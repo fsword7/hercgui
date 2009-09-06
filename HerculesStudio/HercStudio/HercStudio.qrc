@@ -1,0 +1,35 @@
+<RCC>
+    <qresource>
+	    <file>icons/card.jpg</file>
+	    <file>icons/console.jpg</file>
+	    <file>icons/dasd.jpg</file>
+	    <file>icons/dial1.gif</file>
+	    <file>icons/highRed.jpg</file>
+	    <file>icons/interruptu.gif</file>
+	    <file>icons/interruptd.gif</file>
+	    <file>icons/loadu.gif</file>
+	    <file>icons/loadd.gif</file>
+	    <file>icons/net.jpg</file>
+	    <file>icons/opensource.png</file>
+	    <file>icons/poweronoffu.gif</file>
+	    <file>icons/poweronoffd.gif</file>
+	    <file>icons/poweroffu.gif</file>
+	    <file>icons/poweroffd.gif</file>
+	    <file>icons/printer.jpg</file>
+	    <file>icons/red.jpg</file>
+	    <file>icons/restartu.gif</file>
+	    <file>icons/restartd.gif</file>
+	    <file>icons/startu.gif</file>
+	    <file>icons/startd.gif</file>
+	    <file>icons/stopu.gif</file>
+	    <file>icons/stopd.gif</file>
+	    <file>icons/storeu.gif</file>
+	    <file>icons/stored.gif</file>
+	    <file>icons/tape.jpg</file>
+	    <file>icons/terminal.jpg</file>
+	    <file>icons/tray.jpg</file>
+	    <file>icons/unknown.jpg</file>
+	    <file>icons/yellow.png</file>
+	    <file>icons/yellowhigh.png</file>
+    </qresource>
+</RCC>

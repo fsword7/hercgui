@@ -1,0 +1,10 @@
+debian:
+	prerequisits:
+		libqtcore4
+		libqtgui4
+	aptitude install libqtcore4 libqtgui4
+		
+Fedora:
+	prerequisites:
+		qt-x11
+	yum install qt-x11
