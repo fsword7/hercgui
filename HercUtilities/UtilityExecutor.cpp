@@ -26,6 +26,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <cstdio>
 
 UtilityExecutor::UtilityExecutor()
 {

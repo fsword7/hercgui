@@ -32,6 +32,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <cstdio>
 
 #define NUM_DEVICES 12
 

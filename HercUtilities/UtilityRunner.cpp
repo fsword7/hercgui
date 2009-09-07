@@ -28,8 +28,8 @@
 
 
 #include <sstream>
-#include "errno.h"
-
+#include <errno.h>
+#include <cstdio>
 
 UtilityRunner::UtilityRunner(FILE * file)
 : mFile(file)
