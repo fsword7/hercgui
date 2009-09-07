@@ -50,7 +50,7 @@ void PanelButton::paintEvent(QPaintEvent *)
     QPixmap newPix(*filename);
     QPainter painter(this);
     painter.drawPixmap(0, 0, newPix);
-
+    resize(33,25);
 }
 
 void PanelButton::pressedSignal()
