@@ -317,12 +317,8 @@ DasdInit::VolserValidator::VolserValidator(QObject * parent )
 
 QValidator::State DasdInit::VolserValidator::validate(QString & input, int & ) const
 {
-	for (int i=0; i< input.length(); i++)
-	{
-		if ( !( (input[i] >= '0' && input[i] <= '9')
-				|| (input[i] >= 'a' && input[i] <= 'f')
-				|| (input[i] >= 'A' && input[i] <= 'F') ) )
-			return Invalid;
-	}
+	if (input.length() > 6)
+		return Invalid;
+	input = input.toUpper();
 	return Acceptable;
 }
