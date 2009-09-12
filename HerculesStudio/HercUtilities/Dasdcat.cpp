@@ -30,7 +30,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include <signal.h>
+#include <csignal>
 
 
 Dasdcat::Dasdcat(QWidget *parent)

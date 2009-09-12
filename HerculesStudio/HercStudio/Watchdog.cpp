@@ -27,7 +27,7 @@
 #include <iostream>
 #include <sstream>
 #include <sys/wait.h>
-#include <errno.h>
+#include <cerrno>
 #include <sys/stat.h>
 
 Watchdog::Watchdog(int herculesPid, bool child)

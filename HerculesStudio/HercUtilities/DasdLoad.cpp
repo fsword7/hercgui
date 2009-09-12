@@ -30,7 +30,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
-#include <signal.h>
+#include <csignal>
 
 DasdLoad::DasdLoad(QWidget *parent)
     : QDialog(parent), mPid(0)

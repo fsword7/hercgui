@@ -42,7 +42,7 @@
 #include <QFile>
 
 #include <iostream>
-#include "errno.h"
+#include "cerrno"
 #include <err.h>
 #include <typeinfo>
 

@@ -24,7 +24,7 @@
 
 #include "Environment.h"
 
-#include "stdlib.h"
+#include "cstdlib"
 
 #define ENV_ICONS "HERCULES_ICONS"
 

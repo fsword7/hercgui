@@ -26,7 +26,7 @@
 #include "SystemConfigLine.h"
 #include "DeviceConfigLine.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <sstream>
 #include <iomanip>

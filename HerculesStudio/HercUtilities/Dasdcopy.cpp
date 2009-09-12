@@ -30,7 +30,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include <signal.h>
+#include <csignal>
 
 Dasdcopy::Dasdcopy(QWidget *parent)
     : QDialog(parent), mPid(-1)

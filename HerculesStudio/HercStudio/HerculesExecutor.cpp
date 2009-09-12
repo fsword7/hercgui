@@ -25,12 +25,12 @@
 #include "NamedPipe.h"
 
 #include <unistd.h>
-#include <stdio.h>
+#include <cstdio>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-#include <errno.h>
+#include <cerrno>
 #include <iostream>
 
 int pipeLog[2];

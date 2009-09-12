@@ -28,7 +28,7 @@
 
 
 #include <sstream>
-#include <errno.h>
+#include <cerrno>
 #include <cstdio>
 
 UtilityRunner::UtilityRunner(FILE * file)
