@@ -30,7 +30,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include <signal.h>
+#include <csignal>
 
 DasdIsup::DasdIsup(QWidget *parent)
     : QDialog(parent), mPid(-1)

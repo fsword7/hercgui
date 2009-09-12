@@ -33,10 +33,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <cstdio>
 #include <fcntl.h>
 #include <cstdlib>
-#include <errno.h>
+#include <cerrno>
 
 
 #define MAXIMUM_SETS 20

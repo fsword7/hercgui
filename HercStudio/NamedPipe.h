@@ -29,7 +29,7 @@
 #include <QMutex>
 
 #include <string>
-#include <stdio.h>
+#include <cstdio>
 
 class NamedPipe
 {

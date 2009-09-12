@@ -23,9 +23,8 @@
 
 #include "UtilityExecutor.h"
 
-#include <string.h>
 #include <sys/wait.h>
-#include <errno.h>
+#include <cerrno>
 #include <cstdio>
 
 UtilityExecutor::UtilityExecutor()

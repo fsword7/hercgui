@@ -29,7 +29,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include <signal.h>
+#include <csignal>
 
 
 Dasdconv::Dasdconv(QWidget *parent)

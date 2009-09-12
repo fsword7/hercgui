@@ -36,9 +36,9 @@
 
 #include <string>
 #include <sstream>
-#include <errno.h>
+#include <cerrno>
 #include <sys/types.h>
-#include <signal.h>
+#include <csignal>
 
 DasdInit::DasdInit(QWidget *parent)
     : QDialog(parent), mPid(-1)
