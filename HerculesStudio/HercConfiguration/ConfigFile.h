@@ -70,7 +70,7 @@ private:
   int mLastSys;            // last line before device statements
   bool mChanged;           // updates were done to file which were not saved yet
   bool mNewConfig;		   // never saved
-  static const char *configTemplate[45];  // template for new config file
+  static const char *configTemplate[];  // template for new config file
   int  templateCounter;	   // line number to read from template
 
   void openTemplate();

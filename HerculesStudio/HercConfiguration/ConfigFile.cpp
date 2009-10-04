@@ -61,7 +61,7 @@ void ConfigFile::initialize()
 
     char buff[MAX_CONFIG_LINE];
     bool devices = false;
-    while ( getNextLine(buff, MAX_CONFIG_LINE, f) != NULL ) //(fgets(buff, MAX_CONFIG_LINE, f) != NULL)
+    while ( getNextLine(buff, MAX_CONFIG_LINE, f) != NULL )
     {
         std::string s(buff);
         hOutDebug(5,"LINE:" << buff);
@@ -324,7 +324,7 @@ char *ConfigFile::getNextLine(char * buff, int len, FILE * f)
 	return buff;
 }
 
-const char * ConfigFile::configTemplate[45] = {
+const char * ConfigFile::configTemplate[50] = {
 "#------------------------------------------------------------------------------\n",
 "#       CPU Configuration\n",
 "#------------------------------------------------------------------------------\n",
@@ -369,4 +369,9 @@ const char * ConfigFile::configTemplate[45] = {
 "   CPUPRIO    15                 # CPU thread(s) run at Low priority\n",
 "   DEVPRIO     8                 # Device thread(s) run at Below Normal priority\n",
 "   TODPRIO   -20                 # TOD Clock and timer thread are Time Critical\n",
+"\n",
+"#------------------------------------------------------------------------------\n",
+"#       I/O Devices\n",
+"#------------------------------------------------------------------------------\n",
+"\n",
 "EOF"};
