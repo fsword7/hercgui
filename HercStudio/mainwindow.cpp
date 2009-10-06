@@ -35,6 +35,7 @@
 #include "Dasdcopy.h"
 #include "NamedPipe.h"
 #include "Environment.h"
+#include "Arguments.h"
 
 #include <QFileDialog>
 #include <QDockWidget>
@@ -65,6 +66,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui.actionHetmap->setVisible(false);
     ui.actionHetupd->setVisible(false);
 
+    if (Arguments::getInstance().configFileName().length() > 0)
+    {
+    	mConfigFile = new ConfigFile(Arguments::getInstance().configFileName());
+    }
 
     QDir d("");
     mCurrentPath = d.absolutePath().toStdString();
@@ -249,6 +254,8 @@ MainWindow::MainWindow(QWidget *parent)
             powerOn();
         mLogWindow->append("--- successfully attached to Hercules ---");
     }
+    if (Arguments::getInstance().configFileName().length() > 0)
+    	powerOn();
 }
 
 MainWindow::~MainWindow()
@@ -642,6 +649,7 @@ void MainWindow::powerOn()
     mCommandLine->setReadOnly(false);
 
     mMainPanel->standby();
+    this->setWindowTitle((mConfigFile->getFileName() + " - Hercules Studio").c_str());
     if (mRecovery)
     {
     	// refresh devices list

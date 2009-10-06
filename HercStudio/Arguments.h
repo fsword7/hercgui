@@ -1,10 +1,12 @@
 /*
- *  File:       main.cpp
+ *  File:       Arguments.h
  *
  *  Author:     Jacob Dekel
- *  Created on: Aug 7, 2009
+ *  Created on: Oct 6, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *
+ *	Arguments handling class
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,27 +23,29 @@
  *
  */
 
-#include "mainwindow.h"
-#include "MainPanel.h"
-#include "devices.h"
-#include "Arguments.h"
+#ifndef ARGUMENTS_H_
+#define ARGUMENTS_H_
 
-
-#include <QtGui>
-#include <QApplication>
-
-int main(int argc, char *argv[])
+class Arguments
 {
-	Arguments::getInstance().parse(argc, argv);
-	if (Arguments::getInstance().helpRequested())
-	{
-		Arguments::getInstance().printUsage();
-		return 1;
-	}
+public:
+	virtual ~Arguments();
+	static Arguments& getInstance();
 
-    QApplication a(argc, argv);
-    MainWindow w;
+	int parse(int argc, char *argv[]);
+	void printUsage();
 
-    w.show();
-    return a.exec();
-}
+	bool helpRequested() const;
+	const std::string& configFileName() const;
+	const std::string& resourceFileName() const;
+private:
+	Arguments();
+
+	static Arguments instance;
+
+	bool mHelp;
+	std::string mConfigFile;
+	std::string mResourceFile;
+};
+
+#endif /* ARGUMENTS_H_ */
