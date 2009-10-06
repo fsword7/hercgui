@@ -45,7 +45,7 @@ void Psw::notify(const std::string& statusLine)
 	//STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M....... instcount=0
 	if (!mActive || statusLine.compare(0,7,"STATUS=") != 0)
 		return;
-	mLine.replace(0,45, &statusLine.c_str()[7], 45);
+	mLine.replace(0,46, &statusLine.c_str()[7], 46);
 	mLine.replace(48,statusLine.length()-56, &statusLine[63]);
 	setText(&mLine[0]);
 }
