@@ -22,6 +22,7 @@
  */
 
 #include "HerculesExecutor.h"
+#include "Arguments.h"
 #include "NamedPipe.h"
 
 #include <unistd.h>
@@ -76,9 +77,18 @@ int HerculesExecutor::run(std::string & configName, std::string& herculesPath)
         rc = dup2(fileno(fileIn),fileno(stdin));
         if (rc != 0) perror("stdin");
 
+        if (Arguments::getInstance().resourceFileName().length() > 0)
+        {
+        	std::string resourceFile = "HERCULES_RC=" + Arguments::getInstance().resourceFileName();
+        	int stat = putenv(const_cast<char *>(resourceFile.c_str()));
+            if (stat)
+            {
+             std::cout<<"failed to define environment variable "<< stat << std::endl;
+            }
+        }
         rc = execlp(hercules.c_str(),hercules.c_str(),"-d","-f",configName.c_str(),"EXTERNALGUI",NULL);
         std::cout << "***************************************************************" << std::endl
-				<< "hercules could not be started" <<  std::endl
+				<< "hercules could not be started (" <<  rc << ")" << std::endl
 				<< "check that hercules is properly installed and is on the default path " << std::endl
 				<< "or that the path specified in Edit/Preferences is correct." << std::endl
 				<< "**************************************************************" << std::endl;
