@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>DasdconvClass</class>
- <widget class="QDialog" name="DasdconvClass" >
-  <property name="geometry" >
+ <widget class="QDialog" name="DasdconvClass">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,11 +10,11 @@
     <height>657</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Dasdconv</string>
   </property>
-  <widget class="QGroupBox" name="groupBox" >
-   <property name="geometry" >
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
     <rect>
      <x>20</x>
      <y>20</y>
@@ -21,11 +22,11 @@
      <height>101</height>
     </rect>
    </property>
-   <property name="title" >
+   <property name="title">
     <string>Input</string>
    </property>
-   <widget class="QLineEdit" name="infile" >
-    <property name="geometry" >
+   <widget class="QLineEdit" name="infile">
+    <property name="geometry">
      <rect>
       <x>100</x>
       <y>50</y>
@@ -34,8 +35,8 @@
      </rect>
     </property>
    </widget>
-   <widget class="QToolButton" name="browseFileButton" >
-    <property name="geometry" >
+   <widget class="QToolButton" name="browseFileButton">
+    <property name="geometry">
      <rect>
       <x>490</x>
       <y>50</y>
@@ -43,12 +44,12 @@
       <height>22</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>...</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label" >
-    <property name="geometry" >
+   <widget class="QLabel" name="label">
+    <property name="geometry">
      <rect>
       <x>10</x>
       <y>60</y>
@@ -56,26 +57,26 @@
       <height>16</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>Input file</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5" >
-    <property name="geometry" >
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>181</width>
+      <width>301</width>
       <height>16</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>input HDR-30 CKD image file:</string>
     </property>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBox_2" >
-   <property name="geometry" >
+  <widget class="QGroupBox" name="groupBox_2">
+   <property name="geometry">
     <rect>
      <x>20</x>
      <y>180</y>
@@ -83,11 +84,11 @@
      <height>131</height>
     </rect>
    </property>
-   <property name="title" >
+   <property name="title">
     <string>Output</string>
    </property>
-   <widget class="QLineEdit" name="filename" >
-    <property name="geometry" >
+   <widget class="QLineEdit" name="filename">
+    <property name="geometry">
      <rect>
       <x>80</x>
       <y>50</y>
@@ -96,8 +97,8 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="path" >
-    <property name="geometry" >
+   <widget class="QLineEdit" name="path">
+    <property name="geometry">
      <rect>
       <x>80</x>
       <y>90</y>
@@ -106,8 +107,8 @@
      </rect>
     </property>
    </widget>
-   <widget class="QToolButton" name="browseOutButton" >
-    <property name="geometry" >
+   <widget class="QToolButton" name="browseOutButton">
+    <property name="geometry">
      <rect>
       <x>490</x>
       <y>90</y>
@@ -115,12 +116,12 @@
       <height>22</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>...</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2" >
-    <property name="geometry" >
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
      <rect>
       <x>10</x>
       <y>60</y>
@@ -128,12 +129,12 @@
       <height>16</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>File Name</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3" >
-    <property name="geometry" >
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
      <rect>
       <x>10</x>
       <y>100</y>
@@ -141,26 +142,26 @@
       <height>16</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>Path</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4" >
-    <property name="geometry" >
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>211</width>
+      <width>321</width>
       <height>16</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>AWSCKD image file to be created:</string>
     </property>
    </widget>
   </widget>
-  <widget class="QPushButton" name="runButton" >
-   <property name="geometry" >
+  <widget class="QPushButton" name="runButton">
+   <property name="geometry">
     <rect>
      <x>20</x>
      <y>610</y>
@@ -168,12 +169,12 @@
      <height>26</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Run</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="exitButton" >
-   <property name="geometry" >
+  <widget class="QPushButton" name="exitButton">
+   <property name="geometry">
     <rect>
      <x>450</x>
      <y>610</y>
@@ -181,15 +182,15 @@
      <height>26</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Exit</string>
    </property>
   </widget>
-  <widget class="QProgressBar" name="progressBar" >
-   <property name="enabled" >
+  <widget class="QProgressBar" name="progressBar">
+   <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="geometry" >
+   <property name="geometry">
     <rect>
      <x>20</x>
      <y>140</y>
@@ -197,18 +198,18 @@
      <height>23</height>
     </rect>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>0</number>
    </property>
-   <property name="textVisible" >
+   <property name="textVisible">
     <bool>true</bool>
    </property>
-   <property name="invertedAppearance" >
+   <property name="invertedAppearance">
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QGroupBox" name="groupBox_3" >
-   <property name="geometry" >
+  <widget class="QGroupBox" name="groupBox_3">
+   <property name="geometry">
     <rect>
      <x>20</x>
      <y>320</y>
@@ -216,14 +217,14 @@
      <height>251</height>
     </rect>
    </property>
-   <property name="title" >
+   <property name="title">
     <string>Options</string>
    </property>
-   <property name="flat" >
+   <property name="flat">
     <bool>false</bool>
    </property>
-   <widget class="QComboBox" name="compressionComboBox" >
-    <property name="geometry" >
+   <widget class="QComboBox" name="compressionComboBox">
+    <property name="geometry">
      <rect>
       <x>120</x>
       <y>20</y>
@@ -232,28 +233,28 @@
      </rect>
     </property>
     <item>
-     <property name="text" >
+     <property name="text">
       <string>None</string>
      </property>
     </item>
     <item>
-     <property name="text" >
+     <property name="text">
       <string>zlib</string>
      </property>
     </item>
     <item>
-     <property name="text" >
+     <property name="text">
       <string>bz2</string>
      </property>
     </item>
     <item>
-     <property name="text" >
+     <property name="text">
       <string>expanding</string>
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="label_6" >
-    <property name="geometry" >
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
      <rect>
       <x>20</x>
       <y>30</y>
@@ -261,65 +262,65 @@
       <height>16</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>Compression</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="lfsCheckbox" >
-    <property name="geometry" >
+   <widget class="QCheckBox" name="lfsCheckbox">
+    <property name="geometry">
      <rect>
       <x>20</x>
       <y>60</y>
-      <width>181</width>
+      <width>221</width>
       <height>22</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>Build One Large File</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="replaceCheckbox" >
-    <property name="geometry" >
+   <widget class="QCheckBox" name="replaceCheckbox">
+    <property name="geometry">
      <rect>
       <x>20</x>
       <y>90</y>
-      <width>191</width>
+      <width>221</width>
       <height>22</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>Replace File If Exists</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="rawCheckBox" >
-    <property name="geometry" >
+   <widget class="QCheckBox" name="rawCheckBox">
+    <property name="geometry">
      <rect>
       <x>20</x>
       <y>120</y>
-      <width>181</width>
+      <width>211</width>
       <height>22</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>Raw Dasd Image File</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="linuxCheckBox" >
-    <property name="geometry" >
+   <widget class="QCheckBox" name="linuxCheckBox">
+    <property name="geometry">
      <rect>
       <x>20</x>
       <y>150</y>
-      <width>181</width>
+      <width>251</width>
       <height>22</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>Linux Formatted Dasd (cdl)</string>
     </property>
    </widget>
   </widget>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>
