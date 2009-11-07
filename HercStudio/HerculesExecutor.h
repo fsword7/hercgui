@@ -5,6 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: HerculesExecutor.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This object runs hercules as a child process
  *
@@ -25,7 +26,7 @@
 
 #ifndef HERCULESEXECUTOR_H_
 #define HERCULESEXECUTOR_H_
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include <string>
 
 class HerculesExecutor

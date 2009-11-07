@@ -2,9 +2,10 @@
  *  File: DevicesWidget.cpp
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: DevicesWidget.cpp 34 2009-11-07 06:15:58Z jacob $
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +24,6 @@
 
 #include "DevicesWidget.h"
 #include "Configuration.h"
-#include "devices.h"
 #include "DeviceConfigLine.h"
 #include "GenericDeviceProperties.h"
 #include "Environment.h"
@@ -37,7 +37,7 @@
 #include <sstream>
 
 DevicesWidget::DevicesWidget(ConfigFile * configFile, QWidget * parent) :
-    QWidget(parent) , mConfigFile(configFile), mConfigView(), mLastClick(-1)
+    DeviceMenuProcessor(parent) , mConfigFile(configFile), mConfigView()
 {
     mConfigView = new DeviceConfigView(this);
     mConfigView->setAutoScroll(false);
@@ -65,8 +65,7 @@ DevicesWidget::DevicesWidget(ConfigFile * configFile, QWidget * parent) :
 
     mConfigView->setVisible(true);
     connect(mConfigView, SIGNAL(pressed(QModelIndex)),this,SLOT(mousePressed(QModelIndex)));
-    connect(mConfigView, SIGNAL(deviceClick(QMouseEvent *)),this,SLOT(deviceClick(QMouseEvent *)));
-
+    connect(mConfigView, SIGNAL(deviceClick(QMouseEvent *)),this,SLOT(devicesClick(QMouseEvent *)));
 }
 
 DevicesWidget::~DevicesWidget()
@@ -75,142 +74,37 @@ DevicesWidget::~DevicesWidget()
 
 void DevicesWidget::mousePressed(const QModelIndex index)
 {
-    outDebug(2, std::cout << "pressed " << index.row() << std::endl);
-    mLastClick = index.row();
+    hOutDebug(0, "widget mouse pressed " << index.row())
+    mClickRow = index.row();
 }
 
-void DevicesWidget::deviceClick(QMouseEvent * event)
+bool DevicesWidget::addMode()
 {
-    outDebug(2, std::cout << "click "  << std::endl);
-    outDebug(2, std::cout << "mouse pressed(" << mLastClick << "): " <<
-        (event->button() == Qt::RightButton ? "Right " : " ?" )
-        << " at" << event->x()
-        <<  std::endl);
-
-    bool canAddSysg;
-    if (mConfigFile->findFirstDeviceByType("SYSG") != NULL)
-    	canAddSysg = false;
-    else
-    	canAddSysg = true;
-
-    if  ( event->button() == Qt::RightButton )
-    {
-        QMenu * mMenuAdd;
-        if (mLastClick >=0)
-        {
-            mMenu.clear();
-            mMenuAdd = mMenu.addMenu("Add");
-            mMenu.addAction("Delete", this, SLOT(menuDelete()));
-            mMenu.addSeparator();
-            mMenu.addAction("Properties...", this, SLOT(menuProperties()));
-            mMenu.setVisible(true);
-            mMenu.move(event->globalX(), event->globalY());
-        }
-        else
-        {
-            mMenu.clear();
-            mMenuAdd = mMenu.addMenu("Add");
-            mMenu.setVisible(true);
-            mMenu.move(event->globalX(), event->globalY());
-        }
-        if (mMenuAdd != NULL)
-        {
-            mMenuAdd->clear();
-            mMenuAdd->addAction("Terminal", this, SLOT(menuAddTerminal()));
-            if (canAddSysg)
-	            mMenuAdd->addAction("SYSG", this, SLOT(menuAddSYSG()));
-            mMenuAdd->addAction("Console", this, SLOT(menuAddConsole()));
-            mMenuAdd->addAction("Printer", this, SLOT(menuAddPrinter()));
-            mMenuAdd->addAction("Card Reader", this, SLOT(menuAddCardReader()));
-            mMenuAdd->addAction("Card Punch", this, SLOT(menuAddCardPunch()));
-            mMenuAdd->addAction("Tape Drives", this, SLOT(menuAddTape()));
-            mMenuAdd->addAction("CTC", this, SLOT(menuAddCTC()));
-            mMenuAdd->addAction("Dasd", this, SLOT(menuAddDasd()));
-            //mMenuAdd->addAction("Comm", this, SLOT(menuAddComm()));
-        }
-    }
-
+   return (mClickRow <0 || !isRealDev(mClickRow));
 }
 
-void DevicesWidget::menuAddItem(Devices::Type type)
+bool DevicesWidget::canAddSYSG()
 {
-    outDebug(5, std::cout << "add Item" << mLastClick << std::endl);
-    mCandidateLine = new DeviceConfigLine("\n");
-    mCandidateLine->setNew(true);
-
-    GenericDeviceProperties * mProp = NULL;
-
-    try
-    {
-        mProp = GenericDeviceProperties::classFactory(*mCandidateLine,this,type);
-    }
-    catch (...)
-    {
-        outDebug(2, std::cout << "exception caught in class factory (add)" << std::endl);
-    }
-
-    connect(mProp, SIGNAL(updateLine(bool)), this, SLOT(updateLine(bool)));
-    mProp->setVisible(true);
-
-    mLastClick=-1;
+    return (mConfigFile->findFirstDeviceByType("SYSG") == NULL);
 }
 
-void DevicesWidget::menuAddTerminal()
+DeviceTypes::Type DevicesWidget::getType(int lineNumber)
 {
-    menuAddItem(Devices::Terminal);
-}
-
-void DevicesWidget::menuAddConsole()
-{
-    menuAddItem(Devices::Console);
-}
-
-void DevicesWidget::menuAddPrinter()
-{
-    menuAddItem(Devices::Printer);
-}
-
-void DevicesWidget::menuAddCardReader()
-{
-    menuAddItem(Devices::CardReader);
-}
-
-void DevicesWidget::menuAddCardPunch()
-{
-    menuAddItem(Devices::CardPunch);
-}
-
-void DevicesWidget::menuAddTape()
-{
-    menuAddItem(Devices::Tape);
-}
-
-void DevicesWidget::menuAddCTC()
-{
-    menuAddItem(Devices::CTC);
-}
-
-void DevicesWidget::menuAddDasd()
-{
-    menuAddItem(Devices::DASD);
-}
-
-void DevicesWidget::menuAddSYSG()
-{
-    menuAddItem(Devices::Sysg);
+    hOutDebug(0, "getType " << lineNumber << " " << mLastClick << std::endl);
+    DeviceConfigLine * line =  mConfigFile->getDevice(mDialogToFile[lineNumber]);
+    return line->getDeviceType();
 }
 
 void DevicesWidget::menuDelete()
 {
     outDebug(5, std::cout << "delete " << mLastClick << std::endl);
     mConfigFile->deleteLine(mDialogToFile[mLastClick]);
-    mLastClick=-1;
     initialize();
 }
 
 void DevicesWidget::menuProperties()
 {
-    outDebug(5, std::cout << "properties " << mLastClick << std::endl);
+    hOutDebug(0, "properties " << mLastClick);
     mCandidateLine = mConfigFile->getDevice(mDialogToFile[mLastClick]);
     mCandidateLine->setNew(false);
     GenericDeviceProperties * mProp = NULL;
@@ -231,15 +125,12 @@ void DevicesWidget::menuProperties()
 
     if (mProp != NULL)
     {
-        connect(mProp, SIGNAL(updateLine(bool)), this, SLOT(updateLine(bool)));
+        connect(mProp, SIGNAL(updateLine(bool)), this, SLOT(updateDevice(bool)));
         mProp->setVisible(true);
     }
-
-    mLastClick=-1;
-
 }
 
-void DevicesWidget::updateLine(bool keep)
+void DevicesWidget::doAddDevice(bool keep)
 {
     outDebug(5, std::cout << "Update Line " << std::endl);
 
@@ -287,7 +178,7 @@ void DevicesWidget::initialize()
         strLine += line->getMultiToken(2,0).c_str();
         strLine.resize(133,' ');
         QStandardItem * item = new QStandardItem(strLine.c_str());
-        item->setIcon(Devices::getIcon(line->getDeviceType()));
+        item->setIcon(DeviceTypes::getIcon(line->getDeviceType()));
 
         parentItem->appendRow(item);
         ++lineNum;

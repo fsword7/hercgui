@@ -1,0 +1,477 @@
+/*
+ *  File: DevicesPane.cpp
+ *
+ *  Author:     Jacob Dekel
+ *  Created on: Aug 7, 2009
+ *
+ *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: DevicesPane.cpp 34 2009-11-07 06:15:58Z jacob $
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#include "DevicesPane.h"
+#include "DevicesRename.h"
+#include "MainWindow.h"
+#include "VisualizedDeviceEntry.h"
+#include "Environment.h"
+#include "HerculesStudio.h"
+#include "GenericDeviceProperties.h"
+#include "StringTokenizer.h"
+
+#include <QBitmap>
+#include <QString>
+#include <iostream>
+#include <sstream>
+#include <cstdio>
+
+DevicesPane::DevicesPane(QWidget *parent)
+  : DeviceMenuProcessor(parent),
+    StatusUpdateCollector(),
+    mLayout(NULL),
+    mListView(NULL),
+    mModel(NULL),
+    mRenameDlg(NULL),
+    mOldDevNum(-1)
+{
+    ui.setupUi(this);
+    std::string iconsPath = Environment::getIconsPath() + "/yellow.png";
+    mYellowIcon = new QIcon(iconsPath.c_str());
+    iconsPath = Environment::getIconsPath() + "/yellowhigh.png";
+    mYellowHighIcon = new QIcon(iconsPath.c_str());
+    mMainWindow = dynamic_cast<MainWindow *>(parent);
+}
+
+DevicesPane::~DevicesPane()
+{
+
+}
+
+void DevicesPane::notify(const std::string& statusLine)
+{
+    outDebug(1, std::cout  << statusLine << std::endl);
+    struct DynDeviceLine * line = (DynDeviceLine *)statusLine.c_str();
+    int devNo;
+    VisualizedDeviceEntry deviceEntry;
+    bool deviceAdded = false;
+    if (strncmp(line->DEV,"DEV",3) == 0)
+    {
+        DeviceTypes::Type devType = DeviceTypes::Other;
+        switch (line->action)
+        {
+            case('A'):
+                if (strncmp(line->devType,"DASD",4)==0)
+                    devType= DeviceTypes::DASD;
+                else if (strncmp(line->devType,"CTC",3)==0)
+                    devType= DeviceTypes::CTC;
+                else if (strncmp(line->devType,"QETH",4)==0)
+                    devType= DeviceTypes::Comm;
+                else if (strncmp(line->devType,"RDR ",4)==0)
+                    devType= DeviceTypes::CardReader;
+                else if (strncmp(line->devType,"PCH ",4)==0)
+                    devType= DeviceTypes::CardReader;
+                else if (strncmp(line->devType,"PRT ",4)==0)
+                    devType= DeviceTypes::Printer;
+                else if (strncmp(line->devType,"DSP ",4)==0)
+                    devType= DeviceTypes::Terminal;
+                else if (strncmp(line->devType,"TAPE",4)==0)
+                    devType= DeviceTypes::Tape;
+                else if (strncmp(line->devType,"CON",3)==0)
+                    devType= DeviceTypes::Console;
+
+                    devNo =  strtol(line->devNo, NULL, 16);
+                    {
+                    VisualizedDeviceEntry& deviceEntryPtr = *new VisualizedDeviceEntry(devNo, devType, statusLine);
+                    std::pair<int,VisualizedDeviceEntry> toinsert(devNo, deviceEntryPtr);
+                    mDevices.insert(toinsert);
+                    deviceAdded = true;
+                    }
+
+                break;
+            case('C'):
+                devNo = strtol(line->devNo, NULL, 16);
+                if (mDevices.find(devNo) != mDevices.end())
+                {
+                    deviceEntry = mDevices[devNo];
+
+                    if (deviceEntry.getItem() != NULL)
+                    {
+                        if (line->statusBytes[1] == '1')
+                        {
+                            deviceEntry.getItem()->setIcon(*mYellowHighIcon);
+                        }
+                        else
+                        {
+                            deviceEntry.getItem()->setIcon(*mYellowIcon);
+                        }
+                    }
+                }
+                else
+                {
+                    hOutDebug(0,"sending restart");   
+                    mDevices.clear();
+                    emit restartDevices();
+                }
+                break;
+            case('D'):
+            {
+                devNo = strtol(line->devNo, NULL, 16);
+                std::map <int,VisualizedDeviceEntry>::iterator it = mDevices.find(devNo);
+                if (it != mDevices.end())
+                {
+                    mDevices.erase(it);
+                    deviceAdded = true;
+                }
+            }
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (deviceAdded)
+    {
+        outDebug(3,std::cout << mDevices.size() << " Devices." << std::endl);
+        if (mModel == NULL) mModel = new QStandardItemModel();
+        mModel->clear();
+        QStandardItem *parentItem = mModel->invisibleRootItem();
+        int currLine = 0;
+
+        std::map<int, VisualizedDeviceEntry>::iterator it;
+        for (int curDev=0; curDev<=DeviceTypes::Comm; curDev++ )
+        {
+            outDebug(5,std::cout << "curDev:" << curDev<< std::endl);
+            bool titleDevAdded = false;
+            for (it =  mDevices.begin(); it != mDevices.end(); it++)
+            {
+                VisualizedDeviceEntry& ent = it->second;
+                if (ent.getType() == curDev)
+                {
+                    outDebug(5,std::cout << "ent:" << ent.getDeviceNumber()<<" "<<DeviceTypes::getName(ent.getType())<<std::endl);
+                    if (!titleDevAdded)
+                    {
+                        std::string iconPath = Environment::getIconsPath() +
+                                DeviceTypes::getName(ent.getType());
+                        const QIcon& ic = DeviceTypes::getIcon(ent.getType());
+                        QStandardItem *item = new QStandardItem(ic, DeviceTypes::getName(ent.getType()));
+                        item->setEditable(false);
+                        parentItem->appendRow(item);
+                        currLine++;
+                        titleDevAdded=true;
+                    }
+                    char ss[255];
+                    sprintf(ss,"%4.4X %s",ent.getDeviceNumber(), ent.getDefinition().substr(25).c_str());
+                    if (ent.getIcon() == NULL)
+                    {
+                        ent.setIcon(mYellowIcon);
+                    }
+                    ent.setItem(new QStandardItem(*ent.getIcon(), ss));
+                    ent.getItem()->setEditable(false);
+                    std::string tt = ent.getDefinition().substr(10,10).c_str() ;
+                    tt += ent.getDefinition().substr(25).c_str();
+                    ent.getItem()->setToolTip(tt.c_str());
+                    ent.setLineNumber(currLine++);
+                    parentItem->appendRow(ent.getItem());
+                }
+            }
+        }
+        if (mListView != NULL)
+        {
+            mListView->close();
+            mListView = NULL;
+        }
+        mListView = new DeviceListView(this);
+        mListView->setModel(mModel);
+        mListView->setVisible(true);
+        adjustSize();
+        connect(mListView, SIGNAL(pressed(QModelIndex)),this,SLOT(mousePressed(QModelIndex)));
+        connect(mListView, SIGNAL(deviceClick(QMouseEvent *)), this, SLOT(devicesClick(QMouseEvent *)));
+    }
+}
+
+void DevicesPane::mousePressed(const QModelIndex index)
+{
+    outDebug(0, std::cout << "pressed " << index.row() << std::endl);
+    mClickRow = index.row();
+}
+
+void DevicesPane::adjustSize()
+{
+    if (mListView != NULL)
+        mListView->setGeometry(0,0,this->size().width()-10,this->size().height()-10);
+}
+
+void DevicesPane::resizeEvent ( QResizeEvent * )
+{
+    adjustSize();
+}
+
+QSize DevicesPane::sizeHint() const
+{
+    return QSize(160, 100);
+}
+
+void DevicesPane::clear()
+{
+    if (mModel != NULL)
+        mModel->clear();
+    mDevices.clear();
+    if (mListView == NULL)
+        return;
+    mListView->setModel(mModel);
+    mListView->setVisible(true);
+    adjustSize();
+
+}
+
+bool DevicesPane::isRealDev(int lineNumber)
+{
+    std::map<int, VisualizedDeviceEntry>::iterator it;
+    for (it =  mDevices.begin(); it != mDevices.end(); it++)
+    {
+        VisualizedDeviceEntry& ent = it->second;
+        hOutDebug(5,"compare: " << ent.getLineNumber() << " with " << lineNumber);
+        if (ent.getLineNumber() == lineNumber) return true;     
+    }
+    return false;
+}
+
+DeviceTypes::Type DevicesPane::getType(int lineNumber)
+{
+    std::map<int, VisualizedDeviceEntry>::iterator it;
+    for (it =  mDevices.begin(); it != mDevices.end(); it++)
+    {
+        VisualizedDeviceEntry& ent = it->second;
+        hOutDebug(5,"compare: " << ent.getLineNumber() << " with " << lineNumber);
+        if (ent.getLineNumber() == lineNumber) return ent.getType();
+    }
+    return DeviceTypes::Other;
+}
+
+bool DevicesPane::canAddSYSG()
+{
+    return false;
+}
+
+bool DevicesPane::addMode()
+{
+    return (!isRealDev(mClickRow));
+}
+
+void DevicesPane::doAddDevice(bool)
+{
+	hOutDebug(0,mCandidateLine->getLine());
+	std::string command = mCandidateLine->getLine();
+	if (command.length() == 0) return;
+	command = "attach " + command ;
+
+	mMainWindow->issueCommand(command);
+	mClickRow = -1;
+}
+
+void DevicesPane::menuRename()
+{
+	std::map<int, VisualizedDeviceEntry>::iterator it = mDevices.begin();
+	while(it != mDevices.end())
+	{
+		hOutDebug(0, "rename " << mLastClick << " " <<	it->second.getDeviceNumber()
+				<< " " << it->second.getLineNumber());
+		if (it->second.getLineNumber() == mLastClick)
+		{
+			int devno = it->second.getDeviceNumber();
+			mRenameDlg = new DevicesRename(this, devno);
+			connect (mRenameDlg,SIGNAL(accepted(QString, QString)),this, SLOT(doRename(QString, QString)));
+			connect (mRenameDlg,SIGNAL(rejected()), this, SLOT(rejected()));
+			mRenameDlg->show();
+			break;
+		}
+		it++;
+	}
+	mClickRow=-1;
+}
+
+void DevicesPane::doRename(QString oldDevNum, QString newDevNum)
+{
+	hOutDebug(0, "rename " << oldDevNum.toStdString() <<  " " << newDevNum.toStdString());
+	mOldDevNum = ConfigurationEditor::parseNum(oldDevNum.toStdString(), 16);
+	std::stringstream command;
+	command << "define " << oldDevNum.toStdString() << " " << newDevNum.toStdString() ;
+	mMainWindow->issueCommand(command.str());
+	disconnect(mRenameDlg,0,0,0);
+	mRenameDlg->deleteLater();
+}
+
+void DevicesPane::rejected()
+{
+	hOutDebug(0, "rejected");
+	disconnect(mRenameDlg,0,0,0);
+	mRenameDlg->deleteLater();
+}
+
+void DevicesPane::menuDelete()
+{
+	VisualizedDeviceEntry * entry = getDeviceEntry();
+	if (entry != NULL)
+	{
+		std::stringstream command;
+		command << "detach " << std::hex << entry->getDeviceNumber() ;
+		mMainWindow->issueCommand(command.str());
+	}
+	mClickRow=-1;
+	return;
+}
+
+void DevicesPane::menuInterrupt()
+{
+	VisualizedDeviceEntry * entry = getDeviceEntry();
+	if (entry != NULL)
+	{
+		std::stringstream command;
+		command << "i " << std::hex << entry->getDeviceNumber() ;
+		mMainWindow->issueCommand(command.str());
+	}
+	mClickRow=-1;
+	return;
+}
+
+void DevicesPane::menuStatus()
+{
+	VisualizedDeviceEntry * entry = getDeviceEntry();
+	if (entry != NULL)
+	{
+		std::stringstream command;
+		command << "ds " << std::hex << entry->getDeviceNumber() ;
+		mMainWindow->issueCommand(command.str());
+	}
+	mClickRow=-1;
+	return;
+}
+
+bool DevicesPane::traced()
+{
+	VisualizedDeviceEntry * entry = getDeviceEntry();
+	if (entry != NULL)
+	{
+		return entry->traced();
+	}
+	return false;
+}
+
+
+void DevicesPane::menuTraceCCW()
+{
+	VisualizedDeviceEntry * entry = getDeviceEntry();
+	if (entry != NULL)
+	{
+		std::stringstream command;
+		command << "t" << (entry->traced() ? "- " : "+ ") << std::hex << entry->getDeviceNumber() ;
+		mMainWindow->issueCommand(command.str());
+		entry->setTraced(!entry->traced());
+	}
+	mClickRow=-1;
+	return;
+}
+
+bool DevicesPane::hasConfig()
+{
+	VisualizedDeviceEntry * entry = getDeviceEntry();
+	if (entry == NULL) return false;
+	QString devNo = textFromValue(entry->getDeviceNumber());
+	mCandidateLine = mMainWindow->getConfigurationFile()->getDevice(devNo.toStdString());
+	return mCandidateLine!= NULL;
+}
+
+void DevicesPane::menuProperties()
+{
+	hOutDebug(0,"line=" << mCandidateLine->getLine());
+
+	GenericDeviceProperties * mProp = NULL;
+
+    try
+    {
+        mProp = GenericDeviceProperties::classFactory(*mCandidateLine,
+        		this,
+        		mCandidateLine->getDeviceType());
+    }
+    catch (...)
+    {
+        outDebug(2, std::cout << "exception caught in class factory (add)" << std::endl);
+    }
+
+    connect(mProp, SIGNAL(updateLine(bool)), this, SLOT(updateDevice(bool)));
+    mProp->setVisible(true);
+	mClickRow=-1;
+}
+
+void DevicesPane::updateDevice(bool done)
+{
+	if (!done || mCandidateLine == NULL)
+	{
+		mClickRow = -1;
+		return;
+	}
+	hOutDebug(0,mCandidateLine->getLine());
+	std::string command = mCandidateLine->getLine();
+	command = mCandidateLine->getToken(0) + " " + mCandidateLine->getMultiToken(2, 0);
+	if (command.length() == 0) return;
+	command = "devinit " + command ;
+
+	mMainWindow->issueCommand(command);
+	mClickRow = -1;
+}
+
+void DevicesPane::doLoadTape(QString& tapeFileName)
+{
+	VisualizedDeviceEntry * entry = getDeviceEntry();
+	if (entry != NULL)
+	{
+		std::stringstream command;
+		command << "devinit " << std::hex << entry->getDeviceNumber() << " " <<tapeFileName.toStdString() ;
+
+		mMainWindow->issueCommand(command.str());
+	}
+	mClickRow=-1;
+	return;
+}
+
+VisualizedDeviceEntry* DevicesPane::getDeviceEntry()
+{
+	hOutDebug(0,"getDeviceEntry - mLastClick=" << mLastClick);
+	std::map<int, VisualizedDeviceEntry>::iterator it = mDevices.begin();
+	while(it != mDevices.end())
+	{
+		if (it->second.getLineNumber() == mLastClick)
+		{
+			return &(it->second);
+			break;
+		}
+		it++;
+	}
+	return NULL;
+}
+
+QString DevicesPane::textFromValue(int value) const
+{
+	std::stringstream ss;
+	ss << std::hex << value;
+	char formatted[5];
+	if (value <= 0xffff)
+		sprintf(formatted,"%4.4X",(value));
+	else
+		strcpy(formatted,"0000");
+	QString ret(formatted);
+	outDebug(0,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
+	return ret;
+}

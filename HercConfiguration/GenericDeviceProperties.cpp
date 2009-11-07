@@ -2,9 +2,10 @@
  *  File: GenericDeviceProperties.cpp
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: GenericDeviceProperties.cpp 34 2009-11-07 06:15:58Z jacob $
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
  *
  */
 
+#include "HerculesStudio.h"
 #include "GenericDeviceProperties.h"
 #include "TerminalProperties.h"
 #include "SysgProperties.h"
@@ -52,30 +54,30 @@ GenericDeviceProperties::~GenericDeviceProperties()
 
 }
 
-GenericDeviceProperties * GenericDeviceProperties::classFactory(DeviceConfigLine& line, QWidget *parent, Devices::Type type)
+GenericDeviceProperties * GenericDeviceProperties::classFactory(DeviceConfigLine& line, QWidget *parent, DeviceTypes::Type type)
 {
     if (type == 0)
         type = line.getDeviceType();
-    outDebug(5, std::cout << "GenericDeviceProperties::classFactory " << type << std::endl);
+    outDebug(0, std::cout << "GenericDeviceProperties::classFactory " << type << std::endl);
     switch(type)
     {
-    case Devices::Terminal:
+    case DeviceTypes::Terminal:
         return new TerminalProperties(line,parent);
-    case Devices::Console:
+    case DeviceTypes::Console:
         return new ConsoleProperties(line,parent);
-    case Devices::Printer:
+    case DeviceTypes::Printer:
         return new PrinterProperties(line,parent);
-    case Devices::CardReader:
+    case DeviceTypes::CardReader:
         return new CardReaderProperties(line,parent);
-    case Devices::CardPunch:
+    case DeviceTypes::CardPunch:
         return new PunchProperties(line,parent);
-    case Devices::Tape:
+    case DeviceTypes::Tape:
         return new TapeProperties(line,parent);
-    case Devices::CTC:
+    case DeviceTypes::CTC:
         return new CtcProperties(line,parent);
-    case Devices::DASD:
+    case DeviceTypes::DASD:
         return new DasdProperties(line,parent);
-    case Devices::Sysg:
+    case DeviceTypes::Sysg:
         return new SysgProperties(line,parent);
     default:
         throw hsException("Invalid device, "+ line.getToken(1));
@@ -95,7 +97,11 @@ bool GenericDeviceProperties::deviceNumberValidator(QLineEdit * deviceLine)
     }
 
     //make sure device number is new/unique
-    DevicesWidget * dev = static_cast<DevicesWidget *>(mParent);
+    DevicesWidget * dev = dynamic_cast<DevicesWidget *>(mParent);
+    // if parent is not DevicesWidget, it must be a live update while hercules is running
+    if (dev == NULL)
+    	return true;
+
     std::stringstream buff;
     int iDevno = ConfigurationEditor::parseNum(deviceLine->text().toStdString(),16);
     if (iDevno != mOriginalDeviceNumber)

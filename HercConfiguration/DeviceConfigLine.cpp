@@ -2,9 +2,10 @@
  *  File: DeviceConfigLine.cpp
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: DeviceConfigLine.cpp 34 2009-11-07 06:15:58Z jacob $
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
  *
  */
 
+#include "HerculesStudio.h"
 #include "DeviceConfigLine.h"
 #include "ConfigurationEditor.h"
 
@@ -28,8 +30,8 @@
 #include <sstream>
 
 
-DeviceConfigLine::DeviceTypes *DeviceConfigLine::mDeviceTypes = NULL;
-std::map<std::string,Devices::BaseType> *DeviceConfigLine::mDeviceBaseTypes = NULL;
+DeviceConfigLine::DeviceTypesMap *DeviceConfigLine::mDeviceTypes = NULL;
+std::map<std::string,DeviceTypes::BaseType> *DeviceConfigLine::mDeviceBaseTypes = NULL;
 
 DeviceConfigLine::DeviceConfigLine(const char *line):
     ConfigLine(line), mMultiCount(0)
@@ -48,10 +50,10 @@ int DeviceConfigLine::getDeviceNumber() const
     return std::strtol(getToken(0).c_str(),NULL, 16);
 }
 
-Devices::Type DeviceConfigLine::getDeviceType() const
+DeviceTypes::Type DeviceConfigLine::getDeviceType() const
 {
     QString token = getToken(1).c_str();
-    DeviceTypes::iterator it = (*mDeviceTypes).find(token.toUpper().toStdString());
+    DeviceTypesMap::iterator it = (*mDeviceTypes).find(token.toUpper().toStdString());
     if (it == (*mDeviceTypes).end())
         return (*mDeviceTypes)["0000"];
     outDebug(5, std::cout << "getDeviceType " << token.toStdString() << std::endl);
@@ -101,73 +103,73 @@ void DeviceConfigLine::initilize()
     if (mDeviceTypes != NULL)
         return;
 
-    mDeviceTypes = new std::map<std::string,Devices::Type>;
-    mDeviceBaseTypes = new std::map<std::string,Devices::BaseType>;
+    mDeviceTypes = new std::map<std::string,DeviceTypes::Type>;
+    mDeviceBaseTypes = new std::map<std::string,DeviceTypes::BaseType>;
 
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("0000",Devices::Other));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3270",Devices::Terminal));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3287",Devices::Terminal));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("SYSG",Devices::Sysg));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("1052",Devices::Console));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3215",Devices::Console));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("1052-C",Devices::Console));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3215-C",Devices::Console));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("1442",Devices::CardReader));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("2501",Devices::CardReader));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3505",Devices::CardReader));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3525",Devices::CardPunch));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("1403",Devices::Printer));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3211",Devices::Printer));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3410",Devices::Tape));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3420",Devices::Tape));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3422",Devices::Tape));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3430",Devices::Tape));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3480",Devices::Tape));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3490",Devices::Tape));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3590",Devices::Tape));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("9347",Devices::Tape));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("8809",Devices::Tape));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3088",Devices::CTC));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("CTCI",Devices::CTC));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("LCS", Devices::CTC));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("CTCT", Devices::CTC));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("2305",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("2311",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("2314",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3330",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3340",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3350",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3375",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3380",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3390",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("9345",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3310",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("3370",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("9332",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("9335",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("9336",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("0671",Devices::DASD));
-    mDeviceTypes->insert(std::pair<std::string,Devices::Type>("2703",Devices::Comm));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("0000",DeviceTypes::Other));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3270",DeviceTypes::Terminal));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3287",DeviceTypes::Terminal));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("SYSG",DeviceTypes::Sysg));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("1052",DeviceTypes::Console));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3215",DeviceTypes::Console));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("1052-C",DeviceTypes::Console));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3215-C",DeviceTypes::Console));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("1442",DeviceTypes::CardReader));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("2501",DeviceTypes::CardReader));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3505",DeviceTypes::CardReader));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3525",DeviceTypes::CardPunch));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("1403",DeviceTypes::Printer));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3211",DeviceTypes::Printer));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3410",DeviceTypes::Tape));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3420",DeviceTypes::Tape));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3422",DeviceTypes::Tape));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3430",DeviceTypes::Tape));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3480",DeviceTypes::Tape));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3490",DeviceTypes::Tape));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3590",DeviceTypes::Tape));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("9347",DeviceTypes::Tape));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("8809",DeviceTypes::Tape));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3088",DeviceTypes::CTC));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("CTCI",DeviceTypes::CTC));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("LCS", DeviceTypes::CTC));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("CTCT", DeviceTypes::CTC));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("2305",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("2311",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("2314",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3330",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3340",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3350",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3375",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3380",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3390",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("9345",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3310",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3370",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("9332",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("9335",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("9336",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("0671",DeviceTypes::DASD));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("2703",DeviceTypes::Comm));
 
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("3088",Devices::CTCT));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("CTCI",Devices::CTCI));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("LCS", Devices::LCS));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("2305",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("2311",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("2314",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("3330",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("3340",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("3350",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("3375",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("3380",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("3390",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("9345",Devices::CKD));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("3310",Devices::FBA));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("3370",Devices::FBA));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("9332",Devices::FBA));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("9335",Devices::FBA));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("9336",Devices::FBA));
-    mDeviceBaseTypes->insert(std::pair<std::string,Devices::BaseType>("9336",Devices::FBA));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3088",DeviceTypes::CTCT));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("CTCI",DeviceTypes::CTCI));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("LCS", DeviceTypes::LCS));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("2305",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("2311",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("2314",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3330",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3340",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3350",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3375",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3380",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3390",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("9345",DeviceTypes::CKD));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3310",DeviceTypes::FBA));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3370",DeviceTypes::FBA));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("9332",DeviceTypes::FBA));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("9335",DeviceTypes::FBA));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("9336",DeviceTypes::FBA));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("9336",DeviceTypes::FBA));
 
 }
 

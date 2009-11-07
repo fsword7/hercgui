@@ -5,6 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: LogRunner.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This object collects data from the hercules log into the queue
  *

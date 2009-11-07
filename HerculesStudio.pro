@@ -9,7 +9,12 @@ MOC_DIR = moc
 OBJECTS_DIR = obj
 
 # Input
-HEADERS += HercStudio/Arguments.h \
+HEADERS += HercConfiguration/DevicesRename.h \
+    HercConfiguration/DevicesPane.h \
+    HercConfiguration/DeviceTypes.h \
+    HercConfiguration/DeviceMenuProcessor.h \
+    HercStudio/MainWindow.h \
+    HercStudio/Arguments.h \
     HercConfiguration/CardReaderProperties.h \
     HercConfiguration/ConfigFile.h \
     HercConfiguration/ConfigLine.h \
@@ -21,7 +26,6 @@ HEADERS += HercStudio/Arguments.h \
     HercConfiguration/DeviceConfigLine.h \
     HercConfiguration/DeviceConfigView.h \
     HercConfiguration/DeviceListView.h \
-    HercConfiguration/devices.h \
     HercConfiguration/DevicesWidget.h \
     HercConfiguration/Extended_Ui_CardReaderProperties.h \
     HercConfiguration/GenericDeviceProperties.h \
@@ -39,12 +43,10 @@ HEADERS += HercStudio/Arguments.h \
     HercStudio/Environment.h \
     HercStudio/Fonts.h \
     HercStudio/HelpAbout.h \
-    HercStudio/hercstudio.h \
     HercStudio/HerculesExecutor.h \
     HercStudio/HerculesStudio.h \
     HercStudio/LogRunner.h \
     HercStudio/MainPanel.h \
-    HercStudio/mainwindow.h \
     HercStudio/Mips.h \
     HercStudio/NamedPipe.h \
     HercStudio/PanelButton.h \
@@ -52,7 +54,6 @@ HEADERS += HercStudio/Arguments.h \
     HercStudio/PreferencesWin.h \
     HercStudio/Psw.h \
     HercStudio/Recovery.h \
-    HercStudio/Regs.h \
     HercStudio/Regs32.h \
     HercStudio/Regs64.h \
     HercStudio/Runner.h \
@@ -72,30 +73,35 @@ HEADERS += HercStudio/Arguments.h \
     HercUtilities/SystemUtils.h \
     HercUtilities/UtilityExecutor.h \
     HercUtilities/UtilityRunner.h
-FORMS += HercConfiguration/CardReaderProperties.ui \
+FORMS += HercConfiguration/DevicesRename.ui \
+    HercUtilities/DasdInit.ui \
+    HercStudio/MainWindow.ui \
+    HercConfiguration/Devices.ui \
+    HercConfiguration/CardReaderProperties.ui \
     HercConfiguration/Configuration.ui \
     HercConfiguration/ConsoleProperties.ui \
     HercConfiguration/CtcProperties.ui \
     HercConfiguration/DasdProperties.ui \
-    HercConfiguration/devices.ui \
     HercConfiguration/hercconfiguration.ui \
     HercConfiguration/PrinterProperties.ui \
     HercConfiguration/PunchProperties.ui \
     HercConfiguration/TapeProperties.ui \
     HercConfiguration/TerminalProperties.ui \
     HercStudio/helpabout.ui \
-    HercStudio/hercstudio.ui \
-    HercStudio/mainwindow.ui \
     HercStudio/preferenceswin.ui \
     HercStudio/Recovery.ui \
     HercUtilities/Dasdcat.ui \
     HercUtilities/Dasdconv.ui \
     HercUtilities/Dasdcopy.ui \
-    HercUtilities/dasdinit.ui \
     HercUtilities/DasdIsup.ui \
     HercUtilities/DasdLoad.ui \
     HercUtilities/Dasdls.ui
-SOURCES += HercStudio/Arguments.cpp \
+SOURCES += HercConfiguration/DevicesRename.cpp \
+    HercConfiguration/DevicesPane.cpp \
+    HercConfiguration/DeviceTypes.cpp \
+    HercConfiguration/DeviceMenuProcessor.cpp \
+    HercStudio/MainWindow.cpp \
+    HercStudio/Arguments.cpp \
     HercConfiguration/CardReaderProperties.cpp \
     HercConfiguration/ConfigFile.cpp \
     HercConfiguration/ConfigLine.cpp \
@@ -107,7 +113,6 @@ SOURCES += HercStudio/Arguments.cpp \
     HercConfiguration/DeviceConfigLine.cpp \
     HercConfiguration/DeviceConfigView.cpp \
     HercConfiguration/DeviceListView.cpp \
-    HercConfiguration/devices.cpp \
     HercConfiguration/DevicesWidget.cpp \
     HercConfiguration/Extended_Ui_CardReaderProperties.cpp \
     HercConfiguration/GenericDeviceProperties.cpp \
@@ -125,12 +130,10 @@ SOURCES += HercStudio/Arguments.cpp \
     HercStudio/Environment.cpp \
     HercStudio/Fonts.cpp \
     HercStudio/HelpAbout.cpp \
-    HercStudio/hercstudio.cpp \
     HercStudio/HerculesExecutor.cpp \
     HercStudio/LogRunner.cpp \
     HercStudio/main.cpp \
     HercStudio/MainPanel.cpp \
-    HercStudio/mainwindow.cpp \
     HercStudio/Mips.cpp \
     HercStudio/NamedPipe.cpp \
     HercStudio/PanelButton.cpp \
@@ -138,7 +141,6 @@ SOURCES += HercStudio/Arguments.cpp \
     HercStudio/PreferencesWin.cpp \
     HercStudio/Psw.cpp \
     HercStudio/Recovery.cpp \
-    HercStudio/Regs.cpp \
     HercStudio/Regs32.cpp \
     HercStudio/Regs64.cpp \
     HercStudio/Runner.cpp \

@@ -5,6 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: MainPanel.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This object presents the main panel
  *
@@ -30,7 +31,7 @@
 #include "Mips.h"
 
 #include <QtGui/QWidget>
-#include "ui_devices.h"
+#include "ui_Devices.h"
 #include <QPushButton>
 #include <QToolButton>
 #include <QLCDNumber>

@@ -1,10 +1,13 @@
 /*
- *  File:       Regs32.cpp
+ *  File: DevicesPane.h
  *
  *  Author:     Jacob Dekel
- *  Created on: Aug 7, 2009
+ *  Created on: Nov 1, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: DevicesRename.h 34 2009-11-07 06:15:58Z jacob $
+ *
+ *	This object handles the re-initialization of devices during hercules run time
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,27 +23,36 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifdef kukuriku
-#include "Regs.h"
-#include "mainwindow.h"
 
-#include <iostream>
+#ifndef DEVICESRENAME_H
+#define DEVICESRENAME_H
 
-Regs::Regs(QWidget * parent, std:string name) :
-    QWidget::QWidget(parent),
-    mParent(parent),
-    regsCheck(name.c_str(), this),
+#include "Configuration.h"
+
+#include <QtGui/QDialog>
+#include "ui_DevicesRename.h"
+
+class DevicesRename : public QDialog
 {
-    QFont font("curier", 7);
+    Q_OBJECT
 
-    regsCheck.setFont(font);
-    regsCheck.move(0,64);
+public:
+    DevicesRename(QWidget *parent = 0, int value=0);
+    ~DevicesRename();
 
-    connect(&regsCheck, SIGNAL(stateChanged(int)), this, SLOT(regsCheckChanged(int)));
-}
+public slots:
+    void ok();
+    void notok();
 
-Regs::~Regs()
-{
-}
+signals:
+    void accepted(QString oldValue, QString newValue);
+    void rejected();
 
-#endif
+private:
+    Ui::DevicesRenameClass ui;
+    int mInitialDevNum;
+
+    Configuration::HexSpinBox* mSpinBox;
+};
+
+#endif // DEVICESRENAME_H

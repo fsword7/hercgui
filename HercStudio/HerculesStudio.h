@@ -5,6 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: HerculesStudio.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	a collection of product-wide definitions
  *
@@ -26,7 +27,7 @@
 #ifndef HERCULESSTUDIO_H_
 #define HERCULESSTUDIO_H_
 
-#define HERCSTUDIO_VERSION "Version: 1.0.0"
+#define HERCSTUDIO_VERSION "Version: 1.0.0D"
 #define DEBUG 0
 
 #include <iostream>

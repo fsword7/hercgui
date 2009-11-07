@@ -2,9 +2,10 @@
  *  File: ConsoleProperties.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: ConsoleProperties.h 34 2009-11-07 06:15:58Z jacob $
  *
  *  This object handles the configuration of the console
  *

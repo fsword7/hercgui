@@ -2,9 +2,10 @@
  *  File: Configuration.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: Configuration.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This object manages the Hercules configuration
  *
@@ -64,6 +65,16 @@ public:
     	virtual QString textFromValue(int value) const;
     private:
     	bool mAppendPlus;
+    };
+
+    class HexSpinBox : public QSpinBox
+    {
+    public:
+    	HexSpinBox(QWidget * parent = 0);
+    	virtual QString textFromValue(int value) const;
+    protected:
+    	virtual int valueFromText(const QString& text) const;
+    	QValidator::State validate(QString & input, int & pos) const;
     };
 
 private:

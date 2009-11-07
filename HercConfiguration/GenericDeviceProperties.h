@@ -2,9 +2,10 @@
  *  File: GenericDeviceProperties.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: GenericDeviceProperties.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This is the base class for all devices properties dialogs
  *
@@ -27,6 +28,8 @@
 #define GENERICDEVICEPROPERTIES_H_
 
 #include "DeviceConfigLine.h"
+#include "DeviceTypes.h"
+#include <QLineEdit>
 #include <QtGui/QDialog>
 
 class GenericDeviceProperties : public QDialog
@@ -36,7 +39,7 @@ public:
     GenericDeviceProperties(ConfigLine& line, QWidget *parent);
     virtual ~GenericDeviceProperties();
 
-    static GenericDeviceProperties * classFactory(DeviceConfigLine& line, QWidget *parent, Devices::Type type=Devices::Other);
+    static GenericDeviceProperties * classFactory(DeviceConfigLine& line, QWidget *parent, DeviceTypes::Type type=DeviceTypes::Other);
 
 protected:
     mutable ConfigLine & mLine;
