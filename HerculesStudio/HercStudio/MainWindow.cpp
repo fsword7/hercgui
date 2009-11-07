@@ -5,6 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: MainWindow.cpp 34 2009-11-07 06:15:58Z jacob $
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +22,7 @@
  *
  */
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "PreferencesWin.h"
 #include "Watchdog.h"
 #include "Recovery.h"
@@ -77,8 +78,8 @@ MainWindow::MainWindow(QWidget *parent)
     // left dock (Devices)
     mDevicesDock = new QDockWidget("Devices",this);
     mDevicesDock->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    mDevices = new Devices(this);
-    mDevicesDock->setWidget(mDevices);
+    mDevicesPane = new DevicesPane(this);
+    mDevicesDock->setWidget(mDevicesPane);
     addDockWidget(Qt::LeftDockWidgetArea, mDevicesDock );
 
     // top dock (MainPanel)
@@ -229,6 +230,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mMainPanel, SIGNAL(storeClicked()), this , SLOT(store()));
     connect(mMainPanel, SIGNAL(startClicked()), this , SLOT(start()));
     connect(mMainPanel, SIGNAL(stopClicked()), this , SLOT(stop()));
+    connect(mDevicesPane, SIGNAL(restartDevices()), this , SLOT(restartDevices()));
     connect(mCommandLine, SIGNAL(returnPressed()), this , SLOT(newCommand()));
     connect(mSystemTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systrayClick(QSystemTrayIcon::ActivationReason)));
 
@@ -309,7 +311,7 @@ void MainWindow::dispatchStatus()
             if (statusLine[0] == 'D')
             {
                 if (mDevicesRecovery) recoverDevices(statusLine);
-                mDevices->notify(statusLine);
+                mDevicesPane->notify(statusLine);
             }
             else if (statusLine[0] == 'G')
             	mGRegisters32->notify(statusLine);
@@ -339,6 +341,7 @@ void MainWindow::dispatchStatus()
 
 void MainWindow::recoverDevices(std::string& statusLine)
 {
+    if (statusLine.substr(0,5) == "DEVX=") return;
 	if (statusLine[4] == 'X')
 	{
 		if ( mDevicesRecoveryCommenced )
@@ -582,6 +585,12 @@ void MainWindow::preferences()
     pw->show();
 }
 
+ConfigFile * MainWindow::getConfigurationFile()
+{
+	return mConfigFile;
+}
+
+
 void MainWindow::powerOn()
 {
     std::string configName;
@@ -690,7 +699,7 @@ void MainWindow::powerOff()
             outDebug(2, std::cout << "hercules closed" << std::endl);
             usleep(100000);
     }
-    mDevices->clear();
+    mDevicesPane->clear();
 }
 
 void MainWindow::load()
@@ -864,6 +873,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::systrayClick(QSystemTrayIcon::ActivationReason)
 {
     setVisible(true);
+}
+
+void MainWindow::restartDevices()
+{
+    hOutDebug(3,"MainWindow::restartRecovery");
+    mDevicesRecovery = true;
+    issueCommand("]DEVLIST=1");
+    usleep(500000);
+    issueCommand("]NEWDEVLIST=1");
 }
 
 bool MainWindow::issueCommand(const std::string& command)

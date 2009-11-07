@@ -5,6 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: main.cpp 33 2009-11-07 06:02:51Z jacob $
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,12 +19,10 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "MainPanel.h"
-#include "devices.h"
 #include "Arguments.h"
 
 

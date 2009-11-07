@@ -2,9 +2,10 @@
  *  File: DeviceConfigLine.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: DeviceConfigLine.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This object manages one configuration line belonging to devices
  *	(see also ConfigLine.h)
@@ -28,23 +29,25 @@
 #define DEVICECONFIGLINE_H_
 
 #include "ConfigLine.h"
-#include "devices.h"
+#include "DeviceTypes.h"
+
+#include <map>
 
 class DeviceConfigLine: public ConfigLine
 {
 public:
-    typedef std::map<std::string,Devices::Type> DeviceTypes;
+    typedef std::map<std::string, DeviceTypes::Type> DeviceTypesMap;
     DeviceConfigLine(const char *line);
     virtual ~DeviceConfigLine();
 
     int getDeviceNumber() const;
-    Devices::Type getDeviceType() const;
+    DeviceTypes::Type getDeviceType() const;
     std::string toString() const;
     int getMultiCount();
 
 private:
-    static std::map<std::string,Devices::Type> * mDeviceTypes;
-    static std::map<std::string,Devices::BaseType> * mDeviceBaseTypes;
+    static std::map<std::string,DeviceTypes::Type> * mDeviceTypes;
+    static std::map<std::string,DeviceTypes::BaseType> * mDeviceBaseTypes;
     int mMultiCount;
 
     void initilize();

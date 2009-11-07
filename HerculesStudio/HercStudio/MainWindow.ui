@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -72,9 +72,6 @@
     <addaction name="actionExtInterrupt"/>
     <addaction name="actionStore_status"/>
     <addaction name="actionPSW_Restart"/>
-    <addaction name="separator"/>
-    <addaction name="actionDevice_Interrupt"/>
-    <addaction name="actionDisplay_Alter_storage"/>
    </widget>
    <widget class="QMenu" name="menuUtilities">
     <property name="title">
@@ -111,16 +108,28 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen_configuration">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconOpen.png</normaloff>:/icons/16x16/iconOpen.png</iconset>
+   </property>
    <property name="text">
     <string>Open configuration...</string>
    </property>
   </action>
   <action name="actionEditConfig">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconEdit.png</normaloff>:/icons/16x16/iconEdit.png</iconset>
+   </property>
    <property name="text">
     <string>Edit configuration...</string>
    </property>
   </action>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconExit.png</normaloff>:/icons/16x16/iconExit.png</iconset>
+   </property>
    <property name="text">
     <string>Exit</string>
    </property>
@@ -131,6 +140,10 @@
    </property>
    <property name="checked">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconControl.png</normaloff>:/icons/16x16/iconControl.png</iconset>
    </property>
    <property name="text">
     <string>View Controls</string>
@@ -143,61 +156,109 @@
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/yellowhigh.png</normaloff>:/icons/yellowhigh.png</iconset>
+   </property>
    <property name="text">
     <string>View Devices</string>
    </property>
   </action>
   <action name="actionPreferences">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconPreferences.png</normaloff>:/icons/16x16/iconPreferences.png</iconset>
+   </property>
    <property name="text">
     <string>Preferences...</string>
    </property>
   </action>
   <action name="actionDelete_messages">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconDeleteMessages.png</normaloff>:/icons/16x16/iconDeleteMessages.png</iconset>
+   </property>
    <property name="text">
     <string>Delete messages</string>
    </property>
   </action>
   <action name="actionSave_messages">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconSave.png</normaloff>:/icons/16x16/iconSave.png</iconset>
+   </property>
    <property name="text">
     <string>Save messages</string>
    </property>
   </action>
   <action name="actionPower_on">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconPoweron.png</normaloff>:/icons/16x16/iconPoweron.png</iconset>
+   </property>
    <property name="text">
     <string>Power on</string>
    </property>
   </action>
   <action name="actionPower_off">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconPoweroff.png</normaloff>:/icons/16x16/iconPoweroff.png</iconset>
+   </property>
    <property name="text">
     <string>Power off</string>
    </property>
   </action>
   <action name="actionIPL_Load">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconIpl.png</normaloff>:/icons/16x16/iconIpl.png</iconset>
+   </property>
    <property name="text">
     <string>IPL/Load</string>
    </property>
   </action>
   <action name="actionStart">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconStart.png</normaloff>:/icons/16x16/iconStart.png</iconset>
+   </property>
    <property name="text">
     <string>Start</string>
    </property>
   </action>
   <action name="actionStop">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconStop.png</normaloff>:/icons/16x16/iconStop.png</iconset>
+   </property>
    <property name="text">
     <string>Stop</string>
    </property>
   </action>
   <action name="actionExtInterrupt">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconInterrupt.png</normaloff>:/icons/16x16/iconInterrupt.png</iconset>
+   </property>
    <property name="text">
     <string>Interrupt</string>
    </property>
   </action>
   <action name="actionStore_status">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconStoreStatus.png</normaloff>:/icons/16x16/iconStoreStatus.png</iconset>
+   </property>
    <property name="text">
     <string>Store status</string>
    </property>
   </action>
   <action name="actionPSW_Restart">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconPswRestart.png</normaloff>:/icons/16x16/iconPswRestart.png</iconset>
+   </property>
    <property name="text">
     <string>PSW Restart</string>
    </property>
@@ -234,39 +295,70 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconMasterYoda.png</normaloff>:/icons/16x16/iconMasterYoda.png</iconset>
+   </property>
    <property name="text">
     <string>Dasdinit...</string>
+   </property>
+   <property name="toolTip">
+    <string>Dasdinit</string>
    </property>
   </action>
   <action name="actionDasdconv">
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconDarthVader.png</normaloff>:/icons/16x16/iconDarthVader.png</iconset>
+   </property>
    <property name="text">
     <string>Dasdconv...</string>
    </property>
   </action>
   <action name="actionDasdcopy">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconClone.png</normaloff>:/icons/16x16/iconClone.png</iconset>
+   </property>
    <property name="text">
     <string>Dasdcopy...</string>
    </property>
   </action>
   <action name="actionDasdload">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconTieFighter.png</normaloff>:/icons/16x16/iconTieFighter.png</iconset>
+   </property>
    <property name="text">
     <string>Dasdload...</string>
    </property>
   </action>
   <action name="actionDasdisup">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconDeathStar.png</normaloff>:/icons/16x16/iconDeathStar.png</iconset>
+   </property>
    <property name="text">
     <string>Dasdisup...</string>
    </property>
   </action>
   <action name="actionDasdls">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconR2D2.png</normaloff>:/icons/16x16/iconR2D2.png</iconset>
+   </property>
    <property name="text">
     <string>Dasdls...</string>
    </property>
   </action>
   <action name="actionDasdcat">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconC3PO.png</normaloff>:/icons/16x16/iconC3PO.png</iconset>
+   </property>
    <property name="text">
     <string>Dasdcat...</string>
    </property>
@@ -332,6 +424,10 @@
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconHelpAbout.png</normaloff>:/icons/16x16/iconHelpAbout.png</iconset>
+   </property>
    <property name="text">
     <string>About...</string>
    </property>
@@ -343,21 +439,37 @@
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconCommandLine.png</normaloff>:/icons/16x16/iconCommandLine.png</iconset>
+   </property>
    <property name="text">
     <string>View Command Line</string>
    </property>
   </action>
   <action name="actionNew">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconNew.png</normaloff>:/icons/16x16/iconNew.png</iconset>
+   </property>
    <property name="text">
     <string>New...</string>
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconSave.png</normaloff>:/icons/16x16/iconSave.png</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
   </action>
   <action name="actionSave_As">
+   <property name="icon">
+    <iconset resource="HercStudio.qrc">
+     <normaloff>:/icons/16x16/iconsave-as.png</normaloff>:/icons/16x16/iconsave-as.png</iconset>
+   </property>
    <property name="text">
     <string>Save As...</string>
    </property>
@@ -427,6 +539,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="HercStudio.qrc"/>
+ </resources>
  <connections/>
 </ui>

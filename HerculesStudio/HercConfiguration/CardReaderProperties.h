@@ -2,9 +2,10 @@
  *  File: CardReaderProperties.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: CardReaderProperties.h 34 2009-11-07 06:15:58Z jacob $
  *
  *  This object handles the configuration of the card reader
  *
@@ -27,8 +28,9 @@
 #define CARDREADERPROPERTIES_H
 
 #include "GenericDeviceProperties.h"
-
 #include "Extended_Ui_CardReaderProperties.h"
+
+#include <QStandardItemModel>
 
 class NewReaderFile;
 class CardReaderProperties : public GenericDeviceProperties

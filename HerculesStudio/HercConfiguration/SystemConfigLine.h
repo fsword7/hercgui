@@ -2,9 +2,10 @@
  *  File: SystemConfigLine.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: SystemConfigLine.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This object manages a configuration line of system parameters
  *

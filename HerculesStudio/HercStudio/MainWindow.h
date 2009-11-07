@@ -5,6 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: MainWindow.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	Main window object
  *
@@ -28,9 +29,9 @@
 
 #include <QtGui/QMainWindow>
 #include "HerculesStudio.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 #include "MainPanel.h"
-#include "devices.h"
+#include "DevicesPane.h"
 #include "CommandLine.h"
 #include "Psw.h"
 #include "Regs32.h"
@@ -58,8 +59,8 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    bool  issueCommand(const std::string& command);
-
+    bool  			issueCommand(const std::string& command);
+    ConfigFile      * getConfigurationFile();
 
 private:
     Ui::MainWindowClass ui;
@@ -80,7 +81,7 @@ private:
     QTextEdit           * mLogWindow;
     QSystemTrayIcon     * mSystemTrayIcon;
     MainPanel           * mMainPanel;
-    Devices             * mDevices;
+    DevicesPane         * mDevicesPane;
     CommandLine         * mCommandLine;
     Psw					* mPsw;
     Regs32              * mGRegisters32;
@@ -114,6 +115,7 @@ public slots:
     void store();
     void start();
     void stop();
+    void restartDevices();
 
     // menu-related slots
     void newConfig();
@@ -154,7 +156,6 @@ public slots:
     void closeEvent(QCloseEvent * event);
     void systrayClick(QSystemTrayIcon::ActivationReason);
     void recoverDevices(std::string& statusLine);
-
 };
 
 #endif // MAINWINDOW_H

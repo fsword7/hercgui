@@ -2,11 +2,12 @@
  *  File: DevicesWidget.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: DevicesWidget.h 34 2009-11-07 06:15:58Z jacob $
  *
- *	This objects presents the devices section in the configuration
+ *	This object presents the devices section in the configuration
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,12 +29,13 @@
 
 #include "ConfigFile.h"
 #include "DeviceConfigView.h"
+#include "DeviceMenuProcessor.h"
 
 #include <QWidget>
 #include <QFrame>
 #include <QIcon>
 
-class DevicesWidget : public QWidget
+class DevicesWidget : public DeviceMenuProcessor
 {
     Q_OBJECT
 public:
@@ -43,10 +45,8 @@ public:
 
 private:
     ConfigFile * mConfigFile;
-    DeviceConfigLine * mCandidateLine;
     DeviceConfigView * mConfigView;
     QMenu mMenu;
-    int mLastClick;
     std::map<int,int> mDialogToFile;
     QIcon *mCardIcon;
     QIcon *mConsoleIcon;
@@ -58,26 +58,23 @@ private:
     QIcon *mUnknownIcon;
 
     void initialize();
-    void menuAddItem(Devices::Type);
+    virtual bool isRealDev(int) { return true;}
+    bool canAddSYSG();
+    bool isConfig() { return true; };
+    bool addMode();
+    DeviceTypes::Type getType(int lineNumber);
+    virtual void doLoadTape(QString&) { return; }
+    virtual bool hasConfig() { return true; };
+    virtual bool traced() { return false; }
 
 private slots:
     void mousePressed(QModelIndex index);
-    void updateLine(bool keep);
+    void doAddDevice(bool keep);
 
 public slots:
-    void menuAddTerminal();
-    void menuAddConsole();
-    void menuAddPrinter();
-    void menuAddCardReader();
-    void menuAddCardPunch();
-    void menuAddTape();
-    void menuAddCTC();
-    void menuAddDasd();
-    void menuAddSYSG();
 
     void menuDelete();
     void menuProperties();
-    void deviceClick(QMouseEvent * event);
 };
 
 #endif /* DEVICESDLG_H_ */

@@ -2,9 +2,10 @@
  *  File: DeviceListView.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: DeviceListView.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This object manages the device list presented during run time by Devices
  *

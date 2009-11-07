@@ -2,9 +2,10 @@
  *  File: Configuration.cpp
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: Configuration.cpp 34 2009-11-07 06:15:58Z jacob $
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -282,5 +283,40 @@ QString Configuration::DoubleDigitSpinBox::textFromValue(int value) const
 	if (mAppendPlus && sig != -1) ret = "+" + ret;
 	outDebug(5,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
 	return ret;
+}
+
+Configuration::HexSpinBox::HexSpinBox(QWidget * parent):
+	QSpinBox(parent)
+{
+	this->setMaximum(0xffff);
+}
+
+int Configuration::HexSpinBox::valueFromText(const QString& text) const
+{
+	hOutDebug(0,"ValueFromText:" << text.toStdString() << ConfigurationEditor::parseNum(text.toStdString(),16) );
+	return ConfigurationEditor::parseNum(text.toStdString(),16);
+}
+
+QString Configuration::HexSpinBox::textFromValue(int value) const
+{
+	std::stringstream ss;
+	ss << std::hex << value;
+	char formatted[5];
+	if (value <= 0xffff)
+		sprintf(formatted,"%4.4X",(value));
+	else
+		strcpy(formatted,"0000");
+	QString ret(formatted);
+	outDebug(0,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
+	return ret;
+}
+
+QValidator::State Configuration::HexSpinBox::validate (QString & input, int &) const
+{
+	if (input.length() > 4 ||
+		input.toStdString().find_first_not_of("0123456789ABCDEFabcdef") != std::string::npos)
+		return QValidator::Invalid;
+	else
+		return QValidator::Acceptable;
 }
 

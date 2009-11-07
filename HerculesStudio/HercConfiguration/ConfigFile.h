@@ -2,9 +2,10 @@
  *  File: ConfigFile.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: ConfigFile.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This object manages the configuration file
  *
@@ -41,37 +42,37 @@ public:
 	ConfigFile(const std::string& fileName);
 	virtual ~ConfigFile();
 
-	void initialize();
-	const std::string& getFileName() const;
-    SystemConfigLine * operator[] (int index) const;
-    DeviceConfigLine * getDevice(int index) const;
-    DeviceConfigLine * getDevice(std::string& devno) const;
-    DeviceConfigLine * findFirstDeviceByType(const char * type) const;
-    bool write(const std::string& fileName);
-    bool write();
-    int size() const;
-    void addNonDev(SystemConfigLine * configLine);
-    void addDev(DeviceConfigLine * configLine);
-    void appendNewLines();
-    const ConfigLine * locateLine(const std::string& keyword, bool synonyms=true);
-    void deleteLine(int index);
-    inline int getLastSys() { return mLastSys; };
-    bool changed();
-    inline bool isNew() const {return mNewConfig;};
-    void setNew(bool newVal);
+	void 				initialize();
+	const std::string& 	getFileName() const;
+    SystemConfigLine 	* operator[] (int index) const;
+    DeviceConfigLine 	* getDevice(int index) const;
+    DeviceConfigLine 	* getDevice(const std::string& devno) const;
+    DeviceConfigLine 	* findFirstDeviceByType(const char * type) const;
+    bool 				write(const std::string& fileName);
+    bool 				write();
+    int 				size() const;
+    void 				addNonDev(SystemConfigLine * configLine);
+    void 				addDev(DeviceConfigLine * configLine);
+    void 				appendNewLines();
+    const 				ConfigLine * locateLine(const std::string& keyword, bool synonyms=true);
+    void 				deleteLine(int index);
+    inline int 			getLastSys() { return mLastSys; };
+    bool 				changed();
+    inline bool 		isNew() const {return mNewConfig;};
+    void 				setNew(bool newVal);
 
 private:
-  std::string mFileName;
-  FileArray mFileArray;
-  std::vector<SystemConfigLine> mNewLines;
-  std::vector<DeviceConfigLine> mNewDeviceLines;
-  static struct SynonymTableEntry mSynonyms[];
+  std::string 						mFileName;
+  FileArray 						mFileArray;
+  std::vector<SystemConfigLine> 	mNewLines;
+  std::vector<DeviceConfigLine> 	mNewDeviceLines;
+  static struct SynonymTableEntry 	mSynonyms[];
 
-  int mLastSys;            // last line before device statements
-  bool mChanged;           // updates were done to file which were not saved yet
-  bool mNewConfig;		   // never saved
+  int 	mLastSys;            // last line before device statements
+  bool 	mChanged;           // updates were done to file which were not saved yet
+  bool 	mNewConfig;		   // never saved
   static const char *configTemplate[];  // template for new config file
-  int  templateCounter;	   // line number to read from template
+  int  	templateCounter;	   // line number to read from template
 
   void openTemplate();
   char * getNextLine(char * buff, int len, FILE * f);

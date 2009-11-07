@@ -2,9 +2,10 @@
  *  File: TerminalProperties.cpp
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: TerminalProperties.cpp 34 2009-11-07 06:15:58Z jacob $
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -89,7 +90,8 @@ void TerminalProperties::ok()
     	newLineBuff << " "  << ui.groupName->text().toStdString();
     }
     newLineBuff << " " << ip + "\n";
-    outDebug(5, std::cout << "terminal: new line:" << newLineBuff.str() << std::endl);
+    outDebug(0, std::cout << "terminal: new line:" << newLineBuff.str()
+            << " " << &mLine << std::endl);
     mLine.replaceLine(newLineBuff.str());
     emit updateLine(true);
     this->deleteLater();

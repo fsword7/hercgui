@@ -2,9 +2,10 @@
  *  File: ConfigFile.cpp
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: ConfigFile.cpp 34 2009-11-07 06:15:58Z jacob $
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -151,7 +152,7 @@ DeviceConfigLine * ConfigFile::getDevice(int index) const
     return static_cast<DeviceConfigLine *> (const_cast<ConfigLine *>(&mFileArray.at(index)));
 }
 
-DeviceConfigLine * ConfigFile::getDevice(std::string& devno) const
+DeviceConfigLine * ConfigFile::getDevice(const std::string& devno) const
 {
     for (size_t i=mLastSys+1; i<mFileArray.size(); i++)
     {

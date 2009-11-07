@@ -2,9 +2,10 @@
  *  File: VisualizedDeviceEntry.h
  *
  *  Author:     Jacob Dekel
- *  Created on:
+ *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: VisualizedDeviceEntry.h 34 2009-11-07 06:15:58Z jacob $
  *
  *	This is the base class for all configuration device entries
  *  This program is free software: you can redistribute it and/or modify
@@ -25,31 +26,42 @@
 #ifndef DEVICEENTRY_H_
 #define DEVICEENTRY_H_
 
-#include "devices.h"
+#include "DeviceTypes.h"
+
+#include <QPixmap>
+#include <QIcon>
+#include <QStandardItem>
+#include <string>
 
 class VisualizedDeviceEntry
 {
 public:
-    VisualizedDeviceEntry(int number, Devices::Type type, const std::string& definition);
+    VisualizedDeviceEntry(int number, DeviceTypes::Type type, const std::string& definition);
     VisualizedDeviceEntry();
     virtual ~VisualizedDeviceEntry();
 
-    inline int getNumber(){ return mNumber; }
-    inline Devices::Type getType() { return mType; }
+    inline int getDeviceNumber(){ return mNumber; }
+    inline int getLineNumber(){ return mLine; }
+    inline DeviceTypes::Type getType() { return mType; }
     inline QPixmap * getPixmap() { return mPixmap; }
     inline QIcon * getIcon() { return mIcon; }
     inline QStandardItem * getItem() { return mItem; }
     inline std::string getDefinition() { return mDefinition; }
+    inline bool traced() { return mTraced; }
+    inline void setLineNumber(int lineNumber) { mLine = lineNumber; }
     inline void setPixmap(QPixmap * w) { mPixmap=w; }
     inline void setIcon(QIcon * w) { mIcon=w; }
     inline void setItem(QStandardItem * w) { mItem=w; }
+    inline void setTraced(bool traced) { mTraced = traced; }
 
 private:
     int mNumber;
-    Devices::Type mType;
+    int mLine;
+    DeviceTypes::Type mType;
     std::string mDefinition;
     QPixmap * mPixmap;
     QIcon * mIcon;
     QStandardItem * mItem;
+    bool mTraced;
 };
 #endif /* DEVICEENTRY_H_ */

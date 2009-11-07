@@ -5,8 +5,9 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
+ *  $Id: Regs32.h 34 2009-11-07 06:15:58Z jacob $
  *
- *	This object is the base class for all registers widgets
+ *	This object implements the 32-bit registers view
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
