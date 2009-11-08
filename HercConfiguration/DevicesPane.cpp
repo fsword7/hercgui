@@ -120,7 +120,7 @@ void DevicesPane::notify(const std::string& statusLine)
                 }
                 else
                 {
-                    hOutDebug(0,"sending restart");   
+                    hOutDebug(0,"sending restart");
                     mDevices.clear();
                     emit restartDevices();
                 }
@@ -243,7 +243,7 @@ bool DevicesPane::isRealDev(int lineNumber)
     {
         VisualizedDeviceEntry& ent = it->second;
         hOutDebug(5,"compare: " << ent.getLineNumber() << " with " << lineNumber);
-        if (ent.getLineNumber() == lineNumber) return true;     
+        if (ent.getLineNumber() == lineNumber) return true;
     }
     return false;
 }
@@ -291,7 +291,7 @@ void DevicesPane::menuRename()
 		if (it->second.getLineNumber() == mLastClick)
 		{
 			int devno = it->second.getDeviceNumber();
-			mRenameDlg = new DevicesRename(this, devno);
+			mRenameDlg = new DevicesRename(devno, getNextDev(it), this);
 			connect (mRenameDlg,SIGNAL(accepted(QString, QString)),this, SLOT(doRename(QString, QString)));
 			connect (mRenameDlg,SIGNAL(rejected()), this, SLOT(rejected()));
 			mRenameDlg->show();
@@ -311,6 +311,22 @@ void DevicesPane::doRename(QString oldDevNum, QString newDevNum)
 	mMainWindow->issueCommand(command.str());
 	disconnect(mRenameDlg,0,0,0);
 	mRenameDlg->deleteLater();
+}
+
+int DevicesPane::getNextDev(std::map<int, VisualizedDeviceEntry>::iterator it) const
+{
+	int ret = it->second.getDeviceNumber()+1;
+	++it;
+	while (it != mDevices.end())
+	{
+		hOutDebug(0,"examining ret=" << ret << " to:" << it->second.getDeviceNumber());
+		if (it->second.getDeviceNumber() != ret)
+			return ret;
+		else
+			ret = it->second.getDeviceNumber()+1;
+		++it;
+	}
+	return ret;
 }
 
 void DevicesPane::rejected()

@@ -23,14 +23,14 @@
  */
 #include "DevicesRename.h"
 
-DevicesRename::DevicesRename(QWidget *parent, int value)
+DevicesRename::DevicesRename(int value, int newValue, QWidget *parent)
     : QDialog(parent), mInitialDevNum(value)
 {
 	ui.setupUi(this);
 
 	mSpinBox = new Configuration::HexSpinBox(this);
 	mSpinBox->move(180,40);
-	mSpinBox->setValue(1+value);
+	mSpinBox->setValue(newValue);
 
 	QString from = mSpinBox->textFromValue(value);
 	ui.fromValue->setText(from);

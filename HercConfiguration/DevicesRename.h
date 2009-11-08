@@ -37,7 +37,7 @@ class DevicesRename : public QDialog
     Q_OBJECT
 
 public:
-    DevicesRename(QWidget *parent = 0, int value=0);
+    DevicesRename(int value, int newValue, QWidget *parent = 0);
     ~DevicesRename();
 
 public slots:
