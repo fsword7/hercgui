@@ -120,6 +120,7 @@ private:
     void 					adjustSize();
     VisualizedDeviceEntry	* getDeviceEntry();
     QString 				textFromValue(int value) const;
+    int                     getNextDev(std::map<int, VisualizedDeviceEntry>::iterator it) const;
     QIcon 					* mYellowIcon;
     QIcon 					* mYellowHighIcon;
 
