@@ -236,7 +236,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     mLogWindow  = new QTextEdit(this);
     mLogWindow->setReadOnly(true);
-    logFontChanged();
+    fontChanged();
     setCentralWidget(mLogWindow);
 
     int recoverRc = NamedPipe::getInstance().recover();
@@ -271,9 +271,9 @@ void MainWindow::writeToLog(QString line)
     mLogWindow->append(line);
 }
 
-void MainWindow::logFontChanged()
+void MainWindow::fontChanged()
 {
-    std::string fontName = Preferences::getInstance().fontName();
+    std::string fontName = Preferences::getInstance().fontName(Preferences::LogFontObject);
     if (fontName[0] == '(')
     {
     	mLogWindow ->setFont(QFont());
@@ -281,11 +281,21 @@ void MainWindow::logFontChanged()
     else
     {
 		QFont font(fontName.c_str());
-		font.setPointSize(Preferences::getInstance().fontSize());
-		font.setBold(Preferences::getInstance().fontIsBold());
-		font.setItalic(Preferences::getInstance().fontIsItalic());
+		font.setPointSize(Preferences::getInstance().fontSize(Preferences::LogFontObject));
+		font.setBold(Preferences::getInstance().fontIsBold(Preferences::LogFontObject));
+		font.setItalic(Preferences::getInstance().fontIsItalic(Preferences::LogFontObject));
 		mLogWindow->setFont(font);
     }
+    mCRegisters32->setFont();
+    mGRegisters32->setFont();
+    mFRegisters32->setFont();
+    mARegisters32->setFont();
+    mCRegisters64->setFont();
+    mGRegisters64->setFont();
+    mFRegisters64->setFont();
+
+    mPsw->setFont();
+    mCommandLine->setFont();
 }
 
 void MainWindow::writeToLogFromQueue()
@@ -581,7 +591,7 @@ void MainWindow::preferences()
     if (mPreferences == NULL)
         mPreferences = &Preferences::getInstance();
     PreferencesWin * pw = new PreferencesWin(mCurrentPath, mPreferences, this);
-    connect(pw, SIGNAL(logFontChanged()), this, SLOT(logFontChanged()));
+    connect(pw, SIGNAL(fontChanged()), this, SLOT(fontChanged()));
     pw->show();
 }
 

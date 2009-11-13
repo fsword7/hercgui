@@ -23,6 +23,7 @@
  */
 
 #include "CommandLine.h"
+#include "Preferences.h"
 
 #include <QKeyEvent>
 
@@ -32,6 +33,7 @@ CommandLine::CommandLine(QWidget * parent)
  : QLineEdit(parent), mHistoryPtr(-1)
 {
     setMaxLength(512);
+    setFont();
 
 }
 
@@ -88,4 +90,16 @@ void CommandLine::setLine()
         this->setText(history[mHistoryPtr].c_str());
     else
         this->setText("");
+}
+
+void CommandLine::setFont()
+{
+	Preferences& pref = Preferences::getInstance();
+	QFont font(pref.fontName(Preferences::CommandFontObject).c_str(),
+			pref.fontSize(Preferences::CommandFontObject),
+			(pref.fontIsBold(Preferences::CommandFontObject) ? QFont::Bold : QFont::Normal),
+			pref.fontIsItalic(Preferences::CommandFontObject));
+
+    font.setStyleHint(QFont::Courier);
+    QLineEdit::setFont(font);
 }

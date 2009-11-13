@@ -23,6 +23,7 @@
  */
 
 #include "Preferences.h"
+#include "FontPreferences.h"
 #include "HerculesStudio.h"
 #include "ConfigurationEditor.h"
 
@@ -35,6 +36,11 @@
 
 Preferences * Preferences::instance = NULL;
 
+const char Preferences::cFontLog[]      = "LogFont=";
+const char Preferences::cFontRegs[]     = "RegistersFont=";
+const char Preferences::cFontPsw[]      = "PswFont=";
+const char Preferences::cFontCommand[]  = "CommandFont=";
+
 const char * Preferences::sKeywords[] = {
 		"HerculesDir=",
 		"ConfigurationDir=",
@@ -43,7 +49,12 @@ const char * Preferences::sKeywords[] = {
         "FontSize=",
         "FontVariation=",
         "LogTimeStamp=",
-        "RegsViews="};
+        "RegsViews=",
+        "Version=",
+        cFontLog,
+        cFontRegs,
+        cFontPsw,
+        cFontCommand};
 const char * Preferences::sFileName = "HercStudio.pref";
 
 Preferences::Preferences() :
@@ -59,8 +70,8 @@ Preferences::Preferences() :
     setHercDir("");
     setConfigDir("");
     setLogsDir(QDir::homePath().toStdString()+"/Desktop");
-    setFontName("(system default)");
-    setFontSize(9);
+    setFontName(LogFontObject, "(system default)");
+    setFontSize(LogFontObject,9);
     readPref();
 }
 
@@ -94,6 +105,27 @@ void Preferences::readPref()
         mPrefs[i] = value;
     }
     file.close();
+    if (getVersion() == "")
+    {
+    	hOutDebug(0,"converting preferences");
+    	mPrefs[Version] = "1.1";
+		Preferences_1_0& oldP = Preferences_1_0::getInstance();
+		setHercDir(oldP.hercDir() );
+		setConfigDir(oldP.configDir());
+		setLogsDir(oldP.logsDir());
+		FontPreferences fp("");
+		fp.setFontName( oldP.fontName() );
+		fp.setFontSize( oldP.fontSize() );
+		fp.setFontBoldness( oldP.fontIsBold() );
+		fp.setFontItalic( oldP.fontIsItalic() );
+		mPrefs[LogFont] = fp.prefLine();
+
+		FontPreferences dummyFP("");
+		mPrefs[RegsFont] = dummyFP.prefLine();
+		mPrefs[PswFont] = dummyFP.prefLine();
+		mPrefs[CommandFont] = dummyFP.prefLine();
+		write();
+    }
 
 
     std::string value;
@@ -187,48 +219,59 @@ void Preferences::assertConfDir()
     //TODO
 }
 
-std::string& Preferences::fontName()
+std::string Preferences::fontName(FontObject fontObject)
 {
-    return mPrefs[Font];
+    FontPreferences fp(mPrefs[fontObjectToIndex(fontObject)]);
+    return fp.fontName();
 }
 
-void Preferences::setFontName(const std::string& font)
+void Preferences::setFontName(FontObject fontObject, const std::string& fontName)
 {
-    mPrefs[Font] = font;
+	FontPreferences fp(mPrefs[fontObjectToIndex(fontObject)]);
+	fp.setFontName(fontName);
+	mPrefs[fontObjectToIndex(fontObject)] = fp.prefLine();
+
 }
 
-int Preferences::fontVariation()
+int Preferences::fontSize(FontObject fontObject)
 {
-    return ConfigurationEditor::parseNum(mPrefs[FontVariation],10);
+    FontPreferences fp(mPrefs[fontObjectToIndex(fontObject)]);
+	hOutDebug(3, "Preferences::fontSize " << fp.fontSize());
+    return fp.fontSize();
 }
 
-void Preferences::setFontVariation(int fontVariation)
+void Preferences::setFontSize(FontObject fontObject, int size)
 {
-    std::stringstream ss;
-    ss << fontVariation;
-    mPrefs[FontVariation] = ss.str();
+	FontPreferences fp(mPrefs[fontObjectToIndex(fontObject)]);
+	fp.setFontSize(size);
+	mPrefs[fontObjectToIndex(fontObject)] = fp.prefLine();
+	hOutDebug(3, "Preferences::setFontSize " << fp.prefLine());
 }
 
-int Preferences::fontSize()
+void Preferences::setBold(FontObject fontObject, bool bold)
 {
-    return ConfigurationEditor::parseNum(mPrefs[FontSize],10);
+	FontPreferences fp(mPrefs[fontObjectToIndex(fontObject)]);
+	fp.setFontBoldness(bold);
+	mPrefs[fontObjectToIndex(fontObject)] = fp.prefLine();
 }
 
-void Preferences::setFontSize(int size)
+bool Preferences::fontIsBold(FontObject fontObject)
 {
-    std::stringstream ss;
-    ss << size;
-    mPrefs[FontSize] = ss.str();
+    FontPreferences fp(mPrefs[fontObjectToIndex(fontObject)]);
+    return fp.fontIsBold();
 }
 
-bool Preferences::fontIsBold()
+void Preferences::setItalic(FontObject fontObject, bool italic)
 {
-    return ( (fontVariation() & Bold ) != 0 );
+	FontPreferences fp(mPrefs[fontObjectToIndex(fontObject)]);
+	fp.setFontItalic(italic);
+	mPrefs[fontObjectToIndex(fontObject)] = fp.prefLine();
 }
 
-bool Preferences::fontIsItalic()
+bool Preferences::fontIsItalic(FontObject fontObject)
 {
-    return ( (fontVariation() & Italic ) != 0 );
+    FontPreferences fp(mPrefs[fontObjectToIndex(fontObject)]);
+    return fp.fontIsItalic();
 }
 
 bool Preferences::logTimestamp()
@@ -257,3 +300,246 @@ bool Preferences::regs(Views v)
 {
 	return (mView & v);
 }
+
+const std::string& Preferences::getVersion()
+{
+	return mPrefs[Version];
+}
+
+Preferences::keys Preferences::fontObjectToIndex(FontObject fontObject)
+{
+	switch(fontObject)
+	{
+		case RegsFontObject: return RegsFont; break;
+		case PswFontObject: return PswFont; break;
+		case CommandFontObject: return CommandFont; break;
+		default: return LogFont; break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Preferences_1_0 * Preferences_1_0::instance = NULL;
+const char * Preferences_1_0::sKeywords[] = {
+		"HerculesDir=",
+		"ConfigurationDir=",
+		"LogsDir=" ,
+        "Font=",
+        "FontSize=",
+        "FontVariation=",
+        "LogTimeStamp=",
+        "RegsViews="};
+const char * Preferences_1_0::sFileName = "HercStudio.pref";
+
+Preferences_1_0::Preferences_1_0() :
+    mPath(""),
+    mVolatileConfigDir("")
+{
+    assertConfDir();
+    for (unsigned int i=0; i< NumberOfLines ; i++)
+    {
+    	mPrefs.push_back("");
+    }
+    mPath = QDir::homePath().toStdString() + "/.config";
+    setHercDir("");
+    setConfigDir("");
+    setLogsDir(QDir::homePath().toStdString()+"/Desktop");
+    setFontName("(system default)");
+    setFontSize(9);
+    readPref();
+}
+
+Preferences_1_0::~Preferences_1_0()
+{
+}
+
+
+Preferences_1_0& Preferences_1_0::getInstance()
+{
+    if (instance == NULL)
+        instance = new Preferences_1_0();
+    return *instance;
+}
+
+void Preferences_1_0::readPref()
+{
+    QFile file(getFileName());
+    file.open(QIODevice::ReadOnly);
+
+    for (unsigned int i=0; i<NumberOfLines; i++)
+    {
+        char line[Preferences::PREF_LINE_LENGTH];
+        if ( file.readLine(line, Preferences::PREF_LINE_LENGTH) == -1 )
+            break;
+        if (strlen(line) < 2)  // skip null/blank lines
+        {
+            i--;
+            continue;
+        }
+        std::string value = getValue(line, sKeywords[i]);
+        mPrefs[i] = value;
+    }
+    file.close();
+
+
+    std::string value;
+	try
+	{
+		value = mPrefs.at(RegsViews);
+	}
+	catch (const std::out_of_range& e )
+	{
+		value = "0";
+	}
+	mView =  std::strtol(value.c_str(), NULL, 0) ;
+}
+
+std::string Preferences_1_0::getValue(char * line, const char * keyword)
+{
+    if (strncmp(line,keyword,strlen(keyword)) != 0)
+    {
+        std::string err = "preferences keyword: ";
+        err += keyword;
+        std::cerr << err << std::endl;
+        throw new std::string(err);
+    }
+    char *p = line+strlen(keyword);
+    std::string ret(p);
+    if (ret.at(ret.length()-1) == '\n')
+        ret = ret.substr(0,ret.length()-1);
+    outDebug(4,std::cout << "keyword:" << keyword << " value=" << ret << std::endl);
+    return ret;
+}
+
+void Preferences_1_0::write()
+{
+    QString fn(mPath.c_str());
+
+    QFile file(getFileName());
+    file.open(QIODevice::WriteOnly);
+    for(unsigned int i=0; i<NumberOfLines; i++)
+    {
+        std::string line = sKeywords[i];
+        line += mPrefs[i];
+
+        if (line.find("\n") == std::string::npos)
+            line += "\n";
+        file.write(line.c_str());
+    }
+    file.close();
+}
+
+QString Preferences_1_0::getFileName()
+{
+    QString ret = mPath.c_str();
+    ret += "/";
+    ret += sFileName;
+    outDebug(4,std::cout << "file name=" << ret.toStdString() << std::endl);
+    return ret;
+}
+
+void Preferences_1_0::setHercDir(const std::string& hercDir)
+{
+    mPrefs[HerculesDir] = hercDir;
+}
+
+void Preferences_1_0::setConfigDir(const std::string& configDir)
+{
+    mPrefs[ConfigurationDir] = configDir;
+    mVolatileConfigDir = configDir;
+}
+
+void Preferences_1_0::setVolatileConfigDir(const std::string& configDir)
+{
+    mVolatileConfigDir = configDir;
+}
+
+const std::string& Preferences_1_0::configDir()
+{
+	if (mVolatileConfigDir =="")
+		return mPrefs[ConfigurationDir];
+	else
+		return mVolatileConfigDir;
+}
+
+void Preferences_1_0::setLogsDir(const std::string& logsDir)
+{
+    mPrefs[LogsDir] = logsDir;
+}
+
+
+void Preferences_1_0::assertConfDir()
+{
+}
+
+std::string& Preferences_1_0::fontName()
+{
+    return mPrefs[Font];
+}
+
+void Preferences_1_0::setFontName(const std::string& font)
+{
+    mPrefs[Font] = font;
+}
+
+int Preferences_1_0::fontVariation()
+{
+    return ConfigurationEditor::parseNum(mPrefs[FontVariation],10);
+}
+
+void Preferences_1_0::setFontVariation(int fontVariation)
+{
+    std::stringstream ss;
+    ss << fontVariation;
+    mPrefs[FontVariation] = ss.str();
+}
+
+int Preferences_1_0::fontSize()
+{
+    return ConfigurationEditor::parseNum(mPrefs[FontSize],10);
+}
+
+void Preferences_1_0::setFontSize(int size)
+{
+    std::stringstream ss;
+    ss << size;
+    mPrefs[FontSize] = ss.str();
+}
+
+bool Preferences_1_0::fontIsBold()
+{
+    return ( (fontVariation() & Bold ) != 0 );
+}
+
+bool Preferences_1_0::fontIsItalic()
+{
+    return ( (fontVariation() & Italic ) != 0 );
+}
+
+bool Preferences_1_0::logTimestamp()
+{
+	return mPrefs[LogTimestamp] == "TRUE";
+}
+
+void Preferences_1_0::setLogTimestamp(bool isTrue)
+{
+	mPrefs[LogTimestamp] = isTrue ? "TRUE" : "FALSE" ;
+}
+
+void Preferences_1_0::setRegs(Views v, bool view)
+{
+	if (view)
+		mView |= v;
+	else
+		mView &= 255-v;
+	std::stringstream ss;
+	ss << mView;
+	mPrefs[RegsViews] = ss.str();
+	write();
+}
+
+bool Preferences_1_0::regs(Views v)
+{
+	return (mView & v);
+}
+

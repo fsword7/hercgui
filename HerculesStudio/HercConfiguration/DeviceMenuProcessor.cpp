@@ -83,14 +83,14 @@ void DeviceMenuProcessor::devicesClick(QMouseEvent * event)
             		mMenu.addAction("Trace CCW", this, SLOT(menuTraceCCW()));
                 if (this->getType(mClickRow) == DeviceTypes::Tape)
                 {
-                    hOutDebug(0, "TAPE");
+                    hOutDebug(3, "TAPE");
                     mMenu.addSeparator();
                     mMenu.addAction("Load Tape", this, SLOT(menuLoad()));
                     mMenu.addAction("Unload Tape", this, SLOT(menuUnload()));
                 }
                 else
                 {
-                    hOutDebug(0, "not tape");
+                    hOutDebug(3, "not tape");
                 }
             }
             else

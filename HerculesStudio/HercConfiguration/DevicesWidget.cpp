@@ -74,7 +74,7 @@ DevicesWidget::~DevicesWidget()
 
 void DevicesWidget::mousePressed(const QModelIndex index)
 {
-    hOutDebug(0, "widget mouse pressed " << index.row())
+    hOutDebug(3, "widget mouse pressed " << index.row())
     mClickRow = index.row();
 }
 
@@ -90,7 +90,7 @@ bool DevicesWidget::canAddSYSG()
 
 DeviceTypes::Type DevicesWidget::getType(int lineNumber)
 {
-    hOutDebug(0, "getType " << lineNumber << " " << mLastClick << std::endl);
+    hOutDebug(3, "getType " << lineNumber << " " << mLastClick << std::endl);
     DeviceConfigLine * line =  mConfigFile->getDevice(mDialogToFile[lineNumber]);
     return line->getDeviceType();
 }
@@ -104,7 +104,7 @@ void DevicesWidget::menuDelete()
 
 void DevicesWidget::menuProperties()
 {
-    hOutDebug(0, "properties " << mLastClick);
+    hOutDebug(3, "properties " << mLastClick);
     mCandidateLine = mConfigFile->getDevice(mDialogToFile[mLastClick]);
     mCandidateLine->setNew(false);
     GenericDeviceProperties * mProp = NULL;

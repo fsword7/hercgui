@@ -23,6 +23,7 @@
  */
 
 #include "Regs32.h"
+#include "Preferences.h"
 #include "MainWindow.h"
 
 #include <iostream>
@@ -40,16 +41,8 @@ Regs32::Regs32(QWidget * parent, std::string command) :
 	mLine3(this),
 	mLine4(this)
 {
-    QFont font("monospace", 9);
-    font.setStyleHint(QFont::Courier);
-    mLine1.setFont(font);
-    mLine2.setFont(font);
-    mLine3.setFont(font);
-    mLine4.setFont(font);
-    mLine1.setGeometry(0,10,330,12);
-    mLine2.setGeometry(0,26,330,12);
-    mLine3.setGeometry(0,42,330,12);
-    mLine4.setGeometry(0,58,330,12);
+    //QFont font("monospace", 9);
+	setFont();
 
     mCommand = command;
 }
@@ -69,8 +62,34 @@ void Regs32::setActive(bool active)
     mainWindow->issueCommand(command);
 }
 
+void Regs32::setFont()
+{
+	Preferences& pref = Preferences::getInstance();
+	int fontSize = pref.fontSize(Preferences::RegsFontObject);
+	QFont font(pref.fontName(Preferences::RegsFontObject).c_str(),
+			fontSize,
+			(pref.fontIsBold(Preferences::RegsFontObject) ? QFont::Bold : QFont::Normal),
+			pref.fontIsItalic(Preferences::RegsFontObject));
+
+    font.setStyleHint(QFont::Courier);
+    mLine1.setFont(font);
+    mLine2.setFont(font);
+    mLine3.setFont(font);
+    mLine4.setFont(font);
+    mLine1.setGeometry(2,fontSize+2,fontSize*35,fontSize+2);
+    mLine2.setGeometry(2,2*(fontSize+2),fontSize*35,fontSize+2);
+    mLine3.setGeometry(2,3*(fontSize+2),fontSize*35,fontSize+2);
+    mLine4.setGeometry(2,4*(fontSize+2),fontSize*35,fontSize+2);
+
+}
+
 void Regs32::notify(const std::string& statusLine)
 {
+	if (statusLine.length() < 2)
+	{
+		setFont();
+		return;
+	}
 	if (statusLine[2] == '0')
 		Regs32::mLine1.setText(statusLine.c_str());
 	else if (statusLine[2] == '4')

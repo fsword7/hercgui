@@ -58,7 +58,7 @@ GenericDeviceProperties * GenericDeviceProperties::classFactory(DeviceConfigLine
 {
     if (type == 0)
         type = line.getDeviceType();
-    outDebug(0, std::cout << "GenericDeviceProperties::classFactory " << type << std::endl);
+    outDebug(1, std::cout << "GenericDeviceProperties::classFactory " << type << std::endl);
     switch(type)
     {
     case DeviceTypes::Terminal:

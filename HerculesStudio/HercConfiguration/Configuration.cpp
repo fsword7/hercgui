@@ -293,7 +293,7 @@ Configuration::HexSpinBox::HexSpinBox(QWidget * parent):
 
 int Configuration::HexSpinBox::valueFromText(const QString& text) const
 {
-	hOutDebug(0,"ValueFromText:" << text.toStdString() << ConfigurationEditor::parseNum(text.toStdString(),16) );
+	hOutDebug(5,"ValueFromText:" << text.toStdString() << ConfigurationEditor::parseNum(text.toStdString(),16) );
 	return ConfigurationEditor::parseNum(text.toStdString(),16);
 }
 
@@ -307,7 +307,7 @@ QString Configuration::HexSpinBox::textFromValue(int value) const
 	else
 		strcpy(formatted,"0000");
 	QString ret(formatted);
-	outDebug(0,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
+	outDebug(5,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
 	return ret;
 }
 

@@ -145,7 +145,7 @@ public slots:
 
     void writeToLogFromQueue();
     void writeToLog(QString line);
-    void logFontChanged();
+    void fontChanged();
     void dispatchStatus();
     void newCommand();
     void herculesEndedSlot();

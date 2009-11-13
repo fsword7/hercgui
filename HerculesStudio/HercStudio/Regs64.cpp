@@ -23,6 +23,7 @@
  */
 
 #include "Regs64.h"
+#include "Preferences.h"
 
 std::string Regs64::gCommand = "]GREGS64=";
 std::string Regs64::cCommand = "]CREGS64=";
@@ -35,17 +36,7 @@ Regs64::Regs64(QWidget * parent, std::string command) :
 	mLine7(this),
 	mLine8(this)
 {
-    QFont font("monospace", 9);
-    font.setStyleHint(QFont::Courier);
-    mLine5.setFont(font);
-    mLine6.setFont(font);
-    mLine7.setFont(font);
-    mLine8.setFont(font);
-    mLine5.setGeometry(340,10,330,12);
-    mLine6.setGeometry(340,26,330,12);
-    mLine7.setGeometry(340,42,330,12);
-    mLine8.setGeometry(340,58,330,12);
-
+	setFont();
 }
 
 Regs64::~Regs64()
@@ -62,8 +53,33 @@ void Regs64::setActive(bool active)
     std::string command = mCommand + (active ? '1' : '0');
 }
 
+void Regs64::setFont()
+{
+	Regs32::setFont();
+	Preferences& pref = Preferences::getInstance();
+	int fontSize = pref.fontSize(Preferences::RegsFontObject);
+	QFont font(pref.fontName(Preferences::RegsFontObject).c_str(),
+			fontSize,
+			(pref.fontIsBold(Preferences::RegsFontObject) ? QFont::Bold : QFont::Normal),
+			pref.fontIsItalic(Preferences::RegsFontObject));
+
+    font.setStyleHint(QFont::Courier);
+    mLine5.setFont(font);
+    mLine6.setFont(font);
+    mLine7.setFont(font);
+    mLine8.setFont(font);
+    mLine5.setGeometry(fontSize*36,fontSize+2,fontSize*35,fontSize+2);
+    mLine6.setGeometry(fontSize*36,2*(fontSize+2),fontSize*35,fontSize+2);
+    mLine7.setGeometry(fontSize*36,3*(fontSize+2),fontSize*35,fontSize+2);
+    mLine8.setGeometry(fontSize*36,4*(fontSize+2),fontSize*35,fontSize+2);
+}
 void Regs64::notify(const std::string& statusLine)
 {
+	if (statusLine.length() < 2)
+	{
+		setFont();
+		return;
+	}
 	if (statusLine[5] == '0')
 		Regs32::mLine1.setText(statusLine.c_str());
 	if (statusLine[5] == '2')
