@@ -24,12 +24,13 @@
 
 
 #include "Psw.h"
+#include "Preferences.h"
+
 #include <iostream>
 
 Psw::Psw( QWidget * )
 {
-	QFont font("mono");
-	setFont(font);
+	setFont();
 	mActive = false;
 	mLine.reserve(100);
 	mLine.assign(100,' ');
@@ -49,6 +50,18 @@ void Psw::notify(const std::string& statusLine)
 	mLine.replace(0,46, &statusLine.c_str()[7], 46);
 	mLine.replace(48,statusLine.length()-56, &statusLine[63]);
 	setText(&mLine[0]);
+}
+
+void Psw::setFont()
+{
+	Preferences& pref = Preferences::getInstance();
+	QFont font(pref.fontName(Preferences::PswFontObject).c_str(),
+			pref.fontSize(Preferences::PswFontObject),
+			(pref.fontIsBold(Preferences::PswFontObject) ? QFont::Bold : QFont::Normal),
+			pref.fontIsItalic(Preferences::PswFontObject));
+
+    font.setStyleHint(QFont::Courier);
+    QLabel::setFont(font);
 }
 
 void Psw::setActive(bool active)

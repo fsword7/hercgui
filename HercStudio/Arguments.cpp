@@ -88,7 +88,7 @@ int Arguments::parse(int argc, char * argv[])
 	    }
 
     }
-	hOutDebug(0,"resource file:'" << mResourceFile << "'");
+	hOutDebug(1,"resource file:'" << mResourceFile << "'");
 	return 0;
 }
 

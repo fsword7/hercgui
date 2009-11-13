@@ -120,7 +120,7 @@ void DevicesPane::notify(const std::string& statusLine)
                 }
                 else
                 {
-                    hOutDebug(0,"sending restart");
+                    hOutDebug(1,"sending restart");
                     mDevices.clear();
                     emit restartDevices();
                 }
@@ -203,7 +203,7 @@ void DevicesPane::notify(const std::string& statusLine)
 
 void DevicesPane::mousePressed(const QModelIndex index)
 {
-    outDebug(0, std::cout << "pressed " << index.row() << std::endl);
+    outDebug(1, std::cout << "pressed " << index.row() << std::endl);
     mClickRow = index.row();
 }
 
@@ -272,7 +272,7 @@ bool DevicesPane::addMode()
 
 void DevicesPane::doAddDevice(bool)
 {
-	hOutDebug(0,mCandidateLine->getLine());
+	hOutDebug(2,mCandidateLine->getLine());
 	std::string command = mCandidateLine->getLine();
 	if (command.length() == 0) return;
 	command = "attach " + command ;
@@ -286,7 +286,7 @@ void DevicesPane::menuRename()
 	std::map<int, VisualizedDeviceEntry>::iterator it = mDevices.begin();
 	while(it != mDevices.end())
 	{
-		hOutDebug(0, "rename " << mLastClick << " " <<	it->second.getDeviceNumber()
+		hOutDebug(2, "rename " << mLastClick << " " <<	it->second.getDeviceNumber()
 				<< " " << it->second.getLineNumber());
 		if (it->second.getLineNumber() == mLastClick)
 		{
@@ -304,7 +304,7 @@ void DevicesPane::menuRename()
 
 void DevicesPane::doRename(QString oldDevNum, QString newDevNum)
 {
-	hOutDebug(0, "rename " << oldDevNum.toStdString() <<  " " << newDevNum.toStdString());
+	hOutDebug(2, "rename " << oldDevNum.toStdString() <<  " " << newDevNum.toStdString());
 	mOldDevNum = ConfigurationEditor::parseNum(oldDevNum.toStdString(), 16);
 	std::stringstream command;
 	command << "define " << oldDevNum.toStdString() << " " << newDevNum.toStdString() ;
@@ -319,7 +319,7 @@ int DevicesPane::getNextDev(std::map<int, VisualizedDeviceEntry>::iterator it) c
 	++it;
 	while (it != mDevices.end())
 	{
-		hOutDebug(0,"examining ret=" << ret << " to:" << it->second.getDeviceNumber());
+		hOutDebug(5,"examining ret=" << ret << " to:" << it->second.getDeviceNumber());
 		if (it->second.getDeviceNumber() != ret)
 			return ret;
 		else
@@ -331,7 +331,7 @@ int DevicesPane::getNextDev(std::map<int, VisualizedDeviceEntry>::iterator it) c
 
 void DevicesPane::rejected()
 {
-	hOutDebug(0, "rejected");
+	hOutDebug(3, "rejected");
 	disconnect(mRenameDlg,0,0,0);
 	mRenameDlg->deleteLater();
 }
@@ -411,7 +411,7 @@ bool DevicesPane::hasConfig()
 
 void DevicesPane::menuProperties()
 {
-	hOutDebug(0,"line=" << mCandidateLine->getLine());
+	hOutDebug(3,"line=" << mCandidateLine->getLine());
 
 	GenericDeviceProperties * mProp = NULL;
 
@@ -438,7 +438,7 @@ void DevicesPane::updateDevice(bool done)
 		mClickRow = -1;
 		return;
 	}
-	hOutDebug(0,mCandidateLine->getLine());
+	hOutDebug(5,mCandidateLine->getLine());
 	std::string command = mCandidateLine->getLine();
 	command = mCandidateLine->getToken(0) + " " + mCandidateLine->getMultiToken(2, 0);
 	if (command.length() == 0) return;
@@ -464,7 +464,7 @@ void DevicesPane::doLoadTape(QString& tapeFileName)
 
 VisualizedDeviceEntry* DevicesPane::getDeviceEntry()
 {
-	hOutDebug(0,"getDeviceEntry - mLastClick=" << mLastClick);
+	hOutDebug(3,"getDeviceEntry - mLastClick=" << mLastClick);
 	std::map<int, VisualizedDeviceEntry>::iterator it = mDevices.begin();
 	while(it != mDevices.end())
 	{
@@ -488,6 +488,6 @@ QString DevicesPane::textFromValue(int value) const
 	else
 		strcpy(formatted,"0000");
 	QString ret(formatted);
-	outDebug(0,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
+	outDebug(5,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
 	return ret;
 }

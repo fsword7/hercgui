@@ -56,7 +56,7 @@ public slots:
   void logsDirPressed();
 
 signals:
-  void logFontChanged();
+  void fontChanged();
 };
 
 #endif // PREFERENCESWIN_H

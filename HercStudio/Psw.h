@@ -39,6 +39,7 @@ public:
 	virtual ~Psw();
 
 	virtual void notify(const std::string& );
+	void setFont();
 	void setActive(bool active);
 
 private:

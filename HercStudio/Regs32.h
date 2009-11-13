@@ -42,6 +42,7 @@ public:
   Regs32(QWidget * parent, std::string command);
   virtual ~Regs32();
 
+  void setFont();
   virtual void setActive(bool active);
   void notify(const std::string& statusLine);
 

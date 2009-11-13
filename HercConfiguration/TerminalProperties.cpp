@@ -90,7 +90,7 @@ void TerminalProperties::ok()
     	newLineBuff << " "  << ui.groupName->text().toStdString();
     }
     newLineBuff << " " << ip + "\n";
-    outDebug(0, std::cout << "terminal: new line:" << newLineBuff.str()
+    outDebug(3, std::cout << "terminal: new line:" << newLineBuff.str()
             << " " << &mLine << std::endl);
     mLine.replaceLine(newLineBuff.str());
     emit updateLine(true);

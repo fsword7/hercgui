@@ -34,6 +34,8 @@ class Regs64: public Regs32
 public:
 	Regs64(QWidget * parent, std::string command);
 	virtual ~Regs64();
+
+	void setFont();
 	void setActive(bool active);
 	void notify(const std::string& statusLine);
 	static std::string gCommand;

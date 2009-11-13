@@ -38,6 +38,8 @@ class CommandLine : public QLineEdit
 public:
   CommandLine(QWidget * parent=NULL );
   virtual ~CommandLine();
+  void setFont();
+
   QSize sizeHint();
 
 protected:

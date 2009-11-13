@@ -44,16 +44,40 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
 	ui.logsDirLineEdit->setText(mPreferences->logsDir().c_str());
 
 	QStringList& list = Fonts::getInstance().getList();
-	ui.fontNameCombo->addItems(list);
-	int index = Fonts::getInstance().indexOf(mPreferences->fontName().c_str());
-	if (index == -1) index = 0;
-    ui.fontNameCombo->setCurrentIndex(index);
 
-    ui.fontSizeSpinBox->setValue(mPreferences->fontSize());
+	ui.fontNameLog->addItems(list);
+	ui.fontNameRegs->addItems(list);
+	ui.fontNamePsw->addItems(list);
+	ui.fontNameCommand->addItems(list);
 
-    int variation = mPreferences->fontVariation();
-    ui.boldCheckBox->setChecked((variation & Preferences::Bold) != 0);
-    ui.italicCheckBox->setChecked((variation & Preferences::Italic) != 0);
+	int fontIndex = Fonts::getInstance().indexOf(mPreferences->fontName(Preferences::LogFontObject).c_str());
+	if (fontIndex == -1) fontIndex = 0;
+    ui.fontNameLog->setCurrentIndex(fontIndex);
+    ui.fontSizeLog->setValue(mPreferences->fontSize(Preferences::LogFontObject));
+    ui.boldLog->setChecked(mPreferences->fontIsBold(Preferences::LogFontObject));
+    ui.italicLog->setChecked(mPreferences->fontIsItalic(Preferences::LogFontObject));
+
+	fontIndex = Fonts::getInstance().indexOf(mPreferences->fontName(Preferences::RegsFontObject).c_str());
+	if (fontIndex == -1) fontIndex = 0;
+    ui.fontNameRegs->setCurrentIndex(fontIndex);
+    ui.fontSizeRegs->setValue(mPreferences->fontSize(Preferences::RegsFontObject));
+    ui.boldRegs->setChecked(mPreferences->fontIsBold(Preferences::RegsFontObject));
+    ui.italicRegs->setChecked(mPreferences->fontIsItalic(Preferences::RegsFontObject));
+
+	fontIndex = Fonts::getInstance().indexOf(mPreferences->fontName(Preferences::PswFontObject).c_str());
+	if (fontIndex == -1) fontIndex = 0;
+    ui.fontNamePsw->setCurrentIndex(fontIndex);
+    ui.fontSizePsw->setValue(mPreferences->fontSize(Preferences::PswFontObject));
+    ui.boldPsw->setChecked(mPreferences->fontIsBold(Preferences::PswFontObject));
+    ui.italicPsw->setChecked(mPreferences->fontIsItalic(Preferences::PswFontObject));
+
+	fontIndex = Fonts::getInstance().indexOf(mPreferences->fontName(Preferences::CommandFontObject).c_str());
+	if (fontIndex == -1) fontIndex = 0;
+    ui.fontNameCommand->setCurrentIndex(fontIndex);
+    ui.fontSizeCommand->setValue(mPreferences->fontSize(Preferences::CommandFontObject));
+    ui.boldCommand->setChecked(mPreferences->fontIsBold(Preferences::CommandFontObject));
+    ui.italicCommand->setChecked(mPreferences->fontIsItalic(Preferences::CommandFontObject));
+
     ui.logTimestampCheckbox->setChecked(mPreferences->logTimestamp());
 }
 
@@ -66,15 +90,31 @@ void PreferencesWin::okPressed()
 	mPreferences->setHercDir(ui.hercDirLineEdit->text().toStdString());
 	mPreferences->setConfigDir(ui.configDirLineEdit->text().toStdString());
 	mPreferences->setLogsDir(ui.logsDirLineEdit->text().toStdString());
-	mPreferences->setFontName(ui.fontNameCombo->currentText().toStdString());
-	mPreferences->setFontSize(ui.fontSizeSpinBox->value());
-	int variation = 0;
-	if (ui.boldCheckBox->isChecked()) variation |= Preferences::Bold;
-	if (ui.italicCheckBox->isChecked()) variation |= Preferences::Italic;
-	mPreferences->setFontVariation(variation);
+
+
+	mPreferences->setFontName(Preferences::LogFontObject, ui.fontNameLog->currentText().toStdString());
+	mPreferences->setFontSize(Preferences::LogFontObject, ui.fontSizeLog->value());
+	mPreferences->setBold(Preferences::LogFontObject, ui.boldLog->isChecked());
+	mPreferences->setItalic(Preferences::LogFontObject, ui.italicLog->isChecked());
+
+	mPreferences->setFontName(Preferences::RegsFontObject, ui.fontNameRegs->currentText().toStdString());
+	mPreferences->setFontSize(Preferences::RegsFontObject, ui.fontSizeRegs->value());
+	mPreferences->setBold(Preferences::RegsFontObject, ui.boldRegs->isChecked());
+	mPreferences->setItalic(Preferences::RegsFontObject, ui.italicRegs->isChecked());
+
+	mPreferences->setFontName(Preferences::PswFontObject, ui.fontNamePsw->currentText().toStdString());
+	mPreferences->setFontSize(Preferences::PswFontObject, ui.fontSizePsw->value());
+	mPreferences->setBold(Preferences::PswFontObject, ui.boldPsw->isChecked());
+	mPreferences->setItalic(Preferences::PswFontObject, ui.italicPsw->isChecked());
+
+	mPreferences->setFontName(Preferences::CommandFontObject, ui.fontNameCommand->currentText().toStdString());
+	mPreferences->setFontSize(Preferences::CommandFontObject, ui.fontSizeCommand->value());
+	mPreferences->setBold(Preferences::CommandFontObject, ui.boldCommand->isChecked());
+	mPreferences->setItalic(Preferences::CommandFontObject, ui.italicCommand->isChecked());
+
 	mPreferences->setLogTimestamp(ui.logTimestampCheckbox->isChecked());
 	mPreferences->write();
-	emit logFontChanged();
+	emit fontChanged();
 	close();
 }
 
