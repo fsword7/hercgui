@@ -10,7 +10,6 @@ OBJECTS_DIR = obj
 
 # Input
 HEADERS += HercStudio/FontPreferences.h \
-    HercStudio/FontPreferences.h \
     HercConfiguration/DevicesRename.h \
     HercConfiguration/DevicesPane.h \
     HercConfiguration/DeviceTypes.h \
@@ -99,7 +98,6 @@ FORMS += HercConfiguration/DevicesRename.ui \
     HercUtilities/DasdLoad.ui \
     HercUtilities/Dasdls.ui
 SOURCES += HercStudio/FontPreferences.cpp \
-    HercStudio/FontPreferences.cpp \
     HercConfiguration/DevicesRename.cpp \
     HercConfiguration/DevicesPane.cpp \
     HercConfiguration/DeviceTypes.cpp \
