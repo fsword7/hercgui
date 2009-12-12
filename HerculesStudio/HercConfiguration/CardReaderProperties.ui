@@ -301,7 +301,7 @@
       <rect>
        <x>100</x>
        <y>50</y>
-       <width>84</width>
+       <width>101</width>
        <height>25</height>
       </rect>
      </property>
@@ -318,7 +318,7 @@ are truncated instead of producing a unit check error.</string>
       <rect>
        <x>100</x>
        <y>20</y>
-       <width>84</width>
+       <width>101</width>
        <height>25</height>
       </rect>
      </property>
@@ -335,7 +335,7 @@ to a multiple of 80 bytes if necessary. </string>
       <rect>
        <x>10</x>
        <y>80</y>
-       <width>91</width>
+       <width>131</width>
        <height>21</height>
       </rect>
      </property>
@@ -349,7 +349,7 @@ to a multiple of 80 bytes if necessary. </string>
      <rect>
       <x>10</x>
       <y>200</y>
-      <width>84</width>
+      <width>111</width>
       <height>25</height>
      </rect>
     </property>
