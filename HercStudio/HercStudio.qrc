@@ -56,12 +56,12 @@
         <file>icons/16x16/iconCommandLine.png</file>
         <file>icons/16x16/iconDeleteMessages.png</file>
         <file>icons/16x16/iconPreferences.png</file>
-        <file>icons/16x16/iconClone.png</file>
-        <file>icons/16x16/iconMasterYoda.png</file>
-        <file>icons/16x16/iconDarthVader.png</file>
-        <file>icons/16x16/iconTieFighter.png</file>
-        <file>icons/16x16/iconDeathStar.png</file>
-        <file>icons/16x16/iconR2D2.png</file>
-        <file>icons/16x16/iconC3PO.png</file>
+        <file>icons/16x16/dasdcopy.png</file>
+        <file>icons/16x16/dasdinit.png</file>
+        <file>icons/16x16/dasdcat.png</file>
+        <file>icons/16x16/dasdconv.png</file>
+        <file>icons/16x16/dasdisup.png</file>
+        <file>icons/16x16/dasdload.png</file>
+        <file>icons/16x16/dasdls.png</file>
     </qresource>
 </RCC>

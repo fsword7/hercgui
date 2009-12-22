@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>24</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -297,7 +297,7 @@
    </property>
    <property name="icon">
     <iconset resource="HercStudio.qrc">
-     <normaloff>:/icons/16x16/iconMasterYoda.png</normaloff>:/icons/16x16/iconMasterYoda.png</iconset>
+     <normaloff>:/icons/16x16/dasdinit.png</normaloff>:/icons/16x16/dasdinit.png</iconset>
    </property>
    <property name="text">
     <string>Dasdinit...</string>
@@ -312,7 +312,7 @@
    </property>
    <property name="icon">
     <iconset resource="HercStudio.qrc">
-     <normaloff>:/icons/16x16/iconDarthVader.png</normaloff>:/icons/16x16/iconDarthVader.png</iconset>
+     <normaloff>:/icons/16x16/dasdconv.png</normaloff>:/icons/16x16/dasdconv.png</iconset>
    </property>
    <property name="text">
     <string>Dasdconv...</string>
@@ -321,7 +321,7 @@
   <action name="actionDasdcopy">
    <property name="icon">
     <iconset resource="HercStudio.qrc">
-     <normaloff>:/icons/16x16/iconClone.png</normaloff>:/icons/16x16/iconClone.png</iconset>
+     <normaloff>:/icons/16x16/dasdcopy.png</normaloff>:/icons/16x16/dasdcopy.png</iconset>
    </property>
    <property name="text">
     <string>Dasdcopy...</string>
@@ -330,7 +330,7 @@
   <action name="actionDasdload">
    <property name="icon">
     <iconset resource="HercStudio.qrc">
-     <normaloff>:/icons/16x16/iconTieFighter.png</normaloff>:/icons/16x16/iconTieFighter.png</iconset>
+     <normaloff>:/icons/16x16/dasdload.png</normaloff>:/icons/16x16/dasdload.png</iconset>
    </property>
    <property name="text">
     <string>Dasdload...</string>
@@ -339,7 +339,7 @@
   <action name="actionDasdisup">
    <property name="icon">
     <iconset resource="HercStudio.qrc">
-     <normaloff>:/icons/16x16/iconDeathStar.png</normaloff>:/icons/16x16/iconDeathStar.png</iconset>
+     <normaloff>:/icons/16x16/dasdisup.png</normaloff>:/icons/16x16/dasdisup.png</iconset>
    </property>
    <property name="text">
     <string>Dasdisup...</string>
@@ -348,7 +348,7 @@
   <action name="actionDasdls">
    <property name="icon">
     <iconset resource="HercStudio.qrc">
-     <normaloff>:/icons/16x16/iconR2D2.png</normaloff>:/icons/16x16/iconR2D2.png</iconset>
+     <normaloff>:/icons/16x16/dasdls.png</normaloff>:/icons/16x16/dasdls.png</iconset>
    </property>
    <property name="text">
     <string>Dasdls...</string>
@@ -357,7 +357,7 @@
   <action name="actionDasdcat">
    <property name="icon">
     <iconset resource="HercStudio.qrc">
-     <normaloff>:/icons/16x16/iconC3PO.png</normaloff>:/icons/16x16/iconC3PO.png</iconset>
+     <normaloff>:/icons/16x16/dasdcat.png</normaloff>:/icons/16x16/dasdcat.png</iconset>
    </property>
    <property name="text">
     <string>Dasdcat...</string>
