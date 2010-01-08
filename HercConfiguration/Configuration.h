@@ -42,12 +42,6 @@ struct ConfigTableEntry
     void (*populator)(Ui::ConfigurationClass *, const ConfigLine *, ConfigurationEditor::Direction dir);
 };
 
-struct SynonymTableEntry
-{
-    std::string keyword1;
-    std::string keyword2;
-};
-
 class Configuration : public QDialog
 {
     Q_OBJECT

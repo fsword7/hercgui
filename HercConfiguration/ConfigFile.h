@@ -36,6 +36,12 @@
 typedef std::vector<ConfigLine> FileArray;
 #define MAX_CONFIG_LINE 512
 
+struct SynonymTableEntry
+{
+    std::string keyword1;
+    std::string keyword2;
+};
+
 class ConfigFile
 {
 public:

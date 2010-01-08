@@ -23,7 +23,8 @@
  */
 
 #include "ConfigFile.h"
-#include "Configuration.h"
+#include "HerculesStudio.h"
+#include "ConfigurationEditor.h"
 #include "SystemConfigLine.h"
 #include "DeviceConfigLine.h"
 

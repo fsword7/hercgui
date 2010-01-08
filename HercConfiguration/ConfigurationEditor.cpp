@@ -23,8 +23,7 @@
  */
 
 #include "ConfigurationEditor.h"
-#include "Configuration.h"
-
+#include "HerculesStudio.h"
 
 #include <iostream>
 #include <sstream>
