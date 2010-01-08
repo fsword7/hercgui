@@ -22,7 +22,7 @@
  *
  */
 #include "ConfigLine.h"
-#include "Configuration.h"
+#include "HerculesStudio.h"
 
 #include <iostream>
 #include <algorithm>

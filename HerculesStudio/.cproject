@@ -135,7 +135,7 @@
 <pathentry base-path="/usr/include/qt4" include="QtHelp" kind="inc" path="" system="true"/>
 <pathentry base-path="/usr/include/qt4" include="QtNetwork" kind="inc" path="" system="true"/>
 <pathentry base-path="/usr/include/qt4" include="QtScriptTools" kind="inc" path="" system="true"/>
-<pathentry include="/usr/include/c++/4.3" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/c++/4.4" kind="inc" path="" system="true"/>
 <pathentry include="/usr/include" kind="inc" path="" system="true"/>
 <pathentry kind="src" path=""/>
 <pathentry kind="out" path=""/>
