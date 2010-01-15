@@ -27,7 +27,7 @@
 #ifndef HERCULESSTUDIO_H_
 #define HERCULESSTUDIO_H_
 
-#define HERCSTUDIO_VERSION "Version: 1.1.0-Beta"
+#define HERCSTUDIO_VERSION "Version: 1.1.0"
 #define DEBUG 0
 
 #include <iostream>
