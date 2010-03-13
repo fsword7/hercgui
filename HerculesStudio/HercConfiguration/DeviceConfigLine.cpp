@@ -76,6 +76,12 @@ void DeviceConfigLine::handleMultiLine()
         first = ConfigurationEditor::parseNum(devno.substr(0,dot), 16);
         last = first+ConfigurationEditor::parseNum(devno.substr(dot+1), 10)-1;
     }
+    size_t  comma = devno.find_first_of(",");
+    if (comma != std::string::npos)
+    {
+        first = ConfigurationEditor::parseNum(devno.substr(0,comma), 16);
+        last = ConfigurationEditor::parseNum(devno.substr(comma+1), 16);
+    }
 
     if (first > -1)
     {
