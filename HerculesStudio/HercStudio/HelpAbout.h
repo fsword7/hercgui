@@ -28,7 +28,7 @@
 #include <QtGui/QWidget>
 #include "ui_helpabout.h"
 
-class HelpAbout : public QWidget
+class HelpAbout : public QDialog
 {
     Q_OBJECT
 

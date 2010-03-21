@@ -30,7 +30,7 @@
 #include <QGraphicsItem>
 
 HelpAbout::HelpAbout(QWidget *parent)
-    : QWidget(parent)
+    : QDialog(parent)
 {
 	ui.setupUi(this);
 

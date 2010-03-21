@@ -859,7 +859,7 @@ void MainWindow::herculesEndedSlot()
 
 void MainWindow::helpAbout()
 {
-    HelpAbout *ha = new HelpAbout();
+    HelpAbout *ha = new HelpAbout(this);
     ha->show();
 }
 
