@@ -78,9 +78,9 @@ void DevicesWidget::mousePressed(const QModelIndex index)
     mClickRow = index.row();
 }
 
-bool DevicesWidget::addMode()
+bool DevicesWidget::realDevice()
 {
-   return (mClickRow <0 || !isRealDev(mClickRow));
+   return (mClickRow >=0 && isRealDev(mClickRow));
 }
 
 bool DevicesWidget::canAddSYSG()

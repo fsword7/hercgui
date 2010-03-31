@@ -61,7 +61,7 @@ private:
     virtual bool isRealDev(int) { return true;}
     bool canAddSYSG();
     bool isConfig() { return true; };
-    bool addMode();
+    bool realDevice();
     DeviceTypes::Type getType(int lineNumber);
     virtual void doLoadTape(QString&) { return; }
     virtual bool hasConfig() { return true; };

@@ -49,57 +49,55 @@ void DeviceMenuProcessor::devicesClick(QMouseEvent * event)
 
     if ( event->button() == Qt::RightButton )
     {
-        if (addMode())
-        {
-            QMenu * mMenuAdd;
-            mMenu.clear();
-            mMenuAdd = mMenu.addMenu("Add...");
-            mMenuAdd->clear();
-            mMenuAdd->addAction("Terminal", this, SLOT(menuAddTerminal()));
-            if (canAddSYSG())
-                mMenuAdd->addAction("SYSG", this, SLOT(menuAddSYSG()));
-            mMenuAdd->addAction("Console", this, SLOT(menuAddConsole()));
-            mMenuAdd->addAction("Printer", this, SLOT(menuAddPrinter()));
-            mMenuAdd->addAction("Card Reader", this, SLOT(menuAddCardReader()));
-            mMenuAdd->addAction("Card Punch", this, SLOT(menuAddCardPunch()));
-            mMenuAdd->addAction("Tape Drives", this, SLOT(menuAddTape()));
-            mMenuAdd->addAction("CTC", this, SLOT(menuAddCTC()));
-            mMenuAdd->addAction("Dasd", this, SLOT(menuAddDasd()));
-        }
-        else
-        {
-            mMenu.clear();
-            mMenu.addAction("Delete", this, SLOT(menuDelete()));
-            if (!isConfig())
-            {
-            	mMenu.addAction("Rename", this, SLOT(menuRename()));
-            	if (hasConfig())
-            		mMenu.addAction("Re-Initialize...", this, SLOT(menuProperties()));
-            	mMenu.addAction("Attention Interrupt", this, SLOT(menuInterrupt()));
-            	mMenu.addAction("Subchannel Status", this, SLOT(menuStatus()));
-            	if (traced())
-            		mMenu.addAction(*new QIcon(":/icons/16x16/check.png"),"Trace CCW", this, SLOT(menuTraceCCW()));
-            	else
-            		mMenu.addAction("Trace CCW", this, SLOT(menuTraceCCW()));
-                if (this->getType(mClickRow) == DeviceTypes::Tape)
-                {
-                    hOutDebug(3, "TAPE");
-                    mMenu.addSeparator();
-                    mMenu.addAction("Load Tape", this, SLOT(menuLoad()));
-                    mMenu.addAction("Unload Tape", this, SLOT(menuUnload()));
-                }
-                else
-                {
-                    hOutDebug(3, "not tape");
-                }
-            }
-            else
-            {
-            	mMenu.addSeparator();
-            	mMenu.addAction("Properties...", this, SLOT(menuProperties()));
-            	mMenu.move(event->globalX(), event->globalY());
-            }
-        }
+    	mMenu.clear();
+
+    	QMenu * mMenuAdd;
+		mMenuAdd = mMenu.addMenu("Add...");
+		mMenuAdd->clear();
+		mMenuAdd->addAction("Terminal", this, SLOT(menuAddTerminal()));
+		if (canAddSYSG())
+			mMenuAdd->addAction("SYSG", this, SLOT(menuAddSYSG()));
+		mMenuAdd->addAction("Console", this, SLOT(menuAddConsole()));
+		mMenuAdd->addAction("Printer", this, SLOT(menuAddPrinter()));
+		mMenuAdd->addAction("Card Reader", this, SLOT(menuAddCardReader()));
+		mMenuAdd->addAction("Card Punch", this, SLOT(menuAddCardPunch()));
+		mMenuAdd->addAction("Tape Drives", this, SLOT(menuAddTape()));
+		mMenuAdd->addAction("CTC", this, SLOT(menuAddCTC()));
+		mMenuAdd->addAction("Dasd", this, SLOT(menuAddDasd()));
+
+		if (realDevice())
+		{
+			mMenu.addAction("Delete", this, SLOT(menuDelete()));
+			if (!isConfig())
+			{
+				mMenu.addAction("Rename", this, SLOT(menuRename()));
+				if (hasConfig())
+					mMenu.addAction("Re-Initialize...", this, SLOT(menuProperties()));
+				mMenu.addAction("Attention Interrupt", this, SLOT(menuInterrupt()));
+				mMenu.addAction("Subchannel Status", this, SLOT(menuStatus()));
+				if (traced())
+					mMenu.addAction(*new QIcon(":/icons/16x16/check.png"),"Trace CCW", this, SLOT(menuTraceCCW()));
+				else
+					mMenu.addAction("Trace CCW", this, SLOT(menuTraceCCW()));
+				if (this->getType(mClickRow) == DeviceTypes::Tape)
+				{
+					hOutDebug(3, "TAPE");
+					mMenu.addSeparator();
+					mMenu.addAction("Load Tape", this, SLOT(menuLoad()));
+					mMenu.addAction("Unload Tape", this, SLOT(menuUnload()));
+				}
+				else
+				{
+					hOutDebug(3, "not tape");
+				}
+			}
+			else
+			{
+				mMenu.addSeparator();
+				mMenu.addAction("Properties...", this, SLOT(menuProperties()));
+				mMenu.move(event->globalX(), event->globalY());
+			}
+		}
 
         mMenu.move(event->globalX(), event->globalY());
         mMenu.setVisible(true);

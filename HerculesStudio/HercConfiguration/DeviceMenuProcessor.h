@@ -58,7 +58,7 @@ protected:
     virtual bool isRealDev(int lineNumber) = 0;
     virtual bool canAddSYSG() = 0;
     virtual bool isConfig() = 0;
-    virtual bool addMode() = 0;
+    virtual bool realDevice() = 0;
     virtual DeviceTypes::Type getType(int lineNumber) = 0;
     virtual void doLoadTape(QString& tapeFileName) = 0;
     virtual bool hasConfig() = 0;

@@ -265,9 +265,9 @@ bool DevicesPane::canAddSYSG()
     return false;
 }
 
-bool DevicesPane::addMode()
+bool DevicesPane::realDevice()
 {
-    return (!isRealDev(mClickRow));
+    return (isRealDev(mClickRow));
 }
 
 void DevicesPane::doAddDevice(bool)
