@@ -863,13 +863,22 @@ void MainWindow::helpAbout()
     ha->show();
 }
 
+void MainWindow::systrayHint()
+{
+	if (!mSystrayHintEjected)
+	{
+		mSystemTrayIcon->showMessage("Hercules is still active","Click this icon to restore the main window",QSystemTrayIcon::Information,5000);
+        mSystemTrayIcon->setToolTip("Click on this icon to restore the main window");
+		mSystrayHintEjected = true;
+	}
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
  {
      if (this->mHerculesActive)
      {
          mSystemTrayIcon->setVisible(true);
-         mSystemTrayIcon->showMessage("Hercules is still active","Click this icon to restore the main window",QSystemTrayIcon::Information,5000);
-         mSystemTrayIcon->setToolTip("Click on this icon to restore the main window");
+         systrayHint();
          setVisible(false);
 
          event->ignore();
@@ -882,7 +891,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::systrayClick(QSystemTrayIcon::ActivationReason)
 {
-    setVisible(true);
+	if (isVisible())
+	{
+		setVisible(false);
+		systrayHint();
+	}
+	else
+	{
+		setVisible(true);
+	}
 }
 
 void MainWindow::restartDevices()

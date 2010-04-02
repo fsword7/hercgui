@@ -102,6 +102,7 @@ private:
     bool                mRecovery;
     bool 				mDevicesRecovery;
     bool 				mDevicesRecoveryCommenced;
+    bool                mSystrayHintEjected;
     std::string         mRecoveryConfig;
     std::string         mCurrentPath;
 
@@ -155,6 +156,7 @@ public slots:
     void helpAbout();
     void closeEvent(QCloseEvent * event);
     void systrayClick(QSystemTrayIcon::ActivationReason);
+    void systrayHint();
     void recoverDevices(std::string& statusLine);
 };
 
