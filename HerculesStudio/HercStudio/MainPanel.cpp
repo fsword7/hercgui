@@ -67,11 +67,20 @@ void MainPanel::setupUi(QWidget *)
     mStopButton = new PanelButton(iconsPath + "/stopu.gif", iconsPath + "/stopd.gif", this);
     mStartButton = new PanelButton(iconsPath + "/startu.gif", iconsPath + "/startd.gif", this);
 
+    mPowerOnButton->setToolTip("Power On");
+    mPowerOffButton->setToolTip("Power Off");
+    mInterruptButton->setToolTip("Interrupt");
+    mLoadButton->setToolTip("Load (IPL)");
+    mRestartButton->setToolTip("Restart");
+    mStoreButton->setToolTip("Store");
+    mStopButton->setToolTip("Stop all CPUs");
+    mStartButton->setToolTip("Start all CPUs");
+
+    QFont font;
+    font.setPointSize(6);
     mSys = new QLabel(this);
     mSys->setPixmap(*mYellowLow);
     mSysText = new QLabel("SYS",this);
-    QFont font;
-    font.setPointSize(6);
     mSysText->setFont(font);
     mMan = new QLabel(this);
     mMan->setPixmap(*mYellowLow);
@@ -114,17 +123,17 @@ void MainPanel::setupUi(QWidget *)
     mDial0 = new ClickLabel(this,mLcd0);
     QString path = Environment::getIconsPath().c_str();
     mDial0->setPixmap(*new QPixmap(path + "/dial1.gif"));
-    mDial0->setVisible(true);
-    mDial0->setContextMenuPolicy(Qt::CustomContextMenu);
     mDial1 = new ClickLabel(this,mLcd1);
     mDial1->setPixmap(*new QPixmap(path + "/dial1.gif"));
-    mDial1->setVisible(true);
     mDial2 = new ClickLabel(this,mLcd2);
     mDial2->setPixmap(*new QPixmap(path + "/dial1.gif"));
-    mDial2->setVisible(true);
     mDial3 = new ClickLabel(this,mLcd3);
     mDial3->setPixmap(*new QPixmap(path + "/dial1.gif"));
-    mDial3->setVisible(true);
+
+    mDial0->setToolTip("Click to select IPL address");
+    mDial1->setToolTip("Click to select IPL address");
+    mDial2->setToolTip("Click to select IPL address");
+    mDial3->setToolTip("Click to select IPL address");
 
     QPalette mipsPalette;
     mipsPalette.setColor(QPalette::Foreground, QColor(255,0,0));
