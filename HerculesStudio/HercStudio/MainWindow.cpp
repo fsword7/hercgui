@@ -253,8 +253,10 @@ MainWindow::MainWindow(QWidget *parent)
         if (mRecoveryConfig == "")
             mRecovery = false;
         else
+        {
             powerOn();
-        mLogWindow->append("--- successfully attached to Hercules ---");
+            mLogWindow->append("--- successfully attached to Hercules ---");
+        }
     }
     if (Arguments::getInstance().configFileName().length() > 0)
     	powerOn();
