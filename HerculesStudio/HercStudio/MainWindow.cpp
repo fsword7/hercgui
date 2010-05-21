@@ -307,7 +307,22 @@ void MainWindow::writeToLogFromQueue()
         const std::string s = mLogQueue.front();
         mLogQueue.pop_front();
         if (!s.empty())
-            mLogWindow->append(s.c_str());
+        {
+        	if (s.compare(10,4,"<pnl") == 0)
+        	{
+        		int start = s.find(">",11)+1;
+        		const std::string cs = s.substr(0,10) + s.substr(start).c_str();
+        		mLogWindow->setTextBackgroundColor(QColor::fromRgb(0,0,0));
+        		mLogWindow->setTextColor(QColor::fromRgb(0,240,0));
+                mLogWindow->append(cs.c_str());
+        		mLogWindow->setTextBackgroundColor(QColor::fromRgb(255,255,255));
+        		mLogWindow->setTextColor(QColor::fromRgb(0,0,0));
+        	}
+        	else
+        	{
+        		mLogWindow->append(s.c_str());
+        	}
+        }
     }
 }
 
@@ -317,7 +332,7 @@ void MainWindow::dispatchStatus()
     {
         std::string statusLine = mStatusQueue.front();
         mStatusQueue.pop_front();
-        outDebug(3, std::cout << "writeToDevice:" << statusLine << std::endl);
+        outDebug(4, std::cout << "writeToDevice:" << statusLine << std::endl);
         if (!statusLine.empty())
         {
             if (statusLine[0] == 'D')
