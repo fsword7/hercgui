@@ -302,16 +302,22 @@ void MainWindow::fontChanged()
 
 void MainWindow::writeToLogFromQueue()
 {
+	int textColumn =
+	( (Preferences::getInstance().logTimestamp()) ?
+	 10 :
+	 0 );
     while (!mLogQueue.empty())
     {
         const std::string s = mLogQueue.front();
         mLogQueue.pop_front();
         if (!s.empty())
         {
-        	if (s.compare(10,4,"<pnl") == 0)
+        	if (s.compare(textColumn,4,"<pnl") == 0)
         	{
-        		int start = s.find(">",11)+1;
-        		const std::string cs = s.substr(0,10) + s.substr(start).c_str();
+        		int start = s.find(">",textColumn+11)+1;
+        		const std::string cs = ( (textColumn > 0) ?
+        				s.substr(0,textColumn) + s.substr(start).c_str() :
+        				s.substr(start).c_str());
         		mLogWindow->setTextBackgroundColor(QColor::fromRgb(0,0,0));
         		mLogWindow->setTextColor(QColor::fromRgb(0,240,0));
                 mLogWindow->append(cs.c_str());
