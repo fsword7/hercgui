@@ -1,13 +1,13 @@
 /*
- *  File:       Mips.h
+ *  File:       MipsGauge.h
  *
  *  Author:     Jacob Dekel
- *  Created on: Aug 7, 2009
+ *  Created on: June 15, 2010
  *
- *  Copyright (c) 2009 Jacob Dekel
+ *  Copyright (c) 2009-2010 Jacob Dekel
  *  $Id: Mips.h 34 2009-11-07 06:15:58Z jacob $
  *
- *	This object presents the current mips reading as received from hercules
+ *	This object presents the current mips reading as gauge needle
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,25 +24,33 @@
  *
  */
 
-#ifndef MIPS_H_
-#define MIPS_H_
-#include <QString>
-#include <QWidget>
 
-class Mips : public QWidget
+#ifndef MIPSGAUGE_H_
+#define MIPSGAUGE_H_
+
+#include "Mips.h"
+
+class MipsGauge: public Mips
 {
+	Q_OBJECT
 public:
-    Mips(QWidget * parent = 0);
-    virtual ~Mips();
+	MipsGauge(QWidget * parent = 0);
+	virtual ~MipsGauge();
 
-    virtual void display(double value) = 0;
-    virtual void setVisible(bool) = 0;
-    virtual void move(int, int) = 0;
-    virtual void setToolTip(const QString &) = 0;
-    virtual void deleteLater(void) = 0;
+    virtual void display(double);
+    virtual void setVisible(bool visible);
+    virtual void move(int, int);
+    virtual void setToolTip(const QString & tip);
+    virtual void deleteLater(void);
+    virtual bool isVisible();
 
-    virtual bool isVisible() = 0;
+protected:
+    void paintEvent(QPaintEvent *);
 
+private:
+    QWidget * mMips;
+    double mValue;
+    double mHwm;
 };
 
-#endif /* MIPS_H_ */
+#endif /* MIPSGAUGE_H_ */

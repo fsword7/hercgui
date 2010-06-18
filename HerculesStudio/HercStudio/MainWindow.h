@@ -57,7 +57,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    virtual ~MainWindow();
 
     bool  			issueCommand(const std::string& command);
     ConfigFile      * getConfigurationFile();
@@ -99,6 +99,7 @@ private:
     Preferences         * mPreferences;
     Watchdog            * mWatchdog;
     bool                mHerculesActive;
+    bool				mMinimizeOnClose;
     bool                mRecovery;
     bool 				mDevicesRecovery;
     bool 				mDevicesRecoveryCommenced;
@@ -147,6 +148,7 @@ public slots:
     void writeToLogFromQueue();
     void writeToLog(QString line);
     void fontChanged();
+    void mipsChanged();
     void dispatchStatus();
     void newCommand();
     void herculesEndedSlot();

@@ -1,11 +1,13 @@
 /*
- *  File:       Mips.cpp
+ *  File:       MipsLcd.h
  *
  *  Author:     Jacob Dekel
- *  Created on: Aug 7, 2009
+ *  Created on: June 15, 2010
  *
- *  Copyright (c) 2009 Jacob Dekel
- *  $Id: Mips.cpp 34 2009-11-07 06:15:58Z jacob $
+ *  Copyright (c) 2009-2010 Jacob Dekel
+ *  $Id: Mips.h 34 2009-11-07 06:15:58Z jacob $
+ *
+ *	This object presents the current mips reading in LCD format
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,15 +24,29 @@
  *
  */
 
+#ifndef MIPSLCD_H_
+#define MIPSLCD_H_
+
 #include "Mips.h"
 
 #include <QLCDNumber>
 
-Mips::Mips(QWidget * parent) : QWidget(parent)
+class MipsLed : public Mips
 {
-}
+    Q_OBJECT
+public:
+    MipsLed(QWidget * parent = 0);
+    virtual ~MipsLed();
 
-Mips::~Mips()
-{
-}
+    virtual void display(double);
+    virtual void setVisible(bool visible);
+    virtual void move(int, int);
+    virtual void setToolTip(const QString & tip);
+    virtual void deleteLater(void);
+    virtual bool isVisible();
 
+private:
+    QLCDNumber *mMips;
+};
+
+#endif /* MIPSLCD_H_ */

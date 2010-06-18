@@ -42,7 +42,7 @@ class DasdProperties : public GenericDeviceProperties
 
 public:
     DasdProperties(ConfigLine& configLine, QWidget *parent = 0);
-    ~DasdProperties();
+    virtual ~DasdProperties();
 
 private:
     Ui::DasdPropertiesClass ui;

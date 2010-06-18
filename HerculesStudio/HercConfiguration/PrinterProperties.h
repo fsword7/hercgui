@@ -39,7 +39,7 @@ class PrinterProperties : public GenericDeviceProperties
 
 public:
     PrinterProperties(ConfigLine& line,QWidget *parent = 0);
-    ~PrinterProperties();
+    virtual ~PrinterProperties();
     void setCrlfEnabled(bool enabled);
 
 private:

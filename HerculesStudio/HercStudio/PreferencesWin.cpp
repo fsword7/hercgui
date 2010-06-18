@@ -79,6 +79,11 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
     ui.italicCommand->setChecked(mPreferences->fontIsItalic(Preferences::CommandFontObject));
 
     ui.logTimestampCheckbox->setChecked(mPreferences->logTimestamp());
+
+    if (mPreferences->mipsAsGauge())
+    	ui.mipsGaugeButton->setChecked(true);
+    else
+    	ui.mipsLedButton->setChecked(true);
 }
 
 PreferencesWin::~PreferencesWin()
@@ -113,8 +118,11 @@ void PreferencesWin::okPressed()
 	mPreferences->setItalic(Preferences::CommandFontObject, ui.italicCommand->isChecked());
 
 	mPreferences->setLogTimestamp(ui.logTimestampCheckbox->isChecked());
+
+	mPreferences->setMipsAsGauge(ui.mipsGaugeButton->isChecked());
 	mPreferences->write();
 	emit fontChanged();
+	emit mipsChanged();
 	close();
 }
 

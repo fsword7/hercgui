@@ -39,7 +39,7 @@ class PunchProperties : public GenericDeviceProperties
 
 public:
     PunchProperties(ConfigLine& line,QWidget *parent = 0);
-    ~PunchProperties();
+    virtual ~PunchProperties();
     void setBoxesEnabled(bool enabled);
 
 private:

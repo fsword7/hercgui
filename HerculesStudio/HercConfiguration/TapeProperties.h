@@ -39,7 +39,7 @@ class TapeProperties : public GenericDeviceProperties
 
 public:
     TapeProperties(ConfigLine& line,QWidget *parent = 0);
-    ~TapeProperties();
+    virtual ~TapeProperties();
 
 private:
     Ui::TapePropertiesClass ui;

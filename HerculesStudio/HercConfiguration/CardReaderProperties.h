@@ -39,7 +39,7 @@ class CardReaderProperties : public GenericDeviceProperties
 
 public:
     CardReaderProperties(ConfigLine& line, QWidget *parent = 0);
-    ~CardReaderProperties();
+    virtual ~CardReaderProperties();
 
     // Item previously dragged, was relocated, and the original should be deleted
     void shouldBeDeleted();

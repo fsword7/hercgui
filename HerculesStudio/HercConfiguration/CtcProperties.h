@@ -39,7 +39,7 @@ class CtcProperties : public GenericDeviceProperties
 
 public:
     CtcProperties(ConfigLine& configLine, QWidget *parent = 0);
-    ~CtcProperties();
+    virtual ~CtcProperties();
 
 private:
     Ui::CtcPropertiesClass ui;

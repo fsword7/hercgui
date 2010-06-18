@@ -41,7 +41,7 @@ public:
   virtual void run()=0;
 
 signals:
-    virtual void newData() = 0;
+  void newData();
 
 protected:
   SynchronizedQueue& mQueue;

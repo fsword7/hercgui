@@ -40,6 +40,7 @@ const char Preferences::cFontLog[]      = "LogFont=";
 const char Preferences::cFontRegs[]     = "RegistersFont=";
 const char Preferences::cFontPsw[]      = "PswFont=";
 const char Preferences::cFontCommand[]  = "CommandFont=";
+const char Preferences::cMipsAsGauge[]    = "MipgAsGauge=";
 
 const char * Preferences::sKeywords[] = {
 		"HerculesDir=",
@@ -54,7 +55,8 @@ const char * Preferences::sKeywords[] = {
         cFontLog,
         cFontRegs,
         cFontPsw,
-        cFontCommand};
+        cFontCommand,
+        cMipsAsGauge};
 const char * Preferences::sFileName = "HercStudio.pref";
 
 Preferences::Preferences() :
@@ -108,7 +110,7 @@ void Preferences::readPref()
     if (getVersion() == "")
     {
     	hOutDebug(0,"converting preferences");
-    	mPrefs[Version] = "1.1";
+    	mPrefs[Version] = "1.2";
 		Preferences_1_0& oldP = Preferences_1_0::getInstance();
 		setHercDir(oldP.hercDir() );
 		setConfigDir(oldP.configDir());
@@ -124,7 +126,15 @@ void Preferences::readPref()
 		mPrefs[RegsFont] = dummyFP.prefLine();
 		mPrefs[PswFont] = dummyFP.prefLine();
 		mPrefs[CommandFont] = dummyFP.prefLine();
+		setMipsAsGauge(false);
 		write();
+    }
+    else if (getVersion() == "1.1")
+    {
+    	hOutDebug(0,"converting preferences");
+    	mPrefs[Version] = "1.2";
+    	setMipsAsGauge(false);
+    	write();
     }
 
 
@@ -316,6 +326,17 @@ Preferences::keys Preferences::fontObjectToIndex(FontObject fontObject)
 		default: return LogFont; break;
 	}
 }
+
+void Preferences::setMipsAsGauge(bool gauge)
+{
+	mPrefs[MipsAsGauge] = (gauge ? "TRUE" : "FALSE");
+}
+
+bool Preferences::mipsAsGauge()
+{
+	mPrefs[MipsAsGauge] == "TRUE";
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

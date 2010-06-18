@@ -9,7 +9,9 @@ MOC_DIR = moc
 OBJECTS_DIR = obj
 
 # Input
-HEADERS += HercStudio/FontPreferences.h \
+HEADERS += HercStudio/MipsLed.h \
+    HercStudio/MipsGauge.h \
+    HercStudio/FontPreferences.h \
     HercConfiguration/DevicesRename.h \
     HercConfiguration/DevicesPane.h \
     HercConfiguration/DeviceTypes.h \
@@ -97,7 +99,9 @@ FORMS += HercConfiguration/DevicesRename.ui \
     HercUtilities/DasdIsup.ui \
     HercUtilities/DasdLoad.ui \
     HercUtilities/Dasdls.ui
-SOURCES += HercStudio/FontPreferences.cpp \
+SOURCES += HercStudio/MipsLed.cpp \
+    HercStudio/MipsGauge.cpp \
+    HercStudio/FontPreferences.cpp \
     HercConfiguration/DevicesRename.cpp \
     HercConfiguration/DevicesPane.cpp \
     HercConfiguration/DeviceTypes.cpp \

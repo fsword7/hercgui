@@ -26,6 +26,9 @@
 #include "MainPanel.h"
 #include "PanelButton.h"
 #include "Environment.h"
+#include "MipsLed.h"
+#include "MipsGauge.h"
+#include "Preferences.h"
 
 #include <QResizeEvent>
 #include <QColor>
@@ -135,12 +138,10 @@ void MainPanel::setupUi(QWidget *)
     mDial2->setToolTip("Click to select IPL address");
     mDial3->setToolTip("Click to select IPL address");
 
-    QPalette mipsPalette;
-    mipsPalette.setColor(QPalette::Foreground, QColor(255,0,0));
-    mMips = new QLCDNumber(6,this);
-    mMips->setPalette(mipsPalette);
-    mMips->setSegmentStyle(QLCDNumber::Flat);
-    mMips->setFrameShape( QLCDNumber::NoFrame );
+    if (Preferences::getInstance().mipsAsGauge())
+    	mMips = new MipsGauge(this);
+    else
+    	mMips = new MipsLed(this);
     mMips->setVisible(false);
 
     connect(mPowerOnButton, SIGNAL(clicked()), this , SLOT(powerOnClickedSlot()));
@@ -184,7 +185,7 @@ void MainPanel::resizeEvent(QResizeEvent * )
     mDial2->move(width-390,30);
     mDial3->move(width-450,30);
 
-    mMips->move(width-650,30);
+    mMips->move(width-680,20);
 
     mPSW->setGeometry(width-550,110,48*12,12);
 
@@ -308,6 +309,41 @@ void MainPanel::notify(const std::string& statusLine)
              (statusLine[56] == 'W') )
             mMips->display(0);
     }
+}
+
+void MainPanel::switchMips()
+{
+	bool updated = false;
+	bool visible = mMips->isVisible();
+	if (Preferences::getInstance().mipsAsGauge())
+	{
+		MipsLed * oldMips = dynamic_cast<MipsLed *>(mMips);
+		if (oldMips != NULL)
+		{
+			Mips * gauge = new MipsGauge(this);
+			mMips = gauge;
+			oldMips->deleteLater();
+			updated = true;
+		}
+	}
+	else
+	{
+		MipsGauge * oldMips = dynamic_cast<MipsGauge *>(mMips);
+		if (oldMips != NULL)
+		{
+			Mips * lcd = new MipsLed(this);
+			mMips = lcd;
+			oldMips->deleteLater();
+			updated = true;
+		}
+	}
+	if (updated)
+	{
+		mMips->setVisible(visible);
+		int width = this->size().rwidth();
+		mMips->move(width-680,20);
+	}
+
 }
 
 ClickLabel::ClickLabel(QWidget * parent, QLCDNumber * lcd)

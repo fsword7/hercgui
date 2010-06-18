@@ -38,7 +38,6 @@
 #include <QLabel>
 #include <QMouseEvent>
 
-
 // base class for "clickable" objects
 class ClickLabel : public QLabel
 {
@@ -65,6 +64,7 @@ public:
   void standby();
   void setDormant();
   void notify(const std::string& statusLine);
+  void switchMips();
 
 signals:
   void powerOnClicked();
@@ -108,7 +108,7 @@ private:
   QLCDNumber *mLcd0, *mLcd1, *mLcd2, *mLcd3;
   ClickLabel *mDial0, *mDial1, *mDial2, *mDial3;
 
-  QLCDNumber *mMips;
+  Mips *mMips;
 
   double 	mMipsHWM;
 

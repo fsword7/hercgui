@@ -300,6 +300,11 @@ void MainWindow::fontChanged()
     mCommandLine->setFont();
 }
 
+void MainWindow::mipsChanged()
+{
+	mMainPanel->switchMips();
+}
+
 void MainWindow::writeToLogFromQueue()
 {
 	int textColumn =
@@ -615,6 +620,7 @@ void MainWindow::preferences()
         mPreferences = &Preferences::getInstance();
     PreferencesWin * pw = new PreferencesWin(mCurrentPath, mPreferences, this);
     connect(pw, SIGNAL(fontChanged()), this, SLOT(fontChanged()));
+    connect(pw, SIGNAL(mipsChanged()), this, SLOT(mipsChanged()));
     pw->show();
 }
 
@@ -688,6 +694,7 @@ void MainWindow::powerOn()
     mWatchdog->start();
 
     mHerculesActive = true;
+    mMinimizeOnClose=true;
     mCommandLine->setReadOnly(false);
 
     mMainPanel->standby();
@@ -723,6 +730,7 @@ void MainWindow::powerOn()
 void MainWindow::powerOff()
 {
     if (!mHerculesActive) return ;
+    mMinimizeOnClose=false;
     printf("Goodbye!\n");
     FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
     if (input)
@@ -733,6 +741,7 @@ void MainWindow::powerOff()
             usleep(100000);
     }
     mDevicesPane->clear();
+    mMainPanel->setDormant();
 }
 
 void MainWindow::load()
@@ -878,6 +887,7 @@ void MainWindow::herculesEndedSlot()
     mMainPanel->setDormant();
     ui.menuFile->setEnabled(true);
     mSystemTrayIcon->setVisible(false);
+    mMinimizeOnClose=false;
 }
 
 void MainWindow::helpAbout()
@@ -898,8 +908,10 @@ void MainWindow::systrayHint()
 
 void MainWindow::closeEvent(QCloseEvent *event)
  {
-     if (this->mHerculesActive)
+	hOutDebug(0,(mHerculesActive ? "1" : "0") << (mMinimizeOnClose ? "1" : "0"))
+     if (mHerculesActive && mMinimizeOnClose)
      {
+    	 hOutDebug(0,"systray");
          mSystemTrayIcon->setVisible(true);
          systrayHint();
          setVisible(false);
@@ -908,7 +920,16 @@ void MainWindow::closeEvent(QCloseEvent *event)
      }
      else
      {
-         event->accept();
+    	 hOutDebug(0,"real Close");
+         if (mHerculesActive)
+         {
+        	 QMessageBox::warning(this,"Hercules is still running",
+        			 "please wait until Hercules finishes\n"
+        			 "Press OK to wait until hercules finishes\n"
+        			 "Or press Abort to force exit",
+        			 QMessageBox::Ok, QMessageBox::Abort);
+        	 event->ignore(); // TODO - deleteLater debug
+         }
      }
  }
 

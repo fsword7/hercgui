@@ -57,6 +57,7 @@ public slots:
 
 signals:
   void fontChanged();
+  void mipsChanged();
 };
 
 #endif // PREFERENCESWIN_H
