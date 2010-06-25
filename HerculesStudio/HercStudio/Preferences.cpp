@@ -68,7 +68,7 @@ Preferences::Preferences() :
     {
     	mPrefs.push_back("");
     }
-    mPath = QDir::homePath().toStdString() + "/.config";
+    mPath = QDir::homePath() + "/.config";
     setHercDir("");
     setConfigDir("");
     setLogsDir(QDir::homePath().toStdString()+"/Desktop");
@@ -79,6 +79,7 @@ Preferences::Preferences() :
 
 Preferences::~Preferences()
 {
+
 }
 
 Preferences& Preferences::getInstance()
@@ -169,8 +170,6 @@ std::string Preferences::getValue(char * line, const char * keyword)
 
 void Preferences::write()
 {
-    QString fn(mPath.c_str());
-
     QFile file(getFileName());
     file.open(QIODevice::WriteOnly);
     for(unsigned int i=0; i<NumberOfLines; i++)
@@ -187,7 +186,7 @@ void Preferences::write()
 
 QString Preferences::getFileName()
 {
-    QString ret = mPath.c_str();
+    QString ret = mPath;
     ret += "/";
     ret += sFileName;
     outDebug(4,std::cout << "file name=" << ret.toStdString() << std::endl);

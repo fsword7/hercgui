@@ -327,7 +327,7 @@ private:
 	const std::string& getVersion();
 	keys fontObjectToIndex(FontObject fontObject);
 
-	std::string mPath;
+	QString mPath;
 	int mView;
 	std::string mVolatileConfigDir;
 

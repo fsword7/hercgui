@@ -1,8 +1,25 @@
 /*
- * MipsGauge.cpp
+ *  File:       MipsGauge.cpp
  *
- *  Created on: Jun 16, 2010
- *      Author: yakov
+ *  Author:     Jacob Dekel
+ *  Created on: Jun 15, 2010
+ *
+ *  Copyright (c) 2009-2010 Jacob Dekel
+ *  $Id: Mips.cpp 34 2009-11-07 06:15:58Z jacob $
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 #include "MipsGauge.h"
@@ -21,12 +38,10 @@ MipsGauge::MipsGauge(QWidget * parent)
 
 MipsGauge::~MipsGauge()
 {
-
 }
 
 void MipsGauge::move(int x, int y)
 {
-	//mMips->move(x,y);
 	QWidget::move(x,y);
 }
 
@@ -75,34 +90,11 @@ void MipsGauge::paintEvent(QPaintEvent *)
 	hOutDebug(5,"angle="<<angle << " hwm=" << mHwm << std::endl);
 	painter.rotate(angle);
 	painter.drawLine(-50,0,0,0);
-
-return;
-	painter.rotate(30.0);
-	painter.drawLine(-50,0,0,0);
-	painter.rotate(30.0);
-	painter.drawLine(-50,0,0,0);
-	painter.rotate(30.0);
-	painter.drawLine(-50,0,0,0);
-	painter.rotate(30.0);
-	painter.drawLine(-50,0,0,0);
-	painter.rotate(30.0);
-	painter.drawLine(-50,0,0,0);
-return;
-	painter.translate(180.0,45.0);
-	painter.rotate(30.0);
-	for (int angle=30; angle<=150; angle+=10)
-	{
-		painter.drawLine(-45,0,-37,0);
-		painter.rotate(10.0);
-	}
-	painter.rotate(-160.0);
-   painter.setPen(red);
-   painter.drawText(-20,10,"MIPS");
 }
 
 void MipsGauge::deleteLater()
 {
-	//QWidget::deleteLater();
+	QWidget::deleteLater();
 }
 
 bool MipsGauge::isVisible()

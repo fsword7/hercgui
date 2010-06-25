@@ -56,7 +56,8 @@ DevicesPane::DevicesPane(QWidget *parent)
 
 DevicesPane::~DevicesPane()
 {
-
+	delete mYellowIcon;
+	delete mYellowHighIcon;
 }
 
 void DevicesPane::notify(const std::string& statusLine)

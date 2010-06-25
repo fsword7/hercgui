@@ -61,6 +61,7 @@ public:
   virtual ~MainPanel();
   static void updateLcd(QLCDNumber * lcd, int inc);
   int getLoadAddress();
+  void setLoadAddress(const char * devNo);
   void standby();
   void setDormant();
   void notify(const std::string& statusLine);

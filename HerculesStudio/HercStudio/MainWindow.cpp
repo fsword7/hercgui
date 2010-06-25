@@ -37,6 +37,8 @@
 #include "NamedPipe.h"
 #include "Environment.h"
 #include "Arguments.h"
+#include "IplConfig.h"
+#include "SystemConfigLine.h"
 
 #include <QFileDialog>
 #include <QDockWidget>
@@ -73,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     QDir d("");
-    mCurrentPath = d.absolutePath().toStdString();
+    mCurrentPath = d.absolutePath();
 
     // left dock (Devices)
     mDevicesDock = new QDockWidget("Devices",this);
@@ -182,7 +184,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     QString path = Environment::getIconsPath().c_str();
     outDebug(3,std::cout << "icons=" << path.toStdString() << std::endl);
-    mSystemTrayIcon = new QSystemTrayIcon(*new QIcon(path + "/tray.jpg"));
+    QIcon trayIcon(path + "/tray.jpg");
+    mSystemTrayIcon = new QSystemTrayIcon(trayIcon);
 
     connect(ui.actionNew, SIGNAL(triggered()), this , SLOT(newConfig()));
     connect(ui.actionOpen_configuration, SIGNAL(triggered()), this , SLOT(openConfig()));
@@ -206,7 +209,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui.actionPreferences, SIGNAL(triggered()), this, SLOT(preferences()));
     connect(ui.actionPower_on, SIGNAL(triggered()), this, SLOT(powerOn()));
     connect(ui.actionPower_off, SIGNAL(triggered()), this, SLOT(powerOff()));
-    connect(ui.actionIPL_Load, SIGNAL(triggered()), this, SLOT(load()));
+    connect(ui.actionIPL_Load, SIGNAL(triggered()), this, SLOT(loadCommand()));
     connect(ui.actionStart, SIGNAL(triggered()), this, SLOT(start()));
     connect(ui.actionStop, SIGNAL(triggered()), this, SLOT(stop()));
     connect(ui.actionExtInterrupt, SIGNAL(triggered()), this, SLOT(extInterrupt()));
@@ -245,7 +248,7 @@ MainWindow::MainWindow(QWidget *parent)
     {
         Recovery * r = new Recovery(this);
         r->exec();
-        mRecoveryConfig = r->getHerculesConf();
+        mRecoveryConfig = r->getHerculesConf().c_str();
         if (mRecoveryConfig == "!")
         {
             exit(0);
@@ -264,7 +267,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-
+	mMainPanel->close();
+	delete mSystemTrayIcon;
+	delete mCommandLine;
 }
 
 void MainWindow::writeToLog(QString line)
@@ -618,7 +623,7 @@ void MainWindow::preferences()
 {
     if (mPreferences == NULL)
         mPreferences = &Preferences::getInstance();
-    PreferencesWin * pw = new PreferencesWin(mCurrentPath, mPreferences, this);
+    PreferencesWin * pw = new PreferencesWin(mCurrentPath.toStdString(), mPreferences, this);
     connect(pw, SIGNAL(fontChanged()), this, SLOT(fontChanged()));
     connect(pw, SIGNAL(mipsChanged()), this, SLOT(mipsChanged()));
     pw->show();
@@ -642,7 +647,7 @@ void MainWindow::powerOn()
     }
     else
     {
-        configName = mRecoveryConfig;
+        configName = mRecoveryConfig.toStdString();
         mConfigFile = new ConfigFile(configName);
     }
 
@@ -755,6 +760,44 @@ void MainWindow::load()
             fprintf(input,"IPL %X\n",addr);
             fflush(input);
     }
+}
+
+void MainWindow::loadCommand()
+{
+	if (!mHerculesActive) return;
+	int lpIndex = -1;
+	if (mAdHocLoadParm != "")
+	{
+		QString loadParm = mAdHocLoadParm;
+	}
+	else
+	{
+		hOutDebug(5, "lastSYS=" << mConfigFile->getLastSys())
+		for (int i=0; i<= mConfigFile->getLastSys(); i++)
+		{
+			if ((*mConfigFile)[i]->getLowercaseToken(0) == "loadparm")
+			{
+				lpIndex = i;
+				mAdHocLoadParm = (*mConfigFile)[i]->getToken(1).c_str();
+				break;
+			}
+			else hOutDebug(5,"skipping " << i << ": " << (*mConfigFile)[i]->getLowercaseToken(0));
+		}
+	}
+	if (lpIndex == -1) mAdHocLoadParm = "......";
+	IplConfig * iplConfig = new IplConfig(mMainPanel->getLoadAddress(),mAdHocLoadParm.toAscii(), this);
+	iplConfig->show();
+	connect(iplConfig, SIGNAL(doIpl(QString, QString)), this, SLOT(loadCommandDoIpl(QString, QString)));
+}
+
+void MainWindow::loadCommandDoIpl(const QString& devNo, const QString& loadParm)
+{
+	mAdHocLoadParm = loadParm;
+	QString loadCommand = "LOADPARM " + mAdHocLoadParm;
+	issueCommand(loadCommand.toStdString());
+	mMainPanel->setLoadAddress(devNo.toStdString().c_str());
+	std::string iplCommand = "IPL " + devNo.toStdString();
+	issueCommand(iplCommand);
 }
 
 void MainWindow::extInterrupt()
@@ -908,10 +951,9 @@ void MainWindow::systrayHint()
 
 void MainWindow::closeEvent(QCloseEvent *event)
  {
-	hOutDebug(0,(mHerculesActive ? "1" : "0") << (mMinimizeOnClose ? "1" : "0"))
      if (mHerculesActive && mMinimizeOnClose)
      {
-    	 hOutDebug(0,"systray");
+    	 hOutDebug(5,"systray");
          mSystemTrayIcon->setVisible(true);
          systrayHint();
          setVisible(false);
@@ -920,7 +962,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
      }
      else
      {
-    	 hOutDebug(0,"real Close");
+    	 hOutDebug(5,"real Close");
          if (mHerculesActive)
          {
         	 QMessageBox::warning(this,"Hercules is still running",
@@ -930,6 +972,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         			 QMessageBox::Ok, QMessageBox::Abort);
         	 event->ignore(); // TODO - deleteLater debug
          }
+         //else deleteLater();
      }
  }
 

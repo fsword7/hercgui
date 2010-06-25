@@ -29,6 +29,7 @@
 #include "MipsLed.h"
 #include "MipsGauge.h"
 #include "Preferences.h"
+#include "ConfigurationEditor.h"
 
 #include <QResizeEvent>
 #include <QColor>
@@ -47,14 +48,18 @@ MainPanel::MainPanel(QWidget *parent)
 
 MainPanel::~MainPanel()
 {
+	mMips->close();
+	delete mMips;
+	delete mYellowLow;
+	delete mYellowHigh;
 }
 
 void MainPanel::setupUi(QWidget *)
 {
-    const QColor *black = new QColor(50,50,50);
-    const QColor *white = new QColor(255,255,20);
-    QBrush blackBrush(*black);
-    QPalette blackPalette(*white, *black);
+	const QColor black(50,50,50);
+    const QColor white(255,255,20);
+    QBrush blackBrush(black);
+    QPalette blackPalette(white, black);
     this->setPalette(blackPalette);
     this->setAutoFillBackground(true);
     this->setMinimumHeight(100);
@@ -123,15 +128,16 @@ void MainPanel::setupUi(QWidget *)
     mLcd3->resize(20,20);
     mLcd3->setMode(QLCDNumber::Hex);
 
-    mDial0 = new ClickLabel(this,mLcd0);
     QString path = Environment::getIconsPath().c_str();
-    mDial0->setPixmap(*new QPixmap(path + "/dial1.gif"));
+    QPixmap pixMap(path + "/dial1.gif");
+    mDial0 = new ClickLabel(this,mLcd0);
+    mDial0->setPixmap(pixMap);
     mDial1 = new ClickLabel(this,mLcd1);
-    mDial1->setPixmap(*new QPixmap(path + "/dial1.gif"));
+    mDial1->setPixmap(pixMap);
     mDial2 = new ClickLabel(this,mLcd2);
-    mDial2->setPixmap(*new QPixmap(path + "/dial1.gif"));
+    mDial2->setPixmap(pixMap);
     mDial3 = new ClickLabel(this,mLcd3);
-    mDial3->setPixmap(*new QPixmap(path + "/dial1.gif"));
+    mDial3->setPixmap(pixMap);
 
     mDial0->setToolTip("Click to select IPL address");
     mDial1->setToolTip("Click to select IPL address");
@@ -249,6 +255,18 @@ int MainPanel::getLoadAddress()
 {
     return mLcd0->intValue() + 16*mLcd1->intValue() +
         (16*16)*mLcd2->intValue() + (16*16*16)*mLcd3->intValue();
+}
+
+void MainPanel::setLoadAddress(const char *devNo)
+{
+	int addr = ConfigurationEditor::parseNum(devNo,16);
+	QLCDNumber *nums[4] = {mLcd0, mLcd1, mLcd2, mLcd3};
+	for (int i=0; i< 4; i++)
+	{
+		int dig = addr%16;
+		addr /= 16;
+		nums[i]->display(dig);
+	}
 }
 
 void MainPanel::setDormant()

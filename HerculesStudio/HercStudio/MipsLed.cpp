@@ -2,7 +2,7 @@
  *  File:       MipsLcd.cpp
  *
  *  Author:     Jacob Dekel
- *  Created on: Jun15, 2010
+ *  Created on: Jun 15, 2010
  *
  *  Copyright (c) 2009-2010 Jacob Dekel
  *  $Id: Mips.cpp 34 2009-11-07 06:15:58Z jacob $
@@ -65,7 +65,7 @@ void MipsLed::setToolTip(const QString & tip)
 
 void MipsLed::deleteLater()
 {
-	//mMips->deleteLater();
+	mMips->deleteLater();
 }
 
 bool MipsLed::isVisible()
