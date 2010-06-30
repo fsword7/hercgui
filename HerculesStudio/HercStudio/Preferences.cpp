@@ -40,7 +40,8 @@ const char Preferences::cFontLog[]      = "LogFont=";
 const char Preferences::cFontRegs[]     = "RegistersFont=";
 const char Preferences::cFontPsw[]      = "PswFont=";
 const char Preferences::cFontCommand[]  = "CommandFont=";
-const char Preferences::cMipsAsGauge[]    = "MipgAsGauge=";
+const char Preferences::cMipsAsGauge[]  = "MipgAsGauge=";
+const char Preferences::cPswMode[]      = "PswMode=";
 
 const char * Preferences::sKeywords[] = {
 		"HerculesDir=",
@@ -56,7 +57,8 @@ const char * Preferences::sKeywords[] = {
         cFontRegs,
         cFontPsw,
         cFontCommand,
-        cMipsAsGauge};
+        cMipsAsGauge,
+		cPswMode};
 const char * Preferences::sFileName = "HercStudio.pref";
 
 Preferences::Preferences() :
@@ -128,6 +130,7 @@ void Preferences::readPref()
 		mPrefs[PswFont] = dummyFP.prefLine();
 		mPrefs[CommandFont] = dummyFP.prefLine();
 		setMipsAsGauge(false);
+		setPswMode(Psw::Docked);
 		write();
     }
     else if (getVersion() == "1.1")
@@ -135,6 +138,7 @@ void Preferences::readPref()
     	hOutDebug(0,"converting preferences");
     	mPrefs[Version] = "1.2";
     	setMipsAsGauge(false);
+    	setPswMode(Psw::Docked);
     	write();
     }
 
@@ -333,10 +337,20 @@ void Preferences::setMipsAsGauge(bool gauge)
 
 bool Preferences::mipsAsGauge()
 {
-	mPrefs[MipsAsGauge] == "TRUE";
+	return mPrefs[MipsAsGauge] == "TRUE";
 }
 
+void Preferences::setPswMode(Psw::PswMode mode)
+{
+	mPrefs[PswMode] = ( mode == Psw::Docked ? "0" : "1");
+}
 
+Psw::PswMode Preferences::pswMode()
+{
+	return ( (strcmp(mPrefs[PswMode].c_str(),"0") == 0 ) ?
+		Psw::Docked :
+		Psw::StatusBar ) ;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Preferences_1_0 * Preferences_1_0::instance = NULL;

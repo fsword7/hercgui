@@ -31,20 +31,35 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QMainWindow>
 
 class Psw: public StatusUpdateCollector, public QLabel
 {
 public:
-	Psw( QWidget * parent=NULL );
+	enum PswMode
+	{
+		Docked = 0,
+		StatusBar
+	};
+	Psw( PswMode mode, QMainWindow * mainWindow );
 	virtual ~Psw();
 
 	virtual void notify(const std::string& );
 	void setFont();
 	void setActive(bool active);
+	bool isActive() { return mActive; };
+	void setMode(PswMode mode);
 
 private:
+	void setStatusBar();
+
 	std::string mLine;
 	bool mActive;
+	QMainWindow * mMainWindow;
+	Psw::PswMode mMode;
+	QLabel * mCpu;
+	QLabel * mInstCount;
+	QFont * mFontCourier;
 };
 
 #endif /* PSW_H_ */

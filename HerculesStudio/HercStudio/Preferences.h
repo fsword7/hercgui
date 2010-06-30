@@ -27,6 +27,8 @@
 #ifndef PREFERENCES_H_
 #define PREFERENCES_H_
 
+#include "Psw.h"
+
 #include <string>
 #include <vector>
 
@@ -242,7 +244,8 @@ public:
 	RegsFont = 10,
 	PswFont = 11,
 	CommandFont = 12,
-	MipsAsGauge = 13
+	MipsAsGauge = 13,
+	PswMode = 14
 	};
 	enum FontObject
 	{
@@ -253,7 +256,7 @@ public:
 	};
 	enum general
 	{
-		NumberOfLines = 14,
+		NumberOfLines = 15,
 		PREF_LINE_LENGTH = 300
 	};
 
@@ -316,6 +319,10 @@ public:
 	void setMipsAsGauge(bool gauge);
 	bool mipsAsGauge();
 
+	// Psw Mode
+	Psw::PswMode pswMode();
+	void setPswMode(Psw::PswMode mode);
+
 protected:
     Preferences();
 
@@ -336,7 +343,7 @@ private:
 	static const char *sKeywords[];
 	std::vector<std::string> mPrefs;
 	static const char cFontLog[], cFontRegs[], cFontPsw[], cFontCommand[],
-		cMipsAsGauge[];
+		cMipsAsGauge[], cPswMode[];
 };
 
 #endif /* PREFERENCES_H_ */

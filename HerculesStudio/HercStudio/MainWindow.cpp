@@ -167,7 +167,7 @@ MainWindow::MainWindow(QWidget *parent)
     // psw
     mPswDock = new QDockWidget("PSW", this);
     mPswDock->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    mPsw = new Psw(this);
+    mPsw = new Psw(Preferences::getInstance().pswMode(), this);
     mPswDock->setWidget(mPsw);
     addDockWidget(Qt::BottomDockWidgetArea,mPswDock );
     this->tabifyDockWidget(mPswDock,mBottomDock);
@@ -308,6 +308,12 @@ void MainWindow::fontChanged()
 void MainWindow::mipsChanged()
 {
 	mMainPanel->switchMips();
+}
+
+void MainWindow::pswChanged()
+{
+	mPsw->setMode(mPreferences->pswMode());
+	mPswDock->setVisible(mPreferences->pswMode() == Psw::Docked);
 }
 
 void MainWindow::writeToLogFromQueue()
@@ -575,11 +581,17 @@ void MainWindow::editView64BitFr()
 
 void MainWindow::editViewPSW()
 {
-	bool newVal = !mPswDock->isVisible();
-    mPswDock->setVisible(newVal);
-    mPsw->setActive(newVal);
-    ui.actionView_PSW->setChecked(newVal);
-    Preferences::getInstance().setRegs(Preferences::ViewPsw, newVal);
+	bool newVal = !mPsw->isActive();
+	mPsw->setActive(newVal);
+	ui.actionView_PSW->setChecked(newVal);
+	Preferences::getInstance().setRegs(Preferences::ViewPsw, newVal);
+	if (Preferences::getInstance().pswMode() == Psw::Docked)
+	{
+		mPswDock->setVisible(newVal);
+	}
+
+
+
  }
 
 void MainWindow::deleteMessages()
@@ -626,6 +638,7 @@ void MainWindow::preferences()
     PreferencesWin * pw = new PreferencesWin(mCurrentPath.toStdString(), mPreferences, this);
     connect(pw, SIGNAL(fontChanged()), this, SLOT(fontChanged()));
     connect(pw, SIGNAL(mipsChanged()), this, SLOT(mipsChanged()));
+    connect(pw, SIGNAL(pswChanged()), this, SLOT(pswChanged()));
     pw->show();
 }
 

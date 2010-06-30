@@ -152,6 +152,7 @@ public slots:
     void writeToLog(QString line);
     void fontChanged();
     void mipsChanged();
+    void pswChanged();
     void dispatchStatus();
     void newCommand();
     void herculesEndedSlot();

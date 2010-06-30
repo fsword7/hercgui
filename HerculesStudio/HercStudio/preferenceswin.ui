@@ -552,6 +552,19 @@
     </property>
    </widget>
   </widget>
+  <widget class="QCheckBox" name="pswDock">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>200</y>
+     <width>231</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Show PSW in a docked window</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

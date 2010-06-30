@@ -24,13 +24,21 @@
 
 
 #include "Psw.h"
+#include "HerculesStudio.h"
 #include "Preferences.h"
 
+#include <QStatusBar>
 #include <iostream>
 
-Psw::Psw( QWidget * )
+Psw::Psw( Psw::PswMode mode, QMainWindow * mainWindow)
+
 {
+	mMainWindow = mainWindow;
+	mMode = mode;
+	mFontCourier = new QFont("Courier");
+
 	setFont();
+	setStatusBar();
 	mActive = false;
 	mLine.reserve(100);
 	mLine.assign(100,' ');
@@ -47,9 +55,17 @@ void Psw::notify(const std::string& statusLine)
 	//STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M....... instcount=0
 	if (!mActive || statusLine.compare(0,7,"STATUS=") != 0)
 		return;
-	mLine.replace(0,46, &statusLine.c_str()[7], 46);
-	mLine.replace(48,statusLine.length()-56, &statusLine[63]);
-	setText(&mLine[0]);
+	if (mMode == Psw::Docked)
+	{
+		mLine.replace(0,46, &statusLine.c_str()[7], 46);
+		mLine.replace(48,statusLine.length()-56, &statusLine[63]);
+		setText(&mLine[0]);
+	}
+	else if (mActive)
+	{
+		mCpu->setText(statusLine.substr(7,39).c_str());
+		mInstCount->setText(statusLine.substr(60).c_str());
+	}
 }
 
 void Psw::setFont()
@@ -67,5 +83,33 @@ void Psw::setFont()
 void Psw::setActive(bool active)
 {
 	mActive = active;
+	if (mMode == Psw::StatusBar)
+		setStatusBar();
 	setVisible(active);
+}
+
+void Psw::setMode(Psw::PswMode mode)
+{
+	mMode = mode;
+	setStatusBar();
+}
+
+void Psw::setStatusBar()
+{
+	mMainWindow->setStatusBar(0);
+	mMainWindow->setStatusBar(new QStatusBar());
+
+	if (mMode == Psw::StatusBar && mActive)
+	{
+		mCpu = new QLabel("        ", mMainWindow->statusBar());
+		mCpu->setMinimumWidth(320);
+		mCpu->setFont(*mFontCourier);
+		mCpu->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+		mMainWindow->statusBar()->addWidget(mCpu);
+
+		mInstCount = new QLabel("        ", mMainWindow->statusBar());
+		mCpu->setFont(*mFontCourier);
+		mInstCount->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+		mMainWindow->statusBar()->addWidget(mInstCount);
+	}
 }

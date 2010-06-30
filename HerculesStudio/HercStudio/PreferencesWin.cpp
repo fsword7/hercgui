@@ -84,6 +84,11 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
     	ui.mipsGaugeButton->setChecked(true);
     else
     	ui.mipsLedButton->setChecked(true);
+
+    if (mPreferences->pswMode() == Psw::Docked)
+    	ui.pswDock->setChecked(true);
+    else
+    	ui.pswDock->setChecked(false);
 }
 
 PreferencesWin::~PreferencesWin()
@@ -120,9 +125,13 @@ void PreferencesWin::okPressed()
 	mPreferences->setLogTimestamp(ui.logTimestampCheckbox->isChecked());
 
 	mPreferences->setMipsAsGauge(ui.mipsGaugeButton->isChecked());
+
+	mPreferences->setPswMode( ui.pswDock->isChecked() ? Psw::Docked : Psw::StatusBar);
+
 	mPreferences->write();
 	emit fontChanged();
 	emit mipsChanged();
+	emit pswChanged();
 	close();
 }
 

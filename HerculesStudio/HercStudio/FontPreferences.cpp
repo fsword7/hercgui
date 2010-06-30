@@ -76,7 +76,7 @@ void  FontPreferences::setPrefLine(std::string line)
 {
 	hOutDebug(2, "FontPreferences Line='" << line << "'");
 	if (line.length() == 0) return;
-	Tokenizer::handle pos, lastPos;
+	Tokenizer::handle pos=0, lastPos=0;
 	std::string word = StringTokenizer::getFirstWord(line, pos, lastPos, ",");
 	if (word == "") return;
 	mName = word;

@@ -97,8 +97,8 @@ int NamedPipe::recover()
         if (fstr != NULL)
         {
             rc = fscanf(fstr,"%d",&hercPid);
-            fscanf(fstr,"%d",&studioPid);
-            fclose(fstr);
+            if ((true) || (fscanf(fstr,"%d",&studioPid)))
+				fclose(fstr);
         }
 
         if (!processIsRunning(hercPid))
