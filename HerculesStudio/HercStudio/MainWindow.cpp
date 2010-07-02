@@ -324,7 +324,7 @@ void MainWindow::writeToLogFromQueue()
 	 0 );
     while (!mLogQueue.empty())
     {
-        const std::string s = mLogQueue.front();
+        std::string s = mLogQueue.front();
         mLogQueue.pop_front();
         if (!s.empty())
         {
@@ -334,16 +334,19 @@ void MainWindow::writeToLogFromQueue()
         		const std::string cs = ( (textColumn > 0) ?
         				s.substr(0,textColumn) + s.substr(start).c_str() :
         				s.substr(start).c_str());
-        		mLogWindow->setTextBackgroundColor(QColor::fromRgb(0,0,0));
-        		mLogWindow->setTextColor(QColor::fromRgb(0,240,0));
-                mLogWindow->append(cs.c_str());
-        		mLogWindow->setTextBackgroundColor(QColor::fromRgb(255,255,255));
-        		mLogWindow->setTextColor(QColor::fromRgb(0,0,0));
+        		s = cs;
         	}
-        	else
-        	{
-        		mLogWindow->append(s.c_str());
-        	}
+			if (s.compare(0,9,"HHC00001I") == 0)
+			{
+				mLogWindow->setTextBackgroundColor(QColor::fromRgb(0,0,0));
+				mLogWindow->setTextColor(QColor::fromRgb(0,240,0));
+			}
+			else
+			{
+				mLogWindow->setTextBackgroundColor(QColor::fromRgb(255,255,255));
+				mLogWindow->setTextColor(QColor::fromRgb(0,0,0));
+			}
+			mLogWindow->append(s.c_str());
         }
     }
 }

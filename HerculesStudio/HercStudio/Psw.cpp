@@ -35,7 +35,7 @@ Psw::Psw( Psw::PswMode mode, QMainWindow * mainWindow)
 {
 	mMainWindow = mainWindow;
 	mMode = mode;
-	mFontCourier = new QFont("Courier");
+	mFontCourier = new QFont("Mono",10);
 
 	setFont();
 	setStatusBar();
@@ -63,7 +63,7 @@ void Psw::notify(const std::string& statusLine)
 	}
 	else if (mActive)
 	{
-		mCpu->setText(statusLine.substr(7,39).c_str());
+		mCpu->setText(statusLine.substr(7,43).c_str());
 		mInstCount->setText(statusLine.substr(60).c_str());
 	}
 }
@@ -102,13 +102,15 @@ void Psw::setStatusBar()
 	if (mMode == Psw::StatusBar && mActive)
 	{
 		mCpu = new QLabel("        ", mMainWindow->statusBar());
-		mCpu->setMinimumWidth(320);
+		mCpu->setMinimumWidth(400);
+		mCpu->setMinimumHeight(20);
 		mCpu->setFont(*mFontCourier);
+
 		mCpu->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 		mMainWindow->statusBar()->addWidget(mCpu);
 
 		mInstCount = new QLabel("        ", mMainWindow->statusBar());
-		mCpu->setFont(*mFontCourier);
+		mInstCount->setFont(*mFontCourier);
 		mInstCount->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 		mMainWindow->statusBar()->addWidget(mInstCount);
 	}
