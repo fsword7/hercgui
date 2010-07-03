@@ -48,7 +48,6 @@ MainPanel::MainPanel(QWidget *parent)
 
 MainPanel::~MainPanel()
 {
-	mMips->close();
 	delete mMips;
 	delete mYellowLow;
 	delete mYellowHigh;
@@ -62,7 +61,6 @@ void MainPanel::setupUi(QWidget *)
     QPalette blackPalette(white, black);
     this->setPalette(blackPalette);
     this->setAutoFillBackground(true);
-    this->setMinimumHeight(100);
 
     QString iconsPath = Environment::getIconsPath().c_str();
     mPowerOnButton = new PanelButton(iconsPath + "/poweronoffu.gif", iconsPath + "/poweronoffd.gif", this);

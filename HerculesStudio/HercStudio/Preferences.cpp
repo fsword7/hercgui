@@ -42,6 +42,7 @@ const char Preferences::cFontPsw[]      = "PswFont=";
 const char Preferences::cFontCommand[]  = "CommandFont=";
 const char Preferences::cMipsAsGauge[]  = "MipgAsGauge=";
 const char Preferences::cPswMode[]      = "PswMode=";
+const char Preferences::cSplitLog[]     = "SplitLog=";
 
 const char * Preferences::sKeywords[] = {
 		"HerculesDir=",
@@ -58,7 +59,8 @@ const char * Preferences::sKeywords[] = {
         cFontPsw,
         cFontCommand,
         cMipsAsGauge,
-		cPswMode};
+		cPswMode,
+		cSplitLog};
 const char * Preferences::sFileName = "HercStudio.pref";
 
 Preferences::Preferences() :
@@ -131,6 +133,7 @@ void Preferences::readPref()
 		mPrefs[CommandFont] = dummyFP.prefLine();
 		setMipsAsGauge(false);
 		setPswMode(Psw::Docked);
+		setSplitLog(true);
 		write();
     }
     else if (getVersion() == "1.1")
@@ -139,6 +142,7 @@ void Preferences::readPref()
     	mPrefs[Version] = "1.2";
     	setMipsAsGauge(false);
     	setPswMode(Psw::Docked);
+		setSplitLog(true);
     	write();
     }
 
@@ -350,6 +354,18 @@ Psw::PswMode Preferences::pswMode()
 	return ( (strcmp(mPrefs[PswMode].c_str(),"0") == 0 ) ?
 		Psw::Docked :
 		Psw::StatusBar ) ;
+}
+
+void Preferences::setSplitLog(bool split)
+{
+	mPrefs[SplitLog] = ( split ? "TRUE" : "FALSE");
+}
+
+bool Preferences::splitLog()
+{
+	return ( (strcmp(mPrefs[SplitLog].c_str(),"TRUE") == 0 ) ?
+		true :
+		false ) ;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

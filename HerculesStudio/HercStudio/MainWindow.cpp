@@ -39,6 +39,7 @@
 #include "Arguments.h"
 #include "IplConfig.h"
 #include "SystemConfigLine.h"
+#include "LogWidget.h"
 
 #include <QFileDialog>
 #include <QDockWidget>
@@ -237,10 +238,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mCommandLine, SIGNAL(returnPressed()), this , SLOT(newCommand()));
     connect(mSystemTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systrayClick(QSystemTrayIcon::ActivationReason)));
 
-    mLogWindow  = new QTextEdit(this);
-    mLogWindow->setReadOnly(true);
-    fontChanged();
-    setCentralWidget(mLogWindow);
+    if (Preferences::getInstance().splitLog())
+    {
+		mLogWindow  = new LogWidget(this);
+		fontChanged();
+		setCentralWidget(static_cast<LogWidget *>(mLogWindow)->tabWidget());
+    }
+    else
+    {
+    	mLogWindow  = new PlainLogWidget(this);
+    	mLogWindow->setReadOnly(true);
+    	fontChanged();
+    	setCentralWidget(mLogWindow);
+    }
 
     int recoverRc = NamedPipe::getInstance().recover();
     mRecovery = (recoverRc == 1) ;
@@ -267,9 +277,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-	mMainPanel->close();
-	delete mSystemTrayIcon;
-	delete mCommandLine;
 }
 
 void MainWindow::writeToLog(QString line)
@@ -318,35 +325,14 @@ void MainWindow::pswChanged()
 
 void MainWindow::writeToLogFromQueue()
 {
-	int textColumn =
-	( (Preferences::getInstance().logTimestamp()) ?
-	 10 :
-	 0 );
+
     while (!mLogQueue.empty())
     {
         std::string s = mLogQueue.front();
         mLogQueue.pop_front();
         if (!s.empty())
         {
-        	if (s.compare(textColumn,4,"<pnl") == 0)
-        	{
-        		int start = s.find(">",textColumn+11)+1;
-        		const std::string cs = ( (textColumn > 0) ?
-        				s.substr(0,textColumn) + s.substr(start).c_str() :
-        				s.substr(start).c_str());
-        		s = cs;
-        	}
-			if (s.compare(0,9,"HHC00001I") == 0)
-			{
-				mLogWindow->setTextBackgroundColor(QColor::fromRgb(0,0,0));
-				mLogWindow->setTextColor(QColor::fromRgb(0,240,0));
-			}
-			else
-			{
-				mLogWindow->setTextBackgroundColor(QColor::fromRgb(255,255,255));
-				mLogWindow->setTextColor(QColor::fromRgb(0,0,0));
-			}
-			mLogWindow->append(s.c_str());
+        	mLogWindow->append(s.c_str());
         }
     }
 }
@@ -618,7 +604,8 @@ void MainWindow::deleteMessages()
 
 void MainWindow::saveMessages()
 {
-    if (mLogWindow->toPlainText().length() == 0)
+	//TODO: allow splitting to two separate file when in split log mode
+    if (mLogWindow->empty())
         return;
     QString s = QFileDialog::getSaveFileName(this,
             tr("Save Messages"),

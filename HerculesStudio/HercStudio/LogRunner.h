@@ -48,8 +48,6 @@ signals:
 private:
   std::string mLogFifo;
   bool mRunning;
-
-  void getTimeStamp(char * buffStart);
 };
 
 #endif /* LOGRUNNER_H_ */

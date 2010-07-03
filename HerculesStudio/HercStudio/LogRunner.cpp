@@ -26,10 +26,6 @@
 #include "NamedPipe.h"
 #include "Preferences.h"
 
-#include <fcntl.h>
-#include <sys/time.h>
-
-
 LogRunner::LogRunner(SynchronizedQueue& logQueue)
 : Runner(logQueue)
 {
@@ -44,40 +40,21 @@ void LogRunner::run()
 {
     FILE * logFile = NamedPipe::getInstance().getHerculesLogfile();
 
-    bool addTimeStamp = Preferences::getInstance().logTimestamp();
     char buff[512];
-    char * buffPtr;
     mRunning = true;
     mQueue.push_back("logger started");
     emit newData();
-    if (addTimeStamp)
-    	buffPtr = buff+10;
-    else
-    	buffPtr = buff;
     while(mRunning)
     {
-        if (fgets(buffPtr,500,logFile) == NULL)
+        if (fgets(buff,500,logFile) == NULL)
         {
             mQueue.push_back("logger ended");
             emit newData();
             QThread::sleep(100);
             break;
         }
-        if (addTimeStamp)
-        	getTimeStamp(buff);
-        if (buffPtr[0]) buff[strlen(buff)-1] = '\0'; // remove CR
+        buff[strlen(buff)-1] = '\0'; // remove CR
         mQueue.push_back(buff);
         emit newData();
     }
-}
-
-void LogRunner::getTimeStamp(char * addr)
-{
-	static struct timeval  now;
-    static time_t          tt;
-
-	gettimeofday( &now, NULL );
-	tt = now.tv_sec;
-	strncpy( addr, ctime(&tt)+11, 8 );
-	memcpy(addr+8, "  ", 2);
 }

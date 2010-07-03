@@ -50,6 +50,7 @@
 
 class LogRunner;
 class HerculesExecutor;
+class PlainLogWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -78,7 +79,7 @@ private:
 
     Configuration       * mConfiguration;
     ConfigFile          * mConfigFile;
-    QTextEdit           * mLogWindow;
+    PlainLogWidget     * mLogWindow;
     QSystemTrayIcon     * mSystemTrayIcon;
     MainPanel           * mMainPanel;
     DevicesPane         * mDevicesPane;

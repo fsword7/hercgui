@@ -245,7 +245,8 @@ public:
 	PswFont = 11,
 	CommandFont = 12,
 	MipsAsGauge = 13,
-	PswMode = 14
+	PswMode = 14,
+	SplitLog = 15
 	};
 	enum FontObject
 	{
@@ -256,7 +257,7 @@ public:
 	};
 	enum general
 	{
-		NumberOfLines = 15,
+		NumberOfLines = 16,
 		PREF_LINE_LENGTH = 300
 	};
 
@@ -323,6 +324,10 @@ public:
 	Psw::PswMode pswMode();
 	void setPswMode(Psw::PswMode mode);
 
+	// Split log
+	bool  splitLog();
+	void setSplitLog(bool);
+
 protected:
     Preferences();
 
@@ -343,7 +348,7 @@ private:
 	static const char *sKeywords[];
 	std::vector<std::string> mPrefs;
 	static const char cFontLog[], cFontRegs[], cFontPsw[], cFontCommand[],
-		cMipsAsGauge[], cPswMode[];
+		cMipsAsGauge[], cPswMode[], cSplitLog[];
 };
 
 #endif /* PREFERENCES_H_ */

@@ -89,6 +89,8 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
     	ui.pswDock->setChecked(true);
     else
     	ui.pswDock->setChecked(false);
+
+   	ui.splitLogCheckbox->setChecked(mPreferences->splitLog());
 }
 
 PreferencesWin::~PreferencesWin()
@@ -127,6 +129,8 @@ void PreferencesWin::okPressed()
 	mPreferences->setMipsAsGauge(ui.mipsGaugeButton->isChecked());
 
 	mPreferences->setPswMode( ui.pswDock->isChecked() ? Psw::Docked : Psw::StatusBar);
+
+	mPreferences->setSplitLog( ui.splitLogCheckbox->isChecked());
 
 	mPreferences->write();
 	emit fontChanged();

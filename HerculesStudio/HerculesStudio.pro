@@ -9,7 +9,8 @@ MOC_DIR = moc
 OBJECTS_DIR = obj
 
 # Input
-HEADERS += HercStudio/IplConfig.h \
+HEADERS += HercStudio/LogWidget.h \
+    HercStudio/IplConfig.h \
     HercStudio/IplConfig.h \
     HercStudio/MipsLed.h \
     HercStudio/MipsGauge.h \
@@ -102,7 +103,8 @@ FORMS += HercStudio/IplConfig.ui \
     HercUtilities/DasdIsup.ui \
     HercUtilities/DasdLoad.ui \
     HercUtilities/Dasdls.ui
-SOURCES += HercStudio/IplConfig.cpp \
+SOURCES += HercStudio/LogWidget.cpp \
+    HercStudio/IplConfig.cpp \
     HercStudio/MipsLed.cpp \
     HercStudio/MipsGauge.cpp \
     HercStudio/FontPreferences.cpp \
