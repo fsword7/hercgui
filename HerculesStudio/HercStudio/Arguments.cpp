@@ -95,7 +95,7 @@ int Arguments::parse(int argc, char * argv[])
 void Arguments::printUsage()
 {
 	std::cout << "Usage:" << std::endl << std::endl
-			<< "\tHerculesStudio [ -f <hercules-config-file> ] [ -r <hercules-run-commands-file> ]"
+			<< "\tHerculesStudio [ -f <hercules-config-file> ] [ -r <hercules-run-commands-file> ] [ -h ]"
 			<< std::endl;
 }
 
