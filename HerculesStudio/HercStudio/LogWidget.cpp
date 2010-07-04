@@ -83,6 +83,16 @@ QString PlainLogWidget::toPlainText()
 	return QTextEdit::toPlainText();
 }
 
+void PlainLogWidget::clear()
+{
+	QTextEdit::clear();
+}
+
+bool PlainLogWidget::isOSLog()
+{
+	return false;
+}
+
 
 LogWidget::LogWidget(QWidget * parent)
 : PlainLogWidget(NULL)
@@ -176,4 +186,9 @@ QString LogWidget::toPlainText()
 bool LogWidget::empty()
 {
 	return mLogs[0]->document()->isEmpty() && mLogs[1]->document()->isEmpty();
+}
+
+bool LogWidget::isOSLog()
+{
+	return (mTabWidget->currentIndex() == 1);
 }

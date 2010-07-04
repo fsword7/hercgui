@@ -45,6 +45,8 @@ public:
 	virtual bool empty();
 	virtual void append(const QString & text);
 	virtual QString toPlainText();
+	virtual void clear();
+	virtual bool isOSLog();
 
 protected:
 	void getTimeStamp();
@@ -69,9 +71,8 @@ public:
 	virtual bool empty();
 	virtual void append(const QString & text);
 	virtual QString toPlainText();
-
-public slots:
-	void clear ();
+	virtual void clear();
+	virtual bool isOSLog();
 
 private:
 	QTabWidget * mTabWidget;

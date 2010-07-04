@@ -404,7 +404,11 @@ void MainWindow::newCommand()
     FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
     if (input)
     {
-        fprintf(input,"%s\n",cl->text().toAscii().data());
+    	if (!mLogWindow->isOSLog() || cl->text().left(1).compare(".") == 0)
+    		fprintf(input,"%s\n",cl->text().toAscii().data());
+    	else
+    		fprintf(input,".%s\n",cl->text().toAscii().data());
+
         fflush(input);
     }
     else  err(1, "err");
