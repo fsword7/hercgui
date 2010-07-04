@@ -91,6 +91,7 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
     	ui.pswDock->setChecked(false);
 
    	ui.splitLogCheckbox->setChecked(mPreferences->splitLog());
+   	ui.autosaveLogCheckbox->setChecked(mPreferences->autosaveLog());
 }
 
 PreferencesWin::~PreferencesWin()
@@ -131,6 +132,8 @@ void PreferencesWin::okPressed()
 	mPreferences->setPswMode( ui.pswDock->isChecked() ? Psw::Docked : Psw::StatusBar);
 
 	mPreferences->setSplitLog( ui.splitLogCheckbox->isChecked());
+
+	mPreferences->setAutosaveLog( ui.autosaveLogCheckbox->isChecked());
 
 	mPreferences->write();
 	emit fontChanged();

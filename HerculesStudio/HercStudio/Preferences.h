@@ -246,7 +246,8 @@ public:
 	CommandFont = 12,
 	MipsAsGauge = 13,
 	PswMode = 14,
-	SplitLog = 15
+	SplitLog = 15,
+	AutosaveLog = 16
 	};
 	enum FontObject
 	{
@@ -257,7 +258,7 @@ public:
 	};
 	enum general
 	{
-		NumberOfLines = 16,
+		NumberOfLines = 17,
 		PREF_LINE_LENGTH = 300
 	};
 
@@ -328,6 +329,10 @@ public:
 	bool  splitLog();
 	void setSplitLog(bool);
 
+	// Autosave log
+	bool  autosaveLog();
+	void setAutosaveLog(bool);
+
 protected:
     Preferences();
 
@@ -348,7 +353,7 @@ private:
 	static const char *sKeywords[];
 	std::vector<std::string> mPrefs;
 	static const char cFontLog[], cFontRegs[], cFontPsw[], cFontCommand[],
-		cMipsAsGauge[], cPswMode[], cSplitLog[];
+		cMipsAsGauge[], cPswMode[], cSplitLog[], cAutosaveLog[];
 };
 
 #endif /* PREFERENCES_H_ */
