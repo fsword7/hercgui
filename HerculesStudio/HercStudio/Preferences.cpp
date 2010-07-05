@@ -116,7 +116,7 @@ void Preferences::readPref()
     file.close();
     if (getVersion() == "")
     {
-    	hOutDebug(0,"converting preferences");
+    	hOutDebug(1,"converting preferences");
     	mPrefs[Version] = "1.2";
 		Preferences_1_0& oldP = Preferences_1_0::getInstance();
 		setHercDir(oldP.hercDir() );
@@ -141,7 +141,7 @@ void Preferences::readPref()
     }
     else if (getVersion() == "1.1")
     {
-    	hOutDebug(0,"converting preferences");
+    	hOutDebug(1,"converting preferences");
     	mPrefs[Version] = "1.2";
     	setMipsAsGauge(false);
     	setPswMode(Psw::Docked);

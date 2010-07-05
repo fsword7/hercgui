@@ -107,8 +107,8 @@ LogWidget::LogWidget(QWidget * parent)
 		current_log->setReadOnly(true);
 		current_log->setVisible(true);
 	}
-	const QColor black(50,50,50);
-	const QColor white(255,255,20);
+	const QColor black(0,0,0);
+	const QColor white(255,255,255);
     QBrush blackBrush(black);
     QPalette blackPalette(white, black);
     mLogs[1]->setPalette(blackPalette);
