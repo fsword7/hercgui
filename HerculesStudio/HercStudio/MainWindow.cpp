@@ -1002,9 +1002,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
         			 "Or press Abort to force exit",
         			 QMessageBox::Ok, QMessageBox::Abort);
         	 event->ignore();
-        	 deleteLater();
+        	 //deleteLater(); //TODO - send event
          }
-         else deleteLater();
      }
  }
 

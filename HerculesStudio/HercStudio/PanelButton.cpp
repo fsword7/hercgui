@@ -45,10 +45,10 @@ PanelButton::~PanelButton()
 
 void PanelButton::paintEvent(QPaintEvent *)
 {
-    QString * filename = &mUpButtonName;
+    QString  filename = mUpButtonName;
     if (mDown)
-        filename = &mDownButtonName;
-    QPixmap newPix(*filename);
+        filename = mDownButtonName;
+    QPixmap newPix(filename);
     QPainter painter(this);
     painter.drawPixmap(0, 0, newPix);
     resize(33,25);

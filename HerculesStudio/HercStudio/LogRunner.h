@@ -42,9 +42,6 @@ public:
 
   virtual void run();
 
-signals:
-    void newData();
-
 private:
   std::string mLogFifo;
   bool mRunning;
