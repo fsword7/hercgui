@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
     // top dock (MainPanel)
     mTopDock = new QDockWidget("Controls",this);
     mTopDock->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    mMainPanel = new MainPanel(mTopDock);
+    mMainPanel = new MainPanel(this);
     mTopDock->setWidget(mMainPanel);
     addDockWidget(Qt::TopDockWidgetArea,mTopDock );
 
@@ -762,7 +762,7 @@ void MainWindow::powerOn()
 void MainWindow::powerOff()
 {
     if (!mHerculesActive) return ;
-    mMinimizeOnClose=false;
+    //mMinimizeOnClose=false;
     printf("Goodbye!\n");
     FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
     if (input)
@@ -1001,9 +1001,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
         			 "Press OK to wait until hercules finishes\n"
         			 "Or press Abort to force exit",
         			 QMessageBox::Ok, QMessageBox::Abort);
-        	 event->ignore(); // TODO - deleteLater debug
+        	 event->ignore();
+        	 deleteLater();
          }
-         //else deleteLater();
+         else deleteLater();
      }
  }
 
