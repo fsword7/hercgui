@@ -70,6 +70,7 @@ private:
 private slots:
     void mousePressed(QModelIndex index);
     void doAddDevice(bool keep);
+    void updateDevice(bool);
 
 public slots:
 

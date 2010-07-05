@@ -193,3 +193,16 @@ void DevicesWidget::initialize()
     mConfigView->setGridStyle(Qt::NoPen);
     mConfigView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
+
+void DevicesWidget::updateDevice(bool done)
+{
+	if (!done || mCandidateLine == NULL)
+	{
+		mClickRow = -1;
+		return;
+	}
+	hOutDebug(0,mCandidateLine->getLine());
+	initialize();
+	mClickRow = -1;
+}
+
