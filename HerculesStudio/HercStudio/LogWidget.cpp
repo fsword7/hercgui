@@ -33,7 +33,7 @@
 #include "HerculesStudio.h"
 
 #include <QTextEdit>
-#include <QTabBar>
+#include <QTabWidget>
 
 #include <fcntl.h>
 #include <sys/time.h>
