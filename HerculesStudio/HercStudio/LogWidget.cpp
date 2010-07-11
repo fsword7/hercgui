@@ -153,7 +153,19 @@ void LogWidget::append(const QString & text)
 	}
 	else
 	{
+		QColor green(10,120,10), yellow(215,201,45), red(240,20,20);
+		QColor keepC = mLogs[0]->textColor();
+		if (text.left(3).compare(QString("HHC")) == 0)
+		{
+			if (text.mid(8,1).compare(QString("I")) == 0)
+				mLogs[0]->setTextColor(green);
+			else if (text.mid(8,1).compare(QString("W")) == 0)
+				mLogs[0]->setTextColor(yellow);
+			else if (text.mid(8,1).compare(QString("E")) == 0)
+				mLogs[0]->setTextColor(red);
+		}
 		mLogs[0]->append(timeStamp + s);
+		mLogs[0]->setTextColor(keepC);
 	}
 }
 
