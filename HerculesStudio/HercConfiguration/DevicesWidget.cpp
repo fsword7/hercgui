@@ -201,7 +201,6 @@ void DevicesWidget::updateDevice(bool done)
 		mClickRow = -1;
 		return;
 	}
-	hOutDebug(0,mCandidateLine->getLine());
 	initialize();
 	mClickRow = -1;
 }
