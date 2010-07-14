@@ -762,7 +762,7 @@ void MainWindow::powerOn()
 void MainWindow::powerOff()
 {
     if (!mHerculesActive) return ;
-    //mMinimizeOnClose=false;
+    mMinimizeOnClose=false;
     printf("Goodbye!\n");
     FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
     if (input)
@@ -961,6 +961,7 @@ void MainWindow::herculesEndedSlot()
     mMainPanel->setDormant();
     ui.menuFile->setEnabled(true);
     mSystemTrayIcon->setVisible(false);
+    setVisible(true);
     mMinimizeOnClose=false;
 }
 
@@ -993,16 +994,19 @@ void MainWindow::closeEvent(QCloseEvent *event)
      }
      else
      {
-    	 hOutDebug(5,"real Close");
+    	 hOutDebug(5,"Close");
          if (mHerculesActive)
          {
-        	 QMessageBox::warning(this,"Hercules is still running",
-        			 "please wait until Hercules finishes\n"
-        			 "Press OK to wait until hercules finishes\n"
-        			 "Or press Abort to force exit",
-        			 QMessageBox::Ok, QMessageBox::Abort);
-        	 event->ignore();
-        	 //deleteLater(); //TODO - send event
+        	 if( QMessageBox::warning(this,"Hercules Is Still Running",
+        			 "\nPress OK - To Wait Until Hercules Finishes Running\n"
+        			 "Or\n"
+        			 "Press Abort - To Force Exit",
+        			 QMessageBox::Ok, QMessageBox::Abort) != QMessageBox::Abort)
+        	 {
+        		 event->ignore();
+        		 //deleteLater(); //TODO - send new event
+        	 }
+        	 else hOutDebug(5,"abort");
          }
      }
  }
