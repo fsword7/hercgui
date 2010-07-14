@@ -80,6 +80,7 @@ Preferences::Preferences() :
     setLogsDir(QDir::homePath().toStdString()+"/Desktop");
     setFontName(LogFontObject, "(system default)");
     setFontSize(LogFontObject,9);
+    setPswMode(Psw::StatusBar);
     readPref();
 }
 
@@ -134,7 +135,7 @@ void Preferences::readPref()
 		mPrefs[PswFont] = dummyFP.prefLine();
 		mPrefs[CommandFont] = dummyFP.prefLine();
 		setMipsAsGauge(false);
-		setPswMode(Psw::Docked);
+		setPswMode(Psw::StatusBar);
 		setSplitLog(true);
 		setAutosaveLog(false);
 		write();
@@ -144,7 +145,7 @@ void Preferences::readPref()
     	hOutDebug(1,"converting preferences");
     	mPrefs[Version] = "1.2";
     	setMipsAsGauge(false);
-    	setPswMode(Psw::Docked);
+    	setPswMode(Psw::StatusBar);
 		setSplitLog(true);
 		setAutosaveLog(false);
     	write();
