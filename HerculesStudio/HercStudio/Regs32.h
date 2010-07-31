@@ -44,7 +44,7 @@ public:
 
   void setFont();
   virtual void setActive(bool active);
-  void notify(const std::string& statusLine);
+  bool notify(const std::string& statusLine);
 
   static std::string gCommand;
   static std::string fCommand;

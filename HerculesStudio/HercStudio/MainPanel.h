@@ -64,7 +64,7 @@ public:
   void setLoadAddress(const char * devNo);
   void standby();
   void setDormant();
-  void notify(const std::string& statusLine);
+  bool notify(const std::string& statusLine);
   void switchMips();
 
 signals:

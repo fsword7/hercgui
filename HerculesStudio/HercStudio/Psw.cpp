@@ -50,11 +50,11 @@ Psw::~Psw()
 
 }
 
-void Psw::notify(const std::string& statusLine)
+bool Psw::notify(const std::string& statusLine)
 {
 	//STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M....... instcount=0
 	if (!mActive || statusLine.compare(0,7,"STATUS=") != 0)
-		return;
+		return false;
 	if (mMode == Psw::Docked)
 	{
 		mLine.replace(0,46, &statusLine.c_str()[7], 46);
@@ -66,6 +66,7 @@ void Psw::notify(const std::string& statusLine)
 		mCpu->setText(statusLine.substr(7,43).c_str());
 		mInstCount->setText(statusLine.substr(60).c_str());
 	}
+	return true;
 }
 
 void Psw::setFont()

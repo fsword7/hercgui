@@ -60,7 +60,7 @@ DevicesPane::~DevicesPane()
 	delete mYellowHighIcon;
 }
 
-void DevicesPane::notify(const std::string& statusLine)
+bool DevicesPane::notify(const std::string& statusLine)
 {
     outDebug(1, std::cout  << statusLine << std::endl);
     struct DynDeviceLine * line = (DynDeviceLine *)statusLine.c_str();
@@ -199,6 +199,11 @@ void DevicesPane::notify(const std::string& statusLine)
         adjustSize();
         connect(mListView, SIGNAL(pressed(QModelIndex)),this,SLOT(mousePressed(QModelIndex)));
         connect(mListView, SIGNAL(deviceClick(QMouseEvent *)), this, SLOT(devicesClick(QMouseEvent *)));
+        return true;
+    }
+    else
+    {
+    	return false;
     }
 }
 

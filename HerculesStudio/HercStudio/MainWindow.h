@@ -105,9 +105,12 @@ private:
     bool 				mDevicesRecovery;
     bool 				mDevicesRecoveryCommenced;
     bool                mSystrayHintEjected;
+    bool				mStatusReceived;
     QString             mRecoveryConfig;
     QString             mCurrentPath;
     QString             mAdHocLoadParm;
+
+    void 				testGui();
 
 public slots:
     void powerOn();

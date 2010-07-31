@@ -50,9 +50,9 @@ void CommandLine::enterPressed(const QString & text1)
 {
     outDebug(4,std::cout << "text1:"<<  this->text().toStdString() << std::endl);
     std::string str(text1.toStdString());
-    history.insert(history.begin(),str);
-    while (history.size() > 100)
-        history.erase(history.end()-1);
+    mHistory.insert(mHistory.begin(),str);
+    while (mHistory.size() > 100)
+        mHistory.erase(mHistory.end()-1);
     mHistoryPtr = -1;
     this->setText("");
 }
@@ -73,7 +73,7 @@ void CommandLine::keyPressEvent(QKeyEvent * event)
         break;
     case Qt::Key_Up:
         mHistoryPtr++;
-        if (mHistoryPtr >= (signed) history.size()) mHistoryPtr = history.size()-1;
+        if (mHistoryPtr >= (signed) mHistory.size()) mHistoryPtr = mHistory.size()-1;
         setLine();
         break;
     default:
@@ -83,11 +83,11 @@ void CommandLine::keyPressEvent(QKeyEvent * event)
 
 void CommandLine::setLine()
 {
-    outDebug(4,std::cout << "setLine:" << mHistoryPtr << " size:" << history.size() << " " << history[mHistoryPtr].c_str() << std::endl);
-    if (mHistoryPtr < -1 || mHistoryPtr >= (signed) history.size())
+    outDebug(4,std::cout << "setLine:" << mHistoryPtr << " size:" << mHistory.size() << " " << mHistory[mHistoryPtr].c_str() << std::endl);
+    if (mHistoryPtr < -1 || mHistoryPtr >= (signed) mHistory.size())
         return;
     if (mHistoryPtr != -1)
-        this->setText(history[mHistoryPtr].c_str());
+        this->setText(mHistory[mHistoryPtr].c_str());
     else
         this->setText("");
 }
@@ -102,4 +102,9 @@ void CommandLine::setFont()
 
     font.setStyleHint(QFont::Courier);
     QLineEdit::setFont(font);
+}
+
+bool CommandLine::empty()
+{
+	return (!(mHistory.size() > 0));
 }

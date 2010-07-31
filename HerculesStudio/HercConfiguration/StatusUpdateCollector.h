@@ -35,7 +35,7 @@ public:
   StatusUpdateCollector();
   virtual ~StatusUpdateCollector();
 
-  virtual void notify(const std::string& ) = 0;
+  virtual bool notify(const std::string& ) = 0;
 };
 
 #endif /* STATUSUPDATECOLLECTOR_H_ */

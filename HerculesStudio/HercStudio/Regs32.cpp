@@ -83,12 +83,12 @@ void Regs32::setFont()
 
 }
 
-void Regs32::notify(const std::string& statusLine)
+bool Regs32::notify(const std::string& statusLine)
 {
 	if (statusLine.length() < 2)
 	{
 		setFont();
-		return;
+		return false;
 	}
 	if (statusLine[2] == '0')
 		Regs32::mLine1.setText(statusLine.c_str());
@@ -98,4 +98,7 @@ void Regs32::notify(const std::string& statusLine)
 		Regs32::mLine3.setText(statusLine.c_str());
 	else if (statusLine[2] == 'C')
 		Regs32::mLine4.setText(statusLine.c_str());
+	else return false;
+
+	return true;
 }

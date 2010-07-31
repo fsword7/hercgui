@@ -44,7 +44,7 @@ public:
 	Psw( PswMode mode, QMainWindow * mainWindow );
 	virtual ~Psw();
 
-	virtual void notify(const std::string& );
+	virtual bool notify(const std::string& );
 	void setFont();
 	void setActive(bool active);
 	bool isActive() { return mActive; };

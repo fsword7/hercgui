@@ -370,7 +370,8 @@ void MainWindow::dispatchStatus()
             }
             else
             {
-                mMainPanel->notify(statusLine);
+                if (mMainPanel->notify(statusLine))
+                	mStatusReceived = true;
                 mPsw->notify(statusLine);
             }
         }
@@ -665,6 +666,7 @@ ConfigFile * MainWindow::getConfigurationFile()
 void MainWindow::powerOn()
 {
     std::string configName;
+    mStatusReceived=false;
     if (!mRecovery)
     {
         if (mConfigFile == NULL) openConfig();
@@ -963,6 +965,7 @@ void MainWindow::herculesEndedSlot()
     mSystemTrayIcon->setVisible(false);
     setVisible(true);
     mMinimizeOnClose=false;
+    testGui();
 }
 
 void MainWindow::helpAbout()
@@ -1051,4 +1054,16 @@ bool MainWindow::issueCommand(const std::string& command)
         outDebug(3, std::cout << "input=" << input << std::endl);
         return false;
     }
+}
+
+void MainWindow::testGui()
+{
+	if ( !mStatusReceived &&
+		 (mLogWindow->toPlainText().indexOf("No External GUI support") > 0) )
+	{
+		QMessageBox::critical(this,"No GUI Support",
+   			 "The Hercules that you are running does not support external GUI\n"
+   			 "Please obtain a module that was built with GUI support",
+   			 QMessageBox::Ok);
+	}
 }

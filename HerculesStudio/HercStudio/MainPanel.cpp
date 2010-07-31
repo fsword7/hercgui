@@ -277,8 +277,9 @@ void MainPanel::standby()
     mMips->setVisible(true);
 }
 
-void MainPanel::notify(const std::string& statusLine)
+bool MainPanel::notify(const std::string& statusLine)
 {
+	bool ret = true;
     if (statusLine.compare(0,4,"SYS=") == 0)
     {
         char sysVal = statusLine[4];
@@ -325,6 +326,9 @@ void MainPanel::notify(const std::string& statusLine)
              (statusLine[56] == 'W') )
             mMips->display(0);
     }
+    else ret = false;
+
+    return ret;
 }
 
 void MainPanel::switchMips()

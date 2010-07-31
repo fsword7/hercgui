@@ -73,27 +73,30 @@ void Regs64::setFont()
     mLine7.setGeometry(fontSize*36,3*(fontSize+2),fontSize*35,fontSize+2);
     mLine8.setGeometry(fontSize*36,4*(fontSize+2),fontSize*35,fontSize+2);
 }
-void Regs64::notify(const std::string& statusLine)
+bool Regs64::notify(const std::string& statusLine)
 {
 	if (statusLine.length() < 2)
 	{
 		setFont();
-		return;
+		return false;
 	}
 	if (statusLine[5] == '0')
 		Regs32::mLine1.setText(statusLine.c_str());
-	if (statusLine[5] == '2')
+	else if (statusLine[5] == '2')
 		Regs32::mLine2.setText(statusLine.c_str());
-	if (statusLine[5] == '4')
+	else if (statusLine[5] == '4')
 		Regs32::mLine3.setText(statusLine.c_str());
-	if (statusLine[5] == '6')
+	else if (statusLine[5] == '6')
 		Regs32::mLine4.setText(statusLine.c_str());
-	if (statusLine[5] == '8')
+	else if (statusLine[5] == '8')
 		Regs64::mLine5.setText(statusLine.c_str());
-	if (statusLine[5] == 'A')
+	else if (statusLine[5] == 'A')
 		Regs64::mLine6.setText(statusLine.c_str());
-	if (statusLine[5] == 'C')
+	else if (statusLine[5] == 'C')
 		Regs64::mLine7.setText(statusLine.c_str());
-	if (statusLine[5] == 'E')
+	else if (statusLine[5] == 'E')
 		Regs64::mLine8.setText(statusLine.c_str());
+	else return false;
+
+	return true;
 }

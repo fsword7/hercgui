@@ -39,6 +39,7 @@ public:
   CommandLine(QWidget * parent=NULL );
   virtual ~CommandLine();
   void setFont();
+  bool empty();
 
   QSize sizeHint();
 
@@ -49,7 +50,7 @@ private slots:
     void enterPressed(const QString & text);
 
 private:
-  std::vector<std::string> history;
+  std::vector<std::string> mHistory;
   int mHistoryPtr;
 
   void setLine();

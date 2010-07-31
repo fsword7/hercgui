@@ -76,7 +76,7 @@ public:
     DevicesPane(QWidget *parent = 0);
     virtual ~DevicesPane();
 
-    virtual void	notify(const std::string& statusLine);
+    virtual bool	notify(const std::string& statusLine);
     void 			clear();
 
 public slots:
