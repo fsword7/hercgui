@@ -11,7 +11,6 @@ OBJECTS_DIR = obj
 # Input
 HEADERS += HercStudio/LogWidget.h \
     HercStudio/IplConfig.h \
-    HercStudio/IplConfig.h \
     HercStudio/MipsLed.h \
     HercStudio/MipsGauge.h \
     HercStudio/FontPreferences.h \

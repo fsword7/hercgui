@@ -28,14 +28,14 @@
 #define HERCULESSTUDIO_H_
 
 #define HERCSTUDIO_VERSION "Version: 1.2.0"
-#define DEBUG 0
+#define hDEBUG 0
 
 #include <iostream>
 
-#define outDebug(level,s) if ((level) <= DEBUG ) \
+#define outDebug(level,s) if ((level) <= hDEBUG ) \
                     {s;} \
                     else {}
-#define hOutDebug(level,s)  if ((level) <= DEBUG ) \
+#define hOutDebug(level,s)  if ((level) <= hDEBUG ) \
                     {std::cout << s << std::endl;} \
                     else {}
 
