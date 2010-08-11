@@ -35,7 +35,7 @@ public:
   HerculesExecutor(QMainWindow& mainWindow);
   virtual ~HerculesExecutor();
 
-  int run(std::string& configName, std::string& herculesPath);
+  int run(std::string configName, std::string herculesPath);
 
 private:
   QMainWindow & mMainWindow;

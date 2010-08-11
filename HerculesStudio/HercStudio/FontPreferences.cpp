@@ -107,6 +107,6 @@ void  FontPreferences::setPrefLine(std::string line)
 std::string FontPreferences::prefLine()
 {
 	std::stringstream ss;
-	ss << mName << "," << mSize << "," << (mBold ? "true" : "false" ) << "," << (mItalic ? "true" : "false") << "\n";
+	ss << mName << "," << mSize << "," << (mBold ? "true" : "false" ) << "," << (mItalic ? "true" : "false");
 	return ss.str();
 }

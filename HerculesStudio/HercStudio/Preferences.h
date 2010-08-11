@@ -226,7 +226,7 @@ private:
 	static const char cFontLog[], cFontRegs[], cFontPsw[], cFontCommand[];
 };
 
-class Preferences
+class Preferences_1_2_0
 {
 public:
 	enum keys
@@ -274,8 +274,8 @@ public:
 		ViewPsw = 0x01
 	};
 
-	virtual ~Preferences();
-	static Preferences& getInstance();
+	virtual ~Preferences_1_2_0();
+	static Preferences_1_2_0& getInstance();
 
 	void write();
 
@@ -334,7 +334,7 @@ public:
 	void setAutosaveLog(bool);
 
 protected:
-    Preferences();
+    Preferences_1_2_0();
 
 private:
 	void readPref();
@@ -348,12 +348,131 @@ private:
 	int mView;
 	std::string mVolatileConfigDir;
 
-	static Preferences *instance;
+	static Preferences_1_2_0 *instance;
 	static const char *sFileName;
 	static const char *sKeywords[];
 	std::vector<std::string> mPrefs;
 	static const char cFontLog[], cFontRegs[], cFontPsw[], cFontCommand[],
 		cMipsAsGauge[], cPswMode[], cSplitLog[], cAutosaveLog[];
+};
+
+class QSettings;
+
+class Preferences
+{
+public:
+	enum keys
+	{
+	HerculesDir = 0,
+	ConfigurationDir = 1,
+	LogsDir = 2,
+	LogTimestamp = 3,
+	RegsViews = 4,
+	Version = 5,
+	LogFont = 6,
+	RegsFont = 7,
+	PswFont = 8,
+	CommandFont = 9,
+	MipsAsGauge = 10,
+	PswMode = 11,
+	SplitLog = 12,
+	AutosaveLog = 13
+	};
+
+	enum FontObject
+	{
+		LogFontObject = 0,
+		RegsFontObject = 1,
+		PswFontObject = 2,
+		CommandFontObject = 3
+	};
+
+	enum Views
+	{
+		ViewGR32 = 0,
+		ViewCR32 = 1,
+		ViewFR32 = 2,
+		ViewAR32 = 3,
+		ViewGR64 = 4,
+		ViewCR64 = 5,
+		ViewFR64 = 6,
+		ViewPsw = 7
+	};
+
+	virtual ~Preferences();
+	static Preferences& getInstance();
+
+	void write();
+
+	// hercules directory
+	void setHercDir(const std::string& hercDir);
+	std::string  hercDir();
+
+	// configuration default directory
+	void setConfigDir(const std::string& configDir) ;
+	void setVolatileConfigDir(const std::string& logsDir) ;
+	std::string  configDir();
+	std::string  configDir_();
+
+	// log directory
+	void setLogsDir(const std::string& logsDir) ;
+	std::string logsDir();
+
+	// font name
+	void setFontName( FontObject fontObject, const std::string& fontName) ;
+	std::string fontName (FontObject fontObject) ;
+
+	// font size
+	void setFontSize( FontObject fontObject, int variation );
+	int  fontSize(FontObject fontObject);
+
+	// bold
+	void setBold( FontObject fontObject, bool bold);
+	bool fontIsBold(FontObject fontObject);
+
+	// italic
+	void setItalic (FontObject fontObject, bool italic);
+	bool fontIsItalic(FontObject fontObject);
+
+	// logs time stamp
+	bool logTimestamp();
+	void setLogTimestamp(bool isTrue);
+	const std::string&  version();
+
+	// register views
+	void setRegs(Views v,bool view);
+	bool regs(Views v);
+
+	// Mips as gauge
+	void setMipsAsGauge(bool gauge);
+	bool mipsAsGauge();
+
+	// Psw Mode
+	void setPswMode(Psw::PswMode mode);
+	Psw::PswMode pswMode();
+
+	// Split log
+	bool  splitLog();
+	void setSplitLog(bool);
+
+	// Autosave log
+	bool  autosaveLog();
+	void setAutosaveLog(bool);
+
+protected:
+    Preferences();
+
+private:
+	static Preferences *instance;
+	QSettings *mSettings;
+
+	static const char *sKeywords[];
+	static const char *sRegsViews[];
+	std::string mVolatileConfigDir;
+
+	bool fileExists(const char * fileName);
+	const char * fontObjectToString(FontObject fontObject);
+	void convert();
 };
 
 #endif /* PREFERENCES_H_ */

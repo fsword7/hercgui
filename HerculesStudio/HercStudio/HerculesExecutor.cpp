@@ -50,7 +50,7 @@ HerculesExecutor::~HerculesExecutor()
 
 }
 
-int HerculesExecutor::run(std::string & configName, std::string& herculesPath)
+int HerculesExecutor::run(std::string configName, std::string herculesPath)
 {
     int pid;
     int rc =0;

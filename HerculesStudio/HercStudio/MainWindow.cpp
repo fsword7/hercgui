@@ -1062,7 +1062,7 @@ void MainWindow::testGui()
 		 (mLogWindow->toPlainText().indexOf("No External GUI support") > 0) )
 	{
 		QMessageBox::critical(this,"No GUI Support",
-   			 "The Hercules that you are running does not support external GUI\n"
+   			 "The Hercules program that you are running does not support external GUI\n"
    			 "Please obtain a module that was built with GUI support",
    			 QMessageBox::Ok);
 	}
