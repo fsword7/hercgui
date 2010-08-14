@@ -470,7 +470,6 @@ private:
 	static const char *sRegsViews[];
 	std::string mVolatileConfigDir;
 
-	bool fileExists(const char * fileName);
 	const char * fontObjectToString(FontObject fontObject);
 	void convert();
 };

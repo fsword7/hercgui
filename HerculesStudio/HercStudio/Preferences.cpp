@@ -24,6 +24,7 @@
 
 #include "Preferences.h"
 #include "HerculesStudio.h"
+#include "SystemUtils.h"
 #include "ConfigurationEditor.h"
 
 #include <QDir>
@@ -33,9 +34,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <cstdlib>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 Preferences * Preferences::instance = NULL;
 
@@ -114,7 +112,7 @@ Preferences::Preferences()
 	if (mSettings->value("version") != "1.3")
 	{
 		QString oldFile = QDir::homePath() + "/.config/HercStudio.pref";
-		if (fileExists(oldFile.toAscii().data()))
+		if (SystemUtils::fileExists(oldFile))
 		{
 			convert();
 		}
@@ -138,12 +136,6 @@ Preferences& Preferences::getInstance()
     if (instance == NULL)
         instance = new Preferences();
     return *instance;
-}
-
-bool Preferences::fileExists(const char * fileName)
-{
-	static struct stat dstat;
-	return (stat(fileName, &dstat) == 0);
 }
 
 Pref(hercDir,HerculesDir)

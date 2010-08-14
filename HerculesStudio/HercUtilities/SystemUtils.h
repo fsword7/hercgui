@@ -27,6 +27,7 @@
 #ifndef SYSTEMUTILS_H_
 #define SYSTEMUTILS_H_
 
+#include <QString>
 #include <string>
 
 class SystemUtils
@@ -37,6 +38,7 @@ public:
 
 	static bool processIsRunning(int pid);
 	static bool fileExists(const std::string& filename);
+	static bool fileExists(const QString& filename);
 };
 
 #endif /* SYSTEMUTILS_H_ */

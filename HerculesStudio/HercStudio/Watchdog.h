@@ -46,7 +46,6 @@ private:
 	bool mChild;
 
     bool processIsRunning(int pid); // TODO: merge with NamedPipe (same function!)
-    bool fileExists(const std::string & pid); // TODO: merge with NamedPipe (same function!)
 };
 
 #endif /* WATCHDOG_H_ */

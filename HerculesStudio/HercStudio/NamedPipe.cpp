@@ -23,6 +23,7 @@
  */
 
 #include "HerculesStudio.h"
+#include "SystemUtils.h"
 #include "NamedPipe.h"
 
 #include <QMutexLocker>
@@ -31,9 +32,6 @@
 #include <sstream>
 #include <iostream>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 #include <cstdio>
 #include <fcntl.h>
 #include <cstdlib>
@@ -83,7 +81,7 @@ int NamedPipe::recover()
         ss << hercstudioDir << "/run" << pipeSet;
         setPath = ss.str();
 
-        if (!fileExists(setPath))
+        if (!SystemUtils::fileExists(setPath))
         {
             outDebug(2,std::cout << "setPath=" << setPath << ",run=" << pipeSet << std::endl);
             set = pipeSet;
@@ -172,13 +170,7 @@ bool NamedPipe::processIsRunning(int pid)
     if (pid <= 1) return false;
     std::stringstream procPath;// TODO: merge with Watchdog (same function!)
     procPath << "/proc/" << pid;
-    return (fileExists(procPath.str()));
-}
-
-bool NamedPipe::fileExists(const std::string & fileName)
-{
-    static struct stat dstat;
-    return (stat(fileName.c_str(), &dstat) == 0);
+    return (SystemUtils::fileExists(procPath.str()));
 }
 
 void NamedPipe::generatePid(int studioPid, int herculesPid)

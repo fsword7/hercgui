@@ -60,7 +60,6 @@ private:
 
     int delDir(std::string& path);
     bool processIsRunning(int pid);
-    bool fileExists(const std::string & pid);
 
     QMutex      mMutex;
     FILE * mStdinOutput;

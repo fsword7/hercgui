@@ -53,7 +53,6 @@ private:
     void initialize();
     void setSizeValue();
     bool processIsRunning(int pid);
-    bool fileExists(const std::string & fileName);
 
     class VolserValidator : public QValidator
     {

@@ -25,6 +25,8 @@
 
 #include "SystemUtils.h"
 
+#include <QFile>
+
 #include <sstream>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -51,4 +53,9 @@ bool SystemUtils::fileExists(const std::string & fileName)
 {
     static struct stat dstat;
     return (stat(fileName.c_str(), &dstat) == 0);
+}
+
+bool SystemUtils::fileExists(const QString & fileName)
+{
+    return (QFile::exists(fileName));
 }

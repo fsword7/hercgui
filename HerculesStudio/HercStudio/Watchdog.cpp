@@ -24,6 +24,7 @@
 
 #include "Watchdog.h"
 #include "HerculesStudio.h"
+#include "SystemUtils.h"
 
 #include <iostream>
 #include <sstream>
@@ -61,11 +62,5 @@ bool Watchdog::processIsRunning(int pid)
 {
     std::stringstream procPath;
     procPath << "/proc/" << pid;
-    return (fileExists(procPath.str()));
-}
-
-bool Watchdog::fileExists(const std::string & fileName)
-{
-    static struct stat dstat;
-    return (stat(fileName.c_str(), &dstat) == 0);
+    return (SystemUtils::fileExists(procPath.str()));
 }
