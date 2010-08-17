@@ -36,9 +36,6 @@ UtilityExecutor::~UtilityExecutor()
 {
 }
 
-#include "UtilityExecutor.h"
-
-#include <unistd.h>
 
 int UtilityExecutor::run(const std::string & pCommand, const std::string& pPath, std::vector<std::string> pParameters)
 {

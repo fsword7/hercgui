@@ -34,6 +34,8 @@
 #include "Dasdcat.h"
 #include "Dasdconv.h"
 #include "Dasdcopy.h"
+#include "TapeMap.h"
+#include "TapeCopy.h"
 #include "NamedPipe.h"
 #include "Environment.h"
 #include "Arguments.h"
@@ -224,6 +226,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui.actionDasdcat, SIGNAL(triggered()), this, SLOT(dasdcat()));
     connect(ui.actionDasdconv, SIGNAL(triggered()), this, SLOT(dasdconv()));
     connect(ui.actionDasdcopy, SIGNAL(triggered()), this, SLOT(dasdcopy()));
+    connect(ui.actionTapemap, SIGNAL(triggered()), this, SLOT(tapemap()));
+    connect(ui.actionTapecopy, SIGNAL(triggered()), this, SLOT(tapecopy()));
 
     connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(helpAbout()));
     connect(mMainPanel, SIGNAL(powerOnClicked()), this , SLOT(powerOn()));
@@ -945,6 +949,20 @@ void MainWindow::dasdcopy()
     Dasdcopy * dasdcopy = new Dasdcopy(this);
     connect(dasdcopy, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
     dasdcopy->show();
+}
+
+void MainWindow::tapemap()
+{
+    TapeMap * tapemap = new TapeMap(this);
+    connect(tapemap, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    tapemap->show();
+}
+
+void MainWindow::tapecopy()
+{
+    TapeCopy * tapecopy = new TapeCopy(this);
+    connect(tapecopy, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    tapecopy->show();
 }
 
 void MainWindow::herculesEndedSlot()

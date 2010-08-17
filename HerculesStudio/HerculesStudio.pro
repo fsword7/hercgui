@@ -9,7 +9,9 @@ MOC_DIR = moc
 OBJECTS_DIR = obj
 
 # Input
-HEADERS += HercStudio/LogWidget.h \
+HEADERS += HercUtilities/TapeCopy.h \
+    HercUtilities/TapeMap.h \
+    HercStudio/LogWidget.h \
     HercStudio/IplConfig.h \
     HercStudio/MipsLed.h \
     HercStudio/MipsGauge.h \
@@ -78,7 +80,9 @@ HEADERS += HercStudio/LogWidget.h \
     HercUtilities/SystemUtils.h \
     HercUtilities/UtilityExecutor.h \
     HercUtilities/UtilityRunner.h
-FORMS += HercStudio/IplConfig.ui \
+FORMS += HercUtilities/TapeCopy.ui \
+    HercUtilities/TapeMap.ui \
+    HercStudio/IplConfig.ui \
     HercConfiguration/DevicesRename.ui \
     HercUtilities/DasdInit.ui \
     HercStudio/MainWindow.ui \
@@ -102,7 +106,9 @@ FORMS += HercStudio/IplConfig.ui \
     HercUtilities/DasdIsup.ui \
     HercUtilities/DasdLoad.ui \
     HercUtilities/Dasdls.ui
-SOURCES += HercStudio/LogWidget.cpp \
+SOURCES += HercUtilities/TapeCopy.cpp \
+    HercUtilities/TapeMap.cpp \
+    HercStudio/LogWidget.cpp \
     HercStudio/IplConfig.cpp \
     HercStudio/MipsLed.cpp \
     HercStudio/MipsGauge.cpp \
@@ -173,3 +179,5 @@ SOURCES += HercStudio/LogWidget.cpp \
 RESOURCES += HercStudio/HercStudio.qrc
 target.path = /usr/local/bin
 INSTALLS += target
+CONFIG += warn_on
+macx:RC_FILE = hercstudio.icns

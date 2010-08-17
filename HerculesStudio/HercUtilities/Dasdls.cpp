@@ -64,7 +64,7 @@ void Dasdls::runClicked()
                                             QMessageBox::Ok,
                                             QMessageBox::NoButton);
         mPid=-1;
-        ui.runButton->setText("Ok");
+        ui.runButton->setText("Run");
         return;
     }
     if (ui.filename->text().isEmpty())

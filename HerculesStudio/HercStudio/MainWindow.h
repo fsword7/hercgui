@@ -151,6 +151,8 @@ public slots:
     void dasdcat();
     void dasdconv();
     void dasdcopy();
+    void tapemap();
+    void tapecopy();
 
     void writeToLogFromQueue();
     void writeToLog(QString line);
