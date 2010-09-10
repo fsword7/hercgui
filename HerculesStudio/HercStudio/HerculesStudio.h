@@ -29,7 +29,7 @@
 
 #define HERCSTUDIO_VERSION "Version: 1.2.0"
 #define hDEBUG 0
-#define hFramework
+//#define hFramework
 
 #include <iostream>
 
