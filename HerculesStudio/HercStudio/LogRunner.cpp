@@ -23,11 +23,12 @@
  */
 
 #include "LogRunner.h"
+#include "HerculesStudio.h"
 #include "NamedPipe.h"
 #include "Preferences.h"
 
-LogRunner::LogRunner(SynchronizedQueue& logQueue)
-: Runner(logQueue)
+LogRunner::LogRunner(SynchronizedQueue& logQueue, HerculesExecutor * herculesExecutor)
+: Runner(logQueue), mHerculesExecutor(herculesExecutor)
 {
 }
 
@@ -38,12 +39,21 @@ LogRunner::~LogRunner()
 
 void LogRunner::run()
 {
-    FILE * logFile = NamedPipe::getInstance().getHerculesLogfile();
-
-    char buff[512];
-    mRunning = true;
     mQueue.push_back("logger started");
     emit newData();
+
+#ifdef hFramework
+    mProcess = mHerculesExecutor->getQProcess();
+    connect(mProcess,
+            SIGNAL(readyReadStandardOutput()),
+            this,
+            SLOT(readStandardOutput()));
+    return;
+#else
+    FILE * logFile = NamedPipe::getInstance().getHerculesLogfile();
+    char buff[512];
+    mRunning = true;
+
     while(mRunning)
     {
         if (fgets(buff,500,logFile) == NULL)
@@ -57,4 +67,21 @@ void LogRunner::run()
         mQueue.push_back(buff);
         emit newData();
     }
+#endif
 }
+
+#ifdef hFramework
+void LogRunner::readStandardOutput()
+{
+    mProcess->setReadChannel(QProcess::StandardOutput);
+    while (true)
+    {
+        QByteArray output = mProcess->readLine();
+        if (output.length() == 0) break;
+        output.replace("\n","\0");
+        output.replace("\r","\0");
+        mQueue.push_back(output.data());
+        emit newData();
+    }
+}
+#endif

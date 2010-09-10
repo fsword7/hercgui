@@ -33,6 +33,7 @@
 #include "SystemUtils.h"
 
 #include <QMessageBox>
+#include <QProcess>
 #include <QFileDialog>
 
 #include <string>
@@ -42,7 +43,7 @@
 #include <csignal>
 
 DasdInit::DasdInit(QWidget *parent)
-    : QDialog(parent), mPid(-1)
+    : GenericUtility("dasdinit", parent)
 {
     ui.setupUi(this);
     ui.volser->setValidator(new VolserValidator(this));
@@ -150,15 +151,9 @@ void DasdInit::exitClicked()
 
 void DasdInit::runClicked()
 {
-    if (mPid > 0)
+    if (!runOrStopClicked())
     {
-        kill(mPid, SIGKILL);
-        QMessageBox::warning(this, "dasdinit",
-                                            "dasdinit operation was aborted at user's request",
-                                            QMessageBox::Ok,
-                                            QMessageBox::NoButton);
-        mPid=-1;
-        ui.runButton->setText("Ok");
+        ui.runButton->setText("Run");
         return;
     }
 
@@ -219,27 +214,16 @@ void DasdInit::runClicked()
         parameters.push_back(ui.volser->text().toStdString());
     if (ui.sizeCheckBox->isChecked())
     	parameters.push_back(ui.sizeSpinBox->text().toStdString());
-    parameters.push_back("EXTERNALGUI");
     std::string command = "dasdinit";
-    std::string path = "";
+    std::string path = Preferences::getInstance().hercDir();
 
     ui.progressBar->setVisible(true);
-    UtilityExecutor * executor = new UtilityExecutor();
-    mPid = executor->run(command, path, parameters);
-    int fileNo = executor->getPipeError();
-    FILE * file = fdopen(fileNo,"r");
-    UtilityRunner * runner = new UtilityRunner(file);
-    runner->start();
-
-    connect(runner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    execute(command, path, parameters);
+    connect(mRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(mRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
+    connect(mErrorRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(mErrorRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
     ui.runButton->setText("Stop");
-
-    fileNo = executor->getPipeIn();
-    FILE * fileIn = fdopen(fileNo,"w");
-    putc('s', fileIn);
-    fclose(fileIn);
 }
 
 void DasdInit::newDevType()
@@ -273,38 +257,6 @@ void DasdInit::runnerValueChanged(int value)
         ui.progressBar->setValue(ui.progressBar->maximum());
 }
 
-void DasdInit::runnerError(const QString& errorLine)
-{
-    Tokenizer::handle pos, lastPos;
-    std::string word = StringTokenizer::getFirstWord(errorLine.toStdString(), pos, lastPos, " \t\n");
-    outDebug(5, std::cout << "dasdinit runnerError " << errorLine.toStdString() << std::endl);
-    emit output(errorLine);
-
-    if (word == "HHCDI001I" || word == "HHCD002I")
-    {
-        if (mEnded)
-            return;
-        mEnded = true;
-        mPid = -1;
-        QMessageBox::information(this, "dasdinit", "Disk creation successfully completed!",
-                QMessageBox::Ok,
-                QMessageBox::NoButton);
-        ui.runButton->setText("Run");
-        return;
-    }
-    if (word == "HHCDI002I")
-    {
-    	mEnded = true;
-    	mPid = -1;
-        QMessageBox::warning(this, "dasdinit", "Disk creation failed",
-                QMessageBox::Ok,
-                QMessageBox::NoButton);
-        ui.runButton->setText("Run");
-        ui.progressBar->setVisible(false);
-        return;
-    }
-}
-
 void DasdInit::initialize()
 {
 
@@ -322,4 +274,17 @@ QValidator::State DasdInit::VolserValidator::validate(QString & input, int & ) c
 		return Invalid;
 	input = input.toUpper();
 	return Acceptable;
+}
+
+void DasdInit::finishedSlot()
+{
+	if (mExecutor == NULL)
+	{
+		ui.progressBar->setValue(ui.progressBar->maximum());
+		if (mRc == 0)
+			QMessageBox::information(this, "dasdinit", "Disk creation successfully completed!",
+				QMessageBox::Ok,
+				QMessageBox::NoButton);
+	}
+	deleteLater();
 }

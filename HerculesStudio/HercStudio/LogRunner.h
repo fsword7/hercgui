@@ -28,23 +28,33 @@
 #define LOGRUNNER_H_
 
 #include "Runner.h"
+#include "HerculesStudio.h"
 #include "SynchronizedQueue.h"
+#include "HerculesExecutor.h"
 
 #include <QThread>
 #include <QWidget>
 
+class QProcess;
 class LogRunner :  public Runner
 {
   Q_OBJECT
 public:
-  LogRunner(SynchronizedQueue& logQueue);
+  LogRunner(SynchronizedQueue& logQueue, HerculesExecutor * herculesExecutor);
   virtual ~LogRunner();
 
-  virtual void run();
+  void run();
 
 private:
   std::string mLogFifo;
+  HerculesExecutor *mHerculesExecutor;
+  QProcess *mProcess;
   bool mRunning;
+
+public slots:
+#ifdef hFramework
+ void readStandardOutput();
+#endif
 };
 
 #endif /* LOGRUNNER_H_ */

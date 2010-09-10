@@ -27,18 +27,26 @@
 #ifndef STATUSRUNNER_H_
 #define STATUSRUNNER_H_
 #include "Runner.h"
+#include "SynchronizedQueue.h"
+#include "HerculesExecutor.h"
 
+#include <QProcess>
 
 class StatusRunner : public Runner
 {
   Q_OBJECT
 public:
-  StatusRunner(SynchronizedQueue& statusQueue);
+  StatusRunner(SynchronizedQueue& statusQueue, HerculesExecutor * herculesExecutor);
   virtual ~StatusRunner();
 
   virtual void run();
 
 private:
+  HerculesExecutor * mHerculesExecutor;
+  QProcess *mProcess;
+
+public slots:
+  void readStandardError();
 };
 
 #endif /* STATUSRUNNER_H_ */

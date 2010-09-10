@@ -28,12 +28,14 @@
 #define WATCHDOG_H_
 
 #include <QThread>
+#include <QProcess>
 
 class Watchdog : public QThread
 {
 	Q_OBJECT
 public:
 	Watchdog(int herculesPid, bool child);
+  Watchdog(QProcess * herculesProcess);
 	virtual ~Watchdog();
 
 	virtual void run();
@@ -44,6 +46,7 @@ signals:
 private:
 	int mHerculesPid;
 	bool mChild;
+  QProcess * mProcess;
 
     bool processIsRunning(int pid); // TODO: merge with NamedPipe (same function!)
 };

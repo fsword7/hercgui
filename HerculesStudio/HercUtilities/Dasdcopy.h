@@ -27,10 +27,13 @@
 #ifndef DASDCOPY_H
 #define DASDCOPY_H
 
+#include "GenericUtility.h"
+
 #include <QtGui/QDialog>
 #include "ui_Dasdcopy.h"
 
-class Dasdcopy : public QDialog
+class UtilityExecutor;
+class Dasdcopy : public GenericUtility
 {
     Q_OBJECT
 
@@ -38,15 +41,11 @@ public:
     Dasdcopy(QWidget *parent = 0);
     ~Dasdcopy();
 
-signals:
-    void output(QString line);
-
 private:
     Ui::DasdcopyClass ui;
-    int mPid;
     bool mFirstEndReceived;
-
-    void reset();
+    
+	virtual void finishedSlot();
 
 private slots:
     void runClicked();
@@ -56,7 +55,7 @@ private slots:
     void browseOutClicked();
     void runnerMaximumChanged(int maximum);
     void runnerValueChanged(int value);
-    void runnerError(const QString& errorLine);
+
 };
 
 #endif // DASDCOPY_H

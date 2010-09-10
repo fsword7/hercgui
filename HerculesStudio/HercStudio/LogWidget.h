@@ -50,7 +50,7 @@ public:
 
 protected:
 	void getTimeStamp();
-	char timeStamp[11];
+	char mTimeStamp[64];
 };
 
 

@@ -28,7 +28,9 @@
 
 #include <iostream>
 #include <sstream>
+#ifndef hFramework
 #include <sys/wait.h>
+#endif
 #include <cerrno>
 #include <sys/stat.h>
 
@@ -36,6 +38,13 @@ Watchdog::Watchdog(int herculesPid, bool child)
 {
     mHerculesPid = herculesPid;
     mChild = child;
+}
+
+Watchdog::Watchdog(QProcess * herculesProcess)
+{
+  mHerculesPid = -1;
+  mChild = false;
+  mProcess = herculesProcess;
 }
 
 Watchdog::~Watchdog()
@@ -46,14 +55,24 @@ void Watchdog::run()
 {
     if (mChild)
     {
+#ifndef hFramework
         int stat_loc;
         int rc = waitpid(mHerculesPid, &stat_loc, 0);
         outDebug(1, std::cout << "watchdog ended for pid:" << rc << std::endl);
+#endif
     }
     else
     {
+      if (mHerculesPid > 0)
+      {
       while(processIsRunning(mHerculesPid))
           sleep(2);
+      }
+      else
+      {
+        while (mProcess->state() != QProcess::NotRunning)
+          sleep(2);
+      }
     }
     emit HerculesEnded();
 }

@@ -26,7 +26,7 @@
 #include "UtilityExecutor.h"
 #include "UtilityRunner.h"
 #include "StringTokenizer.h"
-
+#include "Preferences.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -34,10 +34,10 @@
 #include <csignal>
 
 DasdIsup::DasdIsup(QWidget *parent)
-    : QDialog(parent), mPid(-1)
+    : GenericUtility("dasdisup",parent)
 {
-  ui.setupUi(this);
-  ui.progressBar->setVisible(false);
+    ui.setupUi(this);
+    ui.progressBar->setVisible(false);
 
     connect(ui.runButton, SIGNAL(clicked()), this, SLOT(runClicked()));
     connect(ui.exitButton, SIGNAL(clicked()), this, SLOT(exitClicked()));
@@ -57,17 +57,17 @@ void DasdIsup::exitClicked()
 
 void DasdIsup::runClicked()
 {
-    if (mPid > 0)
-    {
-        kill(mPid, SIGKILL);
-        QMessageBox::warning(this, "dasdisup",
-                                            "dasdisup operation was aborted at user's request",
-                                            QMessageBox::Ok,
-                                            QMessageBox::NoButton);
-        mPid=-1;
-        ui.runButton->setText("Ok");
-        return;
-    }
+	if ((mExecutor != NULL) && (mExecutor->getQProcess()->state() == QProcess::Running))
+	{
+		mExecutor->terminate();
+		QMessageBox::warning(this, "dasdconv",
+			"dasdconv operation was aborted at user's request",
+			QMessageBox::Ok,
+			QMessageBox::NoButton);
+		mExecutor = NULL;
+		ui.runButton->setText("Run");
+		return;
+	}
     if (ui.filename->text().isEmpty())
     {
         QMessageBox::warning(this, "dasdisup", "Please specify ckd file to process",
@@ -85,28 +85,12 @@ void DasdIsup::runClicked()
     std::string command = "dasdisup";
 
     ui.progressBar->setVisible(true);
-    UtilityExecutor * executor = new UtilityExecutor();
-    std::string path = "";
-    mPid = executor->run(command, path, parameters);
-    int fileNo = executor->getPipeOut();
-    FILE * file = fdopen(fileNo,"r");
-    UtilityRunner * runner = new UtilityRunner(file);
-    runner->start();
-    fileNo = executor->getPipeError();
-    FILE * fileError = fdopen(fileNo,"r");
-    UtilityRunner * runnerError = new UtilityRunner(fileError);
-    runnerError->start();
+	execute(command, Preferences::getInstance().hercDir(), parameters);
 
-    connect(runner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
-    connect(runnerError, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    connect(mRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(mRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
+    connect(mRunner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
     ui.runButton->setText("Stop");
-
-    fileNo = executor->getPipeIn();
-    FILE * fileIn = fdopen(fileNo,"w");
-    putc('s', fileIn);
-    fclose(fileIn);
 }
 
 void DasdIsup::browseFileClicked()
@@ -134,22 +118,13 @@ void DasdIsup::runnerValueChanged(int value)
     else if (value < 0)
     {
         ui.progressBar->setValue(ui.progressBar->maximum());
-        mPid = -1;
-        QMessageBox::information(this, "dasdisup", "Disk update successfully completed!",
-                QMessageBox::Ok,
-                QMessageBox::NoButton);
-        ui.runButton->setText("Run");
-        return;
     }
 }
 
-void DasdIsup::runnerError(const QString& line)
+void DasdIsup::finishedSlot()
 {
-    Tokenizer::handle pos, lastPos;
-    std::string word = StringTokenizer::getFirstWord(line.toStdString(), pos, lastPos, " \t\n");
-    outDebug(4, std::cout << "runnerError " << line.toStdString() << std::endl);
-    ui.runButton->setText("Run");
-    mPid = -1;
-    emit output(line);
+	QMessageBox::information(this, "dasdisup", "Disk update successfully completed!",
+		QMessageBox::Ok,
+		QMessageBox::NoButton);
+	ui.runButton->setText("Run");
 }
-

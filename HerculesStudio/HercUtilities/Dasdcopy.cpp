@@ -26,6 +26,7 @@
 #include "HerculesStudio.h"
 #include "UtilityExecutor.h"
 #include "UtilityRunner.h"
+#include "Preferences.h"
 
 
 #include <QFileDialog>
@@ -34,9 +35,9 @@
 #include <csignal>
 
 Dasdcopy::Dasdcopy(QWidget *parent)
-    : QDialog(parent), mPid(-1)
+    : GenericUtility("dasdcopy",parent)
 {
-  ui.setupUi(this);
+    ui.setupUi(this);
 
     connect(ui.runButton, SIGNAL(clicked()), this, SLOT(runClicked()));
     connect(ui.exitButton, SIGNAL(clicked()), this, SLOT(exitClicked()));
@@ -52,19 +53,14 @@ Dasdcopy::~Dasdcopy()
 
 void Dasdcopy::runClicked()
 {
-    if (mPid > 0)
+    if ((mExecutor != NULL) && (mExecutor->getQProcess()->state() == QProcess::Running))
     {
-        // once we kill the process we get value=-1 (and we wouldn't want another error box to apear)
-        int keepPid = mPid;
-        mPid = -1;
-
-        kill(keepPid, SIGKILL);
-        emit output("dasdcopy operation was aborted at user's request");
+    	mExecutor->terminate();
         QMessageBox::warning(this, "dasdcopy",
                                             "dasdcopy operation was aborted at user's request",
                                             QMessageBox::Ok,
                                             QMessageBox::NoButton);
-        ui.runButton->setText("Ok");
+        ui.runButton->setText("Run");
         return;
     }
     if (ui.infile->text().isEmpty())
@@ -135,34 +131,18 @@ void Dasdcopy::runClicked()
     fullPath += ui.filename->text().toStdString();
 
     parameters.push_back(fullPath);
-    parameters.push_back("EXTERNALGUI");
     std::string command = "dasdcopy";
 
-    UtilityExecutor * executor = new UtilityExecutor();
-    std::string path = "";
-    mPid = executor->run(command, path, parameters);
-    int fileNo = executor->getPipeOut();
-    FILE * file = fdopen(fileNo,"r");
-    UtilityRunner * runner = new UtilityRunner(file);
-    runner->start();
-    fileNo = executor->getPipeError();
-    FILE * fileError = fdopen(fileNo,"r");
-    UtilityRunner * runnerError = new UtilityRunner(fileError);
-    runnerError->start();
-
-    fileNo = executor->getPipeIn();
+    mExecutor = new UtilityExecutor();
+    std::string path = Preferences::getInstance().hercDir();
+    execute(command, path, parameters);
     mFirstEndReceived = false;
 
-    connect(runner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
-    connect(runnerError, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runnerError, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runnerError, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    connect(mRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(mRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
+    connect(mErrorRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(mErrorRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
     ui.runButton->setText("Stop");
-    FILE * fileIn = fdopen(fileNo,"w");
-    putc('s', fileIn);
-    fclose(fileIn);
 }
 
 void Dasdcopy::exitClicked()
@@ -212,9 +192,9 @@ void Dasdcopy::runnerValueChanged(int value)
         {
             mFirstEndReceived = true;
         }
-        else if (mPid > 0)
+        else if (mExecutor != NULL)
         {
-            reset();
+            mExecutor = NULL;
             QMessageBox::warning(this, "dasdcopy", "Disk copy failed",
                     QMessageBox::Ok,
                     QMessageBox::NoButton);
@@ -222,26 +202,14 @@ void Dasdcopy::runnerValueChanged(int value)
     }
 }
 
-void Dasdcopy::runnerError(const QString& line)
+void Dasdcopy::finishedSlot()
 {
-    outDebug(4, std::cout << "dasdcopy::runnerError " << line.toStdString() << std::endl);
-    emit output(line);
-    if (line.toStdString().compare(0,10,"\rHHCDC010I") == 0)
+    if (mStarted && mFinished && mFinishedOK)
     {
-        reset();
         ui.progressBar->setValue(ui.progressBar->maximum());
         QMessageBox::information(this, "dasdcopy", "Disk was successfully copied",
                 QMessageBox::Ok,
                 QMessageBox::NoButton);
+		deleteLater();
     }
 }
-
-void Dasdcopy::reset()
-{
-    ui.runButton->setText("Run");
-    if (mPid != -1)
-    {
-        mPid=-1;
-    }
-}
-

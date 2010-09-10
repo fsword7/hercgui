@@ -34,7 +34,7 @@
 #include <csignal>
 
 DasdLoad::DasdLoad(QWidget *parent)
-    : QDialog(parent), mPid(0)
+    : QDialog(parent)
 {
   ui.setupUi(this);
 
@@ -56,14 +56,13 @@ void DasdLoad::exitClicked()
 
 void DasdLoad::runClicked()
 {
-    if (mPid > 0)
+    if (mExecutor != NULL)
     {
-        kill(mPid, SIGKILL);
+    	mExecutor->terminate();
         QMessageBox::warning(this, "dasdinit",
                                             "dasdinit operation was aborted at user's request",
                                             QMessageBox::Ok,
                                             QMessageBox::NoButton);
-        mPid=-1;
         ui.runButton->setText("Ok");
         return;
     }
@@ -102,30 +101,20 @@ void DasdLoad::runClicked()
     std::string path = "";
 
     ui.progressBar->setVisible(true);
-    UtilityExecutor * executor = new UtilityExecutor();
-    mPid = executor->run(command, path, parameters);
-
-    int fileNo = executor->getPipeOut();
-    FILE * file = fdopen(fileNo,"r");
-    UtilityRunner * runner = new UtilityRunner(file);
+    mExecutor = new UtilityExecutor();
+    UtilityRunner * runner = new UtilityRunner(mExecutor);
     runner->start();
-    fileNo = executor->getPipeError();
-    FILE * fileError = fdopen(fileNo,"r");
-    UtilityRunner * runnerError = new UtilityRunner(fileError);
-    runnerError->start();
+    UtilityRunner * errorRunner = new UtilityRunner(mExecutor);
+    errorRunner->start();
+    mExecutor->run(command, path, parameters, runner, errorRunner);
 
     connect(runner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
     connect(runner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
-    connect(runnerError, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runnerError, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runnerError, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    connect(runner, SIGNAL(error(QString)), this, SLOT(errorRunner(QString)));
+    connect(errorRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(errorRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
+    connect(errorRunner, SIGNAL(error(QString)), this, SLOT(errorRunner(QString)));
     ui.runButton->setText("Stop");
-
-    fileNo = executor->getPipeIn();
-    FILE * fileIn = fdopen(fileNo,"w");
-    putc('s', fileIn);
-    fclose(fileIn);
 }
 
 void DasdLoad::browseCtlClicked()
@@ -167,7 +156,6 @@ void DasdLoad::runnerError(const QString& line)
         if (mEnded)
             return;
         mEnded = true;
-        mPid = -1;
         QMessageBox::information(this, "dasdload", "Disk creation successfully completed!",
                 QMessageBox::Ok,
                 QMessageBox::NoButton);

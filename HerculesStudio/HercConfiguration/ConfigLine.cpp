@@ -126,7 +126,7 @@ void ConfigLine::tokenize(const std::string& delimiters)
         mSize++;
         lastPos = mLine.find_first_not_of(delimiters, pos);
         pos = mLine.find_first_of(delimiters, lastPos);
-        if (mLine[lastPos] == '#') break;
+		if (lastPos != std::string::npos && mLine[lastPos] == '#') break;
     }
 }
 

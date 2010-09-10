@@ -24,16 +24,18 @@
 
 #include "UtilityRunner.h"
 #include "HerculesStudio.h"
+#include "UtilityExecutor.h"
 #include "StringTokenizer.h"
 #include "ConfigurationEditor.h"
 
+#include <QProcess>
 
 #include <sstream>
 #include <cerrno>
 #include <cstdio>
 
-UtilityRunner::UtilityRunner(FILE * file)
-: mFile(file)
+UtilityRunner::UtilityRunner(UtilityExecutor * utilityExecutor)
+: mUtilityExecutor(utilityExecutor), mProcess(utilityExecutor->getQProcess())
 {
 
 }
@@ -45,25 +47,9 @@ UtilityRunner::~UtilityRunner()
 
 void UtilityRunner::run()
 {
-    if (mFile==NULL)
-    {
-        std::stringstream s;
-        s << "dasdinit open failed " << errno <<  std::endl;
-        emit error(s.str().c_str());
-        return;
-    }
-
-    char buff[512];
-    while(true)
-    {
-        if (fgets(buff,512,mFile) == NULL)
-        {
-            emit valueChanged(-1);
-            return;
-        }
-        updateStatus(buff);
-    }
-
+    mUtilityExecutor->getQProcess()->waitForStarted();
+    mProcess = mUtilityExecutor->getQProcess();
+    return;
 }
 
 void UtilityRunner::updateStatus(const std::string& line)
@@ -72,7 +58,7 @@ void UtilityRunner::updateStatus(const std::string& line)
     std::string word = StringTokenizer::getFirstWord(line, pos, lastPos, " \t\n");
     outDebug(1, std::cout << "util runner line:" << line << std::endl);
     if (line.length() == 0)
-    	return;
+        return;
 
     if (word == "HHCDU044I") // dasdinit
     {
@@ -95,7 +81,7 @@ void UtilityRunner::updateStatus(const std::string& line)
         emit valueChanged(currMem);
         return;
     }
-    if (line.compare(0,5,"ETRK=") == 0)  // dasdls
+    if (line.compare(0,5,"ETRK=") == 0)  // dasdls, dasdcat
     {
         int currMem = ConfigurationEditor::parseNum(line.substr(5),10);
         emit maximumChanged(currMem);
@@ -138,13 +124,6 @@ void UtilityRunner::updateStatus(const std::string& line)
         outDebug(2, std::cout << "Value changed " << currMem << std::endl);
         return;
     }
-    if (line.compare(0,5,"ETRK=") == 0)  // dasdcat
-    {
-        int currMem = ConfigurationEditor::parseNum(line.substr(5),10);
-        emit valueChanged(currMem);
-        outDebug(2, std::cout << "Value changed " << currMem << std::endl);
-        return;
-    }
     if (line.compare(0,7,"OUTCYL=") == 0)
     {
         int currCyl = ConfigurationEditor::parseNum(line.substr(7),10);
@@ -175,4 +154,30 @@ void UtilityRunner::updateStatus(const std::string& line)
         QString qline(line.c_str());
         emit error(qline);
     }
+}
+void UtilityRunner::readStandardOutput()
+{
+	if (mProcess == NULL) return;
+	mProcess->setReadChannel(QProcess::StandardOutput);
+	while (true)
+	{
+	QByteArray output = mProcess->readLine();
+	if (output.length() == 0) break;
+	hOutDebug(2,"util runner:" << output.data());
+	updateStatus(QString(output).toStdString());
+	}
+}
+void UtilityRunner::readStandardError()
+{
+	if (mProcess == NULL) return;
+	mProcess->setReadChannel(QProcess::StandardError);
+	while (true)
+	{
+	QByteArray output = mProcess->readLine();
+	if (output.length() == 0) break;
+	output.replace('\n','\0');
+	output.replace('\r','\0');
+	hOutDebug(2,"util runner err:" << output.data());
+	updateStatus(QString(output).toStdString());
+	}
 }

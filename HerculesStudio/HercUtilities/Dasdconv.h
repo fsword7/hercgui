@@ -27,10 +27,14 @@
 #ifndef DASDCONV_H
 #define DASDCONV_H
 
+#include "GenericUtility.h"
+
 #include <QtGui/QDialog>
 #include "ui_Dasdconv.h"
 
-class Dasdconv : public QDialog
+class UtilityExecutor;
+
+class Dasdconv : public GenericUtility
 {
     Q_OBJECT
 
@@ -48,12 +52,11 @@ private slots:
     void browseOutClicked();
     void runnerMaximumChanged(int maximum);
     void runnerValueChanged(int value);
-    void runnerError(const QString& errorLine);
 
 private:
     Ui::DasdconvClass ui;
 
-    int     mPid;
+	virtual void finishedSlot();
 };
 
 #endif // DASDCONV_H

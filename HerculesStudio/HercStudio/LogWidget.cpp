@@ -36,6 +36,7 @@
 #include <QTabWidget>
 
 #include <fcntl.h>
+#include <time.h>
 #include <sys/time.h>
 
 
@@ -55,22 +56,22 @@ void PlainLogWidget::append(const QString & text)
 		getTimeStamp();
 	}
 	else
-		timeStamp[0] = '\0';
+        mTimeStamp[0] = '\0';
 	QString s = text;
 	if (text.toAscii().data()[0] == '<')
 	s = text.mid(24);
-	QTextEdit::append(timeStamp + s);
+    QTextEdit::append(mTimeStamp + s);
 }
 
 void PlainLogWidget::getTimeStamp()
 {
-	static struct timeval  now;
-    static time_t          tt;
+    struct tm *current;
+    time_t now;
+    time(&now);
+    current = localtime(&now);
 
-	gettimeofday( &now, NULL );
-	tt = now.tv_sec;
-	strncpy( timeStamp, ctime(&tt)+11, 8 );
-	memcpy(timeStamp+8, " ", 2);
+    int timeLength = strftime(mTimeStamp, 255, "%H:%M:%S", current); //"%m-%d-%y %H:%M:%S"
+    memcpy(mTimeStamp+8, " ", 2);
 }
 
 bool PlainLogWidget::empty()
@@ -142,14 +143,14 @@ void LogWidget::append(const QString & text)
 		getTimeStamp();
 	}
 	else
-		timeStamp[0] ='\0';
+        mTimeStamp[0] ='\0';
 	QString s = text;
 	if (text.toAscii().data()[0] == '<')
 		s = text.mid(24);
 	if (s.left(9).compare("HHC00001I") == 0)
 	{
 		s = s.mid(9);
-		mLogs[1]->append(timeStamp + s);
+        mLogs[1]->append(mTimeStamp + s);
 	}
 	else
 	{
@@ -164,7 +165,7 @@ void LogWidget::append(const QString & text)
 			else if (text.mid(8,1).compare(QString("E")) == 0)
 				mLogs[0]->setTextColor(red);
 		}
-		mLogs[0]->append(timeStamp + s);
+        mLogs[0]->append(mTimeStamp + s);
 		mLogs[0]->setTextColor(keepC);
 	}
 }

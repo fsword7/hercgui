@@ -24,14 +24,16 @@
 
 
 #include "SystemUtils.h"
+#include "HerculesStudio.h"
 
 #include <QFile>
 
 #include <sstream>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef hFramework
 #include <unistd.h>
-
+#endif
 
 SystemUtils::SystemUtils()
 {

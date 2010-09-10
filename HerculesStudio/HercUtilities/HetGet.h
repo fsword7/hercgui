@@ -1,13 +1,13 @@
 /*
- *  File:       TapeCopy.h
+ *  File:       HetGet.h
  *
  *  Author:     Jacob Dekel
- *  Created on: Aug 27, 2010
+ *  Created on: Sep 3, 2010
  *
  *  Copyright (c) 2009-2010 Jacob Dekel
- *  $Id: DasdIsup.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id: Dasdcat.h 34 2009-11-07 06:15:58Z jacob $
  *
- *  tapecopy utility object
+ *  Hetget utility object
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,35 +23,36 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef TAPECOPY_H
-#define TAPECOPY_H
+
+#ifndef HETGET_H
+#define HETGET_H
 
 #include "GenericUtility.h"
 
 #include <QtGui/QDialog>
-#include "ui_TapeCopy.h"
+#include "ui_HetGet.h"
 
-class TapeCopy : public GenericUtility
+class HetGet : public GenericUtility
 {
     Q_OBJECT
 
 public:
-    TapeCopy(QWidget *parent = 0);
-    ~TapeCopy();
+    HetGet(QWidget *parent = 0);
+    ~HetGet();
 
 private:
-    Ui::TapeCopyClass ui;
-    QRect mUpperGeometry, mLowerGeometry;
+    Ui::HetGetClass ui;
 
-	virtual void finishedSlot();
+    virtual void finishedSlot();
 
-public slots:
-	void runClicked();
-	void cancelClicked();
-	void browseFileClicked();
-	void tapeToScsi();
-	void scsiToTape();
-
+private slots:
+    void exitClicked();
+    void runClicked();
+    void browseInFileClicked();
+    void browseOutDirClicked();
+    void browseOutFileClicked();
+	void asciiChanged();
+	void stripChanged();
 };
 
-#endif // TAPECOPY_H
+#endif // HETGET_H

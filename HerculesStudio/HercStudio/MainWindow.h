@@ -153,6 +153,11 @@ public slots:
     void dasdcopy();
     void tapemap();
     void tapecopy();
+	void tapesplit();
+	void hetinit();
+	void hetget();
+	void hetupd();
+	void hetmap();
 
     void writeToLogFromQueue();
     void writeToLog(QString line);

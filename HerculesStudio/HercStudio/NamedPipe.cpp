@@ -59,6 +59,7 @@ NamedPipe::~NamedPipe()
 
 int NamedPipe::recover()
 {
+    #ifndef hFramework
     int set = 0;
     mRecovery = false;
 
@@ -157,6 +158,9 @@ int NamedPipe::recover()
         return -1;
     }
     return mRecovery ? 1 : 0;
+    #else
+    return 0;
+    #endif
 }
 
 int NamedPipe::delDir(std::string& dir)
@@ -193,6 +197,7 @@ int NamedPipe::getHerculesPid()
     return mHerculesPid;
 }
 
+#ifndef hFramework
 FILE * NamedPipe::getHerculesStdin()
 {
     int fd = open(mFifo0.c_str(),
@@ -200,7 +205,7 @@ FILE * NamedPipe::getHerculesStdin()
     if (fd == -1) perror("fifo0 fd");
     return fdopen(fd,"r");
 }
-
+#endif
 FILE * NamedPipe::getHerculesCommandsFile()
 {
     if (mStdinOutput == NULL)

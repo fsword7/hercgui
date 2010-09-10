@@ -30,6 +30,7 @@
 #include <QtGui/QDialog>
 #include "ui_DasdLoad.h"
 
+class UtilityExecutor;
 class DasdLoad : public QDialog
 {
     Q_OBJECT
@@ -40,8 +41,8 @@ public:
 
 private:
     Ui::DasdLoadClass ui;
-    int               mPid;
     bool              mEnded;
+    UtilityExecutor * mExecutor;
 
 private slots:
     void exitClicked();

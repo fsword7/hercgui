@@ -1,3 +1,26 @@
+/*
+ *  File:       TapeMap.cpp
+ *
+ *  Author:     Jacob Dekel
+ *  Created on: Aug 31, 2010
+ *
+ *  Copyright (c) 2009-2010 Jacob Dekel
+ *  $Id: DasdIsup.h 34 2009-11-07 06:15:58Z jacob $
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #include "TapeMap.h"
 
 #include "HerculesStudio.h"
@@ -14,14 +37,13 @@
 #include <csignal>
 
 TapeMap::TapeMap(QWidget *parent)
-    : QDialog(parent), mPid(-1)
+    : GenericUtility("tapemap", parent)
 {
-	ui.setupUi(this);
+    ui.setupUi(this);
 
     connect(ui.runButton, SIGNAL(clicked()), this, SLOT(runClicked()));
     connect(ui.exitButton, SIGNAL(clicked()), this, SLOT(exitClicked()));
     connect(ui.browseFileButton, SIGNAL(clicked()), this, SLOT(browseFileClicked()));
-    connect(this, SIGNAL(error()), this, SLOT(errorSlot()));
 }
 
 TapeMap::~TapeMap()
@@ -31,14 +53,8 @@ TapeMap::~TapeMap()
 
 void TapeMap::runClicked()
 {
-    if (mPid > 0)
+    if (!runOrStopClicked())
     {
-        kill(mPid, SIGKILL);
-        QMessageBox::warning(this, "tapemap",
-                                            "tapemap operation was aborted at user's request",
-                                            QMessageBox::Ok,
-                                            QMessageBox::NoButton);
-        mPid=-1;
         ui.runButton->setText("Run");
         return;
     }
@@ -58,39 +74,17 @@ void TapeMap::runClicked()
 
     parameters.push_back(ui.filename->text().toStdString());
 
-    parameters.push_back("EXTERNALGUI");
     std::string command = "tapemap";
 
-    mExecutor = new UtilityExecutor();
-    std::string path = "";
-    mPid = mExecutor->run(command, path, parameters);
-    int fileNo = mExecutor->getPipeOut();
-    FILE * file = fdopen(fileNo,"r");
-    UtilityRunner * runner = new UtilityRunner(file);
-    runner->start();
-    fileNo = mExecutor->getPipeError();
-    file = fdopen(fileNo,"r");
-    UtilityRunner * runnerError = new UtilityRunner(file);
-    runnerError->start();
-
-    connect(runner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
-    connect(runnerError, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    execute(command, Preferences::getInstance().hercDir(), parameters);
     ui.runButton->setText("Stop");
-
-    fileNo = mExecutor->getPipeIn();
-    FILE * fileIn = fdopen(fileNo,"w");
-    putc('s', fileIn);
-    fclose(fileIn);
-
-    mCheckCount = 0;
-    QTimer::singleShot(1000, this, SLOT(timeout()));
 }
 
 void TapeMap::browseFileClicked()
 {
-	QString dir = ui.filename->text();
-	if (dir.isEmpty())
-		dir = Preferences::getInstance().configDir().c_str();
+    QString dir = ui.filename->text();
+    if (dir.isEmpty())
+        dir = Preferences::getInstance().configDir().c_str();
     QString s = QFileDialog::getOpenFileName(this,"Browse for tape to map",dir);
     ui.filename->setText(s);
 }
@@ -100,50 +94,14 @@ void TapeMap::exitClicked()
     deleteLater();
 }
 
-void TapeMap::runnerError(const QString& line)
+void TapeMap::finishedSlot()
 {
-    Tokenizer::handle pos, lastPos;
-    std::string word = StringTokenizer::getFirstWord(line.toStdString(), pos, lastPos, " =\t\n");
-    if ( (word == "HHCDU009E" && line.toStdString().find("EXTERNALGUI")!= std::string::npos) ||
-    	 (word == "IPOS") )
-        return;
-    if (QString::compare(line.left(12),"End of tape.") == 0)
-    {
-    	deleteLater();
-    }
-    emit output(line);
-}
-
-void TapeMap::errorSlot()
-{
-	QMessageBox::warning(this, "tapemap",
-								"tapemap failed. Please check the log for details",
-								QMessageBox::Ok,
-								QMessageBox::NoButton);
-	deleteLater();
-}
-
-void TapeMap::timeout()
-{
-    if (mPid > 0)
-    {
-    	if (!mExecutor->evaluateProcess(mPid))
-    	{
-    		mCheckCount++;
-    		if (mCheckCount >= 5)
-    		{
-				QMessageBox::warning(this, "tapemap",
-							"tapemap operation is taking too long. Please check the log for errors",
-							QMessageBox::Ok,
-							QMessageBox::NoButton);
-				deleteLater();
-    		}
-    	}
-    	else
-    	{
-    		mPid=-1;
-    	    ui.runButton->setText("Run");
-    	    emit error();
-    	}
-    }
+ 	if (mStarted && mFinished && mFinishedOK)
+	{
+        QMessageBox::information(this, "tapemap", "Tapemap operation successfully completed!",
+                QMessageBox::Ok,
+                QMessageBox::NoButton);
+        deleteLater();
+	}
+	else emit error();
 }

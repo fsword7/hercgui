@@ -7,7 +7,7 @@
  *  Copyright (c) 2009 Jacob Dekel
  *  $Id: UtilityExecutor.h 34 2009-11-07 06:15:58Z jacob $
  *
- *	This object runs the various utilities as a child process
+ *  This object runs the various utilities as a child process
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,27 +28,35 @@
 #define UTILITYEXECUTOR_H_
 
 #include "HerculesStudio.h"
+#include "UtilityRunner.h"
+
+#include <QObject>
 
 #include <string>
 #include <vector>
 #include <algorithm>
 
-class UtilityExecutor
+class QProcess;
+class UtilityRunner;
+
+class UtilityExecutor : public QObject
 {
+    Q_OBJECT
 public:
-    UtilityExecutor();
+    UtilityExecutor(QObject *parent=0);
     virtual ~UtilityExecutor();
 
-    int run(const std::string & command, const std::string & pPath, std::vector<std::string> pParameters);
-    int getPipeIn();
-    int getPipeOut();
-    int getPipeError();
-    static bool evaluateProcess(int pid);
+    int run(const std::string & command,
+            const std::string & pPath,
+            std::vector<std::string> pParameters,
+            UtilityRunner * runner,
+            UtilityRunner * errorRunner);
+    bool running();
+    QProcess * getQProcess() { return mProcess;};
+    void terminate();
 
 private:
-    int mPipeIn[2];
-    int mPipeOut[2];
-    int mPipeError[2];
+    QProcess * mProcess;
 };
 
 #endif /* UTILITYEXECUTOR_H_ */

@@ -34,6 +34,7 @@
 #include <QBitmap>
 #include <QString>
 #include <iostream>
+#include <string>
 #include <sstream>
 #include <cstdio>
 
@@ -62,7 +63,7 @@ DevicesPane::~DevicesPane()
 
 bool DevicesPane::notify(const std::string& statusLine)
 {
-    outDebug(1, std::cout  << statusLine << std::endl);
+    hOutDebug(1,"devices notify:" << statusLine << "." << std::endl);
     struct DynDeviceLine * line = (DynDeviceLine *)statusLine.c_str();
     int devNo;
     VisualizedDeviceEntry deviceEntry;
@@ -173,7 +174,14 @@ bool DevicesPane::notify(const std::string& statusLine)
                         titleDevAdded=true;
                     }
                     char ss[255];
-                    sprintf(ss,"%4.4X %s",ent.getDeviceNumber(), ent.getDefinition().substr(25).c_str());
+                    std::string def = ent.getDefinition();
+                    int pos=def.find('\r');
+                    while (pos != std::string::npos)
+                    {
+                      def.replace(pos,def.size()," ");
+                      pos = def.find('\r');
+                    }
+                    sprintf(ss,"%4.4X %s",ent.getDeviceNumber(), def.substr(25).c_str());
                     if (ent.getIcon() == NULL)
                     {
                         ent.setIcon(mYellowIcon);

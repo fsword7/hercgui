@@ -26,19 +26,31 @@
 
 #ifndef HERCULESEXECUTOR_H_
 #define HERCULESEXECUTOR_H_
-#include "MainWindow.h"
+#include <QMainWindow>
+#include <QProcess>
 #include <string>
 
 class HerculesExecutor
 {
 public:
-  HerculesExecutor(QMainWindow& mainWindow);
+  HerculesExecutor(QMainWindow& mainWindow, int pid=0);
   virtual ~HerculesExecutor();
 
   int run(std::string configName, std::string herculesPath);
+  void issueCommand(const char * command);
+  void issueFormattedCommand(const char *format, const char * arg1);
+  void issueFormattedCommand(const char *format, const int arg1);
+  void issueFormattedCommand(const char *format, const char * arg1, const char *arg2);
+  QByteArray getLine();
+  bool getLine(char * buff, int max);
+  QByteArray getStatusLine();
+  bool getStatusLine(char * buff, int max);
+  QProcess * getQProcess(){ return mProcess; };
 
 private:
   QMainWindow & mMainWindow;
+  QProcess    *mProcess;
+  int	  	  mPid;
 };
 
 #endif /* HERCULESEXECUTOR_H_ */

@@ -34,7 +34,7 @@ std::string Regs32::fCommand = "]FREGS=";
 std::string Regs32::aCommand = "]AREGS=";
 
 Regs32::Regs32(QWidget * parent, std::string command) :
-    QWidget::QWidget(parent),
+    QWidget(parent),
     mParent(parent),
 	mLine1(this),
 	mLine2(this),

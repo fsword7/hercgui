@@ -7,7 +7,7 @@
  *  Copyright (c) 2009 Jacob Dekel
  *  $Id: DasdIsup.h 34 2009-11-07 06:15:58Z jacob $
  *
- *	Dasdisup utility object
+ *  Dasdisup utility object
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,10 +27,13 @@
 #ifndef DASDISUP_H
 #define DASDISUP_H
 
+#include "GenericUtility.h"
+
 #include <QtGui/QDialog>
 #include "ui_DasdIsup.h"
 
-class DasdIsup : public QDialog
+class UtilityExecutor;
+class DasdIsup : public GenericUtility
 {
     Q_OBJECT
 
@@ -41,7 +44,7 @@ public:
 private:
     Ui::DasdIsupClass ui;
 
-    int     mPid;
+	virtual void finishedSlot();
 
 private slots:
     void exitClicked();
@@ -50,10 +53,6 @@ private slots:
     void browseSfClicked();
     void runnerMaximumChanged(int maximum);
     void runnerValueChanged(int value);
-    void runnerError(const QString& errorLine);
-
-signals:
-    void output(QString line);
 };
 
 #endif // DASDISUP_H

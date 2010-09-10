@@ -23,14 +23,13 @@
  */
 
 #include "HerculesExecutor.h"
+#include "HerculesStudio.h"
 #include "Arguments.h"
 #include "NamedPipe.h"
 
-#include <unistd.h>
 #include <cstdio>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/wait.h>
 #include <fcntl.h>
 #include <cerrno>
 #include <iostream>
@@ -39,8 +38,8 @@ int pipeLog[2];
 int pipeStatus[2];
 int pipeCommand[2];
 
-HerculesExecutor::HerculesExecutor(QMainWindow & mainWindow)
-: mMainWindow(mainWindow)
+HerculesExecutor::HerculesExecutor(QMainWindow & mainWindow, int pid)
+: mMainWindow(mainWindow), mProcess(NULL), mPid(pid)
 {
 
 }
@@ -50,6 +49,7 @@ HerculesExecutor::~HerculesExecutor()
 
 }
 
+#ifndef hFramework
 int HerculesExecutor::run(std::string configName, std::string herculesPath)
 {
     int pid;
@@ -96,7 +96,136 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
         _exit(1);
     }
 
+    mPid = pid;
     printf("pid=:%d\n",pid);
     return pid;
-
 }
+
+void HerculesExecutor::issueCommand(const char * command)
+{
+    if (mPid == 0)
+        return;
+
+    outDebug(2, std::cout << "issue command:" << command << std::endl);
+    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
+    if (input)
+    {
+            fprintf(input,"%s\n", command);
+            fflush(input);
+            return;
+    }
+    else
+    {
+        outDebug(3, std::cout << "input=" << input << std::endl);
+        return;
+    }
+}
+
+void HerculesExecutor::issueFormattedCommand(const char * format, const char * arg1)
+{
+    char buffer[strlen(format)+strlen(arg1)+2];
+    sprintf(buffer,format,arg1);
+    issueCommand(buffer);
+}
+
+void HerculesExecutor::issueFormattedCommand(const char * format, int arg1)
+{
+    char buffer[strlen(format)+64];
+    sprintf(buffer,format,arg1);
+    issueCommand(buffer);
+}
+
+
+#else  // hFramework
+int HerculesExecutor::run(std::string configName, std::string herculesPath)
+{
+    mProcess=NULL;
+    std::string prog = herculesPath;
+    prog += "/hercules";
+    QString program = prog.c_str();
+    QStringList arguments;
+    char comm[256];
+    strncpy(comm,program.toAscii().data(),255);
+    arguments << "-d" << "-f" << configName.c_str() << "EXTERNALGUI" ;
+    mProcess = new QProcess();
+    mProcess->start(program,arguments);
+    Q_PID pid = mProcess->pid();
+    if (pid != 0)
+        return 0;
+    else
+        return -1;
+}
+
+void HerculesExecutor::issueCommand(const char * command)
+{
+    mProcess->write(command);
+}
+
+void HerculesExecutor::issueFormattedCommand(const char * format, const char * arg1)
+{
+	std::string buffer;
+	buffer.resize(strlen(format)+strlen(arg1)+2);
+    sprintf(&buffer[0],format,arg1);
+    mProcess->write(buffer.c_str());
+}
+
+void HerculesExecutor::issueFormattedCommand(const char * format, int arg1)
+{
+	std::string buffer;
+    buffer.resize(strlen(format)+64);
+    sprintf(&buffer[0],format,arg1);
+    mProcess->write(buffer.c_str());
+}
+
+bool HerculesExecutor::getLine(char * buff, int max)
+{
+    bool ready=false;
+    while (!ready)
+    {
+        ready = mProcess->waitForReadyRead(3000);
+        if (ready)
+        {
+            hOutDebug(0,"waiting for log");
+            QByteArray output = mProcess->readLine(max);
+            int len = output.length();
+            hOutDebug(0,"log len=" << len << ":" << output.data());
+            if (len > 0)
+            {
+                strncpy(buff, output.data(), (len>max? max : len));
+                buff[len] = '\0';
+            }
+            else
+            {
+                ready=false;
+            }
+        }
+    }
+    return true;
+}
+
+bool HerculesExecutor::getStatusLine(char * buff, int max)
+{
+    bool ready=false;
+    while (!ready)
+    {
+        ready = mProcess->waitForReadyRead(3000);
+        if (ready)
+        {
+            hOutDebug(0,"waiting for status");
+            QByteArray output = mProcess->readAllStandardError();
+            int len = output.length();
+            hOutDebug(0,"status len=" << len);
+            if (len > 0)
+            {
+                strncpy(buff, output.data(), (len>max? max : len));
+                buff[len] = '\0';
+            }
+            else
+            {
+                ready=false;
+            }
+        }
+    }
+    return true;
+}
+#endif

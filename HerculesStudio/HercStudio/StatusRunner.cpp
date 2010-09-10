@@ -23,12 +23,13 @@
  */
 
 #include "StatusRunner.h"
+#include "HerculesStudio.h"
 #include "NamedPipe.h"
 
 #include <fcntl.h>
 
-StatusRunner::StatusRunner(SynchronizedQueue& statusQueue)
-: Runner(statusQueue)
+StatusRunner::StatusRunner(SynchronizedQueue& statusQueue, HerculesExecutor * herculesExecutor)
+: Runner(statusQueue), mHerculesExecutor(herculesExecutor)
 {
 
 }
@@ -39,6 +40,14 @@ StatusRunner::~StatusRunner()
 
 void StatusRunner::run()
 {
+#ifdef hFramework
+	mProcess = mHerculesExecutor->getQProcess();
+	connect(mHerculesExecutor->getQProcess(),
+			SIGNAL(readyReadStandardError()),
+			this,
+			SLOT(readStandardError()));
+	return;
+#else
 	FILE * statusFile = NamedPipe::getInstance().getHerculesStatus();
 	char buff[512];
 	mRunning = true;
@@ -52,6 +61,21 @@ void StatusRunner::run()
 	if (buff[0]) buff[strlen(buff)-1] = '\0'; // remove CR
 	mQueue.push_back(buff);
 	emit newData();
+	}
+#endif
+}
+
+
+void StatusRunner::readStandardError()
+{
+	mProcess->setReadChannel(QProcess::StandardError);
+	while (true)
+	{
+		QByteArray output = mProcess->readLine();
+		output.replace("\n"," ");
+		if (output.length() == 0) break;
+		mQueue.push_back(output.data());
+		emit newData();
 	}
 }
 

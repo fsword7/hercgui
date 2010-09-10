@@ -7,7 +7,7 @@
  *  Copyright (c) 2009 Jacob Dekel
  *  $Id: UtilityRunner.h 34 2009-11-07 06:15:58Z jacob $
  *
- *	This object tracks on running utilites and updates their status
+ *  This object tracks on running utilites and updates their status
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,29 +25,36 @@
  */
 
 #include <QThread>
+#include <QProcess>
 
 #ifndef UTILIYRUNNER_H_
 #define UTILIYRUNNER_H_
+
+class UtilityExecutor;
 
 class UtilityRunner : public QThread
 {
     Q_OBJECT
 public:
-    UtilityRunner(FILE * file);
+    UtilityRunner(UtilityExecutor * utilityExecutor);
     virtual ~UtilityRunner();
     void run();
 
 signals:
-    void ended();
     void valueChanged(int value);
     void maximumChanged(int maximum);
     void error(QString errorLine);
-    void started(int);
 
 private:
-    FILE * mFile;
+    UtilityExecutor * mUtilityExecutor;
+    QProcess * mProcess;
 
     void updateStatus(const std::string& line);
+
+private slots:
+  void readStandardOutput();
+  void readStandardError();
+
 };
 
 #endif /* UTILIYRUNNER_H_ */

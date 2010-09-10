@@ -28,31 +28,31 @@
 #define DASDINIT_H
 
 #include "UtilityExecutor.h"
+#include "GenericUtility.h"
 
 #include <QtGui/QDialog>
 #include <QtGui/QWidget>
 #include <QThread>
-#include <QMutex>
 #include <QValidator>
 #include "ui_DasdInit.h"
 
-class DasdInit : public QDialog
+class UtilityExecutor;
+class DasdInit : public GenericUtility
 {
     Q_OBJECT
 
 public:
     DasdInit(QWidget *parent = 0);
-    ~DasdInit();
+    virtual ~DasdInit();
 
 private:
     Ui::dasdinitClass ui;
     bool mEnded;
-    int mPid;
-    QMutex mMutex;
 
     void initialize();
     void setSizeValue();
     bool processIsRunning(int pid);
+	virtual void finishedSlot();
 
     class VolserValidator : public QValidator
     {
@@ -71,10 +71,6 @@ private slots:
     void filenameFocus();
     void runnerMaximumChanged(int maximum);
     void runnerValueChanged(int value);
-    void runnerError(const QString& errorLine);
-
-signals:
-    void output(QString line);
 };
 
 #endif // DASDINIT_H

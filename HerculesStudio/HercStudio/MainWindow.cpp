@@ -35,7 +35,12 @@
 #include "Dasdconv.h"
 #include "Dasdcopy.h"
 #include "TapeMap.h"
+#include "TapeSplt.h"
 #include "TapeCopy.h"
+#include "HetInit.h"
+#include "HetGet.h"
+#include "HetUpd.h"
+#include "HetMap.h"
 #include "NamedPipe.h"
 #include "Environment.h"
 #include "Arguments.h"
@@ -50,7 +55,9 @@
 
 #include <iostream>
 #include "cerrno"
+#ifndef hFramework
 #include <err.h>
+#endif
 #include <typeinfo>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -64,13 +71,13 @@ MainWindow::MainWindow(QWidget *parent)
     mHerculesActive(false)
 {
     ui.setupUi(this);
-    ui.actionTapecopy->setVisible(false);
-    ui.actionTapemap->setVisible(false);
-    ui.actionTapesplit->setVisible(false);
-    ui.actionHetget->setVisible(false);
-    ui.actionHetinit->setVisible(false);
-    ui.actionHetmap->setVisible(false);
-    ui.actionHetupd->setVisible(false);
+    ui.actionTapecopy->setVisible(true);
+    ui.actionTapemap->setVisible(true);
+    ui.actionTapesplit->setVisible(true);
+    ui.actionHetget->setVisible(true);
+    ui.actionHetinit->setVisible(true);
+    ui.actionHetmap->setVisible(true);
+    ui.actionHetupd->setVisible(true);
 
     if (Arguments::getInstance().configFileName().length() > 0)
     {
@@ -228,6 +235,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui.actionDasdcopy, SIGNAL(triggered()), this, SLOT(dasdcopy()));
     connect(ui.actionTapemap, SIGNAL(triggered()), this, SLOT(tapemap()));
     connect(ui.actionTapecopy, SIGNAL(triggered()), this, SLOT(tapecopy()));
+	connect(ui.actionTapesplit, SIGNAL(triggered()), this, SLOT(tapesplit()));
+	connect(ui.actionHetinit, SIGNAL(triggered()), this, SLOT(hetinit()));
+	connect(ui.actionHetget, SIGNAL(triggered()), this, SLOT(hetget()));
+	connect(ui.actionHetupd, SIGNAL(triggered()), this, SLOT(hetupd()));
+	connect(ui.actionHetmap, SIGNAL(triggered()), this, SLOT(hetmap()));
 
     connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(helpAbout()));
     connect(mMainPanel, SIGNAL(powerOnClicked()), this , SLOT(powerOn()));
@@ -347,7 +359,7 @@ void MainWindow::dispatchStatus()
     {
         std::string statusLine = mStatusQueue.front();
         mStatusQueue.pop_front();
-        outDebug(4, std::cout << "writeToDevice:" << statusLine << std::endl);
+        hOutDebug(1, "writeToDevice:" << statusLine << std::endl);
         if (!statusLine.empty())
         {
             if (statusLine[0] == 'D')
@@ -406,17 +418,10 @@ void MainWindow::newCommand()
     CommandLine *cl = static_cast<CommandLine *>(QObject::sender());
     if (cl == NULL) return;
     outDebug(2, std::cout  << cl->text().toStdString() << std::endl);
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-    	if (!mLogWindow->isOSLog() || cl->text().left(1).compare(".") == 0)
-    		fprintf(input,"%s\n",cl->text().toAscii().data());
-    	else
-    		fprintf(input,".%s\n",cl->text().toAscii().data());
-
-        fflush(input);
-    }
-    else  err(1, "err");
+    if (!mLogWindow->isOSLog() || cl->text().left(1).compare(".") == 0)
+        mHerculesExecutor->issueFormattedCommand("%s\n",cl->text().toAscii().data());
+    else
+        mHerculesExecutor->issueFormattedCommand(".%s\n",cl->text().toAscii().data());
 }
 
 
@@ -713,21 +718,27 @@ void MainWindow::powerOn()
     {
         outDebug(2,std::cout << "recovery" << std::endl);
         herculesPid = NamedPipe::getInstance().getHerculesPid();
-        mHerculesExecutor = new HerculesExecutor(*this);
+        mHerculesExecutor = new HerculesExecutor(*this, herculesPid);
         mDevicesRecovery = true;
     }
 
+#ifndef hFramework
     NamedPipe::getInstance().generatePid(getpid(), herculesPid);
+#endif
 
-    mLogRunner = new LogRunner(mLogQueue);
+    mLogRunner = new LogRunner(mLogQueue, mHerculesExecutor);
     connect(mLogRunner, SIGNAL(newData()), this , SLOT(writeToLogFromQueue()));
     mLogRunner->start();
 
-    mStatusRunner = new StatusRunner(mStatusQueue);
+    mStatusRunner = new StatusRunner(mStatusQueue, mHerculesExecutor);
     connect(mStatusRunner, SIGNAL(newData()), this , SLOT(dispatchStatus()));
     mStatusRunner->start();
 
+#ifndef hFramework
     mWatchdog = new Watchdog(herculesPid, !mRecovery);
+#else
+    mWatchdog = new Watchdog(mHerculesExecutor->getQProcess());
+#endif
     connect(mWatchdog, SIGNAL(HerculesEnded()), this, SLOT(herculesEndedSlot()));
     mWatchdog->start();
 
@@ -737,32 +748,33 @@ void MainWindow::powerOn()
 
     mMainPanel->standby();
     this->setWindowTitle((mConfigFile->getFileName() + " - Hercules Studio").c_str());
+#ifndef hFramework
     if (mRecovery)
     {
-    	// refresh devices list
+        // refresh devices list
         issueCommand("]DEVLIST=1");
         usleep(500000);
         issueCommand("]NEWDEVLIST=1");
 
     }
-
+#endif
     mRecovery = false;
     mSystemTrayIcon->show();
 
     if (ui.actionView_32_bit_General_Registers->isChecked())
-    	this->mGRegisters32->setActive(true);
+        this->mGRegisters32->setActive(true);
     if (ui.actionView_32_bit_Control_Registers->isChecked())
-    	this->mCRegisters32->setActive(true);
+        this->mCRegisters32->setActive(true);
     if (ui.actionView_32_bit_Floating_Point_Registers->isChecked())
-    	this->mFRegisters32->setActive(true);
+        this->mFRegisters32->setActive(true);
     if (ui.actionView_32_bit_Access_Registers->isChecked())
-    	this->mARegisters32->setActive(true);
+        this->mARegisters32->setActive(true);
     if (ui.actionView_64_bit_General_Registers->isChecked())
-    	this->mGRegisters64->setActive(true);
+        this->mGRegisters64->setActive(true);
     if (ui.actionView_64_bit_Control_Registers->isChecked())
-    	this->mCRegisters64->setActive(true);
+        this->mCRegisters64->setActive(true);
     if (ui.actionView_64_bit_Floating_Point_Registers->isChecked())
-    	this->mFRegisters64->setActive(true);
+        this->mFRegisters64->setActive(true);
 }
 
 void MainWindow::powerOff()
@@ -770,14 +782,10 @@ void MainWindow::powerOff()
     if (!mHerculesActive) return ;
     mMinimizeOnClose=false;
     printf("Goodbye!\n");
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-            fprintf(input,"quit\n\r");
-            fflush(input);
-            outDebug(2, std::cout << "hercules closed" << std::endl);
-            usleep(100000);
-    }
+    mHerculesExecutor->issueCommand("quit\n");
+    #ifndef hFramework
+    usleep(100000);  // TODO32
+    #endif
     mDevicesPane->clear();
     mMainPanel->setDormant();
 }
@@ -787,12 +795,7 @@ void MainWindow::load()
     if (!mHerculesActive) return;
     int addr = mMainPanel->getLoadAddress();
     outDebug(1, std::cout << "going to load " << addr << std::endl);
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-            fprintf(input,"IPL %X\n",addr);
-            fflush(input);
-    }
+    mHerculesExecutor->issueFormattedCommand("IPL %X\n",addr);
 }
 
 void MainWindow::loadCommand()
@@ -837,12 +840,8 @@ void MainWindow::extInterrupt()
 {
     if (!mHerculesActive) return;
     outDebug(1, std::cout << "going to externally interrupt " << std::endl);
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-            fprintf(input,"ext\n");
-            fflush(input);
-    }
+    mHerculesExecutor->issueCommand("ext\n");
+    return;
 }
 
 void MainWindow::devInterrupt()
@@ -850,56 +849,31 @@ void MainWindow::devInterrupt()
     if (!mHerculesActive) return;
     int addr = mMainPanel->getLoadAddress();
     outDebug(1, std::cout << "going to interrupt " << addr << std::endl);
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-            fprintf(input,"I %X\n", addr);
-            fflush(input);
-    }
+    mHerculesExecutor->issueFormattedCommand("I %X\n", addr);
 }
 
 void MainWindow::restart()
 {
-    if (!mHerculesActive) return;
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-            fprintf(input,"restart\n");
-            fflush(input);
-    }
+    if (mHerculesActive)
+        mHerculesExecutor->issueCommand("restart\n");
 }
 
 void MainWindow::store()
 {
-    if (!mHerculesActive) return;
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-            fprintf(input,"store\n");
-            fflush(input);
-    }
+    if (mHerculesActive)
+        mHerculesExecutor->issueCommand("store\n");
 }
 
 void MainWindow::start()
 {
-    if (!mHerculesActive) return;
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-            fprintf(input,"startall\n");
-            fflush(input);
-    }
+       if (mHerculesActive)
+            mHerculesExecutor->issueCommand("startall\n");
 }
 
 void MainWindow::stop()
 {
-    if (!mHerculesActive) return;
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-            fprintf(input,"stopall\n");
-            fflush(input);
-    }
+       if (mHerculesActive)
+            mHerculesExecutor->issueCommand("stopall\n");
 }
 
 void MainWindow::dasdinit()
@@ -965,12 +939,47 @@ void MainWindow::tapecopy()
     tapecopy->show();
 }
 
+void MainWindow::tapesplit()
+{
+	TapeSplt * tapesplit = new TapeSplt(this);
+	connect(tapesplit, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	tapesplit->show();
+}
+
+void MainWindow::hetinit()
+{
+	HetInit * hetinit = new HetInit(this);
+	connect(hetinit, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	hetinit->show();
+}
+
+void MainWindow::hetget()
+{
+	HetGet * hetget = new HetGet(this);
+	connect(hetget, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	hetget->show();
+}
+
+void MainWindow::hetupd()
+{
+	HetUpd * hetupd = new HetUpd(this);
+	connect(hetupd, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	hetupd->show();
+}
+
+void MainWindow::hetmap()
+{
+	HetMap * hetmap = new HetMap(this);
+	connect(hetmap, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	hetmap->exec();
+}
+
 void MainWindow::herculesEndedSlot()
 {
     std::cerr << "############ ended ##############" << std::endl;
     if (Preferences::getInstance().autosaveLog())
     {
-    	saveMessages(true);
+        saveMessages(true);
     }
     mLogRunner->terminate();
     mStatusRunner->terminate();
@@ -1050,28 +1059,18 @@ void MainWindow::restartDevices()
     hOutDebug(3,"MainWindow::restartRecovery");
     mDevicesRecovery = true;
     issueCommand("]DEVLIST=1");
-    usleep(500000);
+    #ifndef hFramework
+    usleep(500000);  // TODO32
+    #endif
     issueCommand("]NEWDEVLIST=1");
 }
 
 bool MainWindow::issueCommand(const std::string& command)
 {
-    if (!mHerculesActive)
-        return false;
-
+   if (mHerculesActive)
+        mHerculesExecutor->issueFormattedCommand("%s\n", command.c_str());
     outDebug(2, std::cout << "issue command:" << command << std::endl);
-    FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
-    if (input)
-    {
-            fprintf(input,"%s\n", command.c_str());
-            fflush(input);
-            return true;
-    }
-    else
-    {
-        outDebug(3, std::cout << "input=" << input << std::endl);
-        return false;
-    }
+   return true;
 }
 
 void MainWindow::testGui()

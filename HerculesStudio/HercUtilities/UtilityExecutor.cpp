@@ -23,13 +23,18 @@
  */
 
 #include "UtilityExecutor.h"
+#include "HerculesStudio.h"
+#include "UtilityRunner.h"
 
-#include <sys/wait.h>
+#include <QProcess>
+#include <QString>
+#include <QStringList>
 #include <cerrno>
 #include <cstdio>
 
-UtilityExecutor::UtilityExecutor()
+UtilityExecutor::UtilityExecutor(QObject *parent) :QObject(parent)
 {
+    mProcess = NULL;
 }
 
 UtilityExecutor::~UtilityExecutor()
@@ -37,113 +42,58 @@ UtilityExecutor::~UtilityExecutor()
 }
 
 
-int UtilityExecutor::run(const std::string & pCommand, const std::string& pPath, std::vector<std::string> pParameters)
+int UtilityExecutor::run(const std::string & pCommand, const std::string& pPath, std::vector<std::string> pParameters, UtilityRunner * runner,
+        UtilityRunner * errorRunner)
 {
-    int pid;
-    int rc =0;
-
-    rc = pipe(mPipeError);
-    if (rc)
+    QString program = pPath.c_str();
+    if (pPath.size() > 0) program += "/";
+    program += pCommand.c_str();
+    QStringList arguments;
+    for (unsigned int i=0; i<pParameters.size(); i++)
     {
-        printf("pipe() rc=%d\n",rc);
+        arguments << pParameters[i].c_str();
+    }
+    mProcess = new QProcess();
+    if (runner != NULL)
+    {
+        runner->start();
+        connect(mProcess,
+                SIGNAL(readyReadStandardOutput()),
+                runner,
+                SLOT(readStandardOutput()));
+    }
+    if (errorRunner != NULL)
+    {
+        errorRunner->start();
+        connect(mProcess,
+                SIGNAL(readyReadStandardError()),
+                errorRunner,
+                SLOT(readStandardError()));
+    }
+    for (int i=0 ; i<arguments.size(); i++)
+        hOutDebug(0, " " << arguments.value(i).toStdString());
+    mProcess->start(program,arguments);
+    Q_PID pid = mProcess->pid();
+
+    if (pid != 0)
         return 0;
-    }
-    rc = pipe(mPipeOut);
-    if (rc)
-    {
-        printf("pipe() rc=%d\n",rc);
-        return 0;
-    }
-
-    rc = pipe(mPipeIn);
-    if (rc)
-    {
-        printf("pipe() rc=%d\n",rc);
-        return 0;
-    }
-
-    pid = fork();
-    if (pid < 0)
-    {
-        return -1;
-    }
-    if (pid == 0)
-    {
-        std::string command = pPath;
-        if (command.length() != 0 )
-            command += "/";
-        command += pCommand;
-        outDebug(5, std::cout << "command=" << command << std::endl);
-        close(mPipeOut[0]);
-        close(mPipeIn[1]);
-        close(mPipeError[0]);
-        rc = dup2(mPipeError[1],fileno(stderr));close(mPipeError[1]);
-        rc = dup2(mPipeOut[1],fileno(stdout)); close(mPipeOut[1]);
-        rc = dup2(mPipeIn[0],fileno(stdin)); close(mPipeIn[0]);
-
-        getchar();
-
-        char * pVec[pParameters.size()+2];
-        std::vector<std::string>::iterator first, end;
-        first = pParameters.begin();
-        end = pParameters.end();
-        const char **p = const_cast<const char **> (pVec);
-        *p++ = command.c_str();
-        std::cerr << pCommand << " ";
-        while (first != end)
-        {
-            if (*first != "EXTERNALGUI")
-            {
-                std::cerr <<  *first << " ";
-            }
-            *p++ = first++->c_str();
-        }
-        std::cerr << std::endl;
-
-        *p=NULL;
-        execvp(command.c_str(), pVec);
-        abort();
-    }
-
-    close(mPipeOut[1]);
-    close(mPipeIn[0]);
-    close(mPipeError[1]);
-
-    printf("pid:=%d\n",pid);
-    return pid;
-}
-
-int UtilityExecutor::getPipeIn()
-{
-    return mPipeIn[1];
-}
-
-int UtilityExecutor::getPipeOut()
-{
-    return mPipeOut[0];
-}
-
-int UtilityExecutor::getPipeError()
-{
-    return mPipeError[0];
-}
-
-bool UtilityExecutor::evaluateProcess(int pid)
-{
-    int status;
-    int reply = waitpid(pid, &status, WNOHANG);
-
-    outDebug(2, std::cout << pid << ": evaluate reply=" << reply << " errno=" << errno);
-    if (WIFEXITED(status))
-    {
-        outDebug(2, std::cout << " exited. status=" << WEXITSTATUS(status) << std::endl);
-        return true;
-
-    }
     else
-    {
-        outDebug(2, std::cout << "running" << std::endl);
-    }
-    return false;
+        return -1;
+}
 
+bool UtilityExecutor::running()
+{
+    if (mProcess != NULL)
+        return mProcess->state() == QProcess::Running;
+    else return false;
+
+}
+
+void UtilityExecutor::terminate()
+{
+    if (mProcess != NULL)
+	{
+        mProcess->close();
+		mProcess = NULL;
+	}
 }

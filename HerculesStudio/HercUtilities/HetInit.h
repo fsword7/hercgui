@@ -1,13 +1,13 @@
 /*
- *  File:       Dasdcat.h
+ *  File:       HetInit.h
  *
  *  Author:     Jacob Dekel
- *  Created on: Aug 7, 2009
+ *  Created on: Sep 3, 2010
  *
- *  Copyright (c) 2009 Jacob Dekel
+ *  Copyright (c) 2009-2010 Jacob Dekel
  *  $Id: Dasdcat.h 34 2009-11-07 06:15:58Z jacob $
  *
- *	Dasdcat utility object
+ *  Hetinit utility object
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,26 +24,45 @@
  *
  */
 
-#ifndef DASDCAT_H
-#define DASDCAT_H
+#ifndef HETINIT_H
+#define HETINIT_H
 
 #include "GenericUtility.h"
 
 #include <QtGui/QDialog>
-#include "ui_Dasdcat.h"
+#include "ui_HetInit.h"
 
-class UtilityExecutor;
+class VolserSpinBox : public QAbstractSpinBox
+{
+    Q_OBJECT
+public:
+    VolserSpinBox(QWidget * parent = 0);
+    virtual ~VolserSpinBox();
 
-class Dasdcat : public GenericUtility
+    virtual QFlags<QAbstractSpinBox::StepEnabledFlag> stepEnabled () const;
+    virtual QString text() const;
+    virtual void setText(QString text);
+
+protected:
+    QFlags<QAbstractSpinBox::StepEnabledFlag> mStepFlag;
+    virtual void stepBy (int steps);
+
+protected slots:
+    bool verify();
+
+};
+
+class HetInit : public GenericUtility
 {
     Q_OBJECT
 
 public:
-    Dasdcat(QWidget *parent = 0);
-    ~Dasdcat();
+    HetInit(QWidget *parent = 0);
+    ~HetInit();
 
 private:
-    Ui::DasdcatClass ui;
+    Ui::HetInitClass ui;
+    QAbstractSpinBox *mVolser;
 
     virtual void finishedSlot();
 
@@ -51,8 +70,7 @@ private slots:
     void exitClicked();
     void runClicked();
     void browseFileClicked();
-    void browseSfClicked();
-    void specificToggeled(bool);
+    void browseDirClicked();
 };
 
-#endif // DASDCAT_H
+#endif // HETINIT_H

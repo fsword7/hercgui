@@ -27,10 +27,12 @@
 #ifndef DASDLS_H
 #define DASDLS_H
 
+#include "GenericUtility.h"
+
 #include <QtGui/QDialog>
 #include "ui_Dasdls.h"
 
-class Dasdls : public QDialog
+class Dasdls : public GenericUtility
 {
     Q_OBJECT
 
@@ -40,9 +42,9 @@ public:
 
 private:
     Ui::DasdlsClass ui;
+    int		mMaximum;
 
-    int     mPid;
-    int		mLineCount;
+	virtual void finishedSlot();
 
 private slots:
     void exitClicked();
@@ -51,10 +53,6 @@ private slots:
     void browseSfClicked();
     void runnerMaximumChanged(int maximum);
     void runnerValueChanged(int value);
-    void runnerError(const QString& errorLine);
-
-signals:
-    void output(QString line);
 };
 
 #endif // DASDLS_H

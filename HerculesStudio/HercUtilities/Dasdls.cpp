@@ -23,8 +23,9 @@
  */
 
 #include "Dasdls.h"
-#include "UtilityExecutor.h"
+#include "HerculesStudio.h"
 #include "UtilityRunner.h"
+#include "Preferences.h"
 #include "StringTokenizer.h"
 
 
@@ -34,7 +35,7 @@
 #include <csignal>
 
 Dasdls::Dasdls(QWidget *parent)
-    : QDialog(parent), mPid(-1)
+    : GenericUtility("dasdls",parent)
 {
     ui.setupUi(this);
 
@@ -56,14 +57,8 @@ void Dasdls::exitClicked()
 
 void Dasdls::runClicked()
 {
-    if (mPid > 0)
+    if (!runOrStopClicked())
     {
-        kill(mPid, SIGKILL);
-        QMessageBox::warning(this, "dasdls",
-                                            "dasdls operation was aborted at user's request",
-                                            QMessageBox::Ok,
-                                            QMessageBox::NoButton);
-        mPid=-1;
         ui.runButton->setText("Run");
         return;
     }
@@ -81,32 +76,13 @@ void Dasdls::runClicked()
     {
         parameters.push_back("sf=" + ui.shadowFile->text().toStdString());
     }
-    parameters.push_back("EXTERNALGUI");
     std::string command = "dasdls";
 
-    UtilityExecutor * executor = new UtilityExecutor();
-    std::string path = "";
-    mLineCount = 0;
-    mPid = executor->run(command, path, parameters);
-    int fileNo = executor->getPipeOut();
-    FILE * file = fdopen(fileNo,"r");
-    UtilityRunner * runner = new UtilityRunner(file);
-    runner->start();
-    fileNo = executor->getPipeError();
-    FILE * fileError = fdopen(fileNo,"r");
-    UtilityRunner * runnerError = new UtilityRunner(fileError);
-    runnerError->start();
+    execute(command, Preferences::getInstance().hercDir(), parameters);
 
-    connect(runner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
-    connect(runnerError, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    connect(mErrorRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(mErrorRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
     ui.runButton->setText("Stop");
-
-    fileNo = executor->getPipeIn();
-    FILE * fileIn = fdopen(fileNo,"w");
-    putc('s', fileIn);
-    fclose(fileIn);
 }
 
 void Dasdls::browseFileClicked()
@@ -123,44 +99,25 @@ void Dasdls::browseSfClicked()
 
 void Dasdls::runnerMaximumChanged(int maximum)
 {
-    outDebug(3, std::cout << "dasdls maximum is " << maximum << std::endl);
+	mMaximum = maximum;
+    outDebug(2, std::cout << "dasdls maximum is " << maximum << std::endl);
 }
 
 void Dasdls::runnerValueChanged(int value)
 {
-    if (value < 0)
-    {
-    	if (mPid > 0 && mLineCount > 4)
-    	{
-			mPid = -1;
-			QMessageBox::information(this, "dasdls", "Disk listing successfully completed!",
-					QMessageBox::Ok,
-					QMessageBox::NoButton);
-    	}
-    	else
-    	{
-			QMessageBox::warning(this, "dasdls", "Disk listing failed!",
-					QMessageBox::Ok,
-					QMessageBox::NoButton);
-
-    	}
-        ui.runButton->setText("Run");
-        return;
-    }
+	hOutDebug(2,"value:" << value);
+	return;
 }
 
-void Dasdls::runnerError(const QString& line)
+void Dasdls::finishedSlot()
 {
-    Tokenizer::handle pos, lastPos;
-    std::string word = StringTokenizer::getFirstWord(line.toStdString(), pos, lastPos, " \t\n");
-    if (word == "HHCDU009E" && line.toStdString().find("EXTERNALGUI")!= std::string::npos)
-        return;
-    if (word == "HHCDU009E" || word == "HHCDU011E")
-    {
-    	mPid = -1;
-    	ui.runButton->setText("Run");
-    }
-    emit output(line);
-    mLineCount++;
+	mExecutor = NULL;
+	if (mFinishedOK)
+	{
+		QMessageBox::information(this, "dasdls", "Disk listing successfully completed!",
+			QMessageBox::Ok,
+			QMessageBox::NoButton);
+		deleteLater();
+	}
+	ui.runButton->setText("Run");
 }
-

@@ -9,8 +9,14 @@ MOC_DIR = moc
 OBJECTS_DIR = obj
 
 # Input
-HEADERS += HercUtilities/TapeCopy.h \
+HEADERS += HercUtilities/HetUpd.h \
+	HercUtilities/HetMap.h \
+	HercUtilities/HetInit.h \
+    HercUtilities/HetGet.h \
+    HercUtilities/GenericUtility.h \
+    HercUtilities/TapeCopy.h \
     HercUtilities/TapeMap.h \
+    HercUtilities/TapeSplt.h \
     HercStudio/LogWidget.h \
     HercStudio/IplConfig.h \
     HercStudio/MipsLed.h \
@@ -80,8 +86,14 @@ HEADERS += HercUtilities/TapeCopy.h \
     HercUtilities/SystemUtils.h \
     HercUtilities/UtilityExecutor.h \
     HercUtilities/UtilityRunner.h
-FORMS += HercUtilities/TapeCopy.ui \
+FORMS += HercUtilities/HetUpd.ui \
+	HercUtilities/HetMap.ui \
+	HercUtilities/HetInit.ui \
+    HercUtilities/HetGet.ui \
+    HercUtilities/TapeCopy.ui \
     HercUtilities/TapeMap.ui \
+    HercUtilities/TapeSplt.ui \
+    HercUtilities/TapeSpltSubDlg.ui\
     HercStudio/IplConfig.ui \
     HercConfiguration/DevicesRename.ui \
     HercUtilities/DasdInit.ui \
@@ -106,8 +118,14 @@ FORMS += HercUtilities/TapeCopy.ui \
     HercUtilities/DasdIsup.ui \
     HercUtilities/DasdLoad.ui \
     HercUtilities/Dasdls.ui
-SOURCES += HercUtilities/TapeCopy.cpp \
+SOURCES += HercUtilities/HetUpd.cpp \
+	HercUtilities/HetMap.cpp \
+	HercUtilities/HetInit.cpp \
+    HercUtilities/HetGet.cpp \
+    HercUtilities/GenericUtility.cpp \
+    HercUtilities/TapeCopy.cpp \
     HercUtilities/TapeMap.cpp \
+    HercUtilities/TapeSplt.cpp \
     HercStudio/LogWidget.cpp \
     HercStudio/IplConfig.cpp \
     HercStudio/MipsLed.cpp \
@@ -180,4 +198,5 @@ RESOURCES += HercStudio/HercStudio.qrc
 target.path = /usr/local/bin
 INSTALLS += target
 CONFIG += warn_on
+CONFIG += debug_and_release
 macx:RC_FILE = hercstudio.icns

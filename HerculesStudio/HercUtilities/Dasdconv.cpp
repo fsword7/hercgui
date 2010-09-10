@@ -26,6 +26,7 @@
 #include "HerculesStudio.h"
 #include "UtilityExecutor.h"
 #include "UtilityRunner.h"
+#include "Preferences.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -34,7 +35,7 @@
 
 
 Dasdconv::Dasdconv(QWidget *parent)
-    : QDialog(parent), mPid(-1)
+    : GenericUtility("dasdconv",parent)
 {
   ui.setupUi(this);
 
@@ -52,15 +53,15 @@ Dasdconv::~Dasdconv()
 
 void Dasdconv::runClicked()
 {
-    if (mPid > 0)
+    if ((mExecutor != NULL) && (mExecutor->getQProcess()->state() == QProcess::Running))
     {
-        kill(mPid, SIGKILL);
-        QMessageBox::warning(this, "dasdconv",
-                                            "dasdconv operation was aborted at user's request",
-                                            QMessageBox::Ok,
-                                            QMessageBox::NoButton);
-        mPid=-1;
-        ui.runButton->setText("Ok");
+    	mExecutor->terminate();
+		QMessageBox::warning(this, "dasdconv",
+									"dasdconv operation was aborted at user's request",
+									QMessageBox::Ok,
+									QMessageBox::NoButton);
+		mExecutor = NULL;
+        ui.runButton->setText("Run");
         return;
     }
     if (ui.infile->text().isEmpty())
@@ -119,35 +120,16 @@ void Dasdconv::runClicked()
     fullPath += ui.filename->text().toStdString();
 
     parameters.push_back(fullPath);
-    parameters.push_back("EXTERNALGUI");
     std::string command = "dasdconv";
 
-    UtilityExecutor * executor = new UtilityExecutor();
-    std::string path = "";
-    mPid = executor->run(command, path, parameters);
-    int fileNo = executor->getPipeOut();
-    FILE * file = fdopen(fileNo,"r");
-    UtilityRunner * runner = new UtilityRunner(file);
-    runner->start();
-    fileNo = executor->getPipeError();
-    FILE * fileError = fdopen(fileNo,"r");
-    UtilityRunner * runnerError = new UtilityRunner(fileError);
-    runnerError->start();
+	execute(command, Preferences::getInstance().hercDir(), parameters);
 
-    fileNo = executor->getPipeIn();
-    FILE * fileIn = fdopen(fileNo,"w");
-    putc('s', fileIn);
-    fclose(fileIn);
-
-
-    connect(runner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
-    connect(runnerError, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runnerError, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runnerError, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    connect(mRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(mRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
+    connect(mRunner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    connect(mErrorRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(mErrorRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
     ui.runButton->setText("Stop");
-
 }
 
 
@@ -192,20 +174,13 @@ void Dasdconv::runnerValueChanged(int value)
     }
 }
 
-void Dasdconv::runnerError(const QString& line)
+void Dasdconv::finishedSlot()
 {
-    outDebug(2, std::cout << "Dasdconv::runnerError " << line.toStdString() << std::endl);
-    emit output(line);
-    if (line.toStdString().compare(0,28,"DASD conversion successfully") == 0)
+    if (mStarted && mFinished && mFinishedOK)
     {
         ui.runButton->setText("Run");
-        mPid=-1;
         QMessageBox::information(this, "dasdload", "Disk conversion successfully completed!",
                 QMessageBox::Ok,
                 QMessageBox::NoButton);
-
     }
 }
-
-
-

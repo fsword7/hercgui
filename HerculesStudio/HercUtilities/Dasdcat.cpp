@@ -24,9 +24,8 @@
 
 #include "Dasdcat.h"
 #include "HerculesStudio.h"
-#include "UtilityExecutor.h"
 #include "UtilityRunner.h"
-#include "StringTokenizer.h"
+#include "Preferences.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -35,11 +34,11 @@
 
 
 Dasdcat::Dasdcat(QWidget *parent)
-    : QDialog(parent), mPid(-1)
+    : GenericUtility("dasdcat",parent)
 {
-  ui.setupUi(this);
-  ui.listRadioButton->setChecked(true);
-  ui.memberName->setDisabled(true);
+    ui.setupUi(this);
+    ui.listRadioButton->setChecked(true);
+    ui.memberName->setDisabled(true);
 
     connect(ui.runButton, SIGNAL(clicked()), this, SLOT(runClicked()));
     connect(ui.exitButton, SIGNAL(clicked()), this, SLOT(exitClicked()));
@@ -55,17 +54,12 @@ Dasdcat::~Dasdcat()
 
 void Dasdcat::runClicked()
 {
-    if (mPid > 0)
+    if (!runOrStopClicked())
     {
-        kill(mPid, SIGKILL);
-        QMessageBox::warning(this, "dasdcat",
-                                            "dasdcat operation was aborted at user's request",
-                                            QMessageBox::Ok,
-                                            QMessageBox::NoButton);
-        mPid=-1;
-        ui.runButton->setText("Ok");
+        ui.runButton->setText("Run");
         return;
     }
+
     if (ui.filename->text().isEmpty())
     {
         QMessageBox::warning(this, "dasdcat", "Please specify ckd file to process",
@@ -111,33 +105,10 @@ void Dasdcat::runClicked()
         dsnameSpec += "*:c";
     }
     parameters.push_back(dsnameSpec);
-    parameters.push_back("EXTERNALGUI");
     std::string command = "dasdcat";
 
-    UtilityExecutor * executor = new UtilityExecutor();
-    std::string path = "";
-    mPid = executor->run(command, path, parameters);
-    int fileNo = executor->getPipeOut();
-    FILE * file = fdopen(fileNo,"r");
-    UtilityRunner * runner = new UtilityRunner(file);
-    runner->start();
-    fileNo = executor->getPipeError();
-    FILE * fileError = fdopen(fileNo,"r");
-    UtilityRunner * runnerError = new UtilityRunner(fileError);
-    runnerError->start();
-
-    fileNo = executor->getPipeIn();
-    FILE * fileIn = fdopen(fileNo,"w");
-    putc('s', fileIn);
-    fclose(fileIn);
-
-
-    connect(runner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
-    connect(runnerError, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    execute(command, Preferences::getInstance().hercDir(), parameters);
     ui.runButton->setText("Stop");
-
 }
 
 
@@ -163,28 +134,6 @@ void Dasdcat::specificToggeled(bool checked)
     ui.memberName->setEnabled(checked);
 }
 
-void Dasdcat::runnerMaximumChanged(int maximum)
+void Dasdcat::finishedSlot()
 {
-    outDebug(2, std::cout << "dasdisup maximum is " << maximum << std::endl);
 }
-
-void Dasdcat::runnerValueChanged(int)
-{
-        return;
-}
-
-void Dasdcat::runnerError(const QString& line)
-{
-    Tokenizer::handle pos, lastPos;
-    std::string word = StringTokenizer::getFirstWord(line.toStdString(), pos, lastPos, " \t\n");
-    if (word == "HHCDU024E" )//&& line.indexOf("EXTERNALGUI") != -1)
-    {
-        ui.runButton->setText("Run");
-        mPid=-1;
-    }
-    else
-    {
-        emit output(line);
-    }
-}
-
