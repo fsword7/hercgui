@@ -342,6 +342,7 @@ void MainPanel::switchMips()
 		{
 			Mips * gauge = new MipsGauge(this);
 			mMips = gauge;
+			mMips->setToolTip(oldMips->toolTip());
 			oldMips->deleteLater();
 			updated = true;
 		}
@@ -353,6 +354,7 @@ void MainPanel::switchMips()
 		{
 			Mips * lcd = new MipsLed(this);
 			mMips = lcd;
+			mMips->setToolTip(oldMips->toolTip());
 			oldMips->deleteLater();
 			updated = true;
 		}
