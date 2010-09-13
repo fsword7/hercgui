@@ -179,7 +179,7 @@ void Dasdconv::finishedSlot()
     if (mStarted && mFinished && mFinishedOK)
     {
         ui.runButton->setText("Run");
-        QMessageBox::information(this, "dasdload", "Disk conversion successfully completed!",
+        QMessageBox::information(this, "dasdconv", "Disk conversion successfully completed!",
                 QMessageBox::Ok,
                 QMessageBox::NoButton);
     }

@@ -59,8 +59,8 @@ void DasdLoad::runClicked()
     if (mExecutor != NULL)
     {
     	mExecutor->terminate();
-        QMessageBox::warning(this, "dasdinit",
-                                            "dasdinit operation was aborted at user's request",
+        QMessageBox::warning(this, "dasdload",
+                                            "dasdload operation was aborted at user's request",
                                             QMessageBox::Ok,
                                             QMessageBox::NoButton);
         ui.runButton->setText("Ok");

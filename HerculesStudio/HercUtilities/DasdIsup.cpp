@@ -60,8 +60,8 @@ void DasdIsup::runClicked()
 	if ((mExecutor != NULL) && (mExecutor->getQProcess()->state() == QProcess::Running))
 	{
 		mExecutor->terminate();
-		QMessageBox::warning(this, "dasdconv",
-			"dasdconv operation was aborted at user's request",
+		QMessageBox::warning(this, "dasdisup",
+			"dasdisup operation was aborted at user's request",
 			QMessageBox::Ok,
 			QMessageBox::NoButton);
 		mExecutor = NULL;
