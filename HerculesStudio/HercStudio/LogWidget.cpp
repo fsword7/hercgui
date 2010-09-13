@@ -37,11 +37,13 @@
 
 #include <fcntl.h>
 #include <time.h>
+#ifndef hFramework
 #include <sys/time.h>
+#endif
 
 
 #define for_each_log \
-	for (int for_loop_i=0; for_loop_i<2; for_loop_i++)
+    for (int for_loop_i=0; for_loop_i<2; for_loop_i++)
 #define current_log mLogs[for_loop_i]
 
 PlainLogWidget::PlainLogWidget(QWidget * parent)
@@ -51,15 +53,15 @@ PlainLogWidget::PlainLogWidget(QWidget * parent)
 
 void PlainLogWidget::append(const QString & text)
 {
-	if (Preferences::getInstance().logTimestamp())
-	{
-		getTimeStamp();
-	}
-	else
+    if (Preferences::getInstance().logTimestamp())
+    {
+        getTimeStamp();
+    }
+    else
         mTimeStamp[0] = '\0';
-	QString s = text;
-	if (text.toAscii().data()[0] == '<')
-	s = text.mid(24);
+    QString s = text;
+    if (text.toAscii().data()[0] == '<')
+    s = text.mid(24);
     QTextEdit::append(mTimeStamp + s);
 }
 
@@ -76,40 +78,40 @@ void PlainLogWidget::getTimeStamp()
 
 bool PlainLogWidget::empty()
 {
-	return this->document()->isEmpty();
+    return this->document()->isEmpty();
 }
 
 QString PlainLogWidget::toPlainText()
 {
-	return QTextEdit::toPlainText();
+    return QTextEdit::toPlainText();
 }
 
 void PlainLogWidget::clear()
 {
-	QTextEdit::clear();
+    QTextEdit::clear();
 }
 
 bool PlainLogWidget::isOSLog()
 {
-	return false;
+    return false;
 }
 
 
 LogWidget::LogWidget(QWidget * parent)
 : PlainLogWidget(NULL)
 {
-	mTabWidget = new QTabWidget(parent);
-	mLogs[0] = new QTextEdit();
-	mLogs[1] = new QTextEdit();
-	mTabWidget->addTab(mLogs[0], "Hercules");
-	mTabWidget->addTab(mLogs[1], "OS");
-	for_each_log
-	{
-		current_log->setReadOnly(true);
-		current_log->setVisible(true);
-	}
-	//const QColor black(0,0,0);
-	//const QColor white(255,255,255);
+    mTabWidget = new QTabWidget(parent);
+    mLogs[0] = new QTextEdit();
+    mLogs[1] = new QTextEdit();
+    mTabWidget->addTab(mLogs[0], "Hercules");
+    mTabWidget->addTab(mLogs[1], "OS");
+    for_each_log
+    {
+        current_log->setReadOnly(true);
+        current_log->setVisible(true);
+    }
+    //const QColor black(0,0,0);
+    //const QColor white(255,255,255);
     //QBrush blackBrush(black);
     //QPalette blackPalette(white, black);
     //mLogs[1]->setPalette(blackPalette);
@@ -122,86 +124,86 @@ LogWidget::~LogWidget()
 
 QTabWidget * LogWidget::tabWidget()
 {
-	return mTabWidget;
+    return mTabWidget;
 }
 void LogWidget::clear()
 {
-	for_each_log
-		current_log->clear();
+    for_each_log
+        current_log->clear();
 }
 
 void LogWidget::setReadOnly(bool ro)
 {
-	for_each_log
-		current_log->setReadOnly(ro);
+    for_each_log
+        current_log->setReadOnly(ro);
 }
 
 void LogWidget::append(const QString & text)
 {
-	if (Preferences::getInstance().logTimestamp())
-	{
-		getTimeStamp();
-	}
-	else
+    if (Preferences::getInstance().logTimestamp())
+    {
+        getTimeStamp();
+    }
+    else
         mTimeStamp[0] ='\0';
-	QString s = text;
-	if (text.toAscii().data()[0] == '<')
-		s = text.mid(24);
-	if (s.left(9).compare("HHC00001I") == 0)
-	{
-		s = s.mid(9);
+    QString s = text;
+    if (text.toAscii().data()[0] == '<')
+        s = text.mid(24);
+    if (s.left(9).compare("HHC00001I") == 0)
+    {
+        s = s.mid(9);
         mLogs[1]->append(mTimeStamp + s);
-	}
-	else
-	{
-		QColor green(10,120,10), yellow(215,201,45), red(240,20,20);
-		QColor keepC = mLogs[0]->textColor();
-		if (text.left(3).compare(QString("HHC")) == 0)
-		{
-			if (text.mid(8,1).compare(QString("I")) == 0)
-				mLogs[0]->setTextColor(green);
-			else if (text.mid(8,1).compare(QString("W")) == 0)
-				mLogs[0]->setTextColor(yellow);
-			else if (text.mid(8,1).compare(QString("E")) == 0)
-				mLogs[0]->setTextColor(red);
-		}
+    }
+    else
+    {
+        QColor green(10,120,10), yellow(215,201,45), red(240,20,20);
+        QColor keepC = mLogs[0]->textColor();
+        if (text.left(3).compare(QString("HHC")) == 0)
+        {
+            if (text.mid(8,1).compare(QString("I")) == 0)
+                mLogs[0]->setTextColor(green);
+            else if (text.mid(8,1).compare(QString("W")) == 0)
+                mLogs[0]->setTextColor(yellow);
+            else if (text.mid(8,1).compare(QString("E")) == 0)
+                mLogs[0]->setTextColor(red);
+        }
         mLogs[0]->append(mTimeStamp + s);
-		mLogs[0]->setTextColor(keepC);
-	}
+        mLogs[0]->setTextColor(keepC);
+    }
 }
 
 void LogWidget::setFont(const QFont & font)
 {
-	for_each_log
-		current_log->setFont(font);
+    for_each_log
+        current_log->setFont(font);
 }
 
 void LogWidget::setTextBackgroundColor  (const QColor &color)
 {
-	for_each_log
-		current_log->setTextBackgroundColor(color);
+    for_each_log
+        current_log->setTextBackgroundColor(color);
 }
 
 void LogWidget::setTextColor  (const QColor &color)
 {
-	for_each_log
-		current_log->setTextColor(color);
+    for_each_log
+        current_log->setTextColor(color);
 }
 
 QString LogWidget::toPlainText()
 {
-	QString ret;
-	for_each_log
-		ret += current_log->toPlainText();
-	return ret;
+    QString ret;
+    for_each_log
+        ret += current_log->toPlainText();
+    return ret;
 }
 
 bool LogWidget::empty()
 {
-	return mLogs[0]->document()->isEmpty() && mLogs[1]->document()->isEmpty();
+    return mLogs[0]->document()->isEmpty() && mLogs[1]->document()->isEmpty();
 }
 
 bool LogWidget::isOSLog()
 {
-	return (mTabWidget->currentIndex() == 1);
+    return (mTabWidget->currentIndex() == 1);
 }
