@@ -7,7 +7,7 @@
  *  Copyright (c) 2009 Jacob Dekel
  *
  *  This object handles the configuration of the CTC
- *  $Id: CtcProperties.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

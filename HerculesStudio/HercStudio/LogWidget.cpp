@@ -72,7 +72,7 @@ void PlainLogWidget::getTimeStamp()
     time(&now);
     current = localtime(&now);
 
-    int timeLength = strftime(mTimeStamp, 255, "%H:%M:%S", current); //"%m-%d-%y %H:%M:%S"
+    strftime(mTimeStamp, 255, "%H:%M:%S", current); //"%m-%d-%y %H:%M:%S"
     memcpy(mTimeStamp+8, " ", 2);
 }
 

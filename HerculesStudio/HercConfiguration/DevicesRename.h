@@ -5,7 +5,7 @@
  *  Created on: Nov 1, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
- *  $Id: DevicesRename.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *	This object handles the re-initialization of devices during hercules run time
  *

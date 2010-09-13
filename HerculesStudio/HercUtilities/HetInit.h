@@ -5,7 +5,7 @@
  *  Created on: Sep 3, 2010
  *
  *  Copyright (c) 2009-2010 Jacob Dekel
- *  $Id: Dasdcat.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *  Hetinit utility object
  *

@@ -5,7 +5,7 @@
  *  Created on: Nov 9, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
- *  $Id: Preferences.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *	This class manages font preferences for one object
  *

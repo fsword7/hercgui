@@ -5,7 +5,7 @@
  *  Created on: Oct 6, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
- *  $Id: Arguments.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *	Arguments handling class
  *

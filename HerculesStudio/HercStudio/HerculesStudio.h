@@ -5,7 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
- *  $Id: HerculesStudio.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *	a collection of product-wide definitions
  *

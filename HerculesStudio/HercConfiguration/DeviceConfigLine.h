@@ -5,7 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
- *  $Id: DeviceConfigLine.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *	This object manages one configuration line belonging to devices
  *	(see also ConfigLine.h)

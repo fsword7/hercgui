@@ -5,7 +5,7 @@
  *  Created on: June 15, 2010
  *
  *  Copyright (c) 2009-2010 Jacob Dekel
- *  $Id: Mips.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *	This object presents the current mips reading in LCD format
  *

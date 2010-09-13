@@ -5,7 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
- *  $Id: DevicesPane.cpp 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -175,7 +175,7 @@ bool DevicesPane::notify(const std::string& statusLine)
                     }
                     char ss[255];
                     std::string def = ent.getDefinition();
-                    int pos=def.find('\r');
+                    size_t pos=def.find('\r');
                     while (pos != std::string::npos)
                     {
                       def.replace(pos,def.size()," ");

@@ -5,7 +5,7 @@
  *  Created on: Oct 15, 2009
  *
  *  Copyright (c) 2009 Jacob Dekel
- *  $Id: DeviceTypes.h 34 2009-11-07 06:15:58Z jacob $
+ *  $Id$
  *
  *  This object is an interface for driving devices through menus
  *  (used by both the devices pane and the devices configuration tab)
