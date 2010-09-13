@@ -219,7 +219,7 @@
   <widget class="QPushButton" name="runButton">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>360</x>
      <y>440</y>
      <width>80</width>
      <height>26</height>
@@ -239,7 +239,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>Cancel</string>
    </property>
   </widget>
   <widget class="QProgressBar" name="progressBar">

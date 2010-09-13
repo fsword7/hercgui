@@ -7,7 +7,7 @@
  *  Copyright (c) 2009 Jacob Dekel
  *  $Id$
  *
- *	a collection of product-wide definitions
+ *  a collection of product-wide definitions
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 
 #define HERCSTUDIO_VERSION "Version: 1.2.0"
 #define hDEBUG 0
-//#define hFramework
+#define hFramework
 
 #include <iostream>
 

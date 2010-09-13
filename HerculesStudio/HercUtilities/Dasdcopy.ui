@@ -23,13 +23,13 @@
     </rect>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>Cancel</string>
    </property>
   </widget>
   <widget class="QPushButton" name="runButton">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>350</x>
      <y>480</y>
      <width>80</width>
      <height>26</height>

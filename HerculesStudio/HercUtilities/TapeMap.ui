@@ -65,7 +65,7 @@
   <widget class="QPushButton" name="runButton">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>370</x>
      <y>140</y>
      <width>85</width>
      <height>27</height>
@@ -85,7 +85,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>Cancel</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">

@@ -132,7 +132,7 @@
   <widget class="QPushButton" name="runButton">
    <property name="geometry">
     <rect>
-     <x>560</x>
+     <x>470</x>
      <y>430</y>
      <width>75</width>
      <height>23</height>
@@ -145,7 +145,7 @@
   <widget class="QPushButton" name="exitButton">
    <property name="geometry">
     <rect>
-     <x>450</x>
+     <x>560</x>
      <y>430</y>
      <width>75</width>
      <height>23</height>
