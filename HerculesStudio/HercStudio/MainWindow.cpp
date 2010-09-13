@@ -663,7 +663,7 @@ void MainWindow::preferences()
     connect(pw, SIGNAL(fontChanged()), this, SLOT(fontChanged()));
     connect(pw, SIGNAL(mipsChanged()), this, SLOT(mipsChanged()));
     connect(pw, SIGNAL(pswChanged()), this, SLOT(pswChanged()));
-    pw->show();
+    pw->exec();
 }
 
 ConfigFile * MainWindow::getConfigurationFile()
@@ -822,7 +822,7 @@ void MainWindow::loadCommand()
 	}
 	if (lpIndex == -1) mAdHocLoadParm = "......";
 	IplConfig * iplConfig = new IplConfig(mMainPanel->getLoadAddress(),mAdHocLoadParm.toAscii(), this);
-	iplConfig->show();
+	iplConfig->exec();
 	connect(iplConfig, SIGNAL(doIpl(QString, QString)), this, SLOT(loadCommandDoIpl(QString, QString)));
 }
 
@@ -880,91 +880,91 @@ void MainWindow::dasdinit()
 {
     DasdInit * dasdinit = new DasdInit(this);
     connect(dasdinit, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-    dasdinit->show();
+    dasdinit->exec();
 }
 
 void MainWindow::dasdload()
 {
     DasdLoad * dasdload = new DasdLoad(this);
     connect(dasdload, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-    dasdload->show();
+    dasdload->exec();
 }
 
 void MainWindow::dasdisup()
 {
     DasdIsup * dasdisup = new DasdIsup(this);
     connect(dasdisup, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-    dasdisup->show();
+    dasdisup->exec();
 }
 
 void MainWindow::dasdls()
 {
     Dasdls * dasdls = new Dasdls(this);
     connect(dasdls, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-    dasdls->show();
+    dasdls->exec();
 }
 
 void MainWindow::dasdcat()
 {
     Dasdcat * dasdcat = new Dasdcat(this);
     connect(dasdcat, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-    dasdcat->show();
+    dasdcat->exec();
 }
 
 void MainWindow::dasdconv()
 {
     Dasdconv * dasdconv = new Dasdconv(this);
     connect(dasdconv, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-    dasdconv->show();
+    dasdconv->exec();
 }
 
 void MainWindow::dasdcopy()
 {
     Dasdcopy * dasdcopy = new Dasdcopy(this);
     connect(dasdcopy, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-    dasdcopy->show();
+    dasdcopy->exec();
 }
 
 void MainWindow::tapemap()
 {
     TapeMap * tapemap = new TapeMap(this);
     connect(tapemap, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-    tapemap->show();
+    tapemap->exec();
 }
 
 void MainWindow::tapecopy()
 {
     TapeCopy * tapecopy = new TapeCopy(this);
     connect(tapecopy, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-    tapecopy->show();
+    tapecopy->exec();
 }
 
 void MainWindow::tapesplit()
 {
 	TapeSplt * tapesplit = new TapeSplt(this);
 	connect(tapesplit, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-	tapesplit->show();
+	tapesplit->exec();
 }
 
 void MainWindow::hetinit()
 {
 	HetInit * hetinit = new HetInit(this);
 	connect(hetinit, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-	hetinit->show();
+	hetinit->exec();
 }
 
 void MainWindow::hetget()
 {
 	HetGet * hetget = new HetGet(this);
 	connect(hetget, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-	hetget->show();
+	hetget->exec();
 }
 
 void MainWindow::hetupd()
 {
 	HetUpd * hetupd = new HetUpd(this);
 	connect(hetupd, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
-	hetupd->show();
+	hetupd->exec();
 }
 
 void MainWindow::hetmap()
@@ -998,7 +998,7 @@ void MainWindow::herculesEndedSlot()
 void MainWindow::helpAbout()
 {
     HelpAbout *ha = new HelpAbout(this);
-    ha->show();
+    ha->exec();
 }
 
 void MainWindow::systrayHint()

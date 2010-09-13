@@ -308,7 +308,7 @@ void DevicesPane::menuRename()
 			mRenameDlg = new DevicesRename(devno, getNextDev(it), this);
 			connect (mRenameDlg,SIGNAL(accepted(QString, QString)),this, SLOT(doRename(QString, QString)));
 			connect (mRenameDlg,SIGNAL(rejected()), this, SLOT(rejected()));
-			mRenameDlg->show();
+			mRenameDlg->exec();
 			break;
 		}
 		it++;

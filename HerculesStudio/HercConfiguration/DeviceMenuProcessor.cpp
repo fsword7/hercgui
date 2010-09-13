@@ -179,7 +179,7 @@ void DeviceMenuProcessor::menuLoad()
 {
 	NewReaderFile * newTapeFile = new NewReaderFile(this);
 	connect(newTapeFile, SIGNAL(okPressed(QString&)), this, SLOT(newTapeFileOK(QString&)));
-	newTapeFile->show();
+	newTapeFile->exec();
 }
 
 void DeviceMenuProcessor::newTapeFileOK(QString& tapeFileName)

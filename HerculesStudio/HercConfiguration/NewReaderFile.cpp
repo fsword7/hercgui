@@ -39,6 +39,7 @@ mOKButton(this),
 mCancelButton(this)
 {
     initialize();
+	move(parent->x()+50,parent->y()+50);
 
     connect(&mCancelButton, SIGNAL(pressed()), this, SLOT(doCancel()));
     connect(&mOKButton, SIGNAL(pressed()), this, SLOT(doOK()));
@@ -75,6 +76,9 @@ void NewReaderFile::doBrowse()
 
 void NewReaderFile::initialize()
 {
+	if (objectName().isEmpty())
+		setObjectName(QString::fromUtf8("NewReaderFile"));
+
     int x = this->geometry().x();
     int y = this->geometry().x();
     this->setGeometry(x, y, 400, 90);
@@ -92,7 +96,4 @@ void NewReaderFile::initialize()
 
     mCancelButton.setGeometry(310,60,50,30);
     mCancelButton.setText("Cancel");
-
-
-    this->setVisible(true);
 }
