@@ -52,6 +52,7 @@
 #include <QDockWidget>
 #include <QMessageBox>
 #include <QFile>
+#include <QTimer>
 
 #include <iostream>
 #include "cerrno"
@@ -1034,12 +1035,19 @@ void MainWindow::closeEvent(QCloseEvent *event)
         			 QMessageBox::Ok, QMessageBox::Abort) != QMessageBox::Abort)
         	 {
         		 event->ignore();
-        		 //deleteLater(); //TODO - send new event
+				 QTimer::singleShot(5000, this, SLOT(tryAbort()));
         	 }
         	 else hOutDebug(5,"abort");
          }
      }
  }
+
+void MainWindow::tryAbort()
+{
+	hOutDebug(5,"tryAbort");
+	setVisible(true);
+	close();
+}
 
 void MainWindow::systrayClick(QSystemTrayIcon::ActivationReason)
 {
