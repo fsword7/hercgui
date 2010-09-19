@@ -28,12 +28,12 @@
 #include <cstdio>
 
 
-IplConfig::IplConfig(int loadAddr, const char * loadParm, QWidget *parent)
-    : QDialog(parent)
+IplConfig::IplConfig(QString &devno, QString& loadParm, QWidget *parent)
+    : QDialog(parent), mDevno(devno), mLoadParm(loadParm)
 {
 	ui.setupUi(this);
-	ui.devNo->setText(textFromValue(loadAddr));
-	ui.loadParm->setText(loadParm);
+	ui.devNo->setText(mDevno);
+	ui.loadParm->setText(mLoadParm);
 
 	connect(ui.okButton, SIGNAL(clicked()), this, SLOT(okPressed()));
 	connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancelPressed()));
@@ -46,26 +46,13 @@ IplConfig::~IplConfig()
 
 void IplConfig::okPressed()
 {
-	emit doIpl(ui.devNo->text(), ui.loadParm->text());
-	deleteLater();
+	mDevno = ui.devNo->text();
+	mLoadParm = ui.loadParm->text();
+	accept();
 }
 
 void IplConfig::cancelPressed()
 {
 	deleteLater();
-}
-
-QString IplConfig::textFromValue(int value) const
-{
-	std::stringstream ss;
-	ss << std::hex << value;
-	char formatted[5];
-	if (value <= 0xffff)
-		sprintf(formatted,"%4.4X",(value));
-	else
-		strcpy(formatted,"0000");
-	QString ret(formatted);
-	outDebug(5,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
-	return ret;
 }
 

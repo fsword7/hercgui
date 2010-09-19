@@ -132,7 +132,6 @@ public slots:
     void openConfig();
     void exitNow();
     void loadCommand();
-    void loadCommandDoIpl(const QString& devNo, const QString& loadParm);
     void editViewControls();
     void editViewDevices();
     void editViewCommand();

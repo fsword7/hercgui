@@ -34,7 +34,7 @@ class IplConfig : public QDialog
     Q_OBJECT
 
 public:
-    IplConfig(int loadAddr, const char * loadParm, QWidget *parent = 0);
+    IplConfig(QString &devno, QString& loadParm, QWidget *parent = 0);
     virtual ~IplConfig();
 
 protected:
@@ -43,6 +43,8 @@ protected:
 
 private:
     Ui::IplConfigClass ui;
+    QString &mDevno;
+    QString &mLoadParm;
 
 private slots:
     void okPressed();

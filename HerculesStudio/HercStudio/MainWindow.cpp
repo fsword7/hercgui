@@ -820,21 +820,21 @@ void MainWindow::loadCommand()
 			}
 			else hOutDebug(5,"skipping " << i << ": " << (*mConfigFile)[i]->getLowercaseToken(0));
 		}
+		if (lpIndex == -1) mAdHocLoadParm = "......";
 	}
-	if (lpIndex == -1) mAdHocLoadParm = "......";
-	IplConfig * iplConfig = new IplConfig(mMainPanel->getLoadAddress(),mAdHocLoadParm.toAscii(), this);
-	iplConfig->exec();
-	connect(iplConfig, SIGNAL(doIpl(QString, QString)), this, SLOT(loadCommandDoIpl(QString, QString)));
-}
+	QString devno = QString::number(mMainPanel->getLoadAddress(),16);
 
-void MainWindow::loadCommandDoIpl(const QString& devNo, const QString& loadParm)
-{
-	mAdHocLoadParm = loadParm;
-	QString loadCommand = "LOADPARM " + mAdHocLoadParm;
-	issueCommand(loadCommand.toStdString());
-	mMainPanel->setLoadAddress(devNo.toStdString().c_str());
-	std::string iplCommand = "IPL " + devNo.toStdString();
-	issueCommand(iplCommand);
+	IplConfig * iplConfig = new IplConfig(devno,mAdHocLoadParm, this);
+
+	int i = iplConfig->exec() ;
+	if (i == QDialog::Accepted)
+	{
+		QString loadCommand = "LOADPARM " + mAdHocLoadParm;
+		issueCommand(loadCommand.toStdString());
+		mMainPanel->setLoadAddress(devno.toStdString().c_str());
+		std::string iplCommand = "IPL " + devno.toStdString();
+		issueCommand(iplCommand);
+	}
 }
 
 void MainWindow::extInterrupt()
