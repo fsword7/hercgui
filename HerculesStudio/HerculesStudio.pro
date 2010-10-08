@@ -11,6 +11,12 @@ INCLUDEPATH += HercConfiguration \
 UI_DIR = ui
 MOC_DIR = moc
 OBJECTS_DIR = obj
+QMAKE_CC   = @echo [c] $< && $$QMAKE_CC
+QMAKE_CXX  = @echo [c++] $< && $$QMAKE_CXX
+QMAKE_MOC  = @echo [moc] $< && $$QMAKE_MOC
+QMAKE_LINK = @echo [link] $$TARGET && $$QMAKE_LINK
+QMAKE_UIC  = @echo [UIC ] $< && $$QMAKE_UIC
+
 
 # Input
 HEADERS += HercConfiguration/CardReaderProperties.h \
