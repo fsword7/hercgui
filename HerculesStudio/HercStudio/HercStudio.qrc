@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/" >
+    <qresource prefix="/">
         <file>icons/card.jpg</file>
         <file>icons/console.jpg</file>
         <file>icons/dasd.jpg</file>
@@ -29,6 +29,7 @@
         <file>icons/tape.jpg</file>
         <file>icons/terminal.jpg</file>
         <file>icons/tray.jpg</file>
+        <file>icons/tray.xpm</file>
         <file>icons/unknown.jpg</file>
         <file>icons/yellow.png</file>
         <file>icons/yellowhigh.png</file>

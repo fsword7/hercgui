@@ -43,7 +43,7 @@ HelpAbout::HelpAbout(QWidget *parent)
     ui.label1->setPixmap(*pixmap1);
 
     static QString icon2 = Environment::getIconsPath().c_str();
-	icon2 += "/tray";
+	icon2 += "/tray.xpm";
     static QPixmap * pixmap2 = new QPixmap(icon2);
     ui.label2->setPixmap(*pixmap2);
     update();
