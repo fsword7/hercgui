@@ -46,6 +46,7 @@ public:
   QByteArray getStatusLine();
   bool getStatusLine(char * buff, int max);
   QProcess * getQProcess(){ return mProcess; };
+  int state() {return mProcess->state();};
 
 private:
   QMainWindow & mMainWindow;

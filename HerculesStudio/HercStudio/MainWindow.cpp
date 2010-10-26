@@ -723,6 +723,18 @@ void MainWindow::powerOn()
         mDevicesRecovery = true;
     }
 
+    if (herculesPid < 0)
+    {
+        QMessageBox::critical(this,"Hercules not started",
+            "The Hercules program could not be started or not found.\n"
+            "Please set the correct path to the hercules program\n"
+            "using the Preferences window",
+            QMessageBox::Ok);
+        delete mHerculesExecutor;
+        mHerculesExecutor = NULL;
+        return;
+    }
+
 #ifndef hFramework
     NamedPipe::getInstance().generatePid(getpid(), herculesPid);
 #endif

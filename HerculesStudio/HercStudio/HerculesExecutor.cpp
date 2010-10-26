@@ -149,6 +149,13 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
     arguments << "-d" << "-f" << configName.c_str() << "EXTERNALGUI" ;
     mProcess = new QProcess();
     mProcess->start(program,arguments);
+    int iter=2;
+    while(mProcess->state() == QProcess::NotRunning && --iter > 0)
+    {
+        sleep(1);
+    }
+    if (mProcess->state() != QProcess::Running && mProcess->state() != QProcess::Starting)
+        return -1;
     Q_PID pid = mProcess->pid();
     if (pid != 0)
         return 0;

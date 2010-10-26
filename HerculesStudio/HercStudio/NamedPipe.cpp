@@ -36,7 +36,11 @@
 #include <fcntl.h>
 #include <cstdlib>
 #include <cerrno>
-
+#ifndef hFramework
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
 
 #define MAXIMUM_SETS 20
 
