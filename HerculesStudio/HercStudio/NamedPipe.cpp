@@ -114,7 +114,7 @@ int NamedPipe::recover()
         // set exists, hercules process is running
         outDebug(1,std::cout<< "Hercules process " << hercPid << " is running" << std::endl);
 
-        if (!processIsRunning(studioPid))
+        if (processIsRunning(studioPid))
         {
             // recovery - takeover
             mRecovery = true;
