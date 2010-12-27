@@ -59,6 +59,8 @@ HEADERS += HercConfiguration/CardReaderProperties.h \
            HercStudio/LogRunner.h \
            HercStudio/LogWidget.h \
            HercStudio/MainPanel.h \
+           HercStudio/MainPanelClassic.h \
+           HercStudio/MainPanelModern.h \
            HercStudio/MainWindow.h \
            HercStudio/Mips.h \
            HercStudio/MipsGauge.h \
@@ -168,6 +170,8 @@ SOURCES += HercConfiguration/CardReaderProperties.cpp \
            HercStudio/LogWidget.cpp \
            HercStudio/main.cpp \
            HercStudio/MainPanel.cpp \
+           HercStudio/MainPanelClassic.cpp \
+           HercStudio/MainPanelModern.cpp \
            HercStudio/MainWindow.cpp \
            HercStudio/Mips.cpp \
            HercStudio/MipsGauge.cpp \

@@ -23,6 +23,8 @@
  */
 
 #include "MainWindow.h"
+#include "MainPanelClassic.h"
+#include "MainPanelModern.h"
 #include "PreferencesWin.h"
 #include "Watchdog.h"
 #include "Recovery.h"
@@ -98,7 +100,10 @@ MainWindow::MainWindow(QWidget *parent)
     // top dock (MainPanel)
     mTopDock = new QDockWidget("Controls",this);
     mTopDock->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    mMainPanel = new MainPanel(this);
+    if (Preferences::getInstance().theme() == Preferences::Modern)
+    	mMainPanel = new MainPanelModern(this);
+    else
+    	mMainPanel = new MainPanelClassic(this);
     mTopDock->setWidget(mMainPanel);
     addDockWidget(Qt::TopDockWidgetArea,mTopDock );
 
@@ -195,7 +200,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QString path = Environment::getIconsPath().c_str();
     outDebug(3,std::cout << "icons=" << path.toStdString() << std::endl);
-    QIcon trayIcon(path + "/tray.jpg");
+    QIcon trayIcon(path + "/tray.xpm");
     mSystemTrayIcon = new QSystemTrayIcon(trayIcon);
 
     connect(ui.actionNew, SIGNAL(triggered()), this , SLOT(newConfig()));
@@ -241,19 +246,11 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(ui.actionHetget, SIGNAL(triggered()), this, SLOT(hetget()));
 	connect(ui.actionHetupd, SIGNAL(triggered()), this, SLOT(hetupd()));
 	connect(ui.actionHetmap, SIGNAL(triggered()), this, SLOT(hetmap()));
-
     connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(helpAbout()));
-    connect(mMainPanel, SIGNAL(powerOnClicked()), this , SLOT(powerOn()));
-    connect(mMainPanel, SIGNAL(powerOffClicked()), this , SLOT(powerOff()));
-    connect(mMainPanel, SIGNAL(interruptClicked()), this , SLOT(extInterrupt()));
-    connect(mMainPanel, SIGNAL(loadClicked()), this , SLOT(load()));
-    connect(mMainPanel, SIGNAL(restartClicked()), this , SLOT(restart()));
-    connect(mMainPanel, SIGNAL(storeClicked()), this , SLOT(store()));
-    connect(mMainPanel, SIGNAL(startClicked()), this , SLOT(start()));
-    connect(mMainPanel, SIGNAL(stopClicked()), this , SLOT(stop()));
     connect(mDevicesPane, SIGNAL(restartDevices()), this , SLOT(restartDevices()));
     connect(mCommandLine, SIGNAL(returnPressed()), this , SLOT(newCommand()));
     connect(mSystemTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systrayClick(QSystemTrayIcon::ActivationReason)));
+    connectMainPanel();
 
     if (Preferences::getInstance().splitLog())
     {
@@ -294,6 +291,18 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::connectMainPanel()
+{
+    connect(mMainPanel, SIGNAL(powerOnClicked()), this , SLOT(powerOn()));
+    connect(mMainPanel, SIGNAL(powerOffClicked()), this , SLOT(powerOff()));
+    connect(mMainPanel, SIGNAL(interruptClicked()), this , SLOT(extInterrupt()));
+    connect(mMainPanel, SIGNAL(loadClicked()), this , SLOT(load()));
+    connect(mMainPanel, SIGNAL(restartClicked()), this , SLOT(restart()));
+    connect(mMainPanel, SIGNAL(storeClicked()), this , SLOT(store()));
+    connect(mMainPanel, SIGNAL(startClicked()), this , SLOT(start()));
+    connect(mMainPanel, SIGNAL(stopClicked()), this , SLOT(stop()));
 }
 
 void MainWindow::writeToLog(QString line)
@@ -338,6 +347,18 @@ void MainWindow::pswChanged()
 {
 	mPsw->setMode(mPreferences->pswMode());
 	mPswDock->setVisible(mPreferences->pswMode() == Psw::Docked);
+}
+
+void MainWindow::themeChanged()
+{
+	mMainPanel->close();
+	delete mMainPanel;
+	if (Preferences::getInstance().theme() == Preferences::Classic)
+		mMainPanel = new MainPanelClassic(this);
+	else
+		mMainPanel = new MainPanelModern(this);
+	mTopDock->setWidget(mMainPanel);
+	connectMainPanel();
 }
 
 void MainWindow::writeToLogFromQueue()
@@ -416,6 +437,7 @@ void MainWindow::recoverDevices(std::string& statusLine)
 
 void MainWindow::newCommand()
 {
+    if (mHerculesExecutor == NULL) return;
     CommandLine *cl = static_cast<CommandLine *>(QObject::sender());
     if (cl == NULL) return;
     outDebug(2, std::cout  << cl->text().toStdString() << std::endl);
@@ -664,6 +686,7 @@ void MainWindow::preferences()
     connect(pw, SIGNAL(fontChanged()), this, SLOT(fontChanged()));
     connect(pw, SIGNAL(mipsChanged()), this, SLOT(mipsChanged()));
     connect(pw, SIGNAL(pswChanged()), this, SLOT(pswChanged()));
+    connect(pw, SIGNAL(themeChanged()), this, SLOT(themeChanged()));
     pw->exec();
 }
 
@@ -806,9 +829,15 @@ void MainWindow::powerOff()
 void MainWindow::load()
 {
     if (!mHerculesActive) return;
+    if (Preferences::getInstance().theme()==Preferences::Modern) // modern theme does not have dials
+    {
+    	loadCommand();	// present menu etc.
+    	return;
+    }
     int addr = mMainPanel->getLoadAddress();
     outDebug(1, std::cout << "going to load " << addr << std::endl);
     mHerculesExecutor->issueFormattedCommand("IPL %X\n",addr);
+    mIplDevno.setNum(addr,16);
 }
 
 void MainWindow::loadCommand()
@@ -834,17 +863,20 @@ void MainWindow::loadCommand()
 		}
 		if (lpIndex == -1) mAdHocLoadParm = "......";
 	}
-	QString devno = QString::number(mMainPanel->getLoadAddress(),16);
+	if (mIplDevno.isEmpty())
+		mIplDevno = "0000";
+	if (Preferences::getInstance().theme() == Preferences::Classic)
+		mIplDevno = QString::number(mMainPanel->getLoadAddress(),16);
 
-	IplConfig * iplConfig = new IplConfig(devno,mAdHocLoadParm, this);
+	IplConfig * iplConfig = new IplConfig(mIplDevno,mAdHocLoadParm, this);
 
 	int i = iplConfig->exec() ;
 	if (i == QDialog::Accepted)
 	{
 		QString loadCommand = "LOADPARM " + mAdHocLoadParm;
 		issueCommand(loadCommand.toStdString());
-		mMainPanel->setLoadAddress(devno.toStdString().c_str());
-		std::string iplCommand = "IPL " + devno.toStdString();
+		mMainPanel->setLoadAddress(mIplDevno.toStdString().c_str());
+		std::string iplCommand = "IPL " + mIplDevno.toStdString();
 		issueCommand(iplCommand);
 	}
 }
@@ -885,8 +917,13 @@ void MainWindow::start()
 
 void MainWindow::stop()
 {
-       if (mHerculesActive)
+    if (mHerculesActive)
+    {
+        if (mMainPanel->isStopped())  // this is already done
             mHerculesExecutor->issueCommand("stopall\n");
+    	else
+    	    mHerculesExecutor->issueCommand("startall\n");
+    }
 }
 
 void MainWindow::dasdinit()

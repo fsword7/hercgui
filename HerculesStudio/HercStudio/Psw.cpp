@@ -52,8 +52,18 @@ Psw::~Psw()
 
 bool Psw::notify(const std::string& statusLine)
 {
-	//STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M....... instcount=0
-	if (!mActive || statusLine.compare(0,7,"STATUS=") != 0)
+	if (!mActive)
+		return false;
+	if (statusLine.compare(0,4,"SYS=") == 0)
+    {
+        if (statusLine[4] == '1')
+        	mSys->setText("SYS");
+        else
+        	mSys->setText("   ");
+		return true;
+    }
+	//STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M.W..... instcount=0
+	if (statusLine.compare(0,7,"STATUS=") != 0)
 		return false;
 	if (mMode == Psw::Docked)
 	{
@@ -64,7 +74,15 @@ bool Psw::notify(const std::string& statusLine)
 	else if (mActive)
 	{
 		mCpu->setText(statusLine.substr(7,43).c_str());
-		mInstCount->setText(statusLine.substr(60).c_str());
+		mInstCount->setText(statusLine.substr(62).c_str());
+		if (statusLine.c_str()[54] == 'M')
+			mMan->setText("MAN");
+		else
+			mMan->setText("   ");
+		if (statusLine.c_str()[56] == 'W')
+			mWait->setText("WAIT");
+		else
+			mWait->setText("    ");
 	}
 	return true;
 }
@@ -104,15 +122,28 @@ void Psw::setStatusBar()
 	{
 		mCpu = new QLabel("        ", mMainWindow->statusBar());
 		mCpu->setMinimumWidth(400);
-		mCpu->setMinimumHeight(20);
 		mCpu->setFont(*mFontCourier);
-
 		mCpu->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 		mMainWindow->statusBar()->addWidget(mCpu);
 
+		mSys = new QLabel("   ", mMainWindow->statusBar());
+		mSys->setFont(*mFontCourier);
+		mSys->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+		mMainWindow->statusBar()->addWidget(mSys);
+
+		mWait = new QLabel("    ", mMainWindow->statusBar());
+		mWait->setFont(*mFontCourier);
+		mWait->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+		mMainWindow->statusBar()->addWidget(mWait);
+
+		mMan = new QLabel("   ", mMainWindow->statusBar());
+		mMan->setFont(*mFontCourier);
+		mMan->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+		mMainWindow->statusBar()->addWidget(mMan);
+
 		mInstCount = new QLabel("        ", mMainWindow->statusBar());
 		mInstCount->setFont(*mFontCourier);
-		mInstCount->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+		mInstCount->setFrameStyle(QFrame::StyledPanel | QFrame::NoFrame);
 		mMainWindow->statusBar()->addWidget(mInstCount);
 	}
 }

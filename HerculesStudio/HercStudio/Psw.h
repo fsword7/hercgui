@@ -47,7 +47,7 @@ public:
 	virtual bool notify(const std::string& );
 	void setFont();
 	void setActive(bool active);
-	bool isActive() { return mActive; };
+	inline bool isActive() const { return mActive; } ;
 	void setMode(PswMode mode);
 
 private:
@@ -59,6 +59,9 @@ private:
 	Psw::PswMode mMode;
 	QLabel * mCpu;
 	QLabel * mInstCount;
+	QLabel * mSys;
+	QLabel * mWait;
+	QLabel * mMan;
 	QFont * mFontCourier;
 };
 

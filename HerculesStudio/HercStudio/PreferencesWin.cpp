@@ -92,6 +92,11 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
 
    	ui.splitLogCheckbox->setChecked(mPreferences->splitLog());
    	ui.autosaveLogCheckbox->setChecked(mPreferences->autosaveLog());
+
+   	if (mPreferences->theme() == Preferences::Classic)
+   		ui.classicRadioButton->setChecked(true);
+   	else
+   		ui.modernRadioButton->setChecked(true);
 }
 
 PreferencesWin::~PreferencesWin()
@@ -135,10 +140,13 @@ void PreferencesWin::okPressed()
 
 	mPreferences->setAutosaveLog( ui.autosaveLogCheckbox->isChecked());
 
+	mPreferences->setTheme( ui.classicRadioButton->isChecked() ? Preferences::Classic : Preferences::Modern);
+
 	mPreferences->write();
 	emit fontChanged();
 	emit mipsChanged();
 	emit pswChanged();
+	emit themeChanged();
 	close();
 }
 

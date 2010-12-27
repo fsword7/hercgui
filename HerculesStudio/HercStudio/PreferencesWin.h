@@ -59,6 +59,7 @@ signals:
   void fontChanged();
   void mipsChanged();
   void pswChanged();
+  void themeChanged();
 };
 
 #endif // PREFERENCESWIN_H

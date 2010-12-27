@@ -376,7 +376,8 @@ public:
 	MipsAsGauge = 10,
 	PswMode = 11,
 	SplitLog = 12,
-	AutosaveLog = 13
+	AutosaveLog = 13,
+	Theme = 14
 	};
 
 	enum FontObject
@@ -399,6 +400,12 @@ public:
 		ViewPsw = 7
 	};
 
+	enum Themes
+	{
+		Classic = 0,
+		Modern = 1
+	};
+
 	virtual ~Preferences();
 	static Preferences& getInstance();
 
@@ -406,58 +413,63 @@ public:
 
 	// hercules directory
 	void setHercDir(const std::string& hercDir);
-	std::string  hercDir();
+	std::string  hercDir() const;
 
 	// configuration default directory
 	void setConfigDir(const std::string& configDir) ;
 	void setVolatileConfigDir(const std::string& logsDir) ;
-	std::string  configDir();
-	std::string  configDir_();
+	std::string  configDir() const;
+	std::string  configDir_() const;
 
 	// log directory
 	void setLogsDir(const std::string& logsDir) ;
-	std::string logsDir();
+	std::string logsDir() const;
 
 	// font name
 	void setFontName( FontObject fontObject, const std::string& fontName) ;
-	std::string fontName (FontObject fontObject) ;
+	std::string fontName (FontObject fontObject) const;
 
 	// font size
 	void setFontSize( FontObject fontObject, int variation );
-	int  fontSize(FontObject fontObject);
+	int  fontSize(FontObject fontObject) const;
 
 	// bold
 	void setBold( FontObject fontObject, bool bold);
-	bool fontIsBold(FontObject fontObject);
+	bool fontIsBold(FontObject fontObject) const;
 
 	// italic
 	void setItalic (FontObject fontObject, bool italic);
-	bool fontIsItalic(FontObject fontObject);
+	bool fontIsItalic(FontObject fontObject) const;
 
 	// logs time stamp
-	bool logTimestamp();
+	bool logTimestamp() const;
 	void setLogTimestamp(bool isTrue);
-	const std::string&  version();
+	const std::string&  version() const;
 
 	// register views
 	void setRegs(Views v,bool view);
-	bool regs(Views v);
+	bool regs(Views v) const;
 
 	// Mips as gauge
 	void setMipsAsGauge(bool gauge);
-	bool mipsAsGauge();
+	bool mipsAsGauge() const;
 
 	// Psw Mode
 	void setPswMode(Psw::PswMode mode);
-	Psw::PswMode pswMode();
+	Psw::PswMode pswMode() const;
 
 	// Split log
-	bool  splitLog();
+	bool  splitLog() const;
 	void setSplitLog(bool);
 
 	// Autosave log
-	bool  autosaveLog();
 	void setAutosaveLog(bool);
+  bool  autosaveLog() const;
+
+	// theme
+	void setTheme(Themes theme);
+  Themes theme() const;
+
 
 protected:
     Preferences();
@@ -470,7 +482,7 @@ private:
 	static const char *sRegsViews[];
 	std::string mVolatileConfigDir;
 
-	const char * fontObjectToString(FontObject fontObject);
+	const char * fontObjectToString(FontObject fontObject) const;
 	void convert();
 };
 

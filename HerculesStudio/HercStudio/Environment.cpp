@@ -41,7 +41,7 @@ Environment::Environment()
 
 Environment::~Environment()
 {
-
+    delete mIconsPath;
 }
 
 std::string& Environment::getIconsPath()

@@ -109,8 +109,10 @@ private:
     QString             mRecoveryConfig;
     QString             mCurrentPath;
     QString             mAdHocLoadParm;
+    QString             mIplDevno;
 
     void 				testGui();
+    void  				connectMainPanel();
 
 public slots:
     void powerOn();
@@ -163,6 +165,7 @@ public slots:
     void fontChanged();
     void mipsChanged();
     void pswChanged();
+    void themeChanged();
     void dispatchStatus();
     void newCommand();
     void herculesEndedSlot();

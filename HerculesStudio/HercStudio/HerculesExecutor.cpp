@@ -141,7 +141,8 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
 {
     mProcess=NULL;
     std::string prog = herculesPath;
-    prog += "/hercules";
+    if (prog.size() > 0) prog += "/";
+    prog += "hercules";
     QString program = prog.c_str();
     QStringList arguments;
     char comm[256];
@@ -150,10 +151,12 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
     mProcess = new QProcess();
     mProcess->start(program,arguments);
     int iter=2;
+    #ifndef  Q_WS_WIN 
     while(mProcess->state() == QProcess::NotRunning && --iter > 0)
     {
         sleep(1);
     }
+    #endif
     if (mProcess->state() != QProcess::Running && mProcess->state() != QProcess::Starting)
         return -1;
     Q_PID pid = mProcess->pid();

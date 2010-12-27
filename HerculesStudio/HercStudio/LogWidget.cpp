@@ -62,7 +62,20 @@ void PlainLogWidget::append(const QString & text)
     QString s = text;
     if (text.toAscii().data()[0] == '<')
     s = text.mid(24);
-    QTextEdit::append(mTimeStamp + s);
+
+    QColor green(10,120,10), yellow(215,201,45), red(240,20,20);
+    QColor keepC = textColor();
+    if (text.left(3).compare(QString("HHC")) == 0)
+    {
+		if (text.mid(8,1).compare(QString("I")) == 0)
+			setTextColor(green);
+		else if (text.mid(8,1).compare(QString("W")) == 0)
+			setTextColor(yellow);
+		else if (text.mid(8,1).compare(QString("E")) == 0)
+			setTextColor(red);
+	}
+	QTextEdit::append(mTimeStamp + s);
+	setTextColor(keepC);
 }
 
 void PlainLogWidget::getTimeStamp()
@@ -149,9 +162,8 @@ void LogWidget::append(const QString & text)
     QString s = text;
     if (text.toAscii().data()[0] == '<')
         s = text.mid(24);
-    if (s.left(9).compare("HHC00001I") == 0)
+    if (s.left(3).compare("HHC") != 0)
     {
-        s = s.mid(9);
         mLogs[1]->append(mTimeStamp + s);
     }
     else

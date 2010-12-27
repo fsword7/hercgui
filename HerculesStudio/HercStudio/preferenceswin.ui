@@ -518,7 +518,7 @@
     <rect>
      <x>330</x>
      <y>170</y>
-     <width>251</width>
+     <width>151</width>
      <height>80</height>
     </rect>
    </property>
@@ -593,6 +593,45 @@
    <property name="text">
     <string>Autosave log upon exit</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_2">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>170</y>
+     <width>151</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Theme</string>
+   </property>
+   <widget class="QRadioButton" name="classicRadioButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>95</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Classic</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="modernRadioButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>95</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Modern</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

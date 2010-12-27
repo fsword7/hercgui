@@ -80,11 +80,15 @@ void HetInit::runClicked()
     else
     {
         parameters.push_back("-i");
-        parameters.push_back(mVolser->text().toStdString());
         if (!ui.owner->text().isEmpty()) parameters.push_back(ui.owner->text().toStdString());
     }
 
-    parameters.push_back(ui.filename->text().toStdString());
+    std::string filename = ui.directory->text().toStdString();
+    if (filename.size() > 0)
+    	filename += "/";
+    filename += ui.filename->text().toStdString();
+    parameters.push_back(filename);
+    parameters.push_back(mVolser->text().toStdString());
 
     std::string command = "hetinit";
 

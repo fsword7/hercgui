@@ -7,7 +7,7 @@
  *  Copyright (c) 2009 Jacob Dekel
  *  $Id$
  *
- *	This object presents the main panel
+ *  This object presents the main panel
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,24 +31,25 @@
 #include "Mips.h"
 
 #include <QtGui/QWidget>
-#include "ui_Devices.h"
+#include <QLabel>
 #include <QPushButton>
 #include <QToolButton>
 #include <QLCDNumber>
-#include <QLabel>
-#include <QMouseEvent>
+#include "ui_Devices.h"
 
+class MainPanel;
 // base class for "clickable" objects
 class ClickLabel : public QLabel
 {
   Q_OBJECT
 public:
-  ClickLabel(QWidget *parent, QLCDNumber * lcd);
+  ClickLabel(MainPanel *parent, QObject * lcd);
   virtual void mousePressEvent(QMouseEvent * event );
 signals:
   void clicked(const QPoint &);
 private:
-  QLCDNumber * mLcd;
+  MainPanel * mPanel;
+  QObject * mLcd;
 
 };
 
@@ -59,13 +60,16 @@ class MainPanel : public QWidget, public StatusUpdateCollector
 public:
   MainPanel(QWidget *parent = 0);
   virtual ~MainPanel();
-  static void updateLcd(QLCDNumber * lcd, int inc);
-  int getLoadAddress();
-  void setLoadAddress(const char * devNo);
-  void standby();
-  void setDormant();
-  bool notify(const std::string& statusLine);
-  void switchMips();
+  virtual void doConnect();
+
+  virtual void standby()=0;
+  virtual void setDormant()=0;
+  virtual bool notify(const std::string& statusLine)=0;
+  virtual void switchMips()=0;
+  virtual int getLoadAddress()=0;
+  virtual void setLoadAddress(const char * devNo)=0;
+  virtual bool isStopped()const = 0;
+  virtual void updateLcd(QLCDNumber * lcd, int inc)=0;
 
 signals:
   void powerOnClicked();
@@ -78,44 +82,29 @@ signals:
   void stopClicked();
 
 protected:
-    void resizeEvent(QResizeEvent * event);
-    QSize sizeHint() const;
+    virtual void resizeEvent(QResizeEvent * event)=0;
+    virtual QSize sizeHint() const=0;
+    virtual QAbstractButton* powerOnButton() {return mPowerOnButton;};
+    virtual QAbstractButton* powerOffButton() {return mPowerOffButton;};
+    virtual QAbstractButton* interruptButton() {return mInterruptButton;};
+    virtual QAbstractButton* stopButton() {return mStopButton;};
+    virtual QAbstractButton* loadButton() {return mLoadButton;};
 
-private:
 
-  QPushButton *mPowerOnButton;
-  QPushButton *mPowerOffButton;
-  QPushButton *mInterruptButton;
-  QPushButton *mLoadButton;
+    double  mMipsHWM;
+    QPushButton *mPowerOnButton;
+    QPushButton *mPowerOffButton;
+    QPushButton *mInterruptButton;
+    QPushButton *mLoadButton;
+    QPushButton *mRestartButton;
+    QPushButton *mStoreButton;
+    QPushButton *mStopButton;
+    QPushButton *mStartButton;
 
-    QLabel      *mSys;
-    QLabel      *mSysText;
-    QLabel      *mMan;
-    QLabel      *mManText;
-    QLabel      *mWait;
-    QLabel      *mWaitText;
-    QLabel      *mLoad;
-    QLabel      *mLoadText;
-    QLabel      *mPSW;
+    QPixmap     *mYellowLow;
+    QPixmap     *mYellowHigh;
 
-  QPixmap     *mYellowLow;
-  QPixmap     *mYellowHigh;
-
-  QPushButton *mRestartButton;
-  QPushButton *mStoreButton;
-  QPushButton *mStopButton;
-  QPushButton *mStartButton;
-
-  QLCDNumber *mLcd0, *mLcd1, *mLcd2, *mLcd3;
-  ClickLabel *mDial0, *mDial1, *mDial2, *mDial3;
-
-  Mips *mMips;
-
-  double 	mMipsHWM;
-
-  void setupUi(QWidget * parent);
-
-private slots:
+public slots:
 void powerOnClickedSlot();
 void powerOffClickedSlot();
 void loadClickedSlot();

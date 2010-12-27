@@ -27,9 +27,12 @@
 #ifndef HERCULESSTUDIO_H_
 #define HERCULESSTUDIO_H_
 
+#include <qglobal.h>
 #define HERCSTUDIO_VERSION "Version: 1.2.0"
 #define hDEBUG 0
-//#define hFramework
+#ifdef  Q_WS_WIN
+#define hFramework
+#endif
 
 #include <iostream>
 
@@ -39,6 +42,9 @@
 #define hOutDebug(level,s)  if ((level) <= hDEBUG ) \
                     {std::cout << s << std::endl;} \
                     else {}
+
+#define checkedConnect(button,slot) \
+    button!= NULL ? connect(button, SIGNAL(clicked()), this , SLOT(slot)) : NULL;
 
 class hsException : public  std::exception
 {

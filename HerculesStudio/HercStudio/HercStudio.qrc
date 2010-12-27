@@ -28,7 +28,6 @@
         <file>icons/stored.gif</file>
         <file>icons/tape.jpg</file>
         <file>icons/terminal.jpg</file>
-        <file>icons/tray.jpg</file>
         <file>icons/tray.xpm</file>
         <file>icons/unknown.jpg</file>
         <file>icons/yellow.png</file>
@@ -65,5 +64,12 @@
         <file>icons/16x16/dasdisup.png</file>
         <file>icons/16x16/dasdload.png</file>
         <file>icons/16x16/dasdls.png</file>
+        <file>icons/modern/interrupt.png</file>
+        <file>icons/modern/load.png</file>
+        <file>icons/modern/Pause.png</file>
+        <file>icons/modern/Resume.png</file>
+        <file>icons/modern/Play-icon.png</file>
+        <file>icons/modern/Stop-icon.png</file>
+        <file>icons/modern/Synchronize-icon.png</file>
     </qresource>
 </RCC>
