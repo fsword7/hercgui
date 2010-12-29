@@ -104,9 +104,9 @@ int NamedPipe::recover()
                 fclose(fstr);
         }
 
-        if (!processIsRunning(studioPid))
+        if (!SystemUtils::processIsRunning(studioPid))
         {
-            if (!processIsRunning(hercPid))
+            if (!SystemUtils::processIsRunning(hercPid))
             {
                 delDir(setPath);
                 set = pipeSet;
@@ -167,14 +167,6 @@ int NamedPipe::delDir(std::string& dir)
 {
     std::string command = "rm -rf " + dir;
     return system(command.c_str()); // TODO: temp
-}
-
-bool NamedPipe::processIsRunning(int pid)
-{
-    if (pid <= 1) return false;
-    std::stringstream procPath;// TODO: merge with Watchdog (same function!)
-    procPath << "/proc/" << pid;
-    return (SystemUtils::fileExists(procPath.str()));
 }
 
 void NamedPipe::generatePid(int studioPid, int herculesPid)

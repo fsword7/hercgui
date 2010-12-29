@@ -51,7 +51,6 @@ private:
 
     void initialize();
     void setSizeValue();
-    bool processIsRunning(int pid);
 	virtual void finishedSlot();
 
     class VolserValidator : public QValidator

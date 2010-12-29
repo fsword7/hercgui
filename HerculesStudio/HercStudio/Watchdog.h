@@ -47,8 +47,6 @@ private:
 	int mHerculesPid;
 	bool mChild;
   QProcess * mProcess;
-
-    bool processIsRunning(int pid); // TODO: merge with NamedPipe (same function!)
 };
 
 #endif /* WATCHDOG_H_ */

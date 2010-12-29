@@ -99,14 +99,6 @@ void Psw::setFont()
     QLabel::setFont(font);
 }
 
-void Psw::setActive(bool active)
-{
-	mActive = active;
-	if (mMode == Psw::StatusBar)
-		setStatusBar();
-	setVisible(active);
-}
-
 void Psw::setMode(Psw::PswMode mode)
 {
 	mMode = mode;
@@ -146,4 +138,24 @@ void Psw::setStatusBar()
 		mInstCount->setFrameStyle(QFrame::StyledPanel | QFrame::NoFrame);
 		mMainWindow->statusBar()->addWidget(mInstCount);
 	}
+}
+
+void Psw::setDormant()
+{
+  mActive = false;
+  mCpu->setVisible(false);
+  mSys->setVisible(false);
+  mWait->setVisible(false);
+  mMan->setVisible(false);
+  mInstCount->setVisible(false);
+}
+
+void Psw::standby()
+{
+  mActive = true;
+  mCpu->setVisible(true);
+  mSys->setVisible(true);
+  mWait->setVisible(true);
+  mMan->setVisible(true);
+  mInstCount->setVisible(true);
 }

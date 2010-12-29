@@ -46,9 +46,10 @@ public:
 
 	virtual bool notify(const std::string& );
 	void setFont();
-	void setActive(bool active);
 	inline bool isActive() const { return mActive; } ;
 	void setMode(PswMode mode);
+  void standby();
+  void setDormant();
 
 private:
 	void setStatusBar();

@@ -65,7 +65,7 @@ void Watchdog::run()
     {
       if (mHerculesPid > 0)
       {
-      while(processIsRunning(mHerculesPid))
+        while(SystemUtils::processIsRunning(mHerculesPid))
           sleep(2);
       }
       else
@@ -75,11 +75,4 @@ void Watchdog::run()
       }
     }
     emit HerculesEnded();
-}
-
-bool Watchdog::processIsRunning(int pid)
-{
-    std::stringstream procPath;
-    procPath << "/proc/" << pid;
-    return (SystemUtils::fileExists(procPath.str()));
 }

@@ -188,6 +188,7 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::BottomDockWidgetArea,mPswDock );
     this->tabifyDockWidget(mPswDock,mBottomDock);
     mPswDock->setVisible(false);
+    mPsw->setDormant();
 
     if( (Preferences::getInstance().regs(Preferences::ViewGR32)) ) editView32BitGr();
     if( (Preferences::getInstance().regs(Preferences::ViewCR32)) ) editView32BitCr();
@@ -241,11 +242,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui.actionDasdcopy, SIGNAL(triggered()), this, SLOT(dasdcopy()));
     connect(ui.actionTapemap, SIGNAL(triggered()), this, SLOT(tapemap()));
     connect(ui.actionTapecopy, SIGNAL(triggered()), this, SLOT(tapecopy()));
-	connect(ui.actionTapesplit, SIGNAL(triggered()), this, SLOT(tapesplit()));
-	connect(ui.actionHetinit, SIGNAL(triggered()), this, SLOT(hetinit()));
-	connect(ui.actionHetget, SIGNAL(triggered()), this, SLOT(hetget()));
-	connect(ui.actionHetupd, SIGNAL(triggered()), this, SLOT(hetupd()));
-	connect(ui.actionHetmap, SIGNAL(triggered()), this, SLOT(hetmap()));
+    connect(ui.actionTapesplit, SIGNAL(triggered()), this, SLOT(tapesplit()));
+    connect(ui.actionHetinit, SIGNAL(triggered()), this, SLOT(hetinit()));
+    connect(ui.actionHetget, SIGNAL(triggered()), this, SLOT(hetget()));
+    connect(ui.actionHetupd, SIGNAL(triggered()), this, SLOT(hetupd()));
+    connect(ui.actionHetmap, SIGNAL(triggered()), this, SLOT(hetmap()));
     connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(helpAbout()));
     connect(mDevicesPane, SIGNAL(restartDevices()), this , SLOT(restartDevices()));
     connect(mCommandLine, SIGNAL(returnPressed()), this , SLOT(newCommand()));
@@ -608,7 +609,6 @@ void MainWindow::editView64BitFr()
 void MainWindow::editViewPSW()
 {
 	bool newVal = !mPsw->isActive();
-	mPsw->setActive(newVal);
 	ui.actionView_PSW->setChecked(newVal);
 	Preferences::getInstance().setRegs(Preferences::ViewPsw, newVal);
 	if (Preferences::getInstance().pswMode() == Psw::Docked)
@@ -783,6 +783,7 @@ void MainWindow::powerOn()
     mCommandLine->setReadOnly(false);
 
     mMainPanel->standby();
+    mPsw->standby();
     this->setWindowTitle((mConfigFile->getFileName() + " - Hercules Studio").c_str());
 #ifndef hFramework
     if (mRecovery)
@@ -824,6 +825,7 @@ void MainWindow::powerOff()
     #endif
     mDevicesPane->clear();
     mMainPanel->setDormant();
+    mPsw->setDormant();
 }
 
 void MainWindow::load()
@@ -1038,6 +1040,7 @@ void MainWindow::herculesEndedSlot()
     mCommandLine->setReadOnly(true);
     mHerculesExecutor = NULL;
     mMainPanel->setDormant();
+    mPsw->setDormant();
     ui.menuFile->setEnabled(true);
     mSystemTrayIcon->setVisible(false);
     setVisible(true);

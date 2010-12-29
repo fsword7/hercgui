@@ -59,7 +59,6 @@ private:
     int mHerculesPid;
 
     int delDir(std::string& path);
-    bool processIsRunning(int pid);
 
     QMutex      mMutex;
     FILE * mStdinOutput;
