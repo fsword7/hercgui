@@ -53,9 +53,11 @@ public:
 
 private:
 	void setStatusBar();
+  void setStatusVisible(bool visible);
 
 	std::string mLine;
 	bool mActive;
+  bool mHasStatusBar;
 	QMainWindow * mMainWindow;
 	Psw::PswMode mMode;
 	QLabel * mCpu;
