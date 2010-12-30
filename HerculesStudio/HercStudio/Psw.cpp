@@ -31,7 +31,7 @@
 #include <iostream>
 
 Psw::Psw( Psw::PswMode mode, QMainWindow * mainWindow)
-
+: mCpu(NULL)
 {
 	mMainWindow = mainWindow;
 	mMode = mode;
@@ -110,7 +110,7 @@ void Psw::setStatusBar()
 	mMainWindow->setStatusBar(0);
 	mMainWindow->setStatusBar(new QStatusBar());
 
-	if (mMode == Psw::StatusBar && mActive)
+	if (mMode == Psw::StatusBar && mCpu == NULL)
 	{
 		mCpu = new QLabel("        ", mMainWindow->statusBar());
 		mCpu->setMinimumWidth(400);
@@ -143,19 +143,25 @@ void Psw::setStatusBar()
 void Psw::setDormant()
 {
   mActive = false;
-  mCpu->setVisible(false);
-  mSys->setVisible(false);
-  mWait->setVisible(false);
-  mMan->setVisible(false);
-  mInstCount->setVisible(false);
+  if (mMode == Psw::StatusBar)
+  {
+	  mCpu->setVisible(false);
+	  mSys->setVisible(false);
+	  mWait->setVisible(false);
+	  mMan->setVisible(false);
+	  mInstCount->setVisible(false);
+  }
 }
 
 void Psw::standby()
 {
   mActive = true;
-  mCpu->setVisible(true);
-  mSys->setVisible(true);
-  mWait->setVisible(true);
-  mMan->setVisible(true);
-  mInstCount->setVisible(true);
+  if (mMode == Psw::StatusBar)
+  {
+	  mCpu->setVisible(true);
+	  mSys->setVisible(true);
+	  mWait->setVisible(true);
+	  mMan->setVisible(true);
+	  mInstCount->setVisible(true);
+  }
 }
