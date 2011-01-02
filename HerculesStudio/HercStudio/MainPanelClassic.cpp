@@ -212,11 +212,15 @@ void MainPanelClassic::setLoadAddress(const char *devNo)
 void MainPanelClassic::setDormant()
 {
     mMips->setVisible(false);
+    QString iconsPath = Environment::getIconsPath().c_str();
+    ((PanelButton *)mPowerOnButton)->replaceButton(iconsPath + "/poweronoffu.gif", iconsPath + "/poweronoffd.gif");
 }
 
 void MainPanelClassic::standby()
 {
     mMips->setVisible(true);
+    QString iconsPath = Environment::getIconsPath().c_str();
+    ((PanelButton *)mPowerOnButton)->replaceButton(iconsPath + "/powerononu.gif", iconsPath + "/poweronond.gif");
 }
 
 bool MainPanelClassic::notify(const std::string& statusLine)

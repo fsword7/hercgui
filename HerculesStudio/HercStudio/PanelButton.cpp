@@ -23,6 +23,7 @@
  */
 
 #include "PanelButton.h"
+#include "HerculesStudio.h"
 #include "Environment.h"
 
 #include <iostream>
@@ -40,9 +41,15 @@ PanelButton::PanelButton(const QString& upButtonName, const QString&  downButton
 
 PanelButton::~PanelButton()
 {
-
+  
 }
 
+void PanelButton::replaceButton(const QString& upButtonName, const QString&  downButtonName)
+{
+	mUpButtonName = upButtonName;
+	mDownButtonName = downButtonName;
+	repaint();
+}
 void PanelButton::paintEvent(QPaintEvent *)
 {
     QString  filename = mUpButtonName;

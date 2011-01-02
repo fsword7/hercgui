@@ -105,14 +105,14 @@ protected:
     QPixmap     *mYellowHigh;
 
 public slots:
-void powerOnClickedSlot();
-void powerOffClickedSlot();
-void loadClickedSlot();
-void interruptClickedSlot();
-void restartClickedSlot();
-void storeClickedSlot();
-void startClickedSlot();
-void stopClickedSlot();
+  void powerOnClickedSlot();
+  void powerOffClickedSlot();
+  void loadClickedSlot();
+  void interruptClickedSlot();
+  void restartClickedSlot();
+  void storeClickedSlot();
+  void startClickedSlot();
+  void stopClickedSlot();
 };
 
 #endif /* MAINPANEL_H_ */

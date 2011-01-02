@@ -36,6 +36,7 @@ class PanelButton : public QPushButton
 public:
     PanelButton(const QString& upButtonName, const QString& downButtonName, QWidget * parent=NULL);
     virtual ~PanelButton();
+    void replaceButton(const QString& upButtonName, const QString&  downButtonName);
     virtual void paintEvent(QPaintEvent *pEvent);
 
 public slots:
