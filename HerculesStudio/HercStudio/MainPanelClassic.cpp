@@ -226,16 +226,6 @@ void MainPanelClassic::standby()
 bool MainPanelClassic::notify(const std::string& statusLine)
 {
     bool ret = true;
-    mMan->pixmap();
-    if (statusLine.c_str()[54] == 'M')
-      mMan->setPixmap(*mYellowHigh);
-    else
-      mMan->setPixmap(*mYellowLow);
-
-    if (statusLine.c_str()[56] == 'W')
-      mWait->setPixmap(*mYellowHigh);
-    else
-      mWait->setPixmap(*mYellowLow);
     if (statusLine.compare(0,4,"SYS=") == 0)
     {
         char sysVal = statusLine[4];
@@ -269,9 +259,19 @@ bool MainPanelClassic::notify(const std::string& statusLine)
     //STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M.W..... instcount=0
     else if ( (statusLine.compare(0,7,"STATUS=") == 0) && (statusLine.length() > 56) )
     {
-        if ( (statusLine[54] == 'M') ||
-             (statusLine[56] == 'W') )
-            mMips->display(0);
+      if (statusLine[54] == 'M')
+        mMan->setPixmap(*mYellowHigh);
+      else
+        mMan->setPixmap(*mYellowLow);
+
+      if (statusLine[56] == 'W')
+        mWait->setPixmap(*mYellowHigh);
+      else
+        mWait->setPixmap(*mYellowLow);
+
+      if ( (statusLine[54] == 'M') ||
+           (statusLine[56] == 'W') )
+          mMips->display(0);
     }
     else ret = false;
 
