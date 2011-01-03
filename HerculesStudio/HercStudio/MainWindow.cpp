@@ -360,7 +360,6 @@ void MainWindow::themeChanged()
 		mMainPanel = new MainPanelModern(this);
 	mTopDock->setWidget(mMainPanel);
 	connectMainPanel();
-	mMainPanel->standby();
 }
 
 void MainWindow::writeToLogFromQueue()
