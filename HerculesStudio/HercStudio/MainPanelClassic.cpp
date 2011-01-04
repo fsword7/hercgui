@@ -268,10 +268,6 @@ bool MainPanelClassic::notify(const std::string& statusLine)
         mWait->setPixmap(*mYellowHigh);
       else
         mWait->setPixmap(*mYellowLow);
-
-      if ( (statusLine[54] == 'M') ||
-           (statusLine[56] == 'W') )
-          mMips->display(0);
     }
     else ret = false;
 

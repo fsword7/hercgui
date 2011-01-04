@@ -358,6 +358,7 @@ void MainWindow::themeChanged()
 		mMainPanel = new MainPanelClassic(this);
 	else
 		mMainPanel = new MainPanelModern(this);
+	if (mHerculesActive) mMainPanel->standby();
 	mTopDock->setWidget(mMainPanel);
 	connectMainPanel();
 }

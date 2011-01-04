@@ -63,7 +63,7 @@ bool Psw::notify(const std::string& statusLine)
 		return true;
     }
 	//STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M.W..... instcount=0
-	if (statusLine.compare(0,7,"STATUS=") != 0)
+	if (statusLine.compare(0,7,"STATUS=") != 0 || statusLine.length() < 63)
 		return false;
 	if (mMode == Psw::Docked)
 	{
@@ -71,7 +71,7 @@ bool Psw::notify(const std::string& statusLine)
 		mLine.replace(48,statusLine.length()-56, &statusLine[63]);
 		setText(&mLine[0]);
 	}
-	else if (mActive)
+	else 
 	{
 		mCpu->setText(statusLine.substr(7,43).c_str());
 		mInstCount->setText(statusLine.substr(62).c_str());

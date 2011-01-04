@@ -144,12 +144,12 @@ void MainPanelModern::setDormant()
     	stopClickedSlot();
     }
 
-    mMips->setVisible(false);  // must be last - indicates hercules is not active to other functions
+    mMips->setVisible(false);
 }
 
 void MainPanelModern::standby()
 {
-    mMips->setVisible(true);   // must be last - indicates hercules is active to other functions
+    mMips->setVisible(true);
 }
 
 bool MainPanelModern::notify(const std::string& statusLine)
@@ -168,13 +168,6 @@ bool MainPanelModern::notify(const std::string& statusLine)
         mMips->display(d);
     }
     //3.07 :STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M....... instcount=0
-    //3.08?:STATUS=CP00 PSW=00000000 00000000 0000000000000000 M......Z instcount=0
-    else if (statusLine.compare(0,7,"STATUS=") == 0)
-    {
-        if ( (statusLine[54] == 'M') ||
-             (statusLine[56] == 'W') )
-            mMips->display(0);
-    }
     else ret = false;
 
     return ret;
