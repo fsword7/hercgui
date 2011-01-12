@@ -103,7 +103,7 @@ void Psw::setMode(Psw::PswMode mode)
 {
 	mMode = mode;
 	setStatusBar();
-  setStatusVisible(!(mMode == Docked)); 
+    setStatusVisible(!(mMode == Docked), Preferences::getInstance().theme() == Preferences::Modern);
 }
 
 void Psw::setStatusBar()
@@ -141,26 +141,26 @@ void Psw::setStatusBar()
   }
 }
 
-void Psw::setStatusVisible(bool visible)
+void Psw::setStatusVisible(bool visible, bool modern)
 {
   mCpu->setVisible(visible);
-  mSys->setVisible(visible);
-  mWait->setVisible(visible);
-  mMan->setVisible(visible);
-  mInstCount->setVisible(visible);
+  mSys->setVisible(visible && modern);
+  mWait->setVisible(visible && modern);
+  mMan->setVisible(visible && modern);
+  mInstCount->setVisible(visible && modern);
 }
 
 void Psw::setDormant()
 {
   mActive = false;
-  setStatusVisible(false);
+  setStatusVisible(false, false);
 }
 
-void Psw::standby()
+void Psw::standby(bool full)
 {
   mActive = true;
   if (mMode == Psw::StatusBar)
   {
-    setStatusVisible(true);
+    setStatusVisible(true, full);
   }
 }

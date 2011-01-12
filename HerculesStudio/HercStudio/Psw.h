@@ -48,12 +48,14 @@ public:
 	void setFont();
 	inline bool isActive() const { return mActive; } ;
 	void setMode(PswMode mode);
-  void standby();
-  void setDormant();
+    void standby(bool full);
+    void setDormant();
 
 private:
 	void setStatusBar();
-  void setStatusVisible(bool visible);
+	// visible - make status bar visible
+	// modern - full status (including man/wait/sys) - used in modern panel
+    void setStatusVisible(bool visible, bool modern);
 
 	std::string mLine;
 	bool mActive;

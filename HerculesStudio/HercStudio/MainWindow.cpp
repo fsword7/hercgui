@@ -784,7 +784,7 @@ void MainWindow::powerOn()
     mCommandLine->setReadOnly(false);
 
     mMainPanel->standby();
-    mPsw->standby();
+    mPsw->standby(Preferences::getInstance().theme() == Preferences::Modern);
     this->setWindowTitle((mConfigFile->getFileName() + " - Hercules Studio").c_str());
 #ifndef hFramework
     if (mRecovery)
