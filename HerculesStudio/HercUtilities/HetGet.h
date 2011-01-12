@@ -52,7 +52,8 @@ private slots:
     void browseOutDirClicked();
     void browseOutFileClicked();
 	void asciiChanged();
-	void stripChanged();
+    void stripChanged();
+    void unblockChanged();
 };
 
 #endif // HETGET_H

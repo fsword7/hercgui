@@ -45,6 +45,7 @@ HetGet::HetGet(QWidget *parent)
     connect(ui.browseOutFile, SIGNAL(clicked()), this, SLOT(browseOutFileClicked()));
 	connect(ui.asciiCheckBox, SIGNAL(stateChanged(int)), this, SLOT(asciiChanged()));
 	connect(ui.stripCheckBox, SIGNAL(stateChanged(int)), this, SLOT(stripChanged()));
+    connect(ui.unblockCheckBox, SIGNAL(stateChanged(int)), this, SLOT(unblockChanged()));
 
     ui.outdir->setText(Preferences::getInstance().logsDir().c_str());
     ui.outdir->setBackgroundRole(QPalette::Window);
@@ -150,7 +151,11 @@ void HetGet::stripChanged()
 		ui.asciiCheckBox->setChecked(true);
 }
 
-
+void HetGet::unblockChanged()
+{
+    if (!ui.unblockCheckBox->isChecked())
+        ui.asciiCheckBox->setChecked(false);
+}
 
 void HetGet::finishedSlot()
 {
