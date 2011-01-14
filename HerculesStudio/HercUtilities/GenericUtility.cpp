@@ -117,7 +117,6 @@ void GenericUtility::errorSlot()
 
 void GenericUtility::runnerError(const QString& line)
 {
-	hOutDebug(0,line.toStdString());
     emit output(line);
 }
 
