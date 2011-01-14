@@ -117,7 +117,7 @@ void Dasdls::finishedSlot()
 		QMessageBox::information(this, "dasdls", "Disk listing successfully completed!",
 			QMessageBox::Ok,
 			QMessageBox::NoButton);
-		deleteLater();
 	}
 	ui.runButton->setText("Run");
+	deleteLater();
 }

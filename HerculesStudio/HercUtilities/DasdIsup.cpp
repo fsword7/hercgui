@@ -126,5 +126,5 @@ void DasdIsup::finishedSlot()
 	QMessageBox::information(this, "dasdisup", "Disk update successfully completed!",
 		QMessageBox::Ok,
 		QMessageBox::NoButton);
-	ui.runButton->setText("Run");
+	deleteLater();
 }

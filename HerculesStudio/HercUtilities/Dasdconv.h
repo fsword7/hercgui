@@ -42,9 +42,6 @@ public:
     Dasdconv(QWidget *parent = 0);
     virtual ~Dasdconv();
 
-signals:
-    void output(QString line);
-
 private slots:
     void runClicked();
     void exitClicked();

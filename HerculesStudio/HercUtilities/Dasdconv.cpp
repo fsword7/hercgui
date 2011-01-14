@@ -53,14 +53,8 @@ Dasdconv::~Dasdconv()
 
 void Dasdconv::runClicked()
 {
-    if ((mExecutor != NULL) && (mExecutor->getQProcess()->state() == QProcess::Running))
+	if (!runOrStopClicked())
     {
-    	mExecutor->terminate();
-		QMessageBox::warning(this, "dasdconv",
-									"dasdconv operation was aborted at user's request",
-									QMessageBox::Ok,
-									QMessageBox::NoButton);
-		mExecutor = NULL;
         ui.runButton->setText("Run");
         return;
     }
@@ -176,11 +170,5 @@ void Dasdconv::runnerValueChanged(int value)
 
 void Dasdconv::finishedSlot()
 {
-    if (mStarted && mFinished && mFinishedOK)
-    {
-        ui.runButton->setText("Run");
-        QMessageBox::information(this, "dasdconv", "Disk conversion successfully completed!",
-                QMessageBox::Ok,
-                QMessageBox::NoButton);
-    }
+	deleteLater();
 }

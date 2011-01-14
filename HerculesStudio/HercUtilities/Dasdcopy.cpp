@@ -53,13 +53,8 @@ Dasdcopy::~Dasdcopy()
 
 void Dasdcopy::runClicked()
 {
-    if ((mExecutor != NULL) && (mExecutor->getQProcess()->state() == QProcess::Running))
+	if (!runOrStopClicked())
     {
-    	mExecutor->terminate();
-        QMessageBox::warning(this, "dasdcopy",
-                                            "dasdcopy operation was aborted at user's request",
-                                            QMessageBox::Ok,
-                                            QMessageBox::NoButton);
         ui.runButton->setText("Run");
         return;
     }
@@ -210,6 +205,6 @@ void Dasdcopy::finishedSlot()
         QMessageBox::information(this, "dasdcopy", "Disk was successfully copied",
                 QMessageBox::Ok,
                 QMessageBox::NoButton);
-		deleteLater();
     }
+	deleteLater();
 }
