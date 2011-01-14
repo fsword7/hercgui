@@ -30,6 +30,7 @@
 #include "GenericUtility.h"
 
 #include <QtGui/QDialog>
+#include <QAbstractSpinBox>
 #include "ui_HetInit.h"
 
 class VolserSpinBox : public QAbstractSpinBox
