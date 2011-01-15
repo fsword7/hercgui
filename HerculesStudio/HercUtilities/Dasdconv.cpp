@@ -37,7 +37,7 @@
 Dasdconv::Dasdconv(QWidget *parent)
     : GenericUtility("dasdconv",parent)
 {
-  ui.setupUi(this);
+	ui.setupUi(this);
 
     connect(ui.runButton, SIGNAL(clicked()), this, SLOT(runClicked()));
     connect(ui.exitButton, SIGNAL(clicked()), this, SLOT(exitClicked()));

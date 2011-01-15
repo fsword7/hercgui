@@ -38,7 +38,7 @@ std::string DasdProperties::fba[] = {"3310", "3370", "9332", "9335", "9336", "06
 DasdProperties::DasdProperties(ConfigLine& configLine, QWidget *parent)
     : GenericDeviceProperties(configLine, parent)
 {
-  ui.setupUi(this);
+    ui.setupUi(this);
 
     connect(ui.okButton, SIGNAL(clicked()), this, SLOT(ok()));
     connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));

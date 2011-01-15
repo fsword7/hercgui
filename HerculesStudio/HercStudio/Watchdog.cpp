@@ -42,9 +42,9 @@ Watchdog::Watchdog(int herculesPid, bool child)
 
 Watchdog::Watchdog(QProcess * herculesProcess)
 {
-  mHerculesPid = -1;
-  mChild = false;
-  mProcess = herculesProcess;
+	mHerculesPid = -1;
+	mChild = false;
+	mProcess = herculesProcess;
 }
 
 Watchdog::~Watchdog()

@@ -28,7 +28,7 @@
 #include <algorithm>
 
 ConfigLine::ConfigLine(const char *line) :
-  mLine(line), mRemark(false), mDeleted(false), mUpdated(false), mNew(false), mTokens()
+    mLine(line), mRemark(false), mDeleted(false), mUpdated(false), mNew(false), mTokens()
 {
     if (mLine.find_first_of("\n") == std::string::npos)
         mLine = mLine + "\n";
@@ -42,7 +42,7 @@ ConfigLine::~ConfigLine()
 
 const std::string& ConfigLine::getLine() const
 {
-   return mLine;
+    return mLine;
 }
 
 std::string ConfigLine::getToken(int i) const
@@ -76,39 +76,39 @@ std::string ConfigLine::getMultiToken(int from, int to) const
 
 void ConfigLine::replaceLine(const std::string& newLine)
 {
-  outDebug(5, std::cout  << "configLine: new Line '" << newLine << "'" << std::endl);
-  outDebug(5, std::cout  << "configLine: old Line  '" << mLine <<     "'" << std::endl);
-  mLine = newLine;
-  mUpdated = true;
-  parseLine();
+    outDebug(5, std::cout  << "configLine: new Line '" << newLine << "'" << std::endl);
+    outDebug(5, std::cout  << "configLine: old Line  '" << mLine <<     "'" << std::endl);
+    mLine = newLine;
+    mUpdated = true;
+    parseLine();
 }
 
 void ConfigLine::replaceParameters(const std::string& newParm)
 {
-  std::string newString = "  " + getToken(0) + "    " + newParm + "                   #edited By Hercules Studio\n";
-  outDebug(5, std::cout  << "configLine: line is now '" << newString << "'" << std::endl);
-  outDebug(5, std::cout  << "configLine: old string  '" << mLine <<     "'" << std::endl);
-  mLine = newString;
-  mUpdated = true;
-  parseLine();
+    std::string newString = "  " + getToken(0) + "    " + newParm + "                   #edited By Hercules Studio\n";
+    outDebug(5, std::cout  << "configLine: line is now '" << newString << "'" << std::endl);
+    outDebug(5, std::cout  << "configLine: old string  '" << mLine <<     "'" << std::endl);
+    mLine = newString;
+    mUpdated = true;
+    parseLine();
 }
 
 void ConfigLine::parseLine()
 {
-  tokenize(" \t\n\r");
-  mRemark = false;
-  if (mLine[0] == '#')
-  {
+    tokenize(" \t\n\r");
+    mRemark = false;
+    if (mLine[0] == '#')
+    {
     mRemark = true;
     return;
-  }
+    }
 
-  mKeyStart=mLine.find_first_not_of(" \t\n\r");
-  if (mKeyStart == std::string::npos) // blank line
-  {
+    mKeyStart=mLine.find_first_not_of(" \t\n\r");
+    if (mKeyStart == std::string::npos) // blank line
+    {
     mRemark = true;
     return;
-  }
+    }
 }
 
 void ConfigLine::tokenize(const std::string& delimiters)

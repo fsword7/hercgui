@@ -33,11 +33,11 @@
 PrinterProperties::PrinterProperties(ConfigLine& line, QWidget *parent)
     : GenericDeviceProperties(line, parent)
 {
-  ui.setupUi(this);
+    ui.setupUi(this);
 
-  ui.filename->setValidator(new PrinterFileNameValidator(this));
+    ui.filename->setValidator(new PrinterFileNameValidator(this));
 
-  if (!line.isNew())
+    if (!line.isNew())
     {
         ui.deviceNumber->setText(mLine.getToken(0).c_str());
         ui.printerCombo->setCurrentIndex( (mLine.getToken(1) == "3211") ? 1 : 0);
@@ -100,7 +100,7 @@ void PrinterProperties::cancel()
 
 void PrinterProperties::setCrlfEnabled(bool checked)
 {
-     ui.crlfCheckBox->setEnabled(checked);
+    ui.crlfCheckBox->setEnabled(checked);
 }
 
 void PrinterProperties::fileNameBrowse()

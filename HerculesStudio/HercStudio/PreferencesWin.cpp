@@ -152,33 +152,33 @@ void PreferencesWin::okPressed()
 
 void PreferencesWin::cancelPressed()
 {
-  close();
+    close();
 }
 
 void PreferencesWin::hercDirPressed()
 {
-  QString s = QFileDialog::getExistingDirectory(this,
+    QString s = QFileDialog::getExistingDirectory(this,
         tr("Find Hercules directory"),
         ui.hercDirLineEdit->text(),
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-  if (s.length() > 0)
-    ui.hercDirLineEdit->setText(s);
+    if (s.length() > 0)
+        ui.hercDirLineEdit->setText(s);
 }
 void PreferencesWin::configDirPressed()
 {
-  QString s = QFileDialog::getExistingDirectory(this,
+    QString s = QFileDialog::getExistingDirectory(this,
         tr("Hercules configurations directory"),
         ui.configDirLineEdit->text(),
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-  if (s.length() > 0)
-    ui.configDirLineEdit->setText(s);
+    if (s.length() > 0)
+        ui.configDirLineEdit->setText(s);
 }
 void PreferencesWin::logsDirPressed()
 {
-  QString s = QFileDialog::getExistingDirectory(this,
+    QString s = QFileDialog::getExistingDirectory(this,
         tr("Logs directory"),
         ui.logsDirLineEdit->text(),
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-  if (s.length() > 0)
-    ui.logsDirLineEdit->setText(s);
+    if (s.length() > 0)
+      ui.logsDirLineEdit->setText(s);
 }

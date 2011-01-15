@@ -30,10 +30,10 @@
 TerminalProperties::TerminalProperties(ConfigLine & line, QWidget *parent)
     : GenericDeviceProperties(line, parent)
 {
-  ui.setupUi(this);
+    ui.setupUi(this);
 
-  if (!line.isNew())
-  {
+    if (!line.isNew())
+    {
       ui.deviceNumber->setText(mLine.getToken(0).c_str());
       ui.terminalCombo->setCurrentIndex( (mLine.getToken(1) == "3287") ? 1 : 0);
       if (mLine.size() > 2)
@@ -48,11 +48,10 @@ TerminalProperties::TerminalProperties(ConfigLine & line, QWidget *parent)
           if (mLine.size() >= index)
               ui.IPAddress->setText(mLine.getToken(index).c_str());
       }
-  }
+    }
 
     connect(ui.OKButton, SIGNAL(clicked()), this, SLOT(ok()));
     connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
-
 }
 
 TerminalProperties::~TerminalProperties()

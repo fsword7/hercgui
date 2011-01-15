@@ -37,13 +37,13 @@ const std::string TapeProperties::types[] = {"3410", "3420", "3422", "3430", "34
 TapeProperties::TapeProperties(ConfigLine & line, QWidget *parent)
     : GenericDeviceProperties(line, parent)
 {
-  ui.setupUi(this);
-  //standard(true);//temp
-  initialize(line);
+    ui.setupUi(this);
+    //standard(true);//temp
+    initialize(line);
 
-  connect(ui.okButton, SIGNAL(clicked()), this, SLOT(ok()));
-  connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
-  connect(ui.fileButton, SIGNAL(clicked()), this, SLOT(fileBrowse()));
+    connect(ui.okButton, SIGNAL(clicked()), this, SLOT(ok()));
+    connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
+    connect(ui.fileButton, SIGNAL(clicked()), this, SLOT(fileBrowse()));
 }
 
 TapeProperties::~TapeProperties()

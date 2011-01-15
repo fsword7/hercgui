@@ -30,17 +30,17 @@
 Recovery::Recovery(QWidget *parent)
     : QDialog(parent)
 {
-  ui.setupUi(this);
-  mHerculesConf = readHerculesConf();
+	ui.setupUi(this);
+	mHerculesConf = readHerculesConf();
 
-  ui.configurationFilename->setText(mHerculesConf.c_str());
-  std::stringstream ss;
-  ss << NamedPipe::getInstance().getHerculesPid();
-  ui.processNumber->setText(ss.str().c_str());
+	ui.configurationFilename->setText(mHerculesConf.c_str());
+	std::stringstream ss;
+	ss << NamedPipe::getInstance().getHerculesPid();
+	ui.processNumber->setText(ss.str().c_str());
 
-    connect(ui.exitButton, SIGNAL(clicked()), this , SLOT(exit()));
-    connect(ui.attachButton, SIGNAL(clicked()), this , SLOT(recover()));
-    connect(ui.skipButton, SIGNAL(clicked()), this , SLOT(skip()));
+	connect(ui.exitButton, SIGNAL(clicked()), this , SLOT(exit()));
+	connect(ui.attachButton, SIGNAL(clicked()), this , SLOT(recover()));
+	connect(ui.skipButton, SIGNAL(clicked()), this , SLOT(skip()));
 }
 
 Recovery::~Recovery()

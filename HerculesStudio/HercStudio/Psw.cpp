@@ -143,24 +143,24 @@ void Psw::setStatusBar()
 
 void Psw::setStatusVisible(bool visible, bool modern)
 {
-  mCpu->setVisible(visible);
-  mSys->setVisible(visible && modern);
-  mWait->setVisible(visible && modern);
-  mMan->setVisible(visible && modern);
-  mInstCount->setVisible(visible && modern);
+	mCpu->setVisible(visible);
+	mSys->setVisible(visible && modern);
+	mWait->setVisible(visible && modern);
+	mMan->setVisible(visible && modern);
+	mInstCount->setVisible(visible && modern);
 }
 
 void Psw::setDormant()
 {
-  mActive = false;
-  setStatusVisible(false, false);
+	mActive = false;
+	setStatusVisible(false, false);
 }
 
 void Psw::standby(bool full)
 {
-  mActive = true;
-  if (mMode == Psw::StatusBar)
-  {
-    setStatusVisible(true, full);
-  }
+	mActive = true;
+	if (mMode == Psw::StatusBar)
+	{
+	setStatusVisible(true, full);
+	}
 }

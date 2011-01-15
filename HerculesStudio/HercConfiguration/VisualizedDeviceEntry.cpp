@@ -26,7 +26,7 @@
 
 VisualizedDeviceEntry::VisualizedDeviceEntry(int number, DeviceTypes::Type type, const std::string& definition)
 : mNumber(number), mType(type), mDefinition(definition), mPixmap(NULL), mIcon(NULL), mItem(NULL),
-  mTraced(false)
+    mTraced(false)
 {
 }
 

@@ -30,9 +30,9 @@
 PunchProperties::PunchProperties(ConfigLine& line, QWidget *parent)
     : GenericDeviceProperties(line, parent)
 {
-  ui.setupUi(this);
+    ui.setupUi(this);
 
-   ui.fileName->setValidator(new PunchFileNameValidator(this));
+    ui.fileName->setValidator(new PunchFileNameValidator(this));
 
     if (!line.isNew())
         {

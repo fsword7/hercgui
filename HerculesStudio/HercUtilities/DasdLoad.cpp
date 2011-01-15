@@ -36,7 +36,7 @@
 DasdLoad::DasdLoad(QWidget *parent)
     : QDialog(parent)
 {
-  ui.setupUi(this);
+	ui.setupUi(this);
 
     connect(ui.runButton, SIGNAL(clicked()), this, SLOT(runClicked()));
     connect(ui.exitButton, SIGNAL(clicked()), this, SLOT(exitClicked()));
