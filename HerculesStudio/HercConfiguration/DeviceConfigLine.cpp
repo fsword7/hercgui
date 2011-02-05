@@ -138,6 +138,7 @@ void DeviceConfigLine::initilize()
     mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("3088",DeviceTypes::CTC));
     mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("CTCI",DeviceTypes::CTC));
     mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("LCS", DeviceTypes::CTC));
+    mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("QETH", DeviceTypes::CTC));
     mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("CTCT", DeviceTypes::CTC));
     mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("2305",DeviceTypes::DASD));
     mDeviceTypes->insert(std::pair<std::string,DeviceTypes::Type>("2311",DeviceTypes::DASD));
@@ -160,6 +161,7 @@ void DeviceConfigLine::initilize()
     mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("3088",DeviceTypes::CTCT));
     mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("CTCI",DeviceTypes::CTCI));
     mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("LCS", DeviceTypes::LCS));
+    mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("QETH", DeviceTypes::QETH));
     mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("2305",DeviceTypes::CKD));
     mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("2311",DeviceTypes::CKD));
     mDeviceBaseTypes->insert(std::pair<std::string,DeviceTypes::BaseType>("2314",DeviceTypes::CKD));

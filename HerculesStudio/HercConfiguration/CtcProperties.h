@@ -45,10 +45,11 @@ private:
     Ui::CtcPropertiesClass ui;
 
     bool macValidator(const std::string& mac);
-    void arangeLcs(bool set);
-    void arangeCtc(bool set);
-    void arangeCtct(bool set);
-    void arangeByType();
+    void arrangeQeth(bool set);
+    void arrangeLcs(bool set);
+    void arrangeCtc(bool set);
+    void arrangeCtct(bool set);
+    void arrangeByType();
     void initialize(ConfigLine & configLine);
 
 private slots:

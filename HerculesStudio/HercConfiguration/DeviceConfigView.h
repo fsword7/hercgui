@@ -40,10 +40,11 @@ public:
     virtual ~DeviceConfigView();
 
 protected:
-    void mousePressEvent ( QMouseEvent * e );
+    virtual void mousePressEvent ( QMouseEvent * e );
 
 signals:
-    void deviceClick(QMouseEvent *);
+	void deviceClick(QMouseEvent *);
+	void deviceDoubleClick(QMouseEvent *);
 };
 
 #endif /* DEVICECONFIGVIEW_H_ */

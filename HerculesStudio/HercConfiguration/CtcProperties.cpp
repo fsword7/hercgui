@@ -97,7 +97,7 @@ void CtcProperties::ok()
         newLineBuff << " " << ui.hostPortSpinbox->text().toStdString();
         newLineBuff << " " << ui.buffsizeSpinBox->text().toStdString();
     }
-    else  // ctci
+    else  if (ui.typeCombo->currentIndex() == 1)  // ctci
     {
     	if (!ipValidator(ui.guestIP,false))
     		return;
@@ -144,6 +144,18 @@ void CtcProperties::ok()
                 return;
         }
     }
+    else // qeth
+    {
+    	if (!(ui.hostIP->text() == "..."))
+    	{
+    		if (ipValidator(ui.hostIP, false))
+    		{
+    			newLineBuff << " " <<  ui.hostIP->text().toStdString() ;
+    		}
+    		else
+    			return;
+    	}
+    }
 
 
     newLineBuff << "\n";
@@ -187,18 +199,37 @@ bool CtcProperties::macValidator(const std::string& mac)
 
 void CtcProperties::typeChanged(const QString &newValue)
 {
-    if (newValue.toLower() == "lcs") arangeLcs(true);
-    else if (newValue.toLower() == "ctct") arangeCtct(true);
-    else arangeCtc(true);
+    if (newValue.toLower() == "qeth") arrangeQeth(true);
+    else if (newValue.toLower() == "lcs") arrangeLcs(true);
+    else if (newValue.toLower() == "ctct") arrangeCtct(true);
+    else arrangeCtc(true);
 }
 
-void CtcProperties::arangeLcs(bool set)
+void CtcProperties::arrangeQeth(bool set)
+{
+    outDebug(5, std::cout << "qeth " << (set ? "true" : "false") << std::endl);
+    if (set)
+    {
+        arrangeCtc(!set);
+        arrangeCtct(!set);
+        arrangeLcs(!set);
+        ui.hostIP->setInputMask("000.000.000.000;");
+    }
+    ui.hostIPLabel->setVisible(set);
+    ui.hostIP->setVisible(set);
+
+    ui.hostIPLabel->setGeometry(20,50,53,16);
+    ui.hostIP->setGeometry(110,40,113,26);
+}
+
+void CtcProperties::arrangeLcs(bool set)
 {
     outDebug(5, std::cout << "lcs " << (set ? "true" : "false") << std::endl);
     if (set)
     {
-        arangeCtc(!set);
-        arangeCtct(!set);
+        arrangeCtc(!set);
+        arrangeCtct(!set);
+        arrangeQeth(!set);
         ui.hostIP->setInputMask("000.000.000.000;");
     }
     ui.guestIPLabel->setVisible(set);
@@ -226,13 +257,14 @@ void CtcProperties::arangeLcs(bool set)
     //ui.oatEditButton->setGeometry(360,140,52,26);
 }
 
-void CtcProperties::arangeCtc(bool set)
+void CtcProperties::arrangeCtc(bool set)
 {
     outDebug(5, std::cout << "ctc " << (set ? "true" : "false") << std::endl);
     if (set)
     {
-        arangeLcs(!set);
-        arangeCtct(!set);
+        arrangeLcs(!set);
+        arrangeCtct(!set);
+        arrangeQeth(!set);
         ui.hostIP->setInputMask("000.000.000.000;");
     }
     ui.guestIPLabel->setVisible(set);
@@ -256,13 +288,14 @@ void CtcProperties::arangeCtc(bool set)
     ui.macLabel2->setGeometry(300,140,53,16);
 }
 
-void CtcProperties::arangeCtct(bool set)
+void CtcProperties::arrangeCtct(bool set)
 {
     outDebug(3, std::cout << "ctct " << (set ? "true" : "false") << std::endl);
     if (set)
     {
-        arangeCtc(!set);
-        arangeLcs(!set);
+        arrangeCtc(!set);
+        arrangeLcs(!set);
+        arrangeQeth(!set);
         ui.hostIP->setInputMask("000.000.000.000;");
     }
     ui.hostIPLabel->setVisible(set);
@@ -284,19 +317,23 @@ void CtcProperties::arangeCtct(bool set)
     ui.buffsizeSpinBox->setGeometry(110,100,71,26);
 }
 
-void CtcProperties::arangeByType()
+void CtcProperties::arrangeByType()
 {
-    if (ui.typeCombo->currentText().toLower() == "lcs")
+    if (ui.typeCombo->currentText().toLower() == "qeth")
     {
-        arangeLcs(true);
+        arrangeQeth(true);
+    }
+    else if (ui.typeCombo->currentText().toLower() == "lcs")
+    {
+        arrangeLcs(true);
     }
     else if (ui.typeCombo->currentText().toLower() == "ctct")
     {
-        arangeCtct(true);
+        arrangeCtct(true);
     }
     else
     {
-        arangeCtc(true);
+        arrangeCtc(true);
     }
 }
 
@@ -315,7 +352,16 @@ void CtcProperties::initialize(ConfigLine & configLine)
             ui.deviceNumber->setText(configLine.getToken(0).c_str());
 
     QString type = configLine.getToken(1).c_str();
-    if (type.toLower() == "lcs")
+    if (type.toLower() == "qeth")
+    {
+        ui.typeCombo->setCurrentIndex(3);
+        if (configLine.size() >= 2)
+        {
+        	ui.hostIP->setText(configLine.getToken(2).c_str());
+        }
+
+    }
+    else if (type.toLower() == "lcs")
     {
         ui.typeCombo->setCurrentIndex(0);
 
@@ -388,27 +434,8 @@ void CtcProperties::initialize(ConfigLine & configLine)
             }
         }
     }
-/*
-    ui.hostIPLabel->setGeometry(20,70,53,16);
-    ui.hostIP->setGeometry(110,60,113,26);
-    ui.hostPortLabel->setGeometry(240,70,61,16);
-    ui.hostPortSpinbox->setGeometry(320,60,61,26);
-    ui.tunLabel->setGeometry(20,110,81,16);
-    ui.tun->setGeometry(110,100,301,26);
-    ui.macLabel->setGeometry(20,150,53,16);
-    ui.mac->setGeometry(110,140,171,26);
-    ui.macLabel2->setGeometry(300,140,53,16);
-    ui.oatFilenameLabel->setGeometry(20,190,91,16);
-    ui.oat->setGeometry(110,180,211,26);
-    ui.oatBrowseButton->setGeometry(330,180,21,26);
-    ui.oatEditButton->setGeometry(360,180,52,26);
-    ui.lportLabel->setGeometry(20,250,61,16);
-    ui.lportSpinbox->setGeometry(110,240,61,26);
-    ui.buffsizeLabel->setGeometry(20,290,71,16);
-    ui.buffsize->setGeometry(110,280,151,26);
-*/
 
-    arangeByType();
+    arrangeByType();
 
 
 }

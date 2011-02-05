@@ -78,6 +78,8 @@ bool DevicesPane::notify(const std::string& statusLine)
                     devType= DeviceTypes::DASD;
                 else if (strncmp(line->devType,"CTC",3)==0)
                     devType= DeviceTypes::CTC;
+                else if (strncmp(line->devType,"OSA",3)==0)
+                    devType= DeviceTypes::Comm;
                 else if (strncmp(line->devType,"QETH",4)==0)
                     devType= DeviceTypes::Comm;
                 else if (strncmp(line->devType,"RDR ",4)==0)

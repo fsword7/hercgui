@@ -39,7 +39,7 @@ public:
     enum Type { Other = 0,
             Terminal, Sysg, Console, Printer, CardReader, CardPunch,
             LinePrinter, Tape, CTC, DASD , Comm };
-    enum BaseType { CTCT=100 , CTCI, LCS, CKD, FBA};
+    enum BaseType { CTCT=100 , CTCI, LCS, QETH, CKD, FBA};
     static QIcon & getIcon(DeviceTypes::Type type) ;
     static const char * getName(Type type);
 private:

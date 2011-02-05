@@ -57,6 +57,11 @@ CTCT - An emulated CTCA to another Hercules system</string>
       <string>CTCT</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>QETH</string>
+     </property>
+    </item>
    </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">

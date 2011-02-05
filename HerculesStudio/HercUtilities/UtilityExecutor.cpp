@@ -71,7 +71,7 @@ int UtilityExecutor::run(const std::string & pCommand, const std::string& pPath,
                 SLOT(readStandardError()));
     }
     for (int i=0 ; i<arguments.size(); i++)
-        hOutDebug(0, " " << arguments.value(i).toStdString());
+        hOutDebug(1, " " << arguments.value(i).toStdString());
     mProcess->start(program,arguments);
     Q_PID pid = mProcess->pid();
 

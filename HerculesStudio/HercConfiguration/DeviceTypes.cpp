@@ -43,7 +43,7 @@ const char *DeviceTypes::sDeviceNames[NUM_DEVICES] =
     "Tape Drives",
     "CTC",
     "Dasd",
-    "Network"
+    "OSA"
 };
 
 const char *DeviceTypes::sDeviceIconNames[NUM_DEVICES] =
