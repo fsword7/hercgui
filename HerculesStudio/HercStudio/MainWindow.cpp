@@ -368,12 +368,12 @@ void MainWindow::writeToLogFromQueue()
 
     while (!mLogQueue.empty())
     {
-        std::string s = mLogQueue.front();
-        mLogQueue.pop_front();
+        std::string& s = mLogQueue.front();
         if (!s.empty())
         {
         	mLogWindow->append(s.c_str());
         }
+        mLogQueue.pop_front();
     }
 }
 
@@ -381,8 +381,7 @@ void MainWindow::dispatchStatus()
 {
     while (!mStatusQueue.empty())
     {
-        std::string statusLine = mStatusQueue.front();
-        mStatusQueue.pop_front();
+        std::string& statusLine = mStatusQueue.front();
         hOutDebug(1, "writeToDevice:" << statusLine << std::endl);
         if (!statusLine.empty())
         {
@@ -415,6 +414,7 @@ void MainWindow::dispatchStatus()
                 mPsw->notify(statusLine);
             }
         }
+        mStatusQueue.pop_front();
     }
 }
 

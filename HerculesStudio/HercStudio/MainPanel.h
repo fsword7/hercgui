@@ -90,7 +90,7 @@ protected:
     virtual QAbstractButton* stopButton() {return mStopButton;};
     virtual QAbstractButton* loadButton() {return mLoadButton;};
 
-
+    bool    mStopped;
     double  mMipsHWM;
     QPushButton *mPowerOnButton;
     QPushButton *mPowerOffButton;

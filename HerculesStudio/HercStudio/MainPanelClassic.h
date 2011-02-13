@@ -76,7 +76,6 @@ private:
 
   Mips *mMips;
 
-  bool    mStopped;
 };
 
 #endif /* MAINPANELCLASSIC_H_ */

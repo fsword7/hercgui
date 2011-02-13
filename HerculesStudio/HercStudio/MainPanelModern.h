@@ -90,8 +90,6 @@ private:
   ClickLabel *mDial0, *mDial1, *mDial2, *mDial3;
 
   Mips *mMips;
-
-  bool  mStopped;
 };
 
 #endif /* MAINPANELMODERN_H_ */

@@ -7,7 +7,7 @@
  *  Copyright (c) 2009 Jacob Dekel
  *  $Id$
  *
- *	This object implementa queue to which is access is serialized on write
+ *	This object implements a queue to which access is serialized
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

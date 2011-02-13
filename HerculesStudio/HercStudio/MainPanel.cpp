@@ -85,11 +85,13 @@ void MainPanel::storeClickedSlot()
 
 void MainPanel::startClickedSlot()
 {
+  	mStopped=false;
     emit startClicked();
 }
 
 void MainPanel::stopClickedSlot()
 {
+  	mStopped=true;
     emit stopClicked();
 }
 
