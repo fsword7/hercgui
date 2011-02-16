@@ -49,6 +49,8 @@ public:
 	virtual bool isOSLog();
 
 protected:
+	void writeToFile();
+
 	void getTimeStamp();
 	char mTimeStamp[64];
 };

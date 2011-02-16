@@ -34,6 +34,9 @@
 
 #include <QTextEdit>
 #include <QTabWidget>
+#include <QFile>
+#include <QTextBlock>
+#include <QTextStream>
 
 #include <fcntl.h>
 #include <time.h>
@@ -74,6 +77,8 @@ void PlainLogWidget::append(const QString & text)
 		else if (text.mid(8,1).compare(QString("E")) == 0)
 			setTextColor(red);
 	}
+	if (QTextEdit::document()->blockCount()%20 == 0)
+		writeToFile();
 	QTextEdit::append(mTimeStamp + s);
 	setTextColor(keepC);
 }
@@ -107,6 +112,26 @@ void PlainLogWidget::clear()
 bool PlainLogWidget::isOSLog()
 {
     return false;
+}
+
+void PlainLogWidget::writeToFile()
+{
+	QString filename="/home/yakov/Desktop/Hercules.log";
+	QFile file(filename);
+	file.open(QIODevice::Append | QIODevice::Text);
+	QTextStream out(&file);
+
+	QTextDocument *oldDocument = QTextEdit::document();
+	QTextBlock block = oldDocument->begin();
+	while(block != oldDocument->end())
+	{
+		out << block.text().toAscii().data() << "\n";
+		block=block.next();
+	}
+
+
+	QTextDocument *newBlock = new QTextDocument(this);
+	QTextEdit::setDocument(newBlock);
 }
 
 

@@ -28,7 +28,7 @@
 #define PREFERENCESWIN_H
 
 #include <QtGui/QDialog>
-#include "ui_preferenceswin.h"
+#include "ui_PreferencesWin.h"
 #include "Preferences.h"
 
 class PreferencesWin : public QDialog
