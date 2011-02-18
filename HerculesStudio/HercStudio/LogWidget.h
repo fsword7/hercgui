@@ -51,8 +51,9 @@ public:
 protected:
 	void writeToFile();
 
-	void getTimeStamp();
+	void getTimeStamp(bool withDate);
 	char mTimeStamp[64];
+	int  mLogFileLines;
 };
 
 

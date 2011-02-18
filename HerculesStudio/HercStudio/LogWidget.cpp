@@ -52,13 +52,14 @@
 PlainLogWidget::PlainLogWidget(QWidget * parent)
 :QTextEdit(parent)
 {
+    mLogFileLines = Preferences::getInstance().logFileLines();
 }
 
 void PlainLogWidget::append(const QString & text)
 {
     if (Preferences::getInstance().logTimestamp())
     {
-        getTimeStamp();
+        getTimeStamp(false);
     }
     else
         mTimeStamp[0] = '\0';
@@ -77,21 +78,30 @@ void PlainLogWidget::append(const QString & text)
 		else if (text.mid(8,1).compare(QString("E")) == 0)
 			setTextColor(red);
 	}
-	if (QTextEdit::document()->blockCount()%20 == 0)
+	if (QTextEdit::document()->blockCount()%mLogFileLines == 0)
+	{
 		writeToFile();
+		mLogFileLines = Preferences::getInstance().logFileLines(); // might have been updated
+	}
+    
 	QTextEdit::append(mTimeStamp + s);
 	setTextColor(keepC);
 }
 
-void PlainLogWidget::getTimeStamp()
+void PlainLogWidget::getTimeStamp(bool withDate)
 {
     struct tm *current;
     time_t now;
     time(&now);
     current = localtime(&now);
 
-    strftime(mTimeStamp, 255, "%H:%M:%S", current); //"%m-%d-%y %H:%M:%S"
-    memcpy(mTimeStamp+8, " ", 2);
+    if (withDate)
+    	strftime(mTimeStamp, 255, "%Y-%m-%d-%H-%M-%S", current);
+    else
+    {
+    	strftime(mTimeStamp, 255, "%H:%M:%S", current); //"%m-%d-%y %H:%M:%S"
+    	memcpy(mTimeStamp+8, " ", 2);
+    }
 }
 
 bool PlainLogWidget::empty()
@@ -116,9 +126,18 @@ bool PlainLogWidget::isOSLog()
 
 void PlainLogWidget::writeToFile()
 {
-	QString filename="/home/yakov/Desktop/Hercules.log";
+	getTimeStamp(true);
+	QString filename=Preferences::getInstance().logsDir().c_str();
+	filename += "/hercules";
+	filename += mTimeStamp;
+	filename += ".log";
 	QFile file(filename);
-	file.open(QIODevice::Append | QIODevice::Text);
+
+	if (!file.open(QIODevice::Append | QIODevice::Text))
+	{
+		hOutDebug(0,"Failed to open file " << filename.toStdString());
+		return ;
+	}
 	QTextStream out(&file);
 
 	QTextDocument *oldDocument = QTextEdit::document();
@@ -129,9 +148,12 @@ void PlainLogWidget::writeToFile()
 		block=block.next();
 	}
 
-
 	QTextDocument *newBlock = new QTextDocument(this);
 	QTextEdit::setDocument(newBlock);
+	QString sepLine = "---------------- log was saved at ";
+	sepLine += mTimeStamp;
+	sepLine += "-------------------------";
+	QTextEdit::append(sepLine);
 }
 
 
@@ -180,7 +202,7 @@ void LogWidget::append(const QString & text)
 {
     if (Preferences::getInstance().logTimestamp())
     {
-        getTimeStamp();
+        getTimeStamp(false);
     }
     else
         mTimeStamp[0] ='\0';

@@ -97,6 +97,11 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
    		ui.classicRadioButton->setChecked(true);
    	else
    		ui.modernRadioButton->setChecked(true);
+
+   	if (mPreferences->logFileLines() > 0)
+   	    ui.memLines->setValue( mPreferences->logFileLines() );
+   	else
+   		ui.memLines->setValue(5000);
 }
 
 PreferencesWin::~PreferencesWin()
@@ -141,6 +146,8 @@ void PreferencesWin::okPressed()
 	mPreferences->setAutosaveLog( ui.autosaveLogCheckbox->isChecked());
 
 	mPreferences->setTheme( ui.classicRadioButton->isChecked() ? Preferences::Classic : Preferences::Modern);
+
+    mPreferences->setLogFileLines( ui.memLines->value() );
 
 	mPreferences->write();
 	emit fontChanged();

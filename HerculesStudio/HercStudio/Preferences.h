@@ -377,7 +377,8 @@ public:
 	PswMode = 11,
 	SplitLog = 12,
 	AutosaveLog = 13,
-	Theme = 14
+	Theme = 14,
+    LogFileLines = 15
 	};
 
 	enum FontObject
@@ -464,12 +465,15 @@ public:
 
 	// Autosave log
 	void setAutosaveLog(bool);
-  bool  autosaveLog() const;
+    bool  autosaveLog() const;
 
 	// theme
 	void setTheme(Themes theme);
-  Themes theme() const;
+    Themes theme() const;
 
+	// LogFileLines
+	void setLogFileLines(int lines);
+	int logFileLines() const;
 
 protected:
     Preferences();

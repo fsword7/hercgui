@@ -52,7 +52,8 @@ const char * Preferences::sKeywords[] = {
         "PswMode",
         "SplitLog",
         "AutosaveLog",
-        "Theme"};
+        "Theme",
+        "LogFileLines"};
 
 const char * Preferences::sRegsViews[] = {
         "ViewGR32",
@@ -90,7 +91,7 @@ const char * Preferences::sRegsViews[] = {
     }
 
 #define PrefInt(FUNC,TOKEN, TYPE) \
-    TYPE Preferences::FUNC() const \
+    int Preferences::FUNC(void) const \
     { \
         return mSettings->value(sKeywords[TOKEN]).toInt(); \
     }
@@ -109,7 +110,7 @@ const char * Preferences::sRegsViews[] = {
 
 Preferences::Preferences()
 {
-    mSettings = new QSettings("org.mvsdasd","HerculesStudioz");
+    mSettings = new QSettings("org.mvsdasd","HerculesStudio");
     if (mSettings->value("version") != "1.3")
     {
         QString oldFile = QDir::homePath() + "/.config/HercStudio.pref";
@@ -146,6 +147,7 @@ PrefBool(logTimestamp,LogTimestamp)
 PrefBool(splitLog,SplitLog)
 PrefBool(autosaveLog, AutosaveLog)
 PrefBool(mipsAsGauge, MipsAsGauge)
+PrefInt(logFileLines, LogFileLines, int)
 
 PrefSet(setHercDir,HerculesDir)
 PrefSet(setConfigDir,ConfigurationDir)
@@ -155,6 +157,8 @@ PrefSetBool(setLogTimestamp, LogTimestamp)
 PrefSetBool(setSplitLog, SplitLog)
 PrefSetBool(setAutosaveLog,AutosaveLog)
 PrefSetBool(setMipsAsGauge,MipsAsGauge)
+PrefSetInt(setLogFileLines,LogFileLines,int)
+
 
 std::string Preferences::configDir() const
 {
@@ -300,7 +304,7 @@ void Preferences::convert()
     setRegs(ViewPsw,oldPreferences.regs(Preferences_1_2_0::ViewPsw));
     setMipsAsGauge(oldPreferences.mipsAsGauge());
     setPswMode(oldPreferences.pswMode());
-    setSplitLog(oldPreferences.splitLog());
+    setSplitLog(false);
     setAutosaveLog(oldPreferences.autosaveLog());
     setTheme(Classic);
 }
