@@ -126,6 +126,7 @@ Preferences::Preferences()
         }
         mSettings->setValue(sKeywords[Version],"1.3");
     }
+    if (logFileLines() <= 0) setLogFileLines(5000);
 }
 
 Preferences::~Preferences()
