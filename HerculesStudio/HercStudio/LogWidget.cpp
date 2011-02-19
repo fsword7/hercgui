@@ -78,14 +78,13 @@ void PlainLogWidget::append(const QString & text)
 		else if (text.mid(8,1).compare(QString("E")) == 0)
 			setTextColor(red);
 	}
-	if (QTextEdit::document()->blockCount()%mLogFileLines == 0)
-	{
-		writeToFile();
-		mLogFileLines = Preferences::getInstance().logFileLines(); // might have been updated
-	}
-    
 	QTextEdit::append(mTimeStamp + s);
 	setTextColor(keepC);
+	if (QTextEdit::document()->blockCount()%mLogFileLines == 0)
+	{
+		writeToFile(true);
+		mLogFileLines = Preferences::getInstance().logFileLines(); // might have been updated
+	}
 }
 
 void PlainLogWidget::getTimeStamp(bool withDate)
@@ -104,19 +103,9 @@ void PlainLogWidget::getTimeStamp(bool withDate)
     }
 }
 
-bool PlainLogWidget::empty()
-{
-    return this->document()->isEmpty();
-}
-
 QString PlainLogWidget::toPlainText()
 {
     return QTextEdit::toPlainText();
-}
-
-void PlainLogWidget::clear()
-{
-    QTextEdit::clear();
 }
 
 bool PlainLogWidget::isOSLog()
@@ -124,12 +113,17 @@ bool PlainLogWidget::isOSLog()
     return false;
 }
 
-void PlainLogWidget::writeToFile()
+void PlainLogWidget::writeToFile(bool writeSep, QString& suffix)
 {
 	getTimeStamp(true);
 	QString filename=Preferences::getInstance().logsDir().c_str();
 	filename += "/hercules";
 	filename += mTimeStamp;
+	if (suffix.length() != 0)
+	{
+		filename += ".";
+		filename += suffix;
+	}
 	filename += ".log";
 	QFile file(filename);
 
@@ -148,23 +142,31 @@ void PlainLogWidget::writeToFile()
 		block=block.next();
 	}
 
-	QTextDocument *newBlock = new QTextDocument(this);
-	QTextEdit::setDocument(newBlock);
-	QString sepLine = "---------------- log was saved at ";
-	sepLine += mTimeStamp;
-	sepLine += "-------------------------";
-	QTextEdit::append(sepLine);
+	if (writeSep)
+	{
+		QTextDocument *newBlock = new QTextDocument(this);
+		QTextEdit::setDocument(newBlock);
+		QString sepLine = "---------------- log was saved at ";
+		sepLine += mTimeStamp;
+		sepLine += "-------------------------";
+		QTextEdit::append(sepLine);
+	}
 }
 
+void PlainLogWidget::writeToFile(bool writeSep)
+{
+	QString noSuffix;
+	writeToFile(writeSep, noSuffix);
+}
 
 LogWidget::LogWidget(QWidget * parent)
-: PlainLogWidget(NULL)
+: PlainLogWidget(NULL), cHercIndex(0), cOsIndex(1)
 {
     mTabWidget = new QTabWidget(parent);
-    mLogs[0] = new QTextEdit();
-    mLogs[1] = new QTextEdit();
-    mTabWidget->addTab(mLogs[0], "Hercules");
-    mTabWidget->addTab(mLogs[1], "OS");
+    mLogs[cHercIndex] = new PlainLogWidget(this);
+    mLogs[cOsIndex] = new PlainLogWidget(this);
+    mTabWidget->addTab(mLogs[cHercIndex], "Hercules");
+    mTabWidget->addTab(mLogs[cOsIndex], "OS");
     for_each_log
     {
         current_log->setReadOnly(true);
@@ -174,8 +176,8 @@ LogWidget::LogWidget(QWidget * parent)
     //const QColor white(255,255,255);
     //QBrush blackBrush(black);
     //QPalette blackPalette(white, black);
-    //mLogs[1]->setPalette(blackPalette);
-    //mLogs[1]->setAutoFillBackground(true);
+    //mLogs[cOsIndex]->setPalette(blackPalette);
+    //mLogs[cOsIndex]->setAutoFillBackground(true);
 }
 
 LogWidget::~LogWidget()
@@ -211,23 +213,23 @@ void LogWidget::append(const QString & text)
         s = text.mid(24);
     if (s.left(3).compare("HHC") != 0)
     {
-        mLogs[1]->append(mTimeStamp + s);
+        mLogs[cOsIndex]->append(mTimeStamp + s);
     }
     else
     {
         QColor green(10,120,10), yellow(215,201,45), red(240,20,20);
-        QColor keepC = mLogs[0]->textColor();
+        QColor keepC = mLogs[cHercIndex]->textColor();
         if (text.left(3).compare(QString("HHC")) == 0)
         {
             if (text.mid(8,1).compare(QString("I")) == 0)
-                mLogs[0]->setTextColor(green);
+                mLogs[cHercIndex]->setTextColor(green);
             else if (text.mid(8,1).compare(QString("W")) == 0)
-                mLogs[0]->setTextColor(yellow);
+                mLogs[cHercIndex]->setTextColor(yellow);
             else if (text.mid(8,1).compare(QString("E")) == 0)
-                mLogs[0]->setTextColor(red);
+                mLogs[cHercIndex]->setTextColor(red);
         }
-        mLogs[0]->append(mTimeStamp + s);
-        mLogs[0]->setTextColor(keepC);
+        mLogs[cHercIndex]->append(mTimeStamp + s);
+        mLogs[cHercIndex]->setTextColor(keepC);
     }
 }
 
@@ -259,10 +261,18 @@ QString LogWidget::toPlainText()
 
 bool LogWidget::empty()
 {
-    return mLogs[0]->document()->isEmpty() && mLogs[1]->document()->isEmpty();
+    return mLogs[cHercIndex]->document()->isEmpty() && mLogs[cOsIndex]->document()->isEmpty();
 }
 
 bool LogWidget::isOSLog()
 {
     return (mTabWidget->currentIndex() == 1);
+}
+
+void LogWidget::writeToFile(bool writeSep)
+{
+	QString herc("Hercules");
+	QString os("OS");
+	mLogs[cHercIndex]->writeToFile(writeSep, herc);
+	mLogs[cOsIndex]->writeToFile(writeSep, os);
 }

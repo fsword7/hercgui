@@ -170,7 +170,7 @@ public slots:
     void newCommand();
     void herculesEndedSlot();
     void deleteMessages();
-    void saveMessages(bool autosave=false);
+    void saveMessages();
     void preferences();
     void helpAbout();
     void closeEvent(QCloseEvent * event);

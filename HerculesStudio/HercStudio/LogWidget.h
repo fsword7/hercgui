@@ -42,14 +42,13 @@ class PlainLogWidget : public QTextEdit
 {
 public:
 	PlainLogWidget(QWidget * parent);
-	virtual bool empty();
 	virtual void append(const QString & text);
 	virtual QString toPlainText();
-	virtual void clear();
 	virtual bool isOSLog();
+	virtual void writeToFile(bool writeSep, QString& suffix);
+	virtual void writeToFile(bool writeSep);
 
 protected:
-	void writeToFile();
 
 	void getTimeStamp(bool withDate);
 	char mTimeStamp[64];
@@ -72,14 +71,18 @@ public:
 	void setTextColor (const QColor &);
 	QTabWidget * tabWidget();
 	virtual bool empty();
+	virtual void clear();
+
 	virtual void append(const QString & text);
 	virtual QString toPlainText();
-	virtual void clear();
 	virtual bool isOSLog();
+	virtual void writeToFile(bool WriteSep);
 
 private:
+	const int cHercIndex;
+	const int cOsIndex;
 	QTabWidget * mTabWidget;
-	QTextEdit   * mLogs[2];
+	PlainLogWidget * mLogs[2];
 	int	mActive;
 };
 

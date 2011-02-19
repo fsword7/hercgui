@@ -636,47 +636,13 @@ void MainWindow::deleteMessages()
             return ;
     }
     mLogWindow->clear();
-
 }
 
 
-void MainWindow::saveMessages(bool autosave)
+void MainWindow::saveMessages()
 {
-	//TODO: allow splitting to two separate files when in split log mode
-    if (mLogWindow->empty())
-        return;
-    QString s;
-    if (!autosave)
-    {
-		 s = QFileDialog::getSaveFileName(this,
-				tr("Save Messages"),
-				mPreferences->logsDir().c_str(),
-				tr("Hercules log files (*.log)")).toUtf8().data();
-		if (!s.endsWith(".log"))
-			s+= ".log";
-    }
-    else
-    {
-    	s = mPreferences->logsDir().c_str();
-    	s += "/hercules";
-    	int i=0;
-    	QString backS = s;
-    	while (QFile::exists(s+".log"))
-    	{
-    		s = backS + "." + QString().setNum(++i);
-    	}
-    	if (i==0)
-    	{
-    		s=backS;
-    	}
-    	s+=".log";
-    }
-    QFile file(s);
-
-    QString data = mLogWindow->toPlainText();
-    file.open(QIODevice::WriteOnly);
-    file.write(data.toStdString().c_str(),data.length());
-    file.close();
+	mLogWindow->writeToFile(false);
+	return;
 }
 
 void MainWindow::preferences()
@@ -1032,7 +998,7 @@ void MainWindow::herculesEndedSlot()
     std::cerr << "############ ended ##############" << std::endl;
     if (Preferences::getInstance().autosaveLog())
     {
-        saveMessages(true);
+        saveMessages();
     }
     mLogRunner->terminate();
     mStatusRunner->terminate();
