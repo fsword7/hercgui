@@ -41,18 +41,19 @@ class QTabWidget;
 class PlainLogWidget : public QTextEdit
 {
 public:
-	PlainLogWidget(QWidget * parent);
+	PlainLogWidget(QWidget * parent, const char * suffix="");
 	virtual void append(const QString & text);
 	virtual QString toPlainText();
 	virtual bool isOSLog();
-	virtual void writeToFile(bool writeSep, QString& suffix);
 	virtual void writeToFile(bool writeSep);
 
 protected:
 
 	void getTimeStamp(bool withDate);
+    void setLogFileName (QString& suffix);
 	char mTimeStamp[64];
 	int  mLogFileLines;
+    QString mLogFileName;
 };
 
 

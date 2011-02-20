@@ -49,10 +49,27 @@
     for (int for_loop_i=0; for_loop_i<2; for_loop_i++)
 #define current_log mLogs[for_loop_i]
 
-PlainLogWidget::PlainLogWidget(QWidget * parent)
+PlainLogWidget::PlainLogWidget(QWidget * parent, const char * suffix)
 :QTextEdit(parent)
 {
-    mLogFileLines = Preferences::getInstance().logFileLines();
+  mLogFileLines = Preferences::getInstance().logFileLines();
+  QString parm(suffix);
+  setLogFileName(parm);
+}
+
+void PlainLogWidget::setLogFileName (QString& suffix)
+{
+  getTimeStamp(true);
+  mLogFileLines = Preferences::getInstance().logFileLines();
+  mLogFileName = Preferences::getInstance().logsDir().c_str();
+  mLogFileName += "/hercules";
+  mLogFileName += mTimeStamp;
+  if (suffix.length() != 0)
+  {
+    mLogFileName += ".";
+    mLogFileName += suffix;
+  }
+  mLogFileName += ".log";
 }
 
 void PlainLogWidget::append(const QString & text)
@@ -113,23 +130,13 @@ bool PlainLogWidget::isOSLog()
     return false;
 }
 
-void PlainLogWidget::writeToFile(bool writeSep, QString& suffix)
+void PlainLogWidget::writeToFile(bool writeSep)
 {
-	getTimeStamp(true);
-	QString filename=Preferences::getInstance().logsDir().c_str();
-	filename += "/hercules";
-	filename += mTimeStamp;
-	if (suffix.length() != 0)
-	{
-		filename += ".";
-		filename += suffix;
-	}
-	filename += ".log";
-	QFile file(filename);
+	QFile file(mLogFileName);
 
 	if (!file.open(QIODevice::Append | QIODevice::Text))
 	{
-		hOutDebug(0,"Failed to open file " << filename.toStdString());
+		hOutDebug(0,"Failed to open file " << mLogFileName.toStdString());
 		return ;
 	}
 	QTextStream out(&file);
@@ -144,6 +151,7 @@ void PlainLogWidget::writeToFile(bool writeSep, QString& suffix)
 
 	if (writeSep)
 	{
+        getTimeStamp(true);
 		QTextDocument *newBlock = new QTextDocument(this);
 		QTextEdit::setDocument(newBlock);
 		QString sepLine = "---------------- log was saved at ";
@@ -153,18 +161,12 @@ void PlainLogWidget::writeToFile(bool writeSep, QString& suffix)
 	}
 }
 
-void PlainLogWidget::writeToFile(bool writeSep)
-{
-	QString noSuffix;
-	writeToFile(writeSep, noSuffix);
-}
-
 LogWidget::LogWidget(QWidget * parent)
 : PlainLogWidget(NULL), cHercIndex(0), cOsIndex(1)
 {
     mTabWidget = new QTabWidget(parent);
-    mLogs[cHercIndex] = new PlainLogWidget(this);
-    mLogs[cOsIndex] = new PlainLogWidget(this);
+    mLogs[cHercIndex] = new PlainLogWidget(this, "hercules");
+    mLogs[cOsIndex] = new PlainLogWidget(this, "os");
     mTabWidget->addTab(mLogs[cHercIndex], "Hercules");
     mTabWidget->addTab(mLogs[cOsIndex], "OS");
     for_each_log
@@ -271,8 +273,6 @@ bool LogWidget::isOSLog()
 
 void LogWidget::writeToFile(bool writeSep)
 {
-	QString herc("Hercules");
-	QString os("OS");
-	mLogs[cHercIndex]->writeToFile(writeSep, herc);
-	mLogs[cOsIndex]->writeToFile(writeSep, os);
+	mLogs[cHercIndex]->writeToFile(writeSep);
+	mLogs[cOsIndex]->writeToFile(writeSep);
 }
