@@ -40,7 +40,7 @@ class LogRunner :  public Runner
 {
   Q_OBJECT
 public:
-  LogRunner(SynchronizedQueue& logQueue, HerculesExecutor * herculesExecutor);
+  LogRunner(SynchronizedQueue& logQueue, HerculesExecutor * herculesExecutor, int maxQueueSize);
   virtual ~LogRunner();
 
   void run();
@@ -50,6 +50,7 @@ private:
   HerculesExecutor *mHerculesExecutor;
   QProcess *mProcess;
   bool mRunning;
+  int mMaxQueueSize;
 
 public slots:
 #ifdef hFramework

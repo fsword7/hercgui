@@ -44,7 +44,7 @@ public:
 	Psw( PswMode mode, QMainWindow * mainWindow );
 	virtual ~Psw();
 
-	virtual bool notify(const std::string& );
+	virtual bool notify(const QString& );
 	void setFont();
 	inline bool isActive() const { return mActive; } ;
 	void setMode(PswMode mode);
@@ -57,7 +57,7 @@ private:
 	// modern - full status (including man/wait/sys) - used in modern panel
     void setStatusVisible(bool visible, bool modern);
 
-	std::string mLine;
+	QString  mLine;
 	bool mActive;
   bool mHasStatusBar;
 	QMainWindow * mMainWindow;
@@ -67,7 +67,7 @@ private:
 	QLabel * mSys;
 	QLabel * mWait;
 	QLabel * mMan;
-	QFont * mFontCourier;
+	QFont  * mFontCourier;
 };
 
 #endif /* PSW_H_ */

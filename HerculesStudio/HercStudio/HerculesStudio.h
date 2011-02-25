@@ -33,7 +33,7 @@
 #ifdef  Q_WS_WIN
 #define hFramework
 #endif
-
+//#define hFramework
 #include <iostream>
 
 #define outDebug(level,s) if ((level) <= hDEBUG ) \

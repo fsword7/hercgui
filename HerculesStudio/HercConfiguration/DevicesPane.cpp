@@ -61,10 +61,10 @@ DevicesPane::~DevicesPane()
 	delete mYellowHighIcon;
 }
 
-bool DevicesPane::notify(const std::string& statusLine)
+bool DevicesPane::notify(const QString& statusLine)
 {
-    hOutDebug(1,"devices notify:" << statusLine << "." << std::endl);
-    struct DynDeviceLine * line = (DynDeviceLine *)statusLine.c_str();
+    struct DynDeviceLine * line = (DynDeviceLine *)statusLine.toAscii().data();
+    hOutDebug(1,"devices notify:" << line << "." << std::endl);
     int devNo;
     VisualizedDeviceEntry deviceEntry;
     bool deviceAdded = false;
@@ -97,7 +97,7 @@ bool DevicesPane::notify(const std::string& statusLine)
 
                     devNo =  strtol(line->devNo, NULL, 16);
                     {
-                    VisualizedDeviceEntry& deviceEntryPtr = *new VisualizedDeviceEntry(devNo, devType, statusLine);
+                    VisualizedDeviceEntry& deviceEntryPtr = *new VisualizedDeviceEntry(devNo, devType, statusLine.toStdString());
                     std::pair<int,VisualizedDeviceEntry> toinsert(devNo, deviceEntryPtr);
                     mDevices.insert(toinsert);
                     deviceAdded = true;

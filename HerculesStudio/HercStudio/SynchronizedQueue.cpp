@@ -40,12 +40,12 @@ bool SynchronizedQueue::empty() const
     return mQueue.empty();
 }
 
-std::string& SynchronizedQueue::front()
+QString& SynchronizedQueue::front()
 {
     return mQueue.front();
 }
 
-void SynchronizedQueue::push_back(const std::string& str)
+void SynchronizedQueue::push_back(const QString& str)
 {
     QMutexLocker lock(&mMutex);
     mQueue.push_back(str);
@@ -55,4 +55,14 @@ void SynchronizedQueue::pop_front()
 {
     QMutexLocker lock(&mMutex);
     mQueue.pop_front();
+}
+
+int SynchronizedQueue::size()
+{
+	return mQueue.size();
+}
+
+void SynchronizedQueue::clear()
+{
+	mQueue.clear();
 }

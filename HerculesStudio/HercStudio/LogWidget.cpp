@@ -52,24 +52,24 @@
 PlainLogWidget::PlainLogWidget(QWidget * parent, const char * suffix)
 :QTextEdit(parent)
 {
-  mLogFileLines = Preferences::getInstance().logFileLines();
-  QString parm(suffix);
-  setLogFileName(parm);
+	mSaveLog = Preferences::getInstance().autosaveLog();
+	mLogFileLines = Preferences::getInstance().logFileLines();
+	QString parm(suffix);
+	setLogFileName(parm);
 }
 
 void PlainLogWidget::setLogFileName (QString& suffix)
 {
-  getTimeStamp(true);
-  mLogFileLines = Preferences::getInstance().logFileLines();
-  mLogFileName = Preferences::getInstance().logsDir().c_str();
-  mLogFileName += "/hercules";
-  mLogFileName += mTimeStamp;
-  if (suffix.length() != 0)
-  {
-    mLogFileName += ".";
-    mLogFileName += suffix;
-  }
-  mLogFileName += ".log";
+	getTimeStamp(true);
+	mLogFileName = Preferences::getInstance().logsDir().c_str();
+	mLogFileName += "/hercules";
+	mLogFileName += mTimeStamp;
+	if (suffix.length() != 0)
+	{
+		mLogFileName += ".";
+		mLogFileName += suffix;
+  	}
+	mLogFileName += ".log";
 }
 
 void PlainLogWidget::append(const QString & text)
@@ -99,8 +99,7 @@ void PlainLogWidget::append(const QString & text)
 	setTextColor(keepC);
 	if (QTextEdit::document()->blockCount()%mLogFileLines == 0)
 	{
-		writeToFile(true);
-		mLogFileLines = Preferences::getInstance().logFileLines(); // might have been updated
+		writeToFile(false);
 	}
 }
 
@@ -130,35 +129,45 @@ bool PlainLogWidget::isOSLog()
     return false;
 }
 
-void PlainLogWidget::writeToFile(bool writeSep)
+void PlainLogWidget::writeToFile(bool menuCommand)
 {
-	QFile file(mLogFileName);
-
-	if (!file.open(QIODevice::Append | QIODevice::Text))
-	{
-		hOutDebug(0,"Failed to open file " << mLogFileName.toStdString());
-		return ;
-	}
-	QTextStream out(&file);
-
 	QTextDocument *oldDocument = QTextEdit::document();
-	QTextBlock block = oldDocument->begin();
-	while(block != oldDocument->end())
+	if (mSaveLog || menuCommand)
 	{
-		out << block.text().toAscii().data() << "\n";
-		block=block.next();
-	}
+		QFile file(mLogFileName);
 
-	if (writeSep)
-	{
-        getTimeStamp(true);
-		QTextDocument *newBlock = new QTextDocument(this);
-		QTextEdit::setDocument(newBlock);
-		QString sepLine = "---------------- log was saved at ";
-		sepLine += mTimeStamp;
-		sepLine += "-------------------------";
-		QTextEdit::append(sepLine);
+		if (!file.open(QIODevice::Append | QIODevice::Text))
+		{
+			hOutDebug(0,"Failed to open file " << mLogFileName.toStdString());
+			return ;
+		}
+		QTextStream out(&file);
+
+		QTextBlock block = oldDocument->begin();
+		while(block != oldDocument->end())
+		{
+			out << block.text().toAscii().data() << "\n";
+			block=block.next();
+		}
+
+		if (!menuCommand)
+		{
+			getTimeStamp(true);
+			QString sepLine = "---------------- log was saved at ";
+			sepLine += mTimeStamp;
+			sepLine += "-------------------------";
+			QTextEdit::append(sepLine);
+		}
 	}
+	oldDocument->clear();
+	QTextDocument *newBlock = new QTextDocument(this);
+	QTextEdit::setDocument(newBlock);
+	oldDocument->setParent(NULL);
+}
+
+void PlainLogWidget::preferencesChanged()
+{
+	mLogFileLines = Preferences::getInstance().logFileLines(); // might have been updated
 }
 
 LogWidget::LogWidget(QWidget * parent)
@@ -271,8 +280,14 @@ bool LogWidget::isOSLog()
     return (mTabWidget->currentIndex() == 1);
 }
 
-void LogWidget::writeToFile(bool writeSep)
+void LogWidget::writeToFile(bool menuCommand)
 {
-	mLogs[cHercIndex]->writeToFile(writeSep);
-	mLogs[cOsIndex]->writeToFile(writeSep);
+	for_each_log
+		current_log->writeToFile(menuCommand);
+}
+
+void LogWidget::preferencesChanged()
+{
+	for_each_log
+		current_log->preferencesChanged();
 }

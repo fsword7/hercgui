@@ -49,17 +49,14 @@ private:
 
 
 public slots:
-  void okPressed();
-  void cancelPressed();
-  void hercDirPressed();
-  void configDirPressed();
-  void logsDirPressed();
+	void okPressed();
+	void cancelPressed();
+	void hercDirPressed();
+	void configDirPressed();
+	void logsDirPressed();
 
 signals:
-  void fontChanged();
-  void mipsChanged();
-  void pswChanged();
-  void themeChanged();
+	void preferencesChanged();
 };
 
 #endif // PREFERENCESWIN_H

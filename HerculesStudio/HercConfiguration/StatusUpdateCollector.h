@@ -27,7 +27,7 @@
 #ifndef STATUSUPDATECOLLECTOR_H_
 #define STATUSUPDATECOLLECTOR_H_
 
-#include <string>
+#include <QString>
 
 class StatusUpdateCollector
 {
@@ -35,7 +35,7 @@ public:
   StatusUpdateCollector();
   virtual ~StatusUpdateCollector();
 
-  virtual bool notify(const std::string& ) = 0;
+  virtual bool notify(const QString& ) = 0;
 };
 
 #endif /* STATUSUPDATECOLLECTOR_H_ */

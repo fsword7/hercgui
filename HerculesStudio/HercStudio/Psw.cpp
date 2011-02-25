@@ -41,7 +41,7 @@ Psw::Psw( Psw::PswMode mode, QMainWindow * mainWindow)
 	setStatusBar();
 	mActive = false;
 	mLine.reserve(100);
-	mLine.assign(100,' ');
+	mLine = QString(100,' ');
 	setGeometry(0,0,1200,12);
 }
 
@@ -50,11 +50,11 @@ Psw::~Psw()
 
 }
 
-bool Psw::notify(const std::string& statusLine)
+bool Psw::notify(const QString& statusLine)
 {
 	if (!mActive)
 		return false;
-	if (statusLine.compare(0,4,"SYS=") == 0)
+	if (statusLine.startsWith("SYS="))
     {
         if (statusLine[4] == '1')
         	mSys->setText("SYS");
@@ -63,23 +63,23 @@ bool Psw::notify(const std::string& statusLine)
 		return true;
     }
 	//STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M.W..... instcount=0
-	if (statusLine.compare(0,7,"STATUS=") != 0 || statusLine.length() < 63)
+	if (!statusLine.startsWith("STATUS=") || statusLine.length() < 63)
 		return false;
 	if (mMode == Psw::Docked)
 	{
-		mLine.replace(0,46, &statusLine.c_str()[7], 46);
-		mLine.replace(48,statusLine.length()-56, &statusLine[63]);
-		setText(&mLine[0]);
+		mLine.replace(0,46, statusLine[7]);
+		mLine.replace(48,statusLine.length()-56, statusLine[63]);
+		setText(mLine);
 	}
 	else 
 	{
-		mCpu->setText(statusLine.substr(7,43).c_str());
-		mInstCount->setText(statusLine.substr(62).c_str());
-		if (statusLine.c_str()[54] == 'M')
+		mCpu->setText(statusLine.mid(7,43));
+		mInstCount->setText(statusLine.mid(62,1));
+		if (statusLine[54] == 'M')
 			mMan->setText("MAN");
 		else
 			mMan->setText("   ");
-		if (statusLine.c_str()[56] == 'W')
+		if (statusLine[56] == 'W')
 			mWait->setText("WAIT");
 		else
 			mWait->setText("    ");
@@ -159,8 +159,8 @@ void Psw::setDormant()
 void Psw::standby(bool full)
 {
 	mActive = true;
-	if (mMode == Psw::StatusBar)
+	//if (mMode == Psw::StatusBar)
 	{
-	setStatusVisible(true, full);
+		setStatusVisible(true, full);
 	}
 }

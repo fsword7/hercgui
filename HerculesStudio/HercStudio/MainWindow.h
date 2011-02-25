@@ -113,6 +113,11 @@ private:
 
     void 				testGui();
     void  				connectMainPanel();
+	void				fontChanged();
+	void				mipsChanged();
+	void				pswChanged();
+	void				themeChanged();
+
 
 public slots:
     void powerOn();
@@ -162,10 +167,7 @@ public slots:
 
     void writeToLogFromQueue();
     void writeToLog(QString line);
-    void fontChanged();
-    void mipsChanged();
-    void pswChanged();
-    void themeChanged();
+	void preferencesChanged();
     void dispatchStatus();
     void newCommand();
     void herculesEndedSlot();
@@ -177,7 +179,7 @@ public slots:
 	void tryAbort();
     void systrayClick(QSystemTrayIcon::ActivationReason);
     void systrayHint();
-    void recoverDevices(std::string& statusLine);
+    void recoverDevices(QString& statusLine);
 };
 
 #endif // MAINWINDOW_H

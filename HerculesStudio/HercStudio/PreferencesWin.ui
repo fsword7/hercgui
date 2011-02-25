@@ -607,7 +607,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Autosave log upon exit</string>
+      <string>Autosave log</string>
      </property>
     </widget>
     <widget class="QCheckBox" name="splitLogCheckbox">
@@ -633,7 +633,7 @@
       </rect>
      </property>
      <property name="maximum">
-      <number>1000000</number>
+      <number>100000000</number>
      </property>
      <property name="singleStep">
       <number>100</number>

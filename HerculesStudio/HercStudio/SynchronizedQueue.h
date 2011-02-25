@@ -27,21 +27,23 @@
 #ifndef SYNCHRONIZEDQUEUE_H_
 #define SYNCHRONIZEDQUEUE_H_
 #include <QMutex>
-#include <string>
+#include <QString>
 #include <list>
 
-typedef std::list<std::string> HercQueue;
+typedef std::list<QString> HercQueue;
 
 class SynchronizedQueue
 {
 public:
-  SynchronizedQueue();
-  virtual ~SynchronizedQueue();
+	SynchronizedQueue();
+	virtual ~SynchronizedQueue();
 
-  bool            empty ( ) const;
-  std::string&    front ( ) ;
-  void            pop_front ( );
-  void            push_back(const std::string& charBuff);
+	bool            empty ( ) const;
+	QString&        front ( ) ;
+	void            pop_front ( );
+	void            push_back(const QString& charBuff);
+	int				size( );
+	void            clear( );
 
 private:
     HercQueue   mQueue;

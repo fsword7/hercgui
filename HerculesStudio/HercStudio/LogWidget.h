@@ -45,7 +45,8 @@ public:
 	virtual void append(const QString & text);
 	virtual QString toPlainText();
 	virtual bool isOSLog();
-	virtual void writeToFile(bool writeSep);
+	virtual void writeToFile(bool menuCommand);
+	virtual void preferencesChanged();
 
 protected:
 
@@ -54,6 +55,7 @@ protected:
 	char mTimeStamp[64];
 	int  mLogFileLines;
     QString mLogFileName;
+	bool mSaveLog;
 };
 
 
@@ -78,6 +80,7 @@ public:
 	virtual QString toPlainText();
 	virtual bool isOSLog();
 	virtual void writeToFile(bool WriteSep);
+	virtual void preferencesChanged();
 
 private:
 	const int cHercIndex;

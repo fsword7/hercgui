@@ -27,8 +27,8 @@
 #include "NamedPipe.h"
 #include "Preferences.h"
 
-LogRunner::LogRunner(SynchronizedQueue& logQueue, HerculesExecutor * herculesExecutor)
-: Runner(logQueue), mHerculesExecutor(herculesExecutor)
+LogRunner::LogRunner(SynchronizedQueue& logQueue, HerculesExecutor * herculesExecutor, int maxQueueSize)
+: Runner(logQueue), mHerculesExecutor(herculesExecutor), mMaxQueueSize(maxQueueSize)
 {
 }
 
@@ -66,6 +66,8 @@ void LogRunner::run()
         buff[strlen(buff)-1] = '\0'; // remove CR
         mQueue.push_back(buff);
         emit newData();
+        while (mQueue.size() > mMaxQueueSize) // do not flood the queue
+        	QThread::msleep(100); // yield
     }
 #endif
 }

@@ -223,30 +223,30 @@ void MainPanelClassic::standby()
     ((PanelButton *)mPowerOnButton)->replaceButton(iconsPath + "/powerononu.gif", iconsPath + "/poweronond.gif");
 }
 
-bool MainPanelClassic::notify(const std::string& statusLine)
+bool MainPanelClassic::notify(const QString& statusLine)
 {
     bool ret = true;
-    if (statusLine.compare(0,4,"SYS=") == 0)
+    if (statusLine.startsWith("SYS="))
     {
-        char sysVal = statusLine[4];
+        QChar sysVal = statusLine[4];
         if (sysVal == '1')
             mSys->setPixmap(*mYellowHigh);
         else
             mSys->setPixmap(*mYellowLow);
 
     }
-    else if (statusLine.compare(0,5,"LOAD=") == 0)
+    else if (statusLine.startsWith("LOAD="))
     {
-        char sysVal = statusLine[4];
+        QChar sysVal = statusLine[4];
         if (sysVal == '1')
             mLoad->setPixmap(*mYellowHigh);
         else
             mLoad->setPixmap(*mYellowLow);
 
     }
-    else if (statusLine.compare(0,5,"MIPS=") == 0)
+    else if (statusLine.startsWith("MIPS="))
     {
-        double d = atof(statusLine.c_str()+5);
+        double d = statusLine.mid(5).toDouble();
         if (d > mMipsHWM)
         {
             mMipsHWM = d;
@@ -257,7 +257,7 @@ bool MainPanelClassic::notify(const std::string& statusLine)
         mMips->display(d);
     }
     //STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M.W..... instcount=0
-    else if ( (statusLine.compare(0,7,"STATUS=") == 0) && (statusLine.length() > 56) )
+    else if ( (statusLine.startsWith("STATUS=")) && (statusLine.length() > 56) )
     {
       if (statusLine[54] == 'M')
         mMan->setPixmap(*mYellowHigh);

@@ -150,10 +150,7 @@ void PreferencesWin::okPressed()
     mPreferences->setLogFileLines( ui.memLines->value() );
 
 	mPreferences->write();
-	emit fontChanged();
-	emit mipsChanged();
-	emit pswChanged();
-	emit themeChanged();
+	emit preferencesChanged();
 	close();
 }
 

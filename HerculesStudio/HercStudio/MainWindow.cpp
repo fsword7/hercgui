@@ -187,7 +187,10 @@ MainWindow::MainWindow(QWidget *parent)
     mPswDock->setWidget(mPsw);
     addDockWidget(Qt::BottomDockWidgetArea,mPswDock );
     this->tabifyDockWidget(mPswDock,mBottomDock);
-    mPswDock->setVisible(false);
+    if (Preferences::getInstance().pswMode() == Psw::Docked)
+    	mPswDock->setVisible(true);
+    else
+    	mPswDock->setVisible(false);
     mPsw->setDormant();
 
     if( (Preferences::getInstance().regs(Preferences::ViewGR32)) ) editView32BitGr();
@@ -312,6 +315,15 @@ void MainWindow::writeToLog(QString line)
     mLogWindow->append(line);
 }
 
+void MainWindow::preferencesChanged()
+{
+	fontChanged();
+	mipsChanged();
+	pswChanged();
+	themeChanged();
+	mLogWindow->preferencesChanged();
+}
+
 void MainWindow::fontChanged()
 {
     std::string fontName = Preferences::getInstance().fontName(Preferences::LogFontObject);
@@ -365,13 +377,12 @@ void MainWindow::themeChanged()
 
 void MainWindow::writeToLogFromQueue()
 {
-
-    while (!mLogQueue.empty())
+    if (!mLogQueue.empty())
     {
-        std::string& s = mLogQueue.front();
-        if (!s.empty())
+        QString& s = mLogQueue.front();
+        if (!s.isEmpty())
         {
-        	mLogWindow->append(s.c_str());
+        	mLogWindow->append(s);
         }
         mLogQueue.pop_front();
     }
@@ -381,9 +392,9 @@ void MainWindow::dispatchStatus()
 {
     while (!mStatusQueue.empty())
     {
-        std::string& statusLine = mStatusQueue.front();
-        hOutDebug(1, "writeToDevice:" << statusLine << std::endl);
-        if (!statusLine.empty())
+        QString& statusLine = mStatusQueue.front();
+        hOutDebug(1, "writeToDevice:" << statusLine.toAscii().data() << std::endl);
+        if (!statusLine.isEmpty())
         {
             if (statusLine[0] == 'D')
             {
@@ -418,9 +429,9 @@ void MainWindow::dispatchStatus()
     }
 }
 
-void MainWindow::recoverDevices(std::string& statusLine)
+void MainWindow::recoverDevices(QString& statusLine)
 {
-    if (statusLine.substr(0,5) == "DEVX=") return;
+    if (statusLine.left(5) == "DEVX=") return;
 	if (statusLine[4] == 'X')
 	{
 		if ( mDevicesRecoveryCommenced )
@@ -434,7 +445,7 @@ void MainWindow::recoverDevices(std::string& statusLine)
 		}
 		return;
 	}
-	statusLine = "DEVA=" + statusLine.substr(4);
+	statusLine = "DEVA=" + statusLine.mid(4);
 }
 
 void MainWindow::newCommand()
@@ -609,16 +620,16 @@ void MainWindow::editView64BitFr()
 
 void MainWindow::editViewPSW()
 {
-	bool newVal = !mPsw->isActive();
-	ui.actionView_PSW->setChecked(newVal);
+	bool newVal = (ui.actionView_PSW->isChecked());
 	Preferences::getInstance().setRegs(Preferences::ViewPsw, newVal);
+	if (newVal)
+		mPsw->standby(Preferences::getInstance().theme() == Preferences::Modern);
+	else
+		mPsw->setDormant();
 	if (Preferences::getInstance().pswMode() == Psw::Docked)
 	{
 		mPswDock->setVisible(newVal);
 	}
-
-
-
  }
 
 void MainWindow::deleteMessages()
@@ -641,7 +652,7 @@ void MainWindow::deleteMessages()
 
 void MainWindow::saveMessages()
 {
-	mLogWindow->writeToFile(false);
+	mLogWindow->writeToFile(true);
 	return;
 }
 
@@ -650,10 +661,7 @@ void MainWindow::preferences()
     if (mPreferences == NULL)
         mPreferences = &Preferences::getInstance();
     PreferencesWin * pw = new PreferencesWin(mCurrentPath.toStdString(), mPreferences, this);
-    connect(pw, SIGNAL(fontChanged()), this, SLOT(fontChanged()));
-    connect(pw, SIGNAL(mipsChanged()), this, SLOT(mipsChanged()));
-    connect(pw, SIGNAL(pswChanged()), this, SLOT(pswChanged()));
-    connect(pw, SIGNAL(themeChanged()), this, SLOT(themeChanged()));
+    connect(pw, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
     pw->exec();
 }
 
@@ -729,7 +737,7 @@ void MainWindow::powerOn()
     NamedPipe::getInstance().generatePid(getpid(), herculesPid);
 #endif
 
-    mLogRunner = new LogRunner(mLogQueue, mHerculesExecutor);
+    mLogRunner = new LogRunner(mLogQueue, mHerculesExecutor, Preferences::getInstance().logFileLines());
     connect(mLogRunner, SIGNAL(newData()), this , SLOT(writeToLogFromQueue()));
     mLogRunner->start();
 

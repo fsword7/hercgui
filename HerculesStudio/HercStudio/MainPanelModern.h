@@ -48,7 +48,7 @@ public:
   void setLoadAddress(const char * devNo);
   void standby();
   void setDormant();
-  bool notify(const std::string& statusLine);
+  bool notify(const QString& statusLine);
   void switchMips();
   bool isStopped() const { return mStopped; };
   virtual void updateLcd(QLCDNumber * , int ){} // null function in this context
