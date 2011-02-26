@@ -183,7 +183,7 @@ MainWindow::MainWindow(QWidget *parent)
     // psw
     mPswDock = new QDockWidget("PSW", this);
     mPswDock->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    mPsw = new Psw(Preferences::getInstance().pswMode(), this);
+    mPsw = new Psw(this);
     mPswDock->setWidget(mPsw);
     addDockWidget(Qt::BottomDockWidgetArea,mPswDock );
     this->tabifyDockWidget(mPswDock,mBottomDock);
@@ -191,6 +191,7 @@ MainWindow::MainWindow(QWidget *parent)
     	mPswDock->setVisible(true);
     else
     	mPswDock->setVisible(false);
+    mPsw->setMode(Preferences::getInstance().pswMode());
     mPsw->setDormant();
 
     if( (Preferences::getInstance().regs(Preferences::ViewGR32)) ) editView32BitGr();
@@ -200,7 +201,8 @@ MainWindow::MainWindow(QWidget *parent)
     if( (Preferences::getInstance().regs(Preferences::ViewGR64)) ) editView64BitGr();
     if( (Preferences::getInstance().regs(Preferences::ViewCR64)) ) editView64BitCr();
     if( (Preferences::getInstance().regs(Preferences::ViewFR64)) ) editView64BitFr();
-    if( (Preferences::getInstance().regs(Preferences::ViewPsw)) ) editViewPSW();
+    ui.actionView_PSW->setChecked(Preferences::getInstance().regs(Preferences::ViewPsw));
+    editViewPSW();
 
     QString path = Environment::getIconsPath().c_str();
     outDebug(3,std::cout << "icons=" << path.toStdString() << std::endl);
@@ -620,12 +622,9 @@ void MainWindow::editView64BitFr()
 
 void MainWindow::editViewPSW()
 {
-	bool newVal = (ui.actionView_PSW->isChecked());
+	bool newVal = ui.actionView_PSW->isChecked();
 	Preferences::getInstance().setRegs(Preferences::ViewPsw, newVal);
-	if (newVal)
-		mPsw->standby(Preferences::getInstance().theme() == Preferences::Modern);
-	else
-		mPsw->setDormant();
+	mPsw->setVisible(newVal, Preferences::getInstance().theme() == Preferences::Modern);
 	if (Preferences::getInstance().pswMode() == Psw::Docked)
 	{
 		mPswDock->setVisible(newVal);
@@ -758,7 +757,7 @@ void MainWindow::powerOn()
     mCommandLine->setReadOnly(false);
 
     mMainPanel->standby();
-    mPsw->standby(Preferences::getInstance().theme() == Preferences::Modern);
+    mPsw->standby();
     this->setWindowTitle((mConfigFile->getFileName() + " - Hercules Studio").c_str());
 #ifndef hFramework
     if (mRecovery)

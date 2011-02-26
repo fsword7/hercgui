@@ -30,16 +30,17 @@
 #include <QStatusBar>
 #include <iostream>
 
-Psw::Psw( Psw::PswMode mode, QMainWindow * mainWindow)
-: mHasStatusBar(false), mCpu(NULL)
+Psw::Psw( QMainWindow * mainWindow)
+: mVisible(false), mCpu(NULL)
 {
 	mMainWindow = mainWindow;
-	mMode = mode;
+	mMode = Preferences::getInstance().pswMode();
 	mFontCourier = new QFont("Mono",10);
 
 	setFont();
 	setStatusBar();
 	mActive = false;
+	setStatusVisible(false,false);
 	mLine.reserve(100);
 	mLine = QString(100,' ');
 	setGeometry(0,0,1200,12);
@@ -52,7 +53,7 @@ Psw::~Psw()
 
 bool Psw::notify(const QString& statusLine)
 {
-	if (!mActive)
+	if (!mActive || !mVisible)
 		return false;
 	if (statusLine.startsWith("SYS="))
     {
@@ -67,14 +68,14 @@ bool Psw::notify(const QString& statusLine)
 		return false;
 	if (mMode == Psw::Docked)
 	{
-		mLine.replace(0,46, statusLine[7]);
-		mLine.replace(48,statusLine.length()-56, statusLine[63]);
+		mLine.replace(0,46, statusLine.mid(7,46));
+		mLine.replace(48,statusLine.length()-56, statusLine.mid(63,statusLine.length()-56));
 		setText(mLine);
 	}
 	else 
 	{
 		mCpu->setText(statusLine.mid(7,43));
-		mInstCount->setText(statusLine.mid(62,1));
+		mInstCount->setText(statusLine.mid(62));
 		if (statusLine[54] == 'M')
 			mMan->setText("MAN");
 		else
@@ -103,7 +104,7 @@ void Psw::setMode(Psw::PswMode mode)
 {
 	mMode = mode;
 	setStatusBar();
-    setStatusVisible(!(mMode == Docked), Preferences::getInstance().theme() == Preferences::Modern);
+    setStatusVisible(mVisible, Preferences::getInstance().theme() == Preferences::Modern);
 }
 
 void Psw::setStatusBar()
@@ -138,29 +139,35 @@ void Psw::setStatusBar()
 		mInstCount->setFont(*mFontCourier);
 		mInstCount->setFrameStyle(QFrame::StyledPanel | QFrame::NoFrame);
 		mMainWindow->statusBar()->addWidget(mInstCount);
-  }
+	}
 }
 
 void Psw::setStatusVisible(bool visible, bool modern)
 {
-	mCpu->setVisible(visible);
+	mCpu->setVisible((mMode != Docked) && visible);
 	mSys->setVisible(visible && modern);
 	mWait->setVisible(visible && modern);
 	mMan->setVisible(visible && modern);
-	mInstCount->setVisible(visible && modern);
+	mInstCount->setVisible((mMode != Docked) && visible);
+	mVisible = visible;
+}
+
+void Psw::setVisible(bool visible, bool modern)
+{
+	setStatusVisible(visible, modern);
+}
+
+bool Psw::visible()
+{
+	return mVisible;
 }
 
 void Psw::setDormant()
 {
 	mActive = false;
-	setStatusVisible(false, false);
 }
 
-void Psw::standby(bool full)
+void Psw::standby()
 {
 	mActive = true;
-	//if (mMode == Psw::StatusBar)
-	{
-		setStatusVisible(true, full);
-	}
 }

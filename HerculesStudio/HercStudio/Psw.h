@@ -41,15 +41,17 @@ public:
 		Docked = 0,
 		StatusBar
 	};
-	Psw( PswMode mode, QMainWindow * mainWindow );
+	Psw( QMainWindow * mainWindow );
 	virtual ~Psw();
 
 	virtual bool notify(const QString& );
 	void setFont();
 	inline bool isActive() const { return mActive; } ;
 	void setMode(PswMode mode);
-    void standby(bool full);
+    void standby();
     void setDormant();
+    virtual void setVisible(bool visible, bool modern);
+    virtual bool visible();
 
 private:
 	void setStatusBar();
@@ -58,8 +60,9 @@ private:
     void setStatusVisible(bool visible, bool modern);
 
 	QString  mLine;
+	bool mHasStatusBar;
+	bool mVisible;
 	bool mActive;
-  bool mHasStatusBar;
 	QMainWindow * mMainWindow;
 	Psw::PswMode mMode;
 	QLabel * mCpu;
