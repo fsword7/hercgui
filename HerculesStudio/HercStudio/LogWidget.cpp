@@ -162,7 +162,6 @@ void PlainLogWidget::writeToFile(bool menuCommand)
 	oldDocument->clear();
 	QTextDocument *newBlock = new QTextDocument(this);
 	QTextEdit::setDocument(newBlock);
-	oldDocument->setParent(NULL);
 }
 
 void PlainLogWidget::preferencesChanged()

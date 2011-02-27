@@ -31,7 +31,7 @@
 #include <iostream>
 
 Psw::Psw( QMainWindow * mainWindow)
-: mVisible(false), mCpu(NULL)
+: mHasStatusBar(false), mVisible(false), mCpu(NULL)
 {
 	mMainWindow = mainWindow;
 	mMode = Preferences::getInstance().pswMode();
