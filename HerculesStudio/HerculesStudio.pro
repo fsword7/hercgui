@@ -114,7 +114,7 @@ FORMS += HercConfiguration/CardReaderProperties.ui \
          HercStudio/helpabout.ui \
          HercStudio/IplConfig.ui \
          HercStudio/MainWindow.ui \
-         HercStudio/preferenceswin.ui \
+         HercStudio/PreferencesWin.ui \
          HercStudio/Recovery.ui \
          HercUtilities/Dasdcat.ui \
          HercUtilities/Dasdconv.ui \
