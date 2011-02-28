@@ -30,10 +30,10 @@
 #include <QStatusBar>
 #include <iostream>
 
-Psw::Psw( QMainWindow * mainWindow)
+Psw::Psw( QStatusBar * statusBar)
 : mHasStatusBar(false), mVisible(false), mCpu(NULL)
 {
-	mMainWindow = mainWindow;
+	mStatusBar = statusBar;
 	mMode = Preferences::getInstance().pswMode();
 	mFontCourier = new QFont("Mono",10);
 
@@ -111,34 +111,33 @@ void Psw::setStatusBar()
 {
 	if (!mHasStatusBar)
     {
-		mMainWindow->setStatusBar(new QStatusBar());
 		mHasStatusBar = true;
 
-		mCpu = new QLabel("        ", mMainWindow->statusBar());
+		mCpu = new QLabel("        ", mStatusBar);
 		mCpu->setMinimumWidth(400);
 		mCpu->setFont(*mFontCourier);
 		mCpu->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-		mMainWindow->statusBar()->addWidget(mCpu);
+		mStatusBar->addWidget(mCpu);
 
-		mSys = new QLabel("   ", mMainWindow->statusBar());
+		mSys = new QLabel("   ", mStatusBar);
 		mSys->setFont(*mFontCourier);
 		mSys->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-		mMainWindow->statusBar()->addWidget(mSys);
+		mStatusBar->addWidget(mSys);
 
-		mWait = new QLabel("    ", mMainWindow->statusBar());
+		mWait = new QLabel("    ", mStatusBar);
 		mWait->setFont(*mFontCourier);
 		mWait->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-		mMainWindow->statusBar()->addWidget(mWait);
+		mStatusBar->addWidget(mWait);
 
-		mMan = new QLabel("   ", mMainWindow->statusBar());
+		mMan = new QLabel("   ", mStatusBar);
 		mMan->setFont(*mFontCourier);
 		mMan->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-		mMainWindow->statusBar()->addWidget(mMan);
+		mStatusBar->addWidget(mMan);
 
-		mInstCount = new QLabel("        ", mMainWindow->statusBar());
+		mInstCount = new QLabel("        ", mStatusBar);
 		mInstCount->setFont(*mFontCourier);
 		mInstCount->setFrameStyle(QFrame::StyledPanel | QFrame::NoFrame);
-		mMainWindow->statusBar()->addWidget(mInstCount);
+		mStatusBar->addWidget(mInstCount);
 	}
 }
 

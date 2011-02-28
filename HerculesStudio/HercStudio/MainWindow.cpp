@@ -183,7 +183,7 @@ MainWindow::MainWindow(QWidget *parent)
     // psw
     mPswDock = new QDockWidget("PSW", this);
     mPswDock->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    mPsw = new Psw(this);
+    mPsw = new Psw(this->statusBar());
     mPswDock->setWidget(mPsw);
     addDockWidget(Qt::BottomDockWidgetArea,mPswDock );
     this->tabifyDockWidget(mPswDock,mBottomDock);

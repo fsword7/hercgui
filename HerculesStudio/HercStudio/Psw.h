@@ -31,7 +31,7 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QMainWindow>
+#include <QStatusBar>
 
 class Psw: public StatusUpdateCollector, public QLabel
 {
@@ -41,7 +41,7 @@ public:
 		Docked = 0,
 		StatusBar
 	};
-	Psw( QMainWindow * mainWindow );
+	Psw( QStatusBar * statusBar );
 	virtual ~Psw();
 
 	virtual bool notify(const QString& );
@@ -63,7 +63,7 @@ private:
 	bool mHasStatusBar;
 	bool mVisible;
 	bool mActive;
-	QMainWindow * mMainWindow;
+	QStatusBar * mStatusBar;
 	Psw::PswMode mMode;
 	QLabel * mCpu;
 	QLabel * mInstCount;
