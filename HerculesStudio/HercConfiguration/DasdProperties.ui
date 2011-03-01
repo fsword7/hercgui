@@ -170,14 +170,6 @@
      <height>391</height>
     </rect>
    </property>
-   <property name="toolTip">
-    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;syncio enables possible 'synchronous' i/o. This is a dasd i/o feature wherein guest i/o requests are completed &quot;synchronously&quot; during the actual emulated execution of the SIO/SSCH (start-i/o / start subchannel) instruction rather than being deferred and executed asynchronously in a separate device i/o thread. &lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Only i/o which are known to be able to be completed without actually needing to perform any actual host i/o are completed synchronously (e.g. whenever the data being requested is found to already be in cache). If the requested data is not found in the cache, then an actual host i/o will need to be done and the request is passed to a device i/o thread to be completed asyncronously instead. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
    <property name="title">
     <string>Parameters</string>
    </property>

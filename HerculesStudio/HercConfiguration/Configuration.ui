@@ -82,6 +82,9 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;When z/Arch or ESAME is specified, the machine will always IPL in ESA/390mode, but is capable of being switched into z/Architecture mode after IPL.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This is handled automatically by all z/Architecture operating systems. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
+      <property name="title">
+       <string>Type</string>
+      </property>
       <widget class="QRadioButton" name="s370Button">
        <property name="geometry">
         <rect>
@@ -2810,7 +2813,7 @@ p, li { white-space: pre-wrap; }
       </rect>
      </property>
      <property name="title">
-      <string/>
+      <string>O/S Tailor</string>
      </property>
      <widget class="QGroupBox" name="groupBox_6">
       <property name="geometry">
@@ -3129,7 +3132,7 @@ p, li { white-space: pre-wrap; }
       </rect>
      </property>
      <property name="title">
-      <string>GroupBox</string>
+      <string>Details</string>
      </property>
      <widget class="QSpinBox" name="httpPortSpin">
       <property name="geometry">
@@ -3589,7 +3592,7 @@ p, li { white-space: pre-wrap; }
       </rect>
      </property>
      <property name="title">
-      <string>GroupBox</string>
+      <string>Parameters</string>
      </property>
      <widget class="QSpinBox" name="sysepochSpin">
       <property name="geometry">

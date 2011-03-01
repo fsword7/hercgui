@@ -37,11 +37,6 @@
       <height>24</height>
      </rect>
     </property>
-    <property name="toolTip">
-     <string>LCS - An emulated Lan Channel Station Adapter. This emulation mode appears to the operating system running in the Hercules machine as an IBM 8232 LCS device, an IBM 2216 router, a 3172 running ICP (Interconnect Communications Program), the LCS3172 driver of a P/390, or an IBM Open Systems Adapter. 
-CTC - A point-to-point IP connection with the TCP/IP stack of the driving system on which Hercules is running
-CTCT - An emulated CTCA to another Hercules system</string>
-    </property>
     <item>
      <property name="text">
       <string>LCS</string>
