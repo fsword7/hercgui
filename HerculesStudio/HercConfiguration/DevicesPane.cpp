@@ -63,7 +63,8 @@ DevicesPane::~DevicesPane()
 
 bool DevicesPane::notify(const QString& statusLine)
 {
-    struct DynDeviceLine * line = (DynDeviceLine *)statusLine.toAscii().data();
+	const QByteArray txtLine(statusLine.toAscii());   // note: this does not copy the array, since QByteArrays are shared. See Qt docs.
+    const struct DynDeviceLine * line = reinterpret_cast<const DynDeviceLine *>(txtLine.data());
     hOutDebug(1,"devices notify:" << line << "." << std::endl);
     int devNo;
     VisualizedDeviceEntry deviceEntry;
