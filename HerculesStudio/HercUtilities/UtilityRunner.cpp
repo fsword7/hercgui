@@ -62,7 +62,7 @@ void UtilityRunner::updateStatus(const std::string& line)
 
     if (word == "HHCDU044I") // dasdinit
     {
-        QString qline(line.c_str());
+        QByteArray qline(line.c_str());
         emit error(qline);
         int i = line.find(":") + 2;
         int cyls = ConfigurationEditor::parseNum(line.substr(i),10);
@@ -151,7 +151,7 @@ void UtilityRunner::updateStatus(const std::string& line)
     }
     else
     {
-        QString qline(line.c_str());
+        QByteArray qline(line.c_str());
         emit error(qline);
     }
 }

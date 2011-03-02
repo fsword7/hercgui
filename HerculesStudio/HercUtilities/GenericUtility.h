@@ -60,11 +60,11 @@ private slots:
 	void timeout();
 	void finished(int result, QProcess::ExitStatus status);
 	void errorSlot();
-	void runnerError(const QString& line);
+	void runnerError(const QByteArray& line);
 
 signals:
 	void error();
-	void output(QString line);
+	void output(QByteArray line);
 };
 
 #endif /* GENERICUTILITY_H_ */

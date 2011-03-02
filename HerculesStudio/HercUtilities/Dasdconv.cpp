@@ -120,7 +120,7 @@ void Dasdconv::runClicked()
 
     connect(mRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
     connect(mRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(mRunner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    connect(mRunner, SIGNAL(error(QByteArray)), this, SLOT(runnerError(QByteArray)));
     connect(mErrorRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
     connect(mErrorRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
     ui.runButton->setText("Stop");

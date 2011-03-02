@@ -42,7 +42,7 @@ class PlainLogWidget : public QTextEdit
 {
 public:
 	PlainLogWidget(QWidget * parent, const char * suffix="");
-	virtual void append(const QString & text);
+	virtual void append(const QByteArray & text);
 	virtual QString toPlainText();
 	virtual bool isOSLog();
 	virtual void writeToFile(bool menuCommand);
@@ -76,7 +76,7 @@ public:
 	virtual bool empty();
 	virtual void clear();
 
-	virtual void append(const QString & text);
+	virtual void append(const QByteArray & text);
 	virtual QString toPlainText();
 	virtual bool isOSLog();
 	virtual void writeToFile(bool WriteSep);

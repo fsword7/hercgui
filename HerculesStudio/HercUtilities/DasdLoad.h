@@ -49,12 +49,8 @@ private slots:
     void runClicked();
     void runnerMaximumChanged(int maximum);
     void runnerValueChanged(int value);
-    void runnerError(const QString& errorLine);
     void browseCtlClicked();
     void browseOutClicked();
-
-signals:
-    void output(QString line);
 };
 
 #endif // DASDLOAD_H

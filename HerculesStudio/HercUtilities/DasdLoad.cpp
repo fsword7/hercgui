@@ -110,10 +110,10 @@ void DasdLoad::runClicked()
 
     connect(runner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
     connect(runner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runner, SIGNAL(error(QString)), this, SLOT(errorRunner(QString)));
+    connect(runner, SIGNAL(error(QByteArray)), this, SLOT(errorRunner(QByteArray)));
     connect(errorRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
     connect(errorRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(errorRunner, SIGNAL(error(QString)), this, SLOT(errorRunner(QString)));
+    connect(errorRunner, SIGNAL(error(QByteArray)), this, SLOT(errorRunner(QByteArray)));
     ui.runButton->setText("Stop");
 }
 
@@ -140,29 +140,6 @@ void DasdLoad::runnerValueChanged(int value)
         ui.progressBar->setValue(value);
     else
         ui.progressBar->setValue(ui.progressBar->maximum());
-}
-
-void DasdLoad::runnerError(const QString& line)
-{
-    Tokenizer::handle pos, lastPos;
-    std::string word = StringTokenizer::getFirstWord(line.toStdString(), pos, lastPos, " \t\n");
-    outDebug(3, std::cout << "runnerError " << word << std::endl);
-    if (word.compare(0,5,"IPOS=") == 0)
-        return;
-    if (word == "HHCDL016I")
-    {
-        emit output(line);
-        ui.progressBar->setValue(ui.progressBar->maximum());
-        if (mEnded)
-            return;
-        mEnded = true;
-        QMessageBox::information(this, "dasdload", "Disk creation successfully completed!",
-                QMessageBox::Ok,
-                QMessageBox::NoButton);
-        ui.runButton->setText("Run");
-        return;
-    }
-    emit output(line);
 }
 
 

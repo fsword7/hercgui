@@ -166,7 +166,7 @@ public slots:
 	void hetmap();
 
     void writeToLogFromQueue();
-    void writeToLog(QString line);
+	void writeToLog(QByteArray line);
 	void preferencesChanged();
     void dispatchStatus();
     void newCommand();
@@ -179,7 +179,7 @@ public slots:
 	void tryAbort();
     void systrayClick(QSystemTrayIcon::ActivationReason);
     void systrayHint();
-    void recoverDevices(QString& statusLine);
+    void recoverDevices(QByteArray& statusLine);
 };
 
 #endif // MAINWINDOW_H

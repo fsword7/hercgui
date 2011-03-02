@@ -40,12 +40,12 @@ bool SynchronizedQueue::empty() const
     return mQueue.empty();
 }
 
-QString& SynchronizedQueue::front()
+QByteArray& SynchronizedQueue::front()
 {
     return mQueue.front();
 }
 
-void SynchronizedQueue::push_back(const QString& str)
+void SynchronizedQueue::push_back(const QByteArray& str)
 {
     QMutexLocker lock(&mMutex);
     mQueue.push_back(str);

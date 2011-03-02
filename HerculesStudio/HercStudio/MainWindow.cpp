@@ -311,10 +311,10 @@ void MainWindow::connectMainPanel()
     connect(mMainPanel, SIGNAL(stopClicked()), this , SLOT(stop()));
 }
 
-void MainWindow::writeToLog(QString line)
+void MainWindow::writeToLog(QByteArray line)
 {
-    line.remove("\n");
-    mLogWindow->append(line);
+	line.replace("\n","");
+	mLogWindow->append(line);
 }
 
 void MainWindow::preferencesChanged()
@@ -381,7 +381,7 @@ void MainWindow::writeToLogFromQueue()
 {
     if (!mLogQueue.empty())
     {
-        QString& s = mLogQueue.front();
+        QByteArray& s = mLogQueue.front();
         if (!s.isEmpty())
         {
         	mLogWindow->append(s);
@@ -394,8 +394,8 @@ void MainWindow::dispatchStatus()
 {
     while (!mStatusQueue.empty())
     {
-        QString& statusLine = mStatusQueue.front();
-        hOutDebug(1, "writeToDevice:" << statusLine.toAscii().data() << std::endl);
+        QByteArray& statusLine = mStatusQueue.front();
+        hOutDebug(1, "writeToDevice:" << statusLine.data() << std::endl);
         if (!statusLine.isEmpty())
         {
             if (statusLine[0] == 'D')
@@ -431,7 +431,7 @@ void MainWindow::dispatchStatus()
     }
 }
 
-void MainWindow::recoverDevices(QString& statusLine)
+void MainWindow::recoverDevices(QByteArray& statusLine)
 {
     if (statusLine.left(5) == "DEVX=") return;
 	if (statusLine[4] == 'X')
@@ -905,98 +905,98 @@ void MainWindow::stop()
 void MainWindow::dasdinit()
 {
     DasdInit * dasdinit = new DasdInit(this);
-    connect(dasdinit, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    connect(dasdinit, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
     dasdinit->exec();
 }
 
 void MainWindow::dasdload()
 {
     DasdLoad * dasdload = new DasdLoad(this);
-    connect(dasdload, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    connect(dasdload, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
     dasdload->exec();
 }
 
 void MainWindow::dasdisup()
 {
     DasdIsup * dasdisup = new DasdIsup(this);
-    connect(dasdisup, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    connect(dasdisup, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
     dasdisup->exec();
 }
 
 void MainWindow::dasdls()
 {
     Dasdls * dasdls = new Dasdls(this);
-    connect(dasdls, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    connect(dasdls, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
     dasdls->exec();
 }
 
 void MainWindow::dasdcat()
 {
     Dasdcat * dasdcat = new Dasdcat(this);
-    connect(dasdcat, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    connect(dasdcat, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
     dasdcat->exec();
 }
 
 void MainWindow::dasdconv()
 {
     Dasdconv * dasdconv = new Dasdconv(this);
-    connect(dasdconv, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    connect(dasdconv, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
     dasdconv->exec();
 }
 
 void MainWindow::dasdcopy()
 {
     Dasdcopy * dasdcopy = new Dasdcopy(this);
-    connect(dasdcopy, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    connect(dasdcopy, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
     dasdcopy->exec();
 }
 
 void MainWindow::tapemap()
 {
     TapeMap * tapemap = new TapeMap(this);
-    connect(tapemap, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    connect(tapemap, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
     tapemap->exec();
 }
 
 void MainWindow::tapecopy()
 {
     TapeCopy * tapecopy = new TapeCopy(this);
-    connect(tapecopy, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+    connect(tapecopy, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
     tapecopy->exec();
 }
 
 void MainWindow::tapesplit()
 {
 	TapeSplt * tapesplit = new TapeSplt(this);
-	connect(tapesplit, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	connect(tapesplit, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	tapesplit->exec();
 }
 
 void MainWindow::hetinit()
 {
 	HetInit * hetinit = new HetInit(this);
-	connect(hetinit, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	connect(hetinit, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	hetinit->exec();
 }
 
 void MainWindow::hetget()
 {
 	HetGet * hetget = new HetGet(this);
-	connect(hetget, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	connect(hetget, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	hetget->exec();
 }
 
 void MainWindow::hetupd()
 {
 	HetUpd * hetupd = new HetUpd(this);
-	connect(hetupd, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	connect(hetupd, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	hetupd->exec();
 }
 
 void MainWindow::hetmap()
 {
 	HetMap * hetmap = new HetMap(this);
-	connect(hetmap, SIGNAL(output(QString)), this , SLOT(writeToLog(QString)));
+	connect(hetmap, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	hetmap->exec();
 }
 

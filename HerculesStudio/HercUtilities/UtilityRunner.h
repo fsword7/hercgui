@@ -43,7 +43,7 @@ public:
 signals:
     void valueChanged(int value);
     void maximumChanged(int maximum);
-    void error(QString errorLine);
+    void error(QByteArray errorLine);
 
 private:
     UtilityExecutor * mUtilityExecutor;

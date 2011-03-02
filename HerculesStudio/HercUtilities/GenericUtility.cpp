@@ -82,8 +82,8 @@ int GenericUtility::execute(const std::string & command, const std::string& path
     connect(mExecutor->getQProcess(),SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(finished(int, QProcess::ExitStatus)));
 
     // connect to default handlers (superclass can override these slots)
-    connect(mRunner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
-    connect(mErrorRunner, SIGNAL(error(QString)), this, SLOT(runnerError(QString)));
+    connect(mRunner, SIGNAL(error(QByteArray)), this, SLOT(runnerError(QByteArray)));
+    connect(mErrorRunner, SIGNAL(error(QByteArray)), this, SLOT(runnerError(QByteArray)));
 
     // general error status handler
     connect(this, SIGNAL(error()), this, SLOT(errorSlot()));
@@ -100,7 +100,7 @@ void GenericUtility::finished(int result, QProcess::ExitStatus status)
 	mFinished = true;
 	mRc = result;
 	mFinishedOK = ( (status==QProcess::NormalExit) && (mRc == 0) );
-	QString rcLine = mName + " ended; rc=";
+	QByteArray rcLine = mName.toAscii() + " ended; rc=";
 	rcLine += QString::number(result);
 	emit output(rcLine);
 	finishedSlot();
@@ -115,7 +115,7 @@ void GenericUtility::errorSlot()
     deleteLater();
 }
 
-void GenericUtility::runnerError(const QString& line)
+void GenericUtility::runnerError(const QByteArray& line)
 {
     emit output(line);
 }

@@ -72,7 +72,7 @@ void PlainLogWidget::setLogFileName (QString& suffix)
 	mLogFileName += ".log";
 }
 
-void PlainLogWidget::append(const QString & text)
+void PlainLogWidget::append(const QByteArray & text)
 {
     if (Preferences::getInstance().logTimestamp())
     {
@@ -80,22 +80,22 @@ void PlainLogWidget::append(const QString & text)
     }
     else
         mTimeStamp[0] = '\0';
-    QString s = text;
-    if (text.toAscii().data()[0] == '<')
-    s = text.mid(24);
+    QByteArray s = text;
+    if (text.data()[0] == '<')
+		s = text.mid(24);
 
     QColor green(10,120,10), yellow(215,201,45), red(240,20,20);
     QColor keepC = textColor();
-    if (text.left(3).compare(QString("HHC")) == 0)
+    if (strncmp(text.data(),"HHC",3) == 0)
     {
-		if (text.mid(8,1).compare(QString("I")) == 0)
+		if (text[8] == 'I')
 			setTextColor(green);
-		else if (text.mid(8,1).compare(QString("W")) == 0)
+		else if (text.mid(8,1) =="W")
 			setTextColor(yellow);
-		else if (text.mid(8,1).compare(QString("E")) == 0)
+		else if (text.mid(8,1) =="E")
 			setTextColor(red);
 	}
-	QTextEdit::append(mTimeStamp + s);
+	QTextEdit::append(QByteArray(mTimeStamp) + s);
 	setTextColor(keepC);
 	if (QTextEdit::document()->blockCount()%mLogFileLines == 0)
 	{
@@ -121,7 +121,7 @@ void PlainLogWidget::getTimeStamp(bool withDate)
 
 QString PlainLogWidget::toPlainText()
 {
-    return QTextEdit::toPlainText();
+	return QTextEdit::toPlainText();
 }
 
 bool PlainLogWidget::isOSLog()
@@ -210,7 +210,7 @@ void LogWidget::setReadOnly(bool ro)
         current_log->setReadOnly(ro);
 }
 
-void LogWidget::append(const QString & text)
+void LogWidget::append(const QByteArray & text)
 {
     if (Preferences::getInstance().logTimestamp())
     {
@@ -218,27 +218,27 @@ void LogWidget::append(const QString & text)
     }
     else
         mTimeStamp[0] ='\0';
-    QString s = text;
-    if (text.toAscii().data()[0] == '<')
+    QByteArray s = text;
+    if (text.data()[0] == '<')
         s = text.mid(24);
-    if (s.left(3).compare("HHC") != 0)
+    if (strncmp(text.data(),"HHC",3) == 0)
     {
-        mLogs[cOsIndex]->append(mTimeStamp + s);
+        mLogs[cOsIndex]->append(QByteArray(mTimeStamp) + s);
     }
     else
     {
         QColor green(10,120,10), yellow(215,201,45), red(240,20,20);
         QColor keepC = mLogs[cHercIndex]->textColor();
-        if (text.left(3).compare(QString("HHC")) == 0)
+        if (strncmp(text.data(),"HHC",3) == 0)
         {
-            if (text.mid(8,1).compare(QString("I")) == 0)
+            if (text[8] == 'I')
                 mLogs[cHercIndex]->setTextColor(green);
-            else if (text.mid(8,1).compare(QString("W")) == 0)
+            else if (text[8] == 'W')
                 mLogs[cHercIndex]->setTextColor(yellow);
-            else if (text.mid(8,1).compare(QString("E")) == 0)
+            else if (text[8] == 'E')
                 mLogs[cHercIndex]->setTextColor(red);
         }
-        mLogs[cHercIndex]->append(mTimeStamp + s);
+        mLogs[cHercIndex]->append(QByteArray(mTimeStamp) + s);
         mLogs[cHercIndex]->setTextColor(keepC);
     }
 }
