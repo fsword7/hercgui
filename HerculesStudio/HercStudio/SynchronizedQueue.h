@@ -28,9 +28,9 @@
 #define SYNCHRONIZEDQUEUE_H_
 #include <QMutex>
 #include <QByteArray>
-#include <list>
+#include <deque>
 
-typedef std::list<QByteArray> HercQueue;
+typedef std::deque<QByteArray> HercQueue;
 
 class SynchronizedQueue
 {
