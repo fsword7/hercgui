@@ -51,7 +51,7 @@ Psw::~Psw()
 
 }
 
-bool Psw::notify(const QString& statusLine)
+bool Psw::notify(const QByteArray& statusLine)
 {
 	if (!mActive || !mVisible)
 		return false;

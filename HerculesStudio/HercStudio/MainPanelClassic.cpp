@@ -223,7 +223,7 @@ void MainPanelClassic::standby()
     ((PanelButton *)mPowerOnButton)->replaceButton(iconsPath + "/powerononu.gif", iconsPath + "/poweronond.gif");
 }
 
-bool MainPanelClassic::notify(const QString& statusLine)
+bool MainPanelClassic::notify(const QByteArray& statusLine)
 {
     bool ret = true;
     if (statusLine.startsWith("SYS="))

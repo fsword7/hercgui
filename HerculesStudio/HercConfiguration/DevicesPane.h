@@ -76,7 +76,7 @@ public:
     DevicesPane(QWidget *parent = 0);
     virtual ~DevicesPane();
 
-    virtual bool	notify(const QString& statusLine);
+	virtual bool	notify(const QByteArray& statusLine);
     void 			clear();
 
 public slots:

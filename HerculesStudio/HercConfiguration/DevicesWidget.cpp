@@ -29,7 +29,6 @@
 #include "Environment.h"
 
 #include <QMouseEvent>
-#include <QList>
 #include <QMessageBox>
 #include <QHeaderView>
 

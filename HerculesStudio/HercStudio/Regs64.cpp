@@ -73,7 +73,7 @@ void Regs64::setFont()
     mLine7.setGeometry(fontSize*36,3*(fontSize+2),fontSize*35,fontSize+2);
     mLine8.setGeometry(fontSize*36,4*(fontSize+2),fontSize*35,fontSize+2);
 }
-bool Regs64::notify(const QString& statusLine)
+bool Regs64::notify(const QByteArray& statusLine)
 {
 	if (statusLine.length() < 2)
 	{

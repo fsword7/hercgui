@@ -35,7 +35,7 @@ public:
   StatusUpdateCollector();
   virtual ~StatusUpdateCollector();
 
-  virtual bool notify(const QString& ) = 0;
+  virtual bool notify(const QByteArray& ) = 0;
 };
 
 #endif /* STATUSUPDATECOLLECTOR_H_ */

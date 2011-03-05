@@ -61,10 +61,9 @@ DevicesPane::~DevicesPane()
 	delete mYellowHighIcon;
 }
 
-bool DevicesPane::notify(const QString& statusLine)
+bool DevicesPane::notify(const QByteArray& statusLine)
 {
-	const QByteArray txtLine(statusLine.toAscii());   // note: this does not copy the array, since QByteArrays are shared. See Qt docs.
-    const struct DynDeviceLine * line = reinterpret_cast<const DynDeviceLine *>(txtLine.data());
+	const struct DynDeviceLine * line = reinterpret_cast<const DynDeviceLine *>(statusLine.data());
     hOutDebug(1,"devices notify:" << line << "." << std::endl);
     int devNo;
     VisualizedDeviceEntry deviceEntry;
@@ -98,7 +97,7 @@ bool DevicesPane::notify(const QString& statusLine)
 
                     devNo =  strtol(line->devNo, NULL, 16);
                     {
-                    VisualizedDeviceEntry& deviceEntryPtr = *new VisualizedDeviceEntry(devNo, devType, statusLine.toStdString());
+					VisualizedDeviceEntry& deviceEntryPtr = *new VisualizedDeviceEntry(devNo, devType, statusLine.data());
                     std::pair<int,VisualizedDeviceEntry> toinsert(devNo, deviceEntryPtr);
                     mDevices.insert(toinsert);
                     deviceAdded = true;

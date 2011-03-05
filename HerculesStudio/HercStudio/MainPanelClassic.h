@@ -47,7 +47,7 @@ public:
   void setLoadAddress(const char * devNo);
   void standby();
   void setDormant();
-  bool notify(const QString& statusLine);
+  bool notify(const QByteArray& statusLine);
   void switchMips();
   bool isStopped() const;
   virtual void updateLcd(QLCDNumber * lcd, int inc);

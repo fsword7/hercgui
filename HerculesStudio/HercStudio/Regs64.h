@@ -37,7 +37,7 @@ public:
 
 	void setFont();
 	void setActive(bool active);
-	bool notify(const QString& statusLine);
+	bool notify(const QByteArray& statusLine);
 	static std::string gCommand;
 	static std::string fCommand;
 	static std::string cCommand;

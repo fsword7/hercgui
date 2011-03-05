@@ -152,12 +152,12 @@ void MainPanelModern::standby()
     mMips->setVisible(true);
 }
 
-bool MainPanelModern::notify(const QString& statusLine)
+bool MainPanelModern::notify(const QByteArray& statusLine)
 {
 	bool ret = true;
     if (statusLine.startsWith("MIPS="))
     {
-        double d = atof(statusLine.toAscii().data()+5);
+		double d = atof(statusLine.data()+5);
         if (d > mMipsHWM)
         {
             mMipsHWM = d;

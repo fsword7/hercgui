@@ -83,7 +83,7 @@ void Regs32::setFont()
 
 }
 
-bool Regs32::notify(const QString& statusLine)
+bool Regs32::notify(const QByteArray& statusLine)
 {
 	if (statusLine.length() < 2)
 	{

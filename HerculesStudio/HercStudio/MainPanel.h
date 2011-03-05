@@ -64,7 +64,7 @@ public:
 
   virtual void standby()=0;
   virtual void setDormant()=0;
-  virtual bool notify(const QString& statusLine)=0;
+  virtual bool notify(const QByteArray& statusLine)=0;
   virtual void switchMips()=0;
   virtual int getLoadAddress()=0;
   virtual void setLoadAddress(const char * devNo)=0;

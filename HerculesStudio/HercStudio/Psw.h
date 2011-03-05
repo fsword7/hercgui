@@ -44,7 +44,7 @@ public:
 	Psw( QStatusBar * statusBar );
 	virtual ~Psw();
 
-	virtual bool notify(const QString& );
+	virtual bool notify(const QByteArray& );
 	void setFont();
 	inline bool isActive() const { return mActive; } ;
 	void setMode(PswMode mode);
