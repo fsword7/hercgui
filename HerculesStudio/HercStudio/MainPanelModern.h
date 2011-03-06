@@ -44,8 +44,6 @@ class MainPanelModern : public MainPanel
 public:
   MainPanelModern(QWidget *parent = 0);
   virtual ~MainPanelModern();
-  int getLoadAddress();
-  void setLoadAddress(const char * devNo);
   void standby();
   void setDormant();
   bool notify(const QByteArray& statusLine);
@@ -86,7 +84,6 @@ private:
     QLabel      *mLoadText;
     QLabel      *mPSW;
 
-  QLCDNumber *mLcd0, *mLcd1, *mLcd2, *mLcd3;
   ClickLabel *mDial0, *mDial1, *mDial2, *mDial3;
 
   Mips *mMips;

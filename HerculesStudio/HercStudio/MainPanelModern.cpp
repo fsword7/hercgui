@@ -38,6 +38,10 @@ MainPanelModern::MainPanelModern(QWidget *parent)
 : MainPanel(parent)
 {
 	setupUi(parent);
+	mLcd0 = new QLCDNumber(1,this); mLcd0->setVisible(false);
+	mLcd1 = new QLCDNumber(1,this); mLcd1->setVisible(false);
+	mLcd2 = new QLCDNumber(1,this); mLcd2->setVisible(false);
+	mLcd3 = new QLCDNumber(1,this); mLcd3->setVisible(false);
 	mStopped=true;
 	doConnect();
 }
@@ -114,27 +118,6 @@ void MainPanelModern::resizeEvent(QResizeEvent * )
 
     mPSW->setGeometry(width-550,110,48*12,12);
 
-}
-
-int MainPanelModern::getLoadAddress()
-{
-    return mLcd0->intValue() + 16*mLcd1->intValue() +
-        (16*16)*mLcd2->intValue() + (16*16*16)*mLcd3->intValue();
-}
-
-void MainPanelModern::setLoadAddress(const char *devNo)
-{
-	if (Preferences::getInstance().theme() == Preferences::Modern)
-		return;
-
-	int addr = ConfigurationEditor::parseNum(devNo,16);
-	QLCDNumber *nums[4] = {mLcd0, mLcd1, mLcd2, mLcd3};
-	for (int i=0; i< 4; i++)
-	{
-		int dig = addr%16;
-		addr /= 16;
-		nums[i]->display(dig);
-	}
 }
 
 void MainPanelModern::setDormant()

@@ -29,7 +29,6 @@
 #include "Preferences.h"
 #include "MipsLed.h"
 #include "MipsGauge.h"
-#include "ConfigurationEditor.h"
 
 #include <sstream>
 
@@ -191,23 +190,6 @@ void MainPanelClassic::updateLcd(QLCDNumber * lcd, int inc)
     outDebug(5, std::cout << "update " << lcd->intValue() << std::endl);
 }
 
-int MainPanelClassic::getLoadAddress()
-{
-    return mLcd0->intValue() + 16*mLcd1->intValue() +
-        (16*16)*mLcd2->intValue() + (16*16*16)*mLcd3->intValue();
-}
-
-void MainPanelClassic::setLoadAddress(const char *devNo)
-{
-    int addr = ConfigurationEditor::parseNum(devNo,16);
-    QLCDNumber *nums[4] = {mLcd0, mLcd1, mLcd2, mLcd3};
-    for (int i=0; i< 4; i++)
-    {
-        int dig = addr%16;
-        addr /= 16;
-        nums[i]->display(dig);
-    }
-}
 
 void MainPanelClassic::setDormant()
 {

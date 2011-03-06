@@ -27,6 +27,7 @@
 #include "MainPanelClassic.h"
 #include "Preferences.h"
 #include "Environment.h"
+#include "ConfigurationEditor.h"
 
 #include <QResizeEvent>
 #include <QColor>
@@ -111,3 +112,22 @@ void ClickLabel::mousePressEvent(QMouseEvent * event)
 {
     mPanel->updateLcd((QLCDNumber*)(mLcd), event->x() > 30 ? 1 : -1); 
 }
+
+int MainPanel::getLoadAddress()
+{
+	return mLcd0->intValue() + 16*mLcd1->intValue() +
+		(16*16)*mLcd2->intValue() + (16*16*16)*mLcd3->intValue();
+}
+
+void MainPanel::setLoadAddress(const char *devNo)
+{
+	int addr = ConfigurationEditor::parseNum(devNo,16);
+	QLCDNumber *nums[4] = {mLcd0, mLcd1, mLcd2, mLcd3};
+	for (int i=0; i< 4; i++)
+	{
+		int dig = addr%16;
+		addr /= 16;
+		nums[i]->display(dig);
+	}
+}
+

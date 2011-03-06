@@ -50,20 +50,21 @@ void LogRunner::run()
             SLOT(readStandardOutput()));
     return;
 #else
-    FILE * logFile = NamedPipe::getInstance().getHerculesLogfile();
-    char buff[512];
+	QFile& logFile = NamedPipe::getInstance().getHerculesLogfile();
+	QByteArray buff;
     mRunning = true;
 
     while(mRunning)
     {
-        if (fgets(buff,500,logFile) == NULL)
-        {
+		buff = logFile.readLine(512);
+		if (buff.isEmpty())
+		{
             mQueue.push_back("logger ended");
             emit newData();
             QThread::sleep(100);
             break;
         }
-        buff[strlen(buff)-1] = '\0'; // remove CR
+		buff[buff.size()-1] = '\0';
         mQueue.push_back(buff);
         emit newData();
         while (mQueue.size() > mMaxQueueSize) // do not flood the queue

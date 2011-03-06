@@ -218,14 +218,14 @@ FILE * NamedPipe::getHerculesStdout()
     return mStdout;
 }
 
-FILE * NamedPipe::getHerculesLogfile()
+QFile& NamedPipe::getHerculesLogfile()
 {
-    if (mStdoutInput == NULL)
-    {
-        if (mStdoutInput == NULL)
-            mStdoutInput = fopen(mFifo1.c_str(),"r");
-    }
-    return mStdoutInput;
+	if (mStdoutInput == NULL)
+	{
+		mStdoutInput = new QFile(mFifo1.c_str());
+		mStdoutInput->open(QIODevice::ReadOnly);
+	}
+	return *mStdoutInput;
 }
 
 FILE * NamedPipe::getHerculesStderr()
@@ -237,14 +237,15 @@ FILE * NamedPipe::getHerculesStderr()
     return mStderr;
 }
 
-FILE * NamedPipe::getHerculesStatus()
+QFile&  NamedPipe::getHerculesStatus()
 {
     if (mStderrInput == NULL)
     {
-        mStderrInput = fopen(mFifo2.c_str(),"r");
+		mStderrInput =  new QFile(mFifo2.c_str());
+		mStderrInput->open(QIODevice::ReadOnly);
     }
 
-    return mStderrInput;
+	return *mStderrInput;
 }
 
 std::string NamedPipe::getHerculesCommandline()

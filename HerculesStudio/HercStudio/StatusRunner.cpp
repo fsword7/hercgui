@@ -48,19 +48,20 @@ void StatusRunner::run()
 			SLOT(readStandardError()));
 	return;
 #else
-	FILE * statusFile = NamedPipe::getInstance().getHerculesStatus();
-	char buff[512];
+	QFile& statusFile = NamedPipe::getInstance().getHerculesStatus();
+	QByteArray buff;
 	mRunning = true;
 	while(mRunning)
 	{
-		if (fgets(buff,512,statusFile) == NULL)
+		buff = statusFile.readLine(512);
+		if (buff.isEmpty())
 		{
 			emit newData();
 			break;
 		}
-	if (buff[0]) buff[strlen(buff)-1] = '\0'; // remove CR
-	mQueue.push_back(buff);
-	emit newData();
+		buff[buff.size()-1] = '\0';
+		mQueue.push_back(buff);
+		emit newData();
 	}
 #endif
 }

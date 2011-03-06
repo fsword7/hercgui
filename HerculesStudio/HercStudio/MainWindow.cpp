@@ -366,12 +366,15 @@ void MainWindow::pswChanged()
 
 void MainWindow::themeChanged()
 {
+	QByteArray loadAddress =
+			QByteArray::number(mMainPanel->getLoadAddress(),16); // preserve
 	mMainPanel->close();
 	delete mMainPanel;
 	if (Preferences::getInstance().theme() == Preferences::Classic)
 		mMainPanel = new MainPanelClassic(this);
 	else
 		mMainPanel = new MainPanelModern(this);
+	mMainPanel->setLoadAddress(loadAddress);	// restore ipl address
 	if (mHerculesActive) mMainPanel->standby();
 	mTopDock->setWidget(mMainPanel);
 	connectMainPanel();

@@ -28,6 +28,7 @@
 #define NAMEDPIPE_H_
 
 #include <QMutex>
+#include <QFile>
 
 #include <string>
 #include <cstdio>
@@ -44,10 +45,10 @@ public:
 
     FILE * getHerculesStdin();
     FILE * getHerculesCommandsFile();
-    FILE * getHerculesStdout();
-    FILE * getHerculesLogfile();
+	FILE * getHerculesStdout();
+	QFile& getHerculesLogfile();
     FILE * getHerculesStderr();
-    FILE * getHerculesStatus();
+	QFile& getHerculesStatus();
 
 private:
     static NamedPipe sInstance;
@@ -61,11 +62,11 @@ private:
     int delDir(std::string& path);
 
     QMutex      mMutex;
-    FILE * mStdinOutput;
-    FILE * mStdout;
-    FILE * mStdoutInput;
-    FILE * mStderr;
-    FILE * mStderrInput;
+	FILE *  mStdinOutput;
+	FILE *  mStdout;
+	QFile * mStdoutInput;
+	FILE *  mStderr;
+	QFile * mStderrInput;
 
 
 protected:

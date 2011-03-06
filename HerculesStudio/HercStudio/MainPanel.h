@@ -66,8 +66,8 @@ public:
   virtual void setDormant()=0;
   virtual bool notify(const QByteArray& statusLine)=0;
   virtual void switchMips()=0;
-  virtual int getLoadAddress()=0;
-  virtual void setLoadAddress(const char * devNo)=0;
+  virtual int getLoadAddress();
+  virtual void setLoadAddress(const char * devNo);
   virtual bool isStopped()const = 0;
   virtual void updateLcd(QLCDNumber * lcd, int inc)=0;
 
@@ -103,6 +103,7 @@ protected:
 
     QPixmap     *mYellowLow;
     QPixmap     *mYellowHigh;
+	QLCDNumber *mLcd0, *mLcd1, *mLcd2, *mLcd3;
 
 public slots:
   void powerOnClickedSlot();
