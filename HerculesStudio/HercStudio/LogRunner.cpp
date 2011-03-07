@@ -52,19 +52,21 @@ void LogRunner::run()
 #else
 	QFile& logFile = NamedPipe::getInstance().getHerculesLogfile();
 	QByteArray buff;
+	buff.resize(512);
     mRunning = true;
 
     while(mRunning)
     {
-		buff = logFile.readLine(512);
-		if (buff.isEmpty())
+		int size;
+		if ((size = logFile.readLine(buff.data(),512)) <= 0)
 		{
             mQueue.push_back("logger ended");
             emit newData();
             QThread::sleep(100);
             break;
         }
-		buff[buff.size()-1] = '\0';
+
+		buff[size-1] = '\0';
         mQueue.push_back(buff);
         emit newData();
         while (mQueue.size() > mMaxQueueSize) // do not flood the queue

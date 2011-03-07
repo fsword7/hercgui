@@ -50,16 +50,17 @@ void StatusRunner::run()
 #else
 	QFile& statusFile = NamedPipe::getInstance().getHerculesStatus();
 	QByteArray buff;
+	buff.resize(512);
 	mRunning = true;
 	while(mRunning)
 	{
-		buff = statusFile.readLine(512);
-		if (buff.isEmpty())
+		int size;
+		if ((size = statusFile.readLine(buff.data(),512)) <= 0)
 		{
 			emit newData();
 			break;
 		}
-		buff[buff.size()-1] = '\0';
+		buff[size-1] = '\0';
 		mQueue.push_back(buff);
 		emit newData();
 	}
