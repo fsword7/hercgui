@@ -47,15 +47,18 @@ public:
 	virtual bool isOSLog();
 	virtual void writeToFile(bool menuCommand);
 	virtual void preferencesChanged();
+	virtual void setIpled(bool ipled);
 
 protected:
 
-	void getTimeStamp(bool withDate);
-    void setLogFileName (QString& suffix);
-	char mTimeStamp[64];
-	int  mLogFileLines;
-    QString mLogFileName;
-	bool mSaveLog;
+	void  getTimeStamp(bool withDate);
+	void  setLogFileName (QString& suffix);
+	char  mTimeStamp[64];
+	int   mLogFileLines;
+	bool  mIpled;
+	bool  mSaveLog;
+	QString mLogFileName;
+	QColor mGreen, mYellow, mRed;
 };
 
 
@@ -81,6 +84,7 @@ public:
 	virtual bool isOSLog();
 	virtual void writeToFile(bool WriteSep);
 	virtual void preferencesChanged();
+	virtual void setIpled(bool ipled);
 
 private:
 	const int cHercIndex;
@@ -88,6 +92,7 @@ private:
 	QTabWidget * mTabWidget;
 	PlainLogWidget * mLogs[2];
 	int	mActive;
+	bool mIpled;
 };
 
 #endif /* LOGSWIDGET_H_ */

@@ -46,16 +46,18 @@
 
 
 #define for_each_log \
-    for (int for_loop_i=0; for_loop_i<2; for_loop_i++)
+	for (int for_loop_i=0; for_loop_i<2; for_loop_i++)
 #define current_log mLogs[for_loop_i]
 
 PlainLogWidget::PlainLogWidget(QWidget * parent, const char * suffix)
-:QTextEdit(parent)
+:QTextEdit(parent),  mGreen(10,120,10), mYellow(215,201,45), mRed(240,20,20)
+
 {
 	mSaveLog = Preferences::getInstance().autosaveLog();
 	mLogFileLines = Preferences::getInstance().logFileLines();
 	QString parm(suffix);
 	setLogFileName(parm);
+	mIpled = false;
 }
 
 void PlainLogWidget::setLogFileName (QString& suffix)
@@ -68,32 +70,31 @@ void PlainLogWidget::setLogFileName (QString& suffix)
 	{
 		mLogFileName += ".";
 		mLogFileName += suffix;
-  	}
+	}
 	mLogFileName += ".log";
 }
 
 void PlainLogWidget::append(const QByteArray & text)
 {
-    if (Preferences::getInstance().logTimestamp())
-    {
-        getTimeStamp(false);
-    }
-    else
-        mTimeStamp[0] = '\0';
-    QByteArray s = text;
-    if (text.data()[0] == '<')
+	if (Preferences::getInstance().logTimestamp())
+	{
+		getTimeStamp(false);
+	}
+	else
+		mTimeStamp[0] = '\0';
+	QByteArray s = text;
+	if (text.data()[0] == '<')
 		s = text.mid(24);
 
-    QColor green(10,120,10), yellow(215,201,45), red(240,20,20);
-    QColor keepC = textColor();
-    if (strncmp(text.data(),"HHC",3) == 0)
-    {
+	QColor keepC = textColor();
+	if (strncmp(text.data(),"HHC",3) == 0)
+	{
 		if (text[8] == 'I')
-			setTextColor(green);
+			setTextColor(mGreen);
 		else if (text.mid(8,1) =="W")
-			setTextColor(yellow);
+			setTextColor(mYellow);
 		else if (text.mid(8,1) =="E")
-			setTextColor(red);
+			setTextColor(mRed);
 	}
 	QTextEdit::append(QByteArray(mTimeStamp) + s);
 	setTextColor(keepC);
@@ -105,18 +106,18 @@ void PlainLogWidget::append(const QByteArray & text)
 
 void PlainLogWidget::getTimeStamp(bool withDate)
 {
-    struct tm *current;
-    time_t now;
-    time(&now);
-    current = localtime(&now);
+	struct tm *current;
+	time_t now;
+	time(&now);
+	current = localtime(&now);
 
-    if (withDate)
-    	strftime(mTimeStamp, 255, "%Y-%m-%d-%H-%M-%S", current);
-    else
-    {
-    	strftime(mTimeStamp, 255, "%H:%M:%S", current); //"%m-%d-%y %H:%M:%S"
-    	memcpy(mTimeStamp+8, " ", 2);
-    }
+	if (withDate)
+		strftime(mTimeStamp, 255, "%Y-%m-%d-%H-%M-%S", current);
+	else
+	{
+		strftime(mTimeStamp, 255, "%H:%M:%S", current); //"%m-%d-%y %H:%M:%S"
+		memcpy(mTimeStamp+8, " ", 2);
+	}
 }
 
 QString PlainLogWidget::toPlainText()
@@ -126,7 +127,7 @@ QString PlainLogWidget::toPlainText()
 
 bool PlainLogWidget::isOSLog()
 {
-    return false;
+	return false;
 }
 
 void PlainLogWidget::writeToFile(bool menuCommand)
@@ -169,25 +170,24 @@ void PlainLogWidget::preferencesChanged()
 	mLogFileLines = Preferences::getInstance().logFileLines(); // might have been updated
 }
 
+void PlainLogWidget::setIpled(bool ipled)
+{
+	mIpled = ipled;
+}
+
 LogWidget::LogWidget(QWidget * parent)
 : PlainLogWidget(NULL), cHercIndex(0), cOsIndex(1)
 {
-    mTabWidget = new QTabWidget(parent);
-    mLogs[cHercIndex] = new PlainLogWidget(this, "hercules");
-    mLogs[cOsIndex] = new PlainLogWidget(this, "os");
-    mTabWidget->addTab(mLogs[cHercIndex], "Hercules");
-    mTabWidget->addTab(mLogs[cOsIndex], "OS");
-    for_each_log
-    {
-        current_log->setReadOnly(true);
-        current_log->setVisible(true);
-    }
-    //const QColor black(0,0,0);
-    //const QColor white(255,255,255);
-    //QBrush blackBrush(black);
-    //QPalette blackPalette(white, black);
-    //mLogs[cOsIndex]->setPalette(blackPalette);
-    //mLogs[cOsIndex]->setAutoFillBackground(true);
+	mTabWidget = new QTabWidget(parent);
+	mLogs[cHercIndex] = new PlainLogWidget(this, "hercules");
+	mLogs[cOsIndex] = new PlainLogWidget(this, "os");
+	mTabWidget->addTab(mLogs[cHercIndex], "Hercules");
+	mTabWidget->addTab(mLogs[cOsIndex], "OS");
+	for_each_log
+	{
+		current_log->setReadOnly(true);
+		current_log->setVisible(true);
+	}
 }
 
 LogWidget::~LogWidget()
@@ -196,87 +196,86 @@ LogWidget::~LogWidget()
 
 QTabWidget * LogWidget::tabWidget()
 {
-    return mTabWidget;
+	return mTabWidget;
 }
 void LogWidget::clear()
 {
-    for_each_log
-        current_log->clear();
+	for_each_log
+		current_log->clear();
 }
 
 void LogWidget::setReadOnly(bool ro)
 {
-    for_each_log
-        current_log->setReadOnly(ro);
+	for_each_log
+		current_log->setReadOnly(ro);
 }
 
 void LogWidget::append(const QByteArray & text)
 {
-    if (Preferences::getInstance().logTimestamp())
-    {
-        getTimeStamp(false);
-    }
-    else
-        mTimeStamp[0] ='\0';
-    QByteArray s = text;
-    if (text.data()[0] == '<')
-        s = text.mid(24);
-    if (strncmp(text.data(),"HHC",3) == 0)
-    {
-        mLogs[cOsIndex]->append(QByteArray(mTimeStamp) + s);
-    }
-    else
-    {
-        QColor green(10,120,10), yellow(215,201,45), red(240,20,20);
-        QColor keepC = mLogs[cHercIndex]->textColor();
-        if (strncmp(text.data(),"HHC",3) == 0)
-        {
-            if (text[8] == 'I')
-                mLogs[cHercIndex]->setTextColor(green);
-            else if (text[8] == 'W')
-                mLogs[cHercIndex]->setTextColor(yellow);
-            else if (text[8] == 'E')
-                mLogs[cHercIndex]->setTextColor(red);
-        }
-        mLogs[cHercIndex]->append(QByteArray(mTimeStamp) + s);
-        mLogs[cHercIndex]->setTextColor(keepC);
-    }
+	if (Preferences::getInstance().logTimestamp())
+	{
+		getTimeStamp(false);
+	}
+	else
+		mTimeStamp[0] ='\0';
+	QByteArray s = text;
+	if (text.data()[0] == '<')
+		s = text.mid(24);
+	if (text.startsWith("HHC") || !mIpled)
+	{
+		QColor keepC = mLogs[cHercIndex]->textColor();
+		if (text.startsWith("HHC"))
+		{
+			if (text[8] == 'I')
+				mLogs[cHercIndex]->setTextColor(mGreen);
+			else if (text[8] == 'W')
+				mLogs[cHercIndex]->setTextColor(mYellow);
+			else if (text[8] == 'E')
+				mLogs[cHercIndex]->setTextColor(mRed);
+		}
+		mLogs[cHercIndex]->append(QByteArray(mTimeStamp) + s);
+		mLogs[cHercIndex]->setTextColor(keepC);
+	}
+	else
+	{
+		mLogs[cOsIndex]->append(QByteArray(mTimeStamp) + s);
+	}
 }
 
 void LogWidget::setFont(const QFont & font)
 {
-    for_each_log
-        current_log->setFont(font);
+	for_each_log
+		current_log->setFont(font);
 }
 
 void LogWidget::setTextBackgroundColor  (const QColor &color)
 {
-    for_each_log
-        current_log->setTextBackgroundColor(color);
+	for_each_log
+		current_log->setTextBackgroundColor(color);
 }
 
 void LogWidget::setTextColor  (const QColor &color)
 {
-    for_each_log
-        current_log->setTextColor(color);
+	for_each_log
+		current_log->setTextColor(color);
 }
 
 QString LogWidget::toPlainText()
 {
-    QString ret;
-    for_each_log
-        ret += current_log->toPlainText();
-    return ret;
+	QString ret;
+	for_each_log
+		ret += current_log->toPlainText();
+	return ret;
 }
 
 bool LogWidget::empty()
 {
-    return mLogs[cHercIndex]->document()->isEmpty() && mLogs[cOsIndex]->document()->isEmpty();
+	return mLogs[cHercIndex]->document()->isEmpty() && mLogs[cOsIndex]->document()->isEmpty();
 }
 
 bool LogWidget::isOSLog()
 {
-    return (mTabWidget->currentIndex() == 1);
+	return (mTabWidget->currentIndex() == 1);
 }
 
 void LogWidget::writeToFile(bool menuCommand)
@@ -290,3 +289,9 @@ void LogWidget::preferencesChanged()
 	for_each_log
 		current_log->preferencesChanged();
 }
+
+void LogWidget::setIpled(bool ipled)
+{
+	mIpled = ipled;
+}
+
