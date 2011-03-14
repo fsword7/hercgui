@@ -32,7 +32,6 @@
 #include "Preferences.h"
 #include "HerculesStudio.h"
 
-#include <QTextEdit>
 #include <QTabWidget>
 #include <QFile>
 #include <QTextBlock>
@@ -50,7 +49,7 @@
 #define current_log mLogs[for_loop_i]
 
 PlainLogWidget::PlainLogWidget(QWidget * parent, const char * suffix)
-:QTextEdit(parent),  mGreen(10,120,10), mYellow(215,201,45), mRed(240,20,20)
+:QTextEdit(parent),  mGreen(10,120,10), mYellow(215,201,45), mRed(240,20,20), mBlack(0,0,0)
 
 {
 	mSaveLog = Preferences::getInstance().autosaveLog();
@@ -87,7 +86,7 @@ void PlainLogWidget::append(const QByteArray & text)
 		s = text.mid(24);
 
 	QColor keepC = textColor();
-	if (strncmp(text.data(),"HHC",3) == 0)
+	if ((strncmp(text.data(),"HHC",3) == 0) || !mIpled)
 	{
 		if (text[8] == 'I')
 			setTextColor(mGreen);
@@ -96,6 +95,8 @@ void PlainLogWidget::append(const QByteArray & text)
 		else if (text.mid(8,1) =="E")
 			setTextColor(mRed);
 	}
+	else
+		setTextColor(mBlack);
 	QTextEdit::append(QByteArray(mTimeStamp) + s);
 	setTextColor(keepC);
 	if (QTextEdit::document()->blockCount()%mLogFileLines == 0)
@@ -188,6 +189,7 @@ LogWidget::LogWidget(QWidget * parent)
 		current_log->setReadOnly(true);
 		current_log->setVisible(true);
 	}
+	mIpled = false;
 }
 
 LogWidget::~LogWidget()
@@ -222,24 +224,9 @@ void LogWidget::append(const QByteArray & text)
 	if (text.data()[0] == '<')
 		s = text.mid(24);
 	if (text.startsWith("HHC") || !mIpled)
-	{
-		QColor keepC = mLogs[cHercIndex]->textColor();
-		if (text.startsWith("HHC"))
-		{
-			if (text[8] == 'I')
-				mLogs[cHercIndex]->setTextColor(mGreen);
-			else if (text[8] == 'W')
-				mLogs[cHercIndex]->setTextColor(mYellow);
-			else if (text[8] == 'E')
-				mLogs[cHercIndex]->setTextColor(mRed);
-		}
 		mLogs[cHercIndex]->append(QByteArray(mTimeStamp) + s);
-		mLogs[cHercIndex]->setTextColor(keepC);
-	}
 	else
-	{
 		mLogs[cOsIndex]->append(QByteArray(mTimeStamp) + s);
-	}
 }
 
 void LogWidget::setFont(const QFont & font)

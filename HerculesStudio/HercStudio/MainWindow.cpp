@@ -1003,10 +1003,6 @@ void MainWindow::hetmap()
 void MainWindow::herculesEndedSlot()
 {
 	std::cerr << "############ ended ##############" << std::endl;
-	if (Preferences::getInstance().autosaveLog())
-	{
-		saveMessages();
-	}
 	mLogWindow->setIpled(false);
 	mLogRunner->terminate();
 	mStatusRunner->terminate();

@@ -39,54 +39,53 @@ LogRunner::~LogRunner()
 
 void LogRunner::run()
 {
-    mQueue.push_back("logger started");
-    emit newData();
+	mQueue.push_back("logger started");
+	emit newData();
 
 #ifdef hFramework
-    mProcess = mHerculesExecutor->getQProcess();
-    connect(mProcess,
-            SIGNAL(readyReadStandardOutput()),
-            this,
-            SLOT(readStandardOutput()));
-    return;
+	mProcess = mHerculesExecutor->getQProcess();
+	connect(mProcess,
+			SIGNAL(readyReadStandardOutput()),
+			this,
+			SLOT(readStandardOutput()));
+	return;
 #else
 	QFile& logFile = NamedPipe::getInstance().getHerculesLogfile();
 	QByteArray buff;
 	buff.resize(512);
-    mRunning = true;
+	mRunning = true;
 
-    while(mRunning)
-    {
+	while(mRunning)
+	{
 		int size;
 		if ((size = logFile.readLine(buff.data(),512)) <= 0)
 		{
-            mQueue.push_back("logger ended");
-            emit newData();
-            QThread::sleep(100);
-            break;
-        }
+			mQueue.push_back("logger ended");
+			emit newData();
+			QThread::sleep(100);
+			break;
+		}
 
 		buff[size-1] = '\0';
-        mQueue.push_back(buff);
-        emit newData();
-        while (mQueue.size() > mMaxQueueSize) // do not flood the queue
-        	QThread::msleep(100); // yield
-    }
+		mQueue.push_back(buff);
+		emit newData();
+		while (mQueue.size() > mMaxQueueSize) // do not flood the queue
+			QThread::msleep(100); // yield
+	}
 #endif
 }
 
 #ifdef hFramework
 void LogRunner::readStandardOutput()
 {
-    mProcess->setReadChannel(QProcess::StandardOutput);
-    while (true)
-    {
-        QByteArray output = mProcess->readLine();
-        if (output.length() == 0) break;
-        output.replace("\n","\0");
-        output.replace("\r","\0");
-        mQueue.push_back(output.data());
-        emit newData();
-    }
+	mProcess->setReadChannel(QProcess::StandardOutput);
+	while (true)
+	{
+		QByteArray output = mProcess->readLine();
+		if (output.length() == 0) break;
+		output[output.length()-2]='\0';
+		mQueue.push_back(output.data());
+		emit newData();
+	}
 }
 #endif
