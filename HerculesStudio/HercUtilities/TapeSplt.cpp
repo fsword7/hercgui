@@ -34,12 +34,12 @@
 #include <csignal>
 
 TapeSplt::TapeSplt(QWidget *parent)
-    : GenericUtility("tapesplt",parent)
+	: GenericUtility("tapesplt",parent)
 {
-    ui.setupUi(this);
+	ui.setupUi(this);
 	ui.tableView->setEditTriggers(QTableView::NoEditTriggers);
-    connect(ui.runButton, SIGNAL(clicked()), this, SLOT(runClicked()));
-    connect(ui.exitButton, SIGNAL(clicked()), this, SLOT(cancelClicked()));
+	connect(ui.runButton, SIGNAL(clicked()), this, SLOT(runClicked()));
+	connect(ui.exitButton, SIGNAL(clicked()), this, SLOT(cancelClicked()));
 	connect(ui.inputSelButton, SIGNAL(clicked()), this, SLOT(selectInputClicked()));
 	connect(ui.addButton, SIGNAL(clicked()), this, SLOT(addClicked()));
 	connect(ui.deleteButton, SIGNAL(clicked()), this, SLOT(deleteClicked()));
@@ -55,56 +55,56 @@ TapeSplt::~TapeSplt()
 
 void TapeSplt::runClicked()
 {
-    if (!runOrStopClicked())
-    {
-        ui.runButton->setText("Run");
-        return;
-    }
+	if (!runOrStopClicked())
+	{
+		ui.runButton->setText("Run");
+		return;
+	}
 
-    if (ui.inputFile->text().isEmpty())
-    {
-        QMessageBox::warning(this, "tapesplt", "Please specify input file to process",
-                QMessageBox::Ok, QMessageBox::NoButton);
-        return;
-    }
-    if (!QFile::exists(ui.inputFile->text()))
-        {
-            QMessageBox::warning(this, "tapesplt", "The specified file does not exist",
-                    QMessageBox::Ok, QMessageBox::NoButton);
-            return;
-        }
+	if (ui.inputFile->text().isEmpty())
+	{
+		QMessageBox::warning(this, "tapesplt", "Please specify input file to process",
+				QMessageBox::Ok, QMessageBox::NoButton);
+		return;
+	}
+	if (!QFile::exists(ui.inputFile->text()))
+		{
+			QMessageBox::warning(this, "tapesplt", "The specified file does not exist",
+					QMessageBox::Ok, QMessageBox::NoButton);
+			return;
+		}
 
-    std::vector<std::string> parameters;
+	std::vector<std::string> parameters;
 
-    parameters.push_back(ui.inputFile->text().toStdString());
+	parameters.push_back(ui.inputFile->text().toStdString());
 
-    for (int i=0; i<mModel->rowCount(); i++)
-    {
-    	QModelIndex ix = mModel->index(i,0,QModelIndex());
-    	QString row = mModel->data(ix).toString();
-    	QString fileName = row.left(mMaxFile).trimmed();
-    	QString blocks = row.mid(mMaxFile);
-    	ui.inputFile->setText(fileName);
-    	parameters.push_back(fileName.toStdString());
-    	parameters.push_back(blocks.toStdString());
-    }
+	for (int i=0; i<mModel->rowCount(); i++)
+	{
+		QModelIndex ix = mModel->index(i,0,QModelIndex());
+		QString row = mModel->data(ix).toString();
+		QString fileName = row.left(mMaxFile).trimmed();
+		QString blocks = row.mid(mMaxFile);
+		ui.inputFile->setText(fileName);
+		parameters.push_back(fileName.toStdString());
+		parameters.push_back(blocks.toStdString());
+	}
 
-    std::string command = "tapesplt";
+	std::string command = "tapesplt";
 
-    execute(command, Preferences::getInstance().hercDir(), parameters);
-    ui.runButton->setText("Stop");
+	execute(command, Preferences::getInstance().hercDir(), parameters);
+	ui.runButton->setText("Stop");
 }
 
 
 void TapeSplt::cancelClicked()
 {
-    deleteLater();
+	deleteLater();
 }
 
 void TapeSplt::selectInputClicked()
 {
-    QString s = QFileDialog::getOpenFileName(this,"Browse for input tape file",ui.inputFile->text());
-    ui.inputFile->setText(s);
+	QString s = QFileDialog::getOpenFileName(this,"Browse for input tape file",ui.inputFile->text());
+	ui.inputFile->setText(s);
 }
 
 void TapeSplt::addClicked()
@@ -127,7 +127,7 @@ void TapeSplt::deleteClicked()
 void TapeSplt::downClicked()
 {
 	int i = ui.tableView->currentIndex().row();
-	if (i>=0 && (i+1)<mModel->rowCount()) 
+	if (i>=0 && (i+1)<mModel->rowCount())
 	{
 		QVariant itemA = mModel->rowData(ui.tableView->currentIndex());
 		QVariant itemB = mModel->rowData(ui.tableView->currentIndex().sibling(i+1,0));
@@ -142,7 +142,7 @@ void TapeSplt::downClicked()
 void TapeSplt::upClicked()
 {
 	int i = ui.tableView->currentIndex().row();
-	if (i>=1 && mModel->rowCount() > 1) 
+	if (i>=1 && mModel->rowCount() > 1)
 	{
 		QVariant itemA = mModel->rowData(ui.tableView->currentIndex().sibling(i-1,0));
 		QVariant itemB = mModel->rowData(ui.tableView->currentIndex());
@@ -187,20 +187,10 @@ void TapeSplt::finishedSlot()
 			QMessageBox::NoButton);
 		deleteLater();
 	}
-	else 
+	else
 		emit error();
 
 	ui.runButton->setText("Run");
-}
-
-TapeTableView::TapeTableView(QWidget * parent) : QTableView(parent)
-{
-
-}
-
-TapeTableView::~TapeTableView()
-{
-
 }
 
 TapeSpltSubDlg::TapeSpltSubDlg(QWidget * parent) : QDialog(parent)
@@ -254,8 +244,8 @@ void TapeSpltSubDlg::setupUi()
 
 void TapeSpltSubDlg::selectOutputSlot()
 {
-    QString s = QFileDialog::getOpenFileName(this,"Browse for output tape file",lineEdit->text());
-    lineEdit->setText(s);
+	QString s = QFileDialog::getOpenFileName(this,"Browse for output tape file",lineEdit->text());
+	lineEdit->setText(s);
 }
 
 void TapeSpltSubDlg::addSlot()

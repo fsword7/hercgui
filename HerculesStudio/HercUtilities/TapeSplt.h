@@ -37,21 +37,13 @@
 
 #include <vector>
 
-class TapeTableView : public QTableView
-{
-	Q_OBJECT
-	TapeTableView(QWidget * parent = 0);
-	virtual ~TapeTableView();
-
-};
-
 class TapeSpltSubDlg : public QDialog
-{	
+{
 	Q_OBJECT
 public:
 	TapeSpltSubDlg(QWidget *parent = 0);
 	virtual ~TapeSpltSubDlg();
-	
+
 private:
 	QLabel *label;
 	QLineEdit *lineEdit;
@@ -60,7 +52,7 @@ private:
 	QLabel *label_2;
 	QPushButton *addButton;
 	QPushButton *cancelButton;
-	TapeTableView *tableView;
+	QTableView  *tableView;
 
 	void setupUi();
 
@@ -70,7 +62,7 @@ private slots:
 	void cancelSlot();
 
 signals:
-    void fileNameSet(QString, int);
+	void fileNameSet(QString, int);
 };
 
 #define HTableType std::vector<QStringList>
@@ -95,11 +87,11 @@ private:
 
 class TapeSplt : public GenericUtility
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    TapeSplt(QWidget *parent = 0);
-    ~TapeSplt();
+	TapeSplt(QWidget *parent = 0);
+	~TapeSplt();
 
 private:
 	Ui::TapeSpltClass ui;
