@@ -86,7 +86,7 @@ void PlainLogWidget::append(const QByteArray & text)
 		s = text.mid(24);
 
 	QColor keepC = textColor();
-	if ((strncmp(text.data(),"HHC",3) == 0) || !mIpled)
+	if ((strncmp(text.data(),"HHC",3) == 0) || (!mIpled && (text.size() > 8)) )
 	{
 		if (text[8] == 'I')
 			setTextColor(mGreen);
