@@ -74,8 +74,8 @@ void StatusRunner::readStandardError()
 	while (true)
 	{
 		QByteArray output = mProcess->readLine();
-		output.replace("\n"," ");
 		if (output.length() == 0) break;
+		output[output.length()-1]='\0';
 		mQueue.push_back(output.data());
 		emit newData();
 	}

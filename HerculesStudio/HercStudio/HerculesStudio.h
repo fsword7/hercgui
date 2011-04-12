@@ -37,21 +37,21 @@
 #include <iostream>
 
 #define outDebug(level,s) if ((level) <= hDEBUG ) \
-                    {s;} \
-                    else {}
+					{s;} \
+					else {}
 #define hOutDebug(level,s)  if ((level) <= hDEBUG ) \
-                    {std::cout << s << std::endl;} \
-                    else {}
+					{std::cout << s << std::endl;} \
+					else {}
 
 #define checkedConnect(button,slot) \
-    button!= NULL ? connect(button, SIGNAL(clicked()), this , SLOT(slot)) : NULL;
+   if ((button) != NULL ) { connect(button, SIGNAL(clicked()), this , SLOT(slot)) ;} else{};
 
 class hsException : public  std::exception
 {
 public:
    hsException(std::string msg)
    {
-       mWhat = msg.c_str();
+	   mWhat = msg.c_str();
    }
    virtual ~hsException() throw()
    {
@@ -59,7 +59,7 @@ public:
    }
    virtual const char* what() const throw()
    {
-       return mWhat.c_str();
+	   return mWhat.c_str();
    }
 private:
    std::string mWhat;

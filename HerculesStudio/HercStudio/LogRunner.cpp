@@ -83,8 +83,8 @@ void LogRunner::readStandardOutput()
 	{
 		QByteArray output = mProcess->readLine();
 		if (output.length() == 0) break;
-		output[output.length()-2]='\0';
-		mQueue.push_back(output.data());
+		output[output.length()-1]='\0';
+        mQueue.push_back(output.data());
 		emit newData();
 	}
 }
