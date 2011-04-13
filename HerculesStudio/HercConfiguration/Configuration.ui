@@ -3774,7 +3774,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="geometry">
     <rect>
-     <x>620</x>
+     <x>530</x>
      <y>530</y>
      <width>80</width>
      <height>27</height>
@@ -3787,7 +3787,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QPushButton" name="pushButton_Cancel">
    <property name="geometry">
     <rect>
-     <x>520</x>
+     <x>430</x>
      <y>530</y>
      <width>80</width>
      <height>27</height>
@@ -3800,7 +3800,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QPushButton" name="pushButton_OK">
    <property name="geometry">
     <rect>
-     <x>420</x>
+     <x>630</x>
      <y>530</y>
      <width>80</width>
      <height>27</height>

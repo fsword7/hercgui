@@ -508,7 +508,9 @@ void MainWindow::saveConfig()
 {
 	if (mConfigFile == NULL) return;
 	if (mConfigFile->isNew())
+	{
 		saveConfigAs();
+	}
 	else
 	{
 		mConfigFile->appendNewLines();
@@ -521,6 +523,26 @@ void MainWindow::saveConfigAs()
 	if (mConfigFile == NULL) return;
 	if (mPreferences == NULL)
 			mPreferences = &Preferences::getInstance();
+
+	if (mConfigFile->isNew())
+	{
+		if (mConfigFile->numberOfDevices() == 0)
+		{
+			int reply = QMessageBox::warning(this, "New Configuration",
+											 "The new configuration does not contain any devices.\n"
+											 "In most cases Hercules will not be able to process it\n\n"
+											 "Are you sure you want to save this configuration?",
+											 QMessageBox::Ok,
+											 QMessageBox::Cancel);
+			if (reply != QMessageBox::Ok)
+			{
+				mConfiguration = new Configuration(mConfigFile,false,this);
+				mConfiguration->setVisible(true);
+				return ;
+			}
+		}
+	}
+
 	std::string s = QFileDialog::getSaveFileName(this,
 			"Save configuration",
 			mPreferences->configDir().c_str(),
@@ -699,7 +721,9 @@ void MainWindow::powerOn()
 											QMessageBox::NoButton);
 		if (ret == QMessageBox::Save)
 		{
-			mConfigFile->write();
+			saveConfig();
+			if (mConfigFile->changed()) // was save done? if not - bail out
+				return;
 		}
 		else return;
 	}

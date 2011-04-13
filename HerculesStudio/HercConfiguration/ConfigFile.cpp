@@ -153,6 +153,18 @@ DeviceConfigLine * ConfigFile::getDevice(int index) const
 	return static_cast<DeviceConfigLine *> (const_cast<ConfigLine *>(&mFileArray.at(index)));
 }
 
+int ConfigFile::numberOfDevices()
+{
+	int num=0;
+	for (size_t i=mLastSys+1 ; i<mFileArray.size(); i++)
+	{
+		if (!getDevice(i)->isRemark() &&
+			!getDevice(i)->isDeleted() )
+			num++;
+	}
+	return num;
+}
+
 DeviceConfigLine * ConfigFile::getDevice(const std::string& devno) const
 {
 	for (size_t i=mLastSys+1; i<mFileArray.size(); i++)
@@ -307,6 +319,7 @@ void ConfigFile::appendNewLines()
 void ConfigFile::setNew(bool isNew)
 {
 	mNewConfig = isNew;
+	if (isNew) mChanged = true;
 }
 
 void ConfigFile::openTemplate()
@@ -354,7 +367,7 @@ const char * ConfigFile::configTemplate[50] = {
 "\n",
 "   DIAG8CMD  disable echo                # OS may not issue commands via DIAG 8\n",
 "\n",
-"   HTTPPORT  8081 noauth userid password # HTTP server port\n",
+"#  HTTPPORT  8081 noauth userid password # HTTP server port\n",
 "\n",
 "  PANRATE   FAST                        # Panel refresh rate\n",
 "\n",

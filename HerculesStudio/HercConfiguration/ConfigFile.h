@@ -38,8 +38,8 @@ typedef std::vector<ConfigLine> FileArray;
 
 struct SynonymTableEntry
 {
-    std::string keyword1;
-    std::string keyword2;
+	std::string keyword1;
+	std::string keyword2;
 };
 
 class ConfigFile
@@ -50,22 +50,23 @@ public:
 
 	void 				initialize();
 	const std::string& 	getFileName() const;
-    SystemConfigLine 	* operator[] (int index) const;
-    DeviceConfigLine 	* getDevice(int index) const;
-    DeviceConfigLine 	* getDevice(const std::string& devno) const;
-    DeviceConfigLine 	* findFirstDeviceByType(const char * type) const;
-    bool 				write(const std::string& fileName);
-    bool 				write();
-    int 				size() const;
-    void 				addNonDev(SystemConfigLine * configLine);
-    void 				addDev(DeviceConfigLine * configLine);
-    void 				appendNewLines();
-    const 				ConfigLine * locateLine(const std::string& keyword, bool synonyms=true);
-    void 				deleteLine(int index);
-    inline int 			getLastSys() { return mLastSys; };
-    bool 				changed();
-    inline bool 		isNew() const {return mNewConfig;};
-    void 				setNew(bool newVal);
+	SystemConfigLine 	* operator[] (int index) const;
+	DeviceConfigLine 	* getDevice(int index) const;
+	DeviceConfigLine 	* getDevice(const std::string& devno) const;
+	DeviceConfigLine 	* findFirstDeviceByType(const char * type) const;
+	int                 numberOfDevices();
+	bool 				write(const std::string& fileName);
+	bool 				write();
+	int 				size() const;
+	void 				addNonDev(SystemConfigLine * configLine);
+	void 				addDev(DeviceConfigLine * configLine);
+	void 				appendNewLines();
+	const 				ConfigLine * locateLine(const std::string& keyword, bool synonyms=true);
+	void 				deleteLine(int index);
+	inline int 			getLastSys() { return mLastSys; };
+	bool 				changed();
+	inline bool 		isNew() const {return mNewConfig;};
+	void 				setNew(bool newVal);
 
 private:
   std::string 						mFileName;
@@ -74,9 +75,9 @@ private:
   std::vector<DeviceConfigLine> 	mNewDeviceLines;
   static struct SynonymTableEntry 	mSynonyms[];
 
-  int 	mLastSys;            // last line before device statements
-  bool 	mChanged;           // updates were done to file which were not saved yet
-  bool 	mNewConfig;		   // never saved
+  int 	mLastSys;              // last line before device statements
+  bool 	mChanged;              // updates were done to file which were not saved yet
+  bool 	mNewConfig;		       // never saved
   static const char *configTemplate[];  // template for new config file
   int  	templateCounter;	   // line number to read from template
 

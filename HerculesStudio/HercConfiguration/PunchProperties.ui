@@ -126,7 +126,7 @@
    <widget class="QPushButton" name="OKButton">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>340</x>
       <y>140</y>
       <width>78</width>
       <height>29</height>
@@ -139,7 +139,7 @@
    <widget class="QPushButton" name="cancelButton">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>20</x>
       <y>140</y>
       <width>78</width>
       <height>29</height>
