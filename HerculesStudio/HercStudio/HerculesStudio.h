@@ -32,6 +32,7 @@
 #define hDEBUG 0
 #ifdef  Q_WS_WIN
 #define hFramework
+#define hCRLF
 #endif
 //#define hFramework
 #include <iostream>

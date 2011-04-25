@@ -83,7 +83,11 @@ void LogRunner::readStandardOutput()
 	{
 		QByteArray output = mProcess->readLine();
 		if (output.length() == 0) break;
+#ifndef hCRLF
 		output[output.length()-1]='\0';
+#else
+		output[output.length()-2]='\0';
+#endif
         mQueue.push_back(output.data());
 		emit newData();
 	}
