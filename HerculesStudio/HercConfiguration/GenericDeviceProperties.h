@@ -34,27 +34,27 @@
 
 class GenericDeviceProperties : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    GenericDeviceProperties(ConfigLine& line, QWidget *parent);
-    virtual ~GenericDeviceProperties();
+	GenericDeviceProperties(ConfigLine& line, QWidget *parent);
+	virtual ~GenericDeviceProperties();
 
-    static GenericDeviceProperties * classFactory(DeviceConfigLine& line, QWidget *parent, DeviceTypes::Type type=DeviceTypes::Other);
+	static GenericDeviceProperties * classFactory(DeviceConfigLine& line, QWidget *parent, DeviceTypes::Type type=DeviceTypes::Other);
 
 protected:
-    mutable ConfigLine & mLine;
-    QWidget *mParent;
+	ConfigLine & mLine;
+	QWidget *mParent;
 
-    bool  deviceNumberValidator(QLineEdit * deviceLine);
-    bool ipValidator(QLineEdit * ipLineEdit, bool allowNull);
-    int   mOriginalDeviceNumber;
+	bool  deviceNumberValidator(QLineEdit * deviceLine);
+	bool ipValidator(QLineEdit * ipLineEdit, bool allowNull);
+	int   mOriginalDeviceNumber;
 
 private slots:
-    virtual void ok()=0;
-    virtual void cancel()=0;
+	virtual void ok()=0;
+	virtual void cancel()=0;
 
 signals:
-    void updateLine(bool keep);
+	void updateLine(bool keep);
 
 };
 
