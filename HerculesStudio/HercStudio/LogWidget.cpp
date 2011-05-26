@@ -1,10 +1,4 @@
 /*
- * LogsWidget.cpp
- *
- *  Created on: Jul 2, 2010
- *      Author: yakov
- */
-/*
  *  File:       LogsWidget.cpp
  *
  *  Author:     Jacob Dekel

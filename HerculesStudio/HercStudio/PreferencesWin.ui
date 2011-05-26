@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>716</width>
-    <height>425</height>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@
      <x>10</x>
      <y>10</y>
      <width>696</width>
-     <height>361</height>
+     <height>401</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -49,7 +49,7 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>95</width>
+        <width>131</width>
         <height>19</height>
        </rect>
       </property>
@@ -62,7 +62,7 @@
        <rect>
         <x>10</x>
         <y>50</y>
-        <width>95</width>
+        <width>141</width>
         <height>19</height>
        </rect>
       </property>
@@ -104,7 +104,7 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>91</width>
+        <width>131</width>
         <height>20</height>
        </rect>
       </property>
@@ -117,7 +117,7 @@
        <rect>
         <x>10</x>
         <y>47</y>
-        <width>91</width>
+        <width>131</width>
         <height>20</height>
        </rect>
       </property>
@@ -132,7 +132,7 @@
        <x>10</x>
        <y>110</y>
        <width>651</width>
-       <height>191</height>
+       <height>251</height>
       </rect>
      </property>
      <property name="title">
@@ -462,6 +462,74 @@
        <string>Command Line</string>
       </property>
      </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>200</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Configuration Edit</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="italicConfiguration">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>200</y>
+        <width>79</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="fontSizeConfiguration">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>200</y>
+        <width>51</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <number>4</number>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="boldConfiguration">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>200</y>
+        <width>79</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="fontNameConfiguration">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>200</y>
+        <width>141</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="directoriesTab">
@@ -660,8 +728,8 @@
   <widget class="QPushButton" name="okButton">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>390</y>
+     <x>630</x>
+     <y>440</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -673,8 +741,8 @@
   <widget class="QPushButton" name="cancelButton">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>390</y>
+     <x>520</x>
+     <y>440</y>
      <width>75</width>
      <height>23</height>
     </rect>

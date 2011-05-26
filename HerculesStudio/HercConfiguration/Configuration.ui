@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>728</width>
-    <height>577</height>
+    <width>732</width>
+    <height>575</height>
    </rect>
   </property>
   <property name="font">
@@ -29,6 +29,12 @@
      <width>691</width>
      <height>491</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="whatsThis">
     <string/>
@@ -509,6 +515,25 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="text">
        <string>Plant</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="logopt">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>270</y>
+        <width>97</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -2799,7 +2824,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab">
+   <widget class="QWidget" name="OSTailor">
     <attribute name="title">
      <string>O/S Tailor</string>
     </attribute>
@@ -3118,7 +3143,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_2">
+   <widget class="QWidget" name="Emulation">
     <attribute name="title">
      <string>Emulation</string>
     </attribute>
@@ -3578,7 +3603,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_3">
+   <widget class="QWidget" name="Environment">
     <attribute name="title">
      <string>Environment</string>
     </attribute>
@@ -3731,7 +3756,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_4">
+   <widget class="QWidget" name="Devices">
     <attribute name="title">
      <string>Devices</string>
     </attribute>
@@ -3767,27 +3792,63 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </widget>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>530</x>
-     <y>530</y>
-     <width>80</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Apply</string>
-   </property>
+   <widget class="QWidget" name="FreeEdit">
+    <attribute name="title">
+     <string>Free Edit</string>
+    </attribute>
+    <widget class="QLabel" name="fileNameLabel_7">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>20</y>
+       <width>591</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_31">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>57</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>File Name:</string>
+     </property>
+    </widget>
+    <widget class="QPlainTextEdit" name="plainTextEdit">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>671</width>
+       <height>411</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QPushButton" name="pushButton_Cancel">
    <property name="geometry">
     <rect>
-     <x>430</x>
+     <x>530</x>
      <y>530</y>
      <width>80</width>
      <height>27</height>
@@ -3816,7 +3877,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>Configuration</tabstop>
   <tabstop>pushButton_OK</tabstop>
   <tabstop>pushButton_Cancel</tabstop>
-  <tabstop>pushButton</tabstop>
   <tabstop>s370Button</tabstop>
   <tabstop>ESA390Button</tabstop>
   <tabstop>ZArchButton</tabstop>

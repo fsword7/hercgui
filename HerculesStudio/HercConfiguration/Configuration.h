@@ -34,70 +34,105 @@
 
 #include "ui_Configuration.h"
 
+#include <QSyntaxHighlighter>
 #include <QtGui/QDialog>
 
 struct ConfigTableEntry
 {
-    std::string keyword;
-    void (*populator)(Ui::ConfigurationClass *, const ConfigLine *, ConfigurationEditor::Direction dir);
+	std::string keyword;
+	void (*populator)(Ui::ConfigurationClass *, const ConfigLine *, ConfigurationEditor::Direction dir);
 };
 
 class Configuration : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    Configuration(ConfigFile* confignFile, bool newConfig = false, QWidget *parent = 0);
-    virtual ~Configuration();
+	Configuration(ConfigFile* confignFile, bool newConfig = false, QWidget *parent = 0);
+	virtual ~Configuration();
 
-    class DoubleDigitSpinBox : public QSpinBox
-    {
-    public:
-    	DoubleDigitSpinBox(QWidget * parent = 0, bool appendPlus=false);
-    protected:
-    	virtual int valueFromText(const QString& text) const;
-    	virtual QString textFromValue(int value) const;
-    private:
-    	bool mAppendPlus;
-    };
+	class DoubleDigitSpinBox : public QSpinBox
+	{
+	public:
+		DoubleDigitSpinBox(QWidget * parent = 0, bool appendPlus=false);
+	protected:
+		virtual int valueFromText(const QString& text) const;
+		virtual QString textFromValue(int value) const;
+	private:
+		bool mAppendPlus;
+	};
 
-    class HexSpinBox : public QSpinBox
-    {
-    public:
-    	HexSpinBox(QWidget * parent = 0);
-    	virtual QString textFromValue(int value) const;
-    protected:
-    	virtual int valueFromText(const QString& text) const;
-    	QValidator::State validate(QString & input, int & pos) const;
-    };
+	class HexSpinBox : public QSpinBox
+	{
+	public:
+		HexSpinBox(QWidget * parent = 0);
+		virtual QString textFromValue(int value) const;
+	protected:
+		virtual int valueFromText(const QString& text) const;
+		QValidator::State validate(QString & input, int & pos) const;
+	};
+
+protected:
+	virtual void resizeEvent ( QResizeEvent * event );
 
 private:
-    Ui::ConfigurationClass ui;
-    DevicesWidget * mDevWgt;
-    QWidget   * mParent;
-    ConfigFile* mConfigFile;
-    bool        mNewConfig;
-    static struct ConfigTableEntry mConfigTable[];
+	Ui::ConfigurationClass	ui;
+	DevicesWidget			* mDevWgt;
+	QPlainTextEdit			* mFreeEdit;
+	QSyntaxHighlighter      * mSyntaxHighlighter;
+	QWidget					* mParent;
+	ConfigFile				* mConfigFile;
+	bool					mNewConfig;
+	bool                    mChanged;    // text changed since last validation
+	bool					mTimerSet;	 // validation timer was set
 
-    void initilize();
-    void populate(ConfigurationEditor::Direction);
+	int						mCurrTab;
+	int						mLastSys;	// updated by blockCountChanged()
+	static struct ConfigTableEntry mConfigTable[];
+	friend                  class ConfigHighlight;
+
+	void initilize();
+	void populate(ConfigurationEditor::Direction);
+	void handleHighlight(const ConfigLine& configLine, QTextCursor& cursor, QTextCharFormat& format);
 
 signals:
-     void OKSignal();
+	 void OKSignal();
 
  private slots:
-     void okPressed();
-     void cancelPressed();
-     void autoMountBrowsePressed();
-     void autoScsiMountChanged();
-     void cpuPrioChanged(int);
-     void devPrioChanged(int);
-     void hercPrioChanged(int);
-     void todPrioChanged(int);
-     void ecpSvmChanged(int);
-     void httpPortChanged(int);
-     void httpRootBrowsePressed();
-     void modPathBrowsePressed();
+	 void okPressed();
+	 void cancelPressed();
+	 void autoMountBrowsePressed();
+	 void autoScsiMountChanged();
+	 void cpuPrioChanged(int);
+	 void devPrioChanged(int);
+	 void hercPrioChanged(int);
+	 void todPrioChanged(int);
+	 void ecpSvmChanged(int);
+	 void httpPortChanged(int);
+	 void httpRootBrowsePressed();
+	 void modPathBrowsePressed();
+	 void tabChanged(int);
+	 void blockCountChangedSlot();
+};
+
+class ConfigHighlight : public QSyntaxHighlighter
+{
+	Q_OBJECT
+public:
+	ConfigHighlight(QWidget * parent);
+
+protected:
+	void highlightBlock(const QString &text);
+
+private:
+	QDialog  mDummyConfig;
+	Ui::ConfigurationClass	mDummyUi;
+	QColor mGreen;
+	QColor mRed;
+	QColor mBlack;
+	QColor mBlue;
+	QColor mGray;
+
 };
 
 #endif // CONFIGURATION_H

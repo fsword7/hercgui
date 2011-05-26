@@ -30,6 +30,8 @@
 #include "SystemConfigLine.h"
 #include "DeviceConfigLine.h"
 
+#include <QPlainTextEdit>
+#include <QTextBlock>
 #include <string>
 #include <vector>
 
@@ -49,6 +51,7 @@ public:
 	virtual ~ConfigFile();
 
 	void 				initialize();
+	void                updateEditor(QPlainTextEdit& document);
 	const std::string& 	getFileName() const;
 	SystemConfigLine 	* operator[] (int index) const;
 	DeviceConfigLine 	* getDevice(int index) const;
@@ -61,7 +64,7 @@ public:
 	void 				addNonDev(SystemConfigLine * configLine);
 	void 				addDev(DeviceConfigLine * configLine);
 	void 				appendNewLines();
-	const 				ConfigLine * locateLine(const std::string& keyword, bool synonyms=true);
+        const 				ConfigLine * locateLine(const std::string& keyword, bool create=false, bool synonyms=true);
 	void 				deleteLine(int index);
 	inline int 			getLastSys() { return mLastSys; };
 	bool 				changed();
@@ -69,11 +72,20 @@ public:
 	void 				setNew(bool newVal);
 
 private:
-  std::string 						mFileName;
+	enum BuildType
+	{
+		File=1,
+		TextEdit
+	};
+
+	std::string 					mFileName;
   FileArray 						mFileArray;
   std::vector<SystemConfigLine> 	mNewLines;
   std::vector<DeviceConfigLine> 	mNewDeviceLines;
   static struct SynonymTableEntry 	mSynonyms[];
+  FILE *							mFile;
+  QPlainTextEdit *                  mEditor;
+  QTextBlock                        mEditorIterator;
 
   int 	mLastSys;              // last line before device statements
   bool 	mChanged;              // updates were done to file which were not saved yet
@@ -82,7 +94,9 @@ private:
   int  	templateCounter;	   // line number to read from template
 
   void openTemplate();
-  char * getNextLine(char * buff, int len, FILE * f);
+  char * getNextLine(char * buff, int len, BuildType type);
+
+  void buildConfig(BuildType);
 };
 
 #endif

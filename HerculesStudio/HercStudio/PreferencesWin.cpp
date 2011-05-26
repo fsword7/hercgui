@@ -30,7 +30,7 @@
 #include <iostream>
 
 PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *preferences, QWidget *parent)
-    : QDialog(parent), mCurrentPath(currentPath), mPreferences(preferences)
+	: QDialog(parent), mCurrentPath(currentPath), mPreferences(preferences)
 {
 	ui.setupUi(this);
 	connect(ui.okButton, SIGNAL(pressed()), this, SLOT(okPressed()));
@@ -49,59 +49,67 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
 	ui.fontNameRegs->addItems(list);
 	ui.fontNamePsw->addItems(list);
 	ui.fontNameCommand->addItems(list);
+	ui.fontNameConfiguration->addItems(list);
 
 	int fontIndex = Fonts::getInstance().indexOf(mPreferences->fontName(Preferences::LogFontObject).c_str());
 	if (fontIndex == -1) fontIndex = 0;
-    ui.fontNameLog->setCurrentIndex(fontIndex);
-    ui.fontSizeLog->setValue(mPreferences->fontSize(Preferences::LogFontObject));
-    ui.boldLog->setChecked(mPreferences->fontIsBold(Preferences::LogFontObject));
-    ui.italicLog->setChecked(mPreferences->fontIsItalic(Preferences::LogFontObject));
+	ui.fontNameLog->setCurrentIndex(fontIndex);
+	ui.fontSizeLog->setValue(mPreferences->fontSize(Preferences::LogFontObject));
+	ui.boldLog->setChecked(mPreferences->fontIsBold(Preferences::LogFontObject));
+	ui.italicLog->setChecked(mPreferences->fontIsItalic(Preferences::LogFontObject));
 
 	fontIndex = Fonts::getInstance().indexOf(mPreferences->fontName(Preferences::RegsFontObject).c_str());
 	if (fontIndex == -1) fontIndex = 0;
-    ui.fontNameRegs->setCurrentIndex(fontIndex);
-    ui.fontSizeRegs->setValue(mPreferences->fontSize(Preferences::RegsFontObject));
-    ui.boldRegs->setChecked(mPreferences->fontIsBold(Preferences::RegsFontObject));
-    ui.italicRegs->setChecked(mPreferences->fontIsItalic(Preferences::RegsFontObject));
+	ui.fontNameRegs->setCurrentIndex(fontIndex);
+	ui.fontSizeRegs->setValue(mPreferences->fontSize(Preferences::RegsFontObject));
+	ui.boldRegs->setChecked(mPreferences->fontIsBold(Preferences::RegsFontObject));
+	ui.italicRegs->setChecked(mPreferences->fontIsItalic(Preferences::RegsFontObject));
 
 	fontIndex = Fonts::getInstance().indexOf(mPreferences->fontName(Preferences::PswFontObject).c_str());
 	if (fontIndex == -1) fontIndex = 0;
-    ui.fontNamePsw->setCurrentIndex(fontIndex);
-    ui.fontSizePsw->setValue(mPreferences->fontSize(Preferences::PswFontObject));
-    ui.boldPsw->setChecked(mPreferences->fontIsBold(Preferences::PswFontObject));
-    ui.italicPsw->setChecked(mPreferences->fontIsItalic(Preferences::PswFontObject));
+	ui.fontNamePsw->setCurrentIndex(fontIndex);
+	ui.fontSizePsw->setValue(mPreferences->fontSize(Preferences::PswFontObject));
+	ui.boldPsw->setChecked(mPreferences->fontIsBold(Preferences::PswFontObject));
+	ui.italicPsw->setChecked(mPreferences->fontIsItalic(Preferences::PswFontObject));
 
 	fontIndex = Fonts::getInstance().indexOf(mPreferences->fontName(Preferences::CommandFontObject).c_str());
 	if (fontIndex == -1) fontIndex = 0;
-    ui.fontNameCommand->setCurrentIndex(fontIndex);
-    ui.fontSizeCommand->setValue(mPreferences->fontSize(Preferences::CommandFontObject));
-    ui.boldCommand->setChecked(mPreferences->fontIsBold(Preferences::CommandFontObject));
-    ui.italicCommand->setChecked(mPreferences->fontIsItalic(Preferences::CommandFontObject));
+	ui.fontNameCommand->setCurrentIndex(fontIndex);
+	ui.fontSizeCommand->setValue(mPreferences->fontSize(Preferences::CommandFontObject));
+	ui.boldCommand->setChecked(mPreferences->fontIsBold(Preferences::CommandFontObject));
+	ui.italicCommand->setChecked(mPreferences->fontIsItalic(Preferences::CommandFontObject));
 
-    ui.logTimestampCheckbox->setChecked(mPreferences->logTimestamp());
+	fontIndex = Fonts::getInstance().indexOf(mPreferences->fontName(Preferences::ConfigurationFontObject).c_str());
+	if (fontIndex == -1) fontIndex = 0;
+	ui.fontNameConfiguration->setCurrentIndex(fontIndex);
+	ui.fontSizeConfiguration->setValue(mPreferences->fontSize(Preferences::ConfigurationFontObject));
+	ui.boldConfiguration->setChecked(mPreferences->fontIsBold(Preferences::ConfigurationFontObject));
+	ui.italicConfiguration->setChecked(mPreferences->fontIsItalic(Preferences::ConfigurationFontObject));
 
-    if (mPreferences->mipsAsGauge())
-    	ui.mipsGaugeButton->setChecked(true);
-    else
-    	ui.mipsLedButton->setChecked(true);
+	ui.logTimestampCheckbox->setChecked(mPreferences->logTimestamp());
 
-    if (mPreferences->pswMode() == Psw::Docked)
-    	ui.pswDock->setChecked(true);
-    else
-    	ui.pswDock->setChecked(false);
+	if (mPreferences->mipsAsGauge())
+		ui.mipsGaugeButton->setChecked(true);
+	else
+		ui.mipsLedButton->setChecked(true);
 
-   	ui.splitLogCheckbox->setChecked(mPreferences->splitLog());
-   	ui.autosaveLogCheckbox->setChecked(mPreferences->autosaveLog());
+	if (mPreferences->pswMode() == Psw::Docked)
+		ui.pswDock->setChecked(true);
+	else
+		ui.pswDock->setChecked(false);
 
-   	if (mPreferences->theme() == Preferences::Classic)
-   		ui.classicRadioButton->setChecked(true);
-   	else
-   		ui.modernRadioButton->setChecked(true);
+	ui.splitLogCheckbox->setChecked(mPreferences->splitLog());
+	ui.autosaveLogCheckbox->setChecked(mPreferences->autosaveLog());
 
-   	if (mPreferences->logFileLines() > 0)
-   	    ui.memLines->setValue( mPreferences->logFileLines() );
-   	else
-   		ui.memLines->setValue(5000);
+	if (mPreferences->theme() == Preferences::Classic)
+		ui.classicRadioButton->setChecked(true);
+	else
+		ui.modernRadioButton->setChecked(true);
+
+	if (mPreferences->logFileLines() > 0)
+		ui.memLines->setValue( mPreferences->logFileLines() );
+	else
+		ui.memLines->setValue(5000);
 }
 
 PreferencesWin::~PreferencesWin()
@@ -135,6 +143,11 @@ void PreferencesWin::okPressed()
 	mPreferences->setBold(Preferences::CommandFontObject, ui.boldCommand->isChecked());
 	mPreferences->setItalic(Preferences::CommandFontObject, ui.italicCommand->isChecked());
 
+	mPreferences->setFontName(Preferences::ConfigurationFontObject, ui.fontNameConfiguration->currentText().toStdString());
+	mPreferences->setFontSize(Preferences::ConfigurationFontObject, ui.fontSizeConfiguration->value());
+	mPreferences->setBold(Preferences::ConfigurationFontObject, ui.boldConfiguration->isChecked());
+	mPreferences->setItalic(Preferences::ConfigurationFontObject, ui.italicConfiguration->isChecked());
+
 	mPreferences->setLogTimestamp(ui.logTimestampCheckbox->isChecked());
 
 	mPreferences->setMipsAsGauge(ui.mipsGaugeButton->isChecked());
@@ -147,7 +160,7 @@ void PreferencesWin::okPressed()
 
 	mPreferences->setTheme( ui.classicRadioButton->isChecked() ? Preferences::Classic : Preferences::Modern);
 
-    mPreferences->setLogFileLines( ui.memLines->value() );
+	mPreferences->setLogFileLines( ui.memLines->value() );
 
 	mPreferences->write();
 	emit preferencesChanged();
@@ -156,33 +169,33 @@ void PreferencesWin::okPressed()
 
 void PreferencesWin::cancelPressed()
 {
-    close();
+	close();
 }
 
 void PreferencesWin::hercDirPressed()
 {
-    QString s = QFileDialog::getExistingDirectory(this,
-        tr("Find Hercules directory"),
-        ui.hercDirLineEdit->text(),
-        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if (s.length() > 0)
-        ui.hercDirLineEdit->setText(s);
+	QString s = QFileDialog::getExistingDirectory(this,
+		tr("Find Hercules directory"),
+		ui.hercDirLineEdit->text(),
+		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	if (s.length() > 0)
+		ui.hercDirLineEdit->setText(s);
 }
 void PreferencesWin::configDirPressed()
 {
-    QString s = QFileDialog::getExistingDirectory(this,
-        tr("Hercules configurations directory"),
-        ui.configDirLineEdit->text(),
-        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if (s.length() > 0)
-        ui.configDirLineEdit->setText(s);
+	QString s = QFileDialog::getExistingDirectory(this,
+		tr("Hercules configurations directory"),
+		ui.configDirLineEdit->text(),
+		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	if (s.length() > 0)
+		ui.configDirLineEdit->setText(s);
 }
 void PreferencesWin::logsDirPressed()
 {
-    QString s = QFileDialog::getExistingDirectory(this,
-        tr("Logs directory"),
-        ui.logsDirLineEdit->text(),
-        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if (s.length() > 0)
-      ui.logsDirLineEdit->setText(s);
+	QString s = QFileDialog::getExistingDirectory(this,
+		tr("Logs directory"),
+		ui.logsDirLineEdit->text(),
+		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	if (s.length() > 0)
+	  ui.logsDirLineEdit->setText(s);
 }

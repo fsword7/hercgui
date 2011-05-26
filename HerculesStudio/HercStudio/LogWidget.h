@@ -1,10 +1,4 @@
 /*
- * LogsWidget.h
- *
- *  Created on: Jul 2, 2010
- *      Author: yakov
- */
-/*
  *  File:       LogsWidget.h
  *
  *  Author:     Jacob Dekel

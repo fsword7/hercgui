@@ -37,45 +37,46 @@
 
 class DevicesWidget : public DeviceMenuProcessor
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    DevicesWidget(ConfigFile * configFile, QWidget * parent);
-    virtual ~DevicesWidget();
-    bool isUnique(std::string devno);
+	DevicesWidget(ConfigFile * configFile, QWidget * parent);
+	virtual ~DevicesWidget();
+	void update(ConfigFile * configFile);
+	bool isUnique(std::string devno);
 
 private:
-    ConfigFile * mConfigFile;
-    DeviceConfigView * mConfigView;
-    QMenu mMenu;
-    std::map<int,int> mDialogToFile;
-    QIcon *mCardIcon;
-    QIcon *mConsoleIcon;
-    QIcon *mDasdIcon;
-    QIcon *mNetIcon;
-    QIcon *mPrinterIcon;
-    QIcon *mTapeIcon;
-    QIcon *mTerminalIcon;
-    QIcon *mUnknownIcon;
+	ConfigFile * mConfigFile;
+	DeviceConfigView * mConfigView;
+	QMenu mMenu;
+	std::map<int,int> mDialogToFile;
+	QIcon *mCardIcon;
+	QIcon *mConsoleIcon;
+	QIcon *mDasdIcon;
+	QIcon *mNetIcon;
+	QIcon *mPrinterIcon;
+	QIcon *mTapeIcon;
+	QIcon *mTerminalIcon;
+	QIcon *mUnknownIcon;
 
-    void initialize();
-    virtual bool isRealDev(int) { return true;}
-    bool canAddSYSG();
-    bool isConfig() { return true; };
-    bool realDevice();
-    DeviceTypes::Type getType(int lineNumber);
-    virtual void doLoadTape(QString&) { return; }
-    virtual bool hasConfig() { return true; };
-    virtual bool traced() { return false; }
+	void initialize();
+	virtual bool isRealDev(int) { return true;}
+	bool canAddSYSG();
+	bool isConfig() { return true; };
+	bool realDevice();
+	DeviceTypes::Type getType(int lineNumber);
+	virtual void doLoadTape(QString&) { return; }
+	virtual bool hasConfig() { return true; };
+	virtual bool traced() { return false; }
 
 private slots:
-    void mousePressed(QModelIndex index);
-    void doAddDevice(bool keep);
-    void updateDevice(bool);
+	void mousePressed(QModelIndex index);
+	void doAddDevice(bool keep);
+	void updateDevice(bool);
 
 public slots:
 
-    void menuDelete();
-    void menuProperties();
+	void menuDelete();
+	void menuProperties();
 };
 
 #endif /* DEVICESDLG_H_ */

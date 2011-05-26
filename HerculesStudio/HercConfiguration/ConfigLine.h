@@ -36,40 +36,50 @@ typedef std::pair<int,int> TokenPair;
 class ConfigLine
 {
 public:
-  ConfigLine(const char *line);
-  virtual ~ConfigLine();
-    void  replaceLine(const std::string& newLine);
-    void  replaceParameters(const std::string& newParm);
-    void setDeleted(bool parm);
-    const std::string& getLine() const;
-    inline bool isRemark() const { return mRemark; }
-    inline bool isDeleted() const { return mDeleted; }
-    inline bool isNew() const { return mNew; }
-    inline bool isUpdated() const { return mUpdated; }
-    inline void setNew(bool newVal) { mNew=newVal; } ;
-    inline void setUpdated(bool updated) { mUpdated=updated; } ;
+	ConfigLine(const char *line);
+	virtual ~ConfigLine();
 
-    std::string getToken(int i) const;
-    std::string getLowercaseToken(int i) const;
-    std::string getUppercaseToken(int i) const;
-    std::string getMultiToken(int from, int to) const;
-    inline int size() const  {return mSize;}
-    void  parseLine();
+	void  replaceLine(const std::string& newLine);
+	void  replaceParameters(const std::string& newParm);
+	void setDeleted(bool parm);
+	const std::string& getLine() const;
+	inline bool isRemark() const { return mRemark; }
+	inline bool isDeleted() const { return mDeleted; }
+	inline bool isNew() const { return mNew; }
+	inline bool isUpdated() const { return mUpdated; }
+	inline bool inError() const { return mInError; }
+	inline int  errorColumn() const { return mErrorColumn; }
+
+	inline void setNew(bool newVal) { mNew=newVal; } ;
+	inline void setUpdated(bool updated) { mUpdated=updated; } ;
+	inline void setInError(int column) const { mInError=true; mErrorColumn=column; }
+	inline void setNoError() const { mInError=false; mErrorColumn=-1; }
+
+	std::string getToken(int i) const;
+	std::string getLowercaseToken(int i) const;
+	std::string getUppercaseToken(int i) const;
+	int         getAbsoluteTokenColumn(int i) const;
+	int         getAbsoluteTokenEnd(int i) const;
+	std::string getMultiToken(int from, int to) const;
+	inline int size() const  {return mSize;}
+	void  parseLine();
 
 protected:
-    std::string mLine;
+	std::string mLine;
 
 private:
-    std::string mKeyword;
-    bool   mRemark;
-    bool   mDeleted;
-    bool   mUpdated;
-    bool   mNew;
-  std::string::size_type    mKeyStart;
-    int    mSize;
-    std::vector<TokenPair> mTokens;
+	bool   mRemark;
+	bool   mDeleted;
+	bool   mUpdated;
+	bool   mNew;
+	int    mSize;
+	mutable bool  mInError;
+	mutable int   mErrorColumn;
+	std::string::size_type    mKeyStart;
+	std::string               mKeyword;
+	std::vector<TokenPair> mTokens;
 
-    void  tokenize(const std::string& delimiters = " ");
+	void  tokenize(const std::string& delimiters = " ");
 };
 
 #endif // #ifdef CONFIGLINE_H

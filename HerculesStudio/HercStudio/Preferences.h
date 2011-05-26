@@ -99,7 +99,7 @@ public:
 	bool regs(Views v);
 
 protected:
-    Preferences_1_0();
+	Preferences_1_0();
 private:
 	void readPref();
 	void assertConfDir();
@@ -205,7 +205,7 @@ public:
 	bool regs(Views v);
 
 protected:
-    Preferences_1_1();
+	Preferences_1_1();
 
 private:
 	void readPref();
@@ -334,7 +334,7 @@ public:
 	void setAutosaveLog(bool);
 
 protected:
-    Preferences_1_2_0();
+	Preferences_1_2_0();
 
 private:
 	void readPref();
@@ -378,7 +378,7 @@ public:
 	SplitLog = 12,
 	AutosaveLog = 13,
 	Theme = 14,
-    LogFileLines = 15
+	LogFileLines = 15
 	};
 
 	enum FontObject
@@ -386,7 +386,8 @@ public:
 		LogFontObject = 0,
 		RegsFontObject = 1,
 		PswFontObject = 2,
-		CommandFontObject = 3
+		CommandFontObject = 3,
+		ConfigurationFontObject = 4
 	};
 
 	enum Views
@@ -465,18 +466,18 @@ public:
 
 	// Autosave log
 	void setAutosaveLog(bool);
-    bool  autosaveLog() const;
+	bool  autosaveLog() const;
 
 	// theme
 	void setTheme(Themes theme);
-    Themes theme() const;
+	Themes theme() const;
 
 	// LogFileLines
 	void setLogFileLines(int lines);
 	int logFileLines() const;
 
 protected:
-    Preferences();
+	Preferences();
 
 private:
 	static Preferences *instance;
