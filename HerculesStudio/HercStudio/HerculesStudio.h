@@ -34,7 +34,6 @@
 #define hFramework
 #define hCRLF
 #endif
-//#define hFramework
 #include <iostream>
 
 #define outDebug(level,s) if ((level) <= hDEBUG ) \

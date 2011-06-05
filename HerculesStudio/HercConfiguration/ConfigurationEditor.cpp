@@ -556,7 +556,7 @@ void ConfigurationEditor::OSTAILOR(Ui::ConfigurationClass * configUi, const Conf
 	if (dir == toScreen)
 	{
 		std::string parm = configLine->getUppercaseToken(1);
-		int initialValue;
+		int initialValue = 0;
 		if (parm == "QUIET")
 		{
 			configUi->quiet->setChecked(true);
@@ -684,7 +684,7 @@ void ConfigurationEditor::TZOFFSET(Ui::ConfigurationClass * configUi, const Conf
 			return;
 		}
 		outDebug(5,std::cout << "parm=" << parm << std::endl;)
-		int hh, mm;
+		int hh = 0, mm = 0;
 		int sig = 1;
 		if (parm[0] == '+') parm = parm.substr(1);
 		if (parm[0] == '-')

@@ -123,16 +123,16 @@ void HerculesExecutor::issueCommand(const char * command)
 
 void HerculesExecutor::issueFormattedCommand(const char * format, const char * arg1)
 {
-	char buffer[strlen(format)+strlen(arg1)+2];
-	sprintf(buffer,format,arg1);
-	issueCommand(buffer);
+	std::vector<char> buffer(strlen(format) + strlen(arg1) + 2);
+	sprintf(&buffer[0],format,arg1);
+	issueCommand(&buffer[0]);
 }
 
 void HerculesExecutor::issueFormattedCommand(const char * format, int arg1)
 {
-	char buffer[strlen(format)+64];
-	sprintf(buffer,format,arg1);
-	issueCommand(buffer);
+	std::vector<char> buffer(strlen(format) + 64);
+	sprintf(&buffer[0],format,arg1);
+	issueCommand(&buffer[0]);
 }
 
 
