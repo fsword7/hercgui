@@ -28,7 +28,7 @@
 #define HERCULESSTUDIO_H_
 
 #include <qglobal.h>
-#define HERCSTUDIO_VERSION "Version: 1.2.0"
+#define HERCSTUDIO_VERSION "Version: 1.3.0"
 #define hDEBUG 0
 #ifdef  Q_WS_WIN
 #define hFramework

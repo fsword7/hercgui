@@ -178,7 +178,7 @@ void ConfigurationEditor::handleCheckbox(QCheckBox * checkbox, const ConfigLine 
 {
 	QString name=configLine->getToken(0).c_str();
 	QString parm=configLine->getToken(1).c_str();
-	outDebug(0,std::cout << parm.toStdString() << std::endl);
+	outDebug(2,std::cout << parm.toStdString() << std::endl);
 	if (dir == toScreen)                                                         
 	{                                                                               
 		if (parm=="") parm=unchecked;

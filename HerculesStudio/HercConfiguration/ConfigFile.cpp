@@ -324,7 +324,7 @@ const ConfigLine * ConfigFile::locateLine(const std::string& keyword, bool creat
 		std::string line(keyword + "\n");
 		ret = new SystemConfigLine(line.c_str());
 		ret->setNew(true);
-		outDebug(0, std::cout << "new line 1:" << ret->getToken(0) << " 2:" << ret->getToken(1) << std::endl);
+		outDebug(3, std::cout << "new line 1:" << ret->getToken(0) << " 2:" << ret->getToken(1) << std::endl);
 		mNewLines.push_back(*ret);
 	}
 	return ret;

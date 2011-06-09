@@ -17,8 +17,8 @@ QMAKE_CXX  = @echo [c++] $< && $$QMAKE_CXX
 QMAKE_MOC  = @echo [moc] $< && $$QMAKE_MOC
 QMAKE_LINK = @echo [link] $$TARGET && $$QMAKE_LINK
 #QMAKE_UIC  = @echo [uic ] $< && $$QMAKE_UIC
+QMAKE_CXXFLAGS = -pedantic -Wno-long-long
 }
-CXXFLAGS = -pedantic -Wno-long-long
 
 # Input
 HEADERS += HercConfiguration/CardReaderProperties.h \
