@@ -74,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent)
 	mHerculesActive(false)
 {
 	ui.setupUi(this);
+	QString iconPath(Environment::getIconsPath().c_str());
+	this->setWindowIcon(QIcon(iconPath+"/tray.xpm"));
 	ui.actionTapecopy->setVisible(true);
 	ui.actionTapemap->setVisible(true);
 	ui.actionTapesplit->setVisible(true);
