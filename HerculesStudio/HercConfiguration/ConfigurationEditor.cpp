@@ -80,6 +80,7 @@ void ConfigurationEditor::handleText(QLineEdit * lineEdit, const ConfigLine * co
 
 void ConfigurationEditor::handleSpin(QSpinBox * spinBox, const ConfigLine * configLine, Direction dir, int dflt) 
 { 
+	std::string keyword = configLine->getUppercaseToken(0);
 	std::string parm = configLine->getToken(1);
 	outDebug(4,std::cout << parm << std::endl);      
 	if (dir == toScreen)                              
@@ -100,14 +101,14 @@ void ConfigurationEditor::handleSpin(QSpinBox * spinBox, const ConfigLine * conf
 		{																								
 			spinBox->setValue(0);									
 		}																								
-		mSpinMap[parm] = spinBox->value();     
+		mSpinMap[keyword] = spinBox->value();     
 		if (configLine->getToken(2).length() != 0)      
 			configLine->setInError(configLine->getAbsoluteTokenColumn(2)); 
 	}                                                 
 	else                                              
 	{                                                 
 		/*TODO: verification routine*/                
-		if (mSpinMap[parm] != spinBox->value())
+		if (mSpinMap[keyword] != spinBox->value())
 			const_cast<ConfigLine *>(configLine)->replaceParameters(spinBox->text().toStdString()); 
 	} 
 }
@@ -148,6 +149,7 @@ void ConfigurationEditor::handleSpin(QDoubleSpinBox * doubleSpinBox, const Confi
 
 void ConfigurationEditor::handleSlider(QSlider * slider, const ConfigLine * configLine, Direction dir)
 {
+	std::string keyword = configLine->getToken(0);	
 	std::string parm = configLine->getToken(1);
 	if (dir == toScreen)
 	{
@@ -156,7 +158,7 @@ void ConfigurationEditor::handleSlider(QSlider * slider, const ConfigLine * conf
 		if (num == 0 && parm.find_first_not_of("0123456789") != std::string::npos) 
 			configLine->setInError(configLine->getAbsoluteTokenColumn(1)); 
 		slider->setValue(num);    	
-		mSpinMap[parm] = slider->value();
+		mSpinMap[keyword] = slider->value();
 		if (configLine->getToken(2).length() != 0)
 			configLine->setInError(configLine->getAbsoluteTokenColumn(2)); 
 	}
@@ -164,7 +166,7 @@ void ConfigurationEditor::handleSlider(QSlider * slider, const ConfigLine * conf
 	{
 		if(slider->isWindowModified()){};      
 			/*TODO: verification routine*/                
-		if (mSpinMap[parm] != slider->value())
+		if (mSpinMap[keyword] != slider->value())
 		{                                               
 			std::stringstream s;                        
 			s << slider->value();      
