@@ -123,7 +123,7 @@ Preferences::Preferences()
 			// set default values
 			setLogsDir(QDir::homePath().toStdString()+"/Desktop");
 			setPswMode(Psw::StatusBar);
-			setFontName(ConfigurationFontObject,"Mono");
+			setFontName(ConfigurationFontObject,"monospace");
 		}
 		mSettings->setValue(sKeywords[Version],"1.3");
 	}
