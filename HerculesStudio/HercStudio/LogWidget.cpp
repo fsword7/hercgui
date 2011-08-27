@@ -43,7 +43,7 @@
 #define current_log mLogs[for_loop_i]
 
 PlainLogWidget::PlainLogWidget(QWidget * parent, const char * suffix)
-:QTextEdit(parent),  mGreen(10,120,10), mYellow(215,201,45), mRed(240,20,20), mBlack(0,0,0)
+:QTextEdit(parent),  mGreen(10,120,10), mYellow(215,201,45), mRed(240,20,20), mBlack(0,0,0), mLinesWritten(0)
 
 {
 	mSaveLog = Preferences::getInstance().autosaveLog();
@@ -95,7 +95,7 @@ void PlainLogWidget::append(const QByteArray & text)
 	setTextColor(keepC);
 	if (QTextEdit::document()->blockCount()%mLogFileLines == 0)
 	{
-		writeToFile(false);
+		writeToFile(Overflow);
 	}
 }
 
@@ -125,10 +125,10 @@ bool PlainLogWidget::isOSLog()
 	return false;
 }
 
-void PlainLogWidget::writeToFile(bool menuCommand)
+void PlainLogWidget::writeToFile(WriteType type)
 {
 	QTextDocument *oldDocument = QTextEdit::document();
-	if (mSaveLog || menuCommand)
+	if (mSaveLog || type == MenuCommand)
 	{
 		QFile file(mLogFileName);
 
@@ -140,24 +140,35 @@ void PlainLogWidget::writeToFile(bool menuCommand)
 		QTextStream out(&file);
 
 		QTextBlock block = oldDocument->begin();
+
+		// skip  lines that were already written
+		long linecount = 0;
+		while(linecount < mLinesWritten && block != oldDocument->end())
+		{
+			block=block.next();
+			linecount++;
+		}
+
+		// write new lines
 		while(block != oldDocument->end())
 		{
 			out << block.text().toAscii().data() << "\n";
+			mLinesWritten++;
 			block=block.next();
 		}
-
-		if (!menuCommand)
-		{
-			getTimeStamp(true);
-			QString sepLine = "---------------- log was saved at ";
-			sepLine += mTimeStamp;
-			sepLine += "-------------------------";
-			QTextEdit::append(sepLine);
-		}
 	}
-	oldDocument->clear();
-	QTextDocument *newBlock = new QTextDocument(this);
-	QTextEdit::setDocument(newBlock);
+	if (type == Overflow)
+	{
+		oldDocument->clear();
+		QTextDocument *newBlock = new QTextDocument(this);
+		QTextEdit::setDocument(newBlock);
+		mLinesWritten = 0;
+		getTimeStamp(true);
+		QString sepLine = "---------------- log was saved at ";
+		sepLine += mTimeStamp;
+		sepLine += "-------------------------";
+		QTextEdit::append(sepLine);
+	}
 }
 
 void PlainLogWidget::preferencesChanged()
@@ -259,10 +270,10 @@ bool LogWidget::isOSLog()
 	return (mTabWidget->currentIndex() == 1);
 }
 
-void LogWidget::writeToFile(bool menuCommand)
+void LogWidget::writeToFile(WriteType writeType)
 {
 	for_each_log
-		current_log->writeToFile(menuCommand);
+		current_log->writeToFile(writeType);
 }
 
 void LogWidget::preferencesChanged()

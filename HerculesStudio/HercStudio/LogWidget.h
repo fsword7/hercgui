@@ -35,11 +35,17 @@ class QTabWidget;
 class PlainLogWidget : public QTextEdit
 {
 public:
+	enum WriteType
+	{
+		MenuCommand,
+		Overflow,
+		Shutdown
+	} ;
 	PlainLogWidget(QWidget * parent, const char * suffix="");
 	virtual void append(const QByteArray & text);
 	virtual QString toPlainText();
 	virtual bool isOSLog();
-	virtual void writeToFile(bool menuCommand);
+	virtual void writeToFile(WriteType type);
 	virtual void preferencesChanged();
 	virtual void setIpled(bool ipled);
 
@@ -53,6 +59,7 @@ protected:
 	bool  mSaveLog;
 	QString mLogFileName;
 	QColor mGreen, mYellow, mRed, mBlack;
+	long  mLinesWritten;
 };
 
 
@@ -76,7 +83,7 @@ public:
 	virtual void append(const QByteArray & text);
 	virtual QString toPlainText();
 	virtual bool isOSLog();
-	virtual void writeToFile(bool WriteSep);
+	virtual void writeToFile(PlainLogWidget::WriteType writeType);
 	virtual void preferencesChanged();
 	virtual void setIpled(bool ipled);
 

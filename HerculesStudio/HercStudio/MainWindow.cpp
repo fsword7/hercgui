@@ -677,7 +677,7 @@ void MainWindow::deleteMessages()
 
 void MainWindow::saveMessages()
 {
-	mLogWindow->writeToFile(true);
+	mLogWindow->writeToFile(PlainLogWidget::MenuCommand);
 	return;
 }
 
@@ -1030,6 +1030,7 @@ void MainWindow::herculesEndedSlot()
 {
 	std::cerr << "############ ended ##############" << std::endl;
 	mLogWindow->setIpled(false);
+	mLogWindow->writeToFile(PlainLogWidget::Shutdown);
 	mLogRunner->terminate();
 	mStatusRunner->terminate();
 	mWatchdog->terminate();
