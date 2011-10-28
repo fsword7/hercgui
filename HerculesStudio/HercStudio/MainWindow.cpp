@@ -211,6 +211,12 @@ MainWindow::MainWindow(QWidget *parent)
 	QIcon trayIcon(path + "/tray.xpm");
 	mSystemTrayIcon = new QSystemTrayIcon(trayIcon);
 
+    QMenu *trayIconMenu = new QMenu(this);
+    QAction *restoreAction = new QAction(tr("&Hide"), this);
+    connect(restoreAction, SIGNAL(triggered()), this, SLOT(hideRestore()));
+    trayIconMenu->addAction(restoreAction);
+    mSystemTrayIcon->setContextMenu(trayIconMenu);
+
 	connect(ui.actionNew, SIGNAL(triggered()), this , SLOT(newConfig()));
 	connect(ui.actionOpen_configuration, SIGNAL(triggered()), this , SLOT(openConfig()));
 	connect(ui.actionEditConfig, SIGNAL(triggered()), this , SLOT(config()));
@@ -1056,7 +1062,7 @@ void MainWindow::systrayHint()
 {
 	if (!mSystrayHintEjected)
 	{
-		mSystemTrayIcon->showMessage("Hercules is still active","Click this icon to restore the main window",QSystemTrayIcon::Information,5000);
+        mSystemTrayIcon->showMessage("Hercules is still active","Click the Hercules icon to restore the main window",QSystemTrayIcon::Information,5000);
 		mSystemTrayIcon->setToolTip("Click on this icon to restore the main window");
 		mSystrayHintEjected = true;
 	}
@@ -1070,8 +1076,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 		 mSystemTrayIcon->setVisible(true);
 		 systrayHint();
 		 setVisible(false);
+         mSystemTrayIcon->contextMenu()->actions().at(0)->setText("&Restore");
 
-		 event->ignore();
+         event->ignore();
 	 }
 	 else
 	 {
@@ -1101,15 +1108,23 @@ void MainWindow::tryAbort()
 
 void MainWindow::systrayClick(QSystemTrayIcon::ActivationReason)
 {
-	if (isVisible())
+    hideRestore();
+}
+
+void MainWindow::hideRestore()
+{
+    if (isVisible())
 	{
 		setVisible(false);
 		systrayHint();
+        mSystemTrayIcon->contextMenu()->actions().at(0)->setText("Restore");
+
 	}
 	else
 	{
 		setVisible(true);
-	}
+        mSystemTrayIcon->contextMenu()->actions().at(0)->setText("Hide");
+    }
 }
 
 void MainWindow::restartDevices()

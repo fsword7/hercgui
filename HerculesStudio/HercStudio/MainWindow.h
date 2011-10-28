@@ -176,8 +176,9 @@ public slots:
     void preferences();
     void helpAbout();
     void closeEvent(QCloseEvent * event);
-	void tryAbort();
+    void tryAbort();
     void systrayClick(QSystemTrayIcon::ActivationReason);
+    void hideRestore();
     void systrayHint();
     void recoverDevices(QByteArray& statusLine);
 };
