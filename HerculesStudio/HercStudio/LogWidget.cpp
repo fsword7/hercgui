@@ -156,6 +156,7 @@ void PlainLogWidget::writeToFile(WriteType type)
 			mLinesWritten++;
 			block=block.next();
 		}
+        file.close();
 	}
 	if (type == Overflow)
 	{
@@ -219,19 +220,13 @@ void LogWidget::setReadOnly(bool ro)
 
 void LogWidget::append(const QByteArray & text)
 {
-	if (Preferences::getInstance().logTimestamp())
-	{
-		getTimeStamp(false);
-	}
-	else
-		mTimeStamp[0] ='\0';
 	QByteArray s = text;
 	if (text.data()[0] == '<')
 		s = text.mid(24);
 	if (text.startsWith("HHC") || !mIpled)
-		mLogs[cHercIndex]->append(QByteArray(mTimeStamp) + s);
+		mLogs[cHercIndex]->append(s);
 	else
-		mLogs[cOsIndex]->append(QByteArray(mTimeStamp) + s);
+		mLogs[cOsIndex]->append(s);
 }
 
 void LogWidget::setFont(const QFont & font)
