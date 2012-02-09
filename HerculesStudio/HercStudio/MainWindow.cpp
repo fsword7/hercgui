@@ -62,6 +62,7 @@
 #include <err.h>
 #endif
 #include <typeinfo>
+#include <unistd.h>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent),

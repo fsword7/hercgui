@@ -33,6 +33,7 @@
 #include <fcntl.h>
 #include <cerrno>
 #include <iostream>
+#include <unistd.h>
 
 int pipeLog[2];
 int pipeStatus[2];
