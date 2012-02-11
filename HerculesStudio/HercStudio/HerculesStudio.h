@@ -30,9 +30,11 @@
 #include <qglobal.h>
 #define HERCSTUDIO_VERSION "Version: 1.3.0"
 #define hDEBUG 0
+#define UNISTD_INC
 #ifdef  Q_WS_WIN
 #define hFramework
 #define hCRLF
+#undef UNISTD_INC
 #endif
 #include <iostream>
 

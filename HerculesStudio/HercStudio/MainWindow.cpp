@@ -62,7 +62,10 @@
 #include <err.h>
 #endif
 #include <typeinfo>
+#ifdef UNISTD_INC
 #include <unistd.h>
+#endif
+
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent),

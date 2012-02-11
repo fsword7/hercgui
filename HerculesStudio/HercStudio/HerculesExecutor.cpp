@@ -33,7 +33,9 @@
 #include <fcntl.h>
 #include <cerrno>
 #include <iostream>
+#ifdef UNISTD_INC
 #include <unistd.h>
+#endif
 
 int pipeLog[2];
 int pipeStatus[2];
