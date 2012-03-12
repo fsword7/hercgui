@@ -128,7 +128,6 @@ void Dasdcopy::runClicked()
     parameters.push_back(fullPath);
     std::string command = "dasdcopy";
 
-    mExecutor = new UtilityExecutor();
     std::string path = Preferences::getInstance().hercDir();
     execute(command, path, parameters);
     mFirstEndReceived = false;
@@ -179,7 +178,7 @@ void Dasdcopy::runnerMaximumChanged(int maximum)
 void Dasdcopy::runnerValueChanged(int value)
 {
     outDebug(3, std::cout << "dasdcopy got value changed " << value << std::endl);
-    if (value >= 0)
+	if (value >= 0)
         ui.progressBar->setValue(value);
     else
     {

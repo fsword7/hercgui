@@ -55,6 +55,7 @@ private slots:
 	void dataInfoClicked();
 	void tapemapClicked();
 	void browseFileClicked();
+	void runnerError(const QByteArray &line);
 };
 
 #endif // HETMAP_H

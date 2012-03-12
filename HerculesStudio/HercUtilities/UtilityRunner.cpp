@@ -69,13 +69,25 @@ void UtilityRunner::updateStatus(const std::string& line)
         emit maximumChanged(cyls);
         return;
     }
-    if (line.compare(0,5,"NMEM=") == 0)  // dasdisup
-    {
-        int currMem = ConfigurationEditor::parseNum(line.substr(5),10);
-        emit maximumChanged(currMem);
-        return;
-    }
-    if (line.compare(0,4,"MEM=") == 0)  // dasdisup
+	if (line.compare(0,5,"NMEM=") == 0)  // dasdisup
+	{
+		int currMem = ConfigurationEditor::parseNum(line.substr(5),10);
+		emit maximumChanged(currMem);
+		return;
+	}
+	if (line.compare(0,4,"POS=") == 0)  // dasdcopy
+	{
+		int currMem = ConfigurationEditor::parseNum(line.substr(5),10);
+		emit valueChanged(currMem);
+		return;
+	}
+	if (line.compare(0,5,"IPOS=") == 0)  // hetmap
+	{
+		int currMem = ConfigurationEditor::parseNum(line.substr(5),10);
+		emit valueChanged(currMem);
+		return;
+	}
+	if (line.compare(0,4,"MEM=") == 0)  // dasdisup
     {
         int currMem = ConfigurationEditor::parseNum(line.substr(5),10);
         emit valueChanged(currMem);
@@ -124,13 +136,18 @@ void UtilityRunner::updateStatus(const std::string& line)
         outDebug(2, std::cout << "Value changed " << currMem << std::endl);
         return;
     }
-    if (line.compare(0,7,"OUTCYL=") == 0)
-    {
-        int currCyl = ConfigurationEditor::parseNum(line.substr(7),10);
-        emit valueChanged(currCyl);
-        return;
-    }
-    if (line.length() > 5 && line.compare(2,4,"CYL=") == 0)
+	if (line.compare(0,7,"OUTCYL=") == 0)
+	{
+		int currCyl = ConfigurationEditor::parseNum(line.substr(7),10);
+		emit valueChanged(currCyl);
+		return;
+	}
+	if (line.compare(0,5,"SIZE=") == 0) // dasdcopy
+	{
+		// swallow this message
+		return;
+	}
+	if (line.length() > 5 && line.compare(2,4,"CYL=") == 0)
     {
         int currCyl = ConfigurationEditor::parseNum(line.substr(4),10);
         outDebug(5, std::cout << "emitting value changed to " << currCyl << std::endl);

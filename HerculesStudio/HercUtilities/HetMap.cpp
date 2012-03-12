@@ -189,7 +189,15 @@ void HetMap::tapemapClicked()
 	mInternalChange = false;  // resume propagating signals
 }
 
+void HetMap::runnerError(const QByteArray &line)
+{
+	QByteArray lineCopy = line;
+	if (lineCopy.endsWith("\n"))
+		lineCopy.chop(1);
+	emit output(lineCopy);
+}
+
 void HetMap::finishedSlot()
 {
-    deleteLater();
+   deleteLater();
 }
