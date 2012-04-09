@@ -1131,6 +1131,22 @@ void MainWindow::hideRestore()
     }
 }
 
+void MainWindow::keyPressEvent(QKeyEvent * event)
+{
+	outDebug(4, std::cout << "key:" << event->key() << " " << (event->key() == Qt::Key_Up) << std::endl);
+	QMainWindow::keyPressEvent(event);
+	switch (event->key())
+	{
+	case Qt::Key_Enter:
+	case Qt::Key_Return:
+		if (!mCommandLine->hasFocus())
+			mCommandLine->setFocus();
+		break;
+	default:
+		break;
+	}
+}
+
 void MainWindow::restartDevices()
 {
 	hOutDebug(3,"MainWindow::restartRecovery");
@@ -1161,3 +1177,5 @@ void MainWindow::testGui()
 			 QMessageBox::Ok);
 	}
 }
+
+

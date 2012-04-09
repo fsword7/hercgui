@@ -181,6 +181,7 @@ public slots:
     void hideRestore();
     void systrayHint();
     void recoverDevices(QByteArray& statusLine);
+	void keyPressEvent(QKeyEvent * event);
 };
 
 #endif // MAINWINDOW_H
