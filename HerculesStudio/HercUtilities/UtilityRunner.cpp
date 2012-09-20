@@ -47,7 +47,7 @@ UtilityRunner::~UtilityRunner()
 
 void UtilityRunner::run()
 {
-    mUtilityExecutor->getQProcess()->waitForStarted();
+    //mUtilityExecutor->getQProcess()->waitForStarted();
     mProcess = mUtilityExecutor->getQProcess();
     return;
 }

@@ -476,6 +476,10 @@ public:
 	void setLogFileLines(int lines);
 	int logFileLines() const;
 
+    //command line history
+    void setHistory(QVector<QString>& history);
+    void getHistory(QVector<QString>& history);
+
 protected:
 	Preferences();
 

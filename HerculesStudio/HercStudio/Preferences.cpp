@@ -313,6 +313,24 @@ void Preferences::convert()
 	setFontName(ConfigurationFontObject,"Mono");
 }
 
+void Preferences::setHistory(QVector<QString> &history)
+{
+    QList<QString> list;
+    for (int i=0; i<history.size(); i++)
+        list.append(history[i]);
+
+    mSettings->setValue(QString("History"),QVariant(list));
+}
+
+void Preferences::getHistory(QVector<QString> &history)
+{
+    QList<QVariant> list;
+    list = mSettings->value("History").toList();
+    for (int i=0; i<list.size(); i++)
+        history.append(list[i].toString());
+
+}
+
 //////////////////////////////////////////////////////////////////////
 #include "FontPreferences.h"
 

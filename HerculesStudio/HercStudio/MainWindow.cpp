@@ -303,6 +303,7 @@ MainWindow::MainWindow(QWidget *parent)
 			mLogWindow->append("--- successfully attached to Hercules ---");
 		}
 	}
+    mCommandLine->restore();
 	if (Arguments::getInstance().configFileName().length() > 0)
 		powerOn();
 }
@@ -838,6 +839,7 @@ void MainWindow::powerOff()
 	mDevicesPane->clear();
 	mMainPanel->setDormant();
 	mPsw->setDormant();
+    mCommandLine->save();
 }
 
 void MainWindow::load()

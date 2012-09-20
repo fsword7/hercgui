@@ -40,6 +40,8 @@ public:
   virtual ~CommandLine();
   void setFont();
   bool empty();
+  void save();
+  void restore();
 
   QSize sizeHint();
 
@@ -50,7 +52,7 @@ private slots:
     void enterPressed(const QString & text);
 
 private:
-  std::vector<std::string> mHistory;
+  QVector<QString> mHistory;
   int mHistoryPtr;
 
   void setLine();

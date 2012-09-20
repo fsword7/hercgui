@@ -49,8 +49,7 @@ QSize CommandLine::sizeHint()
 void CommandLine::enterPressed(const QString & text1)
 {
     outDebug(4,std::cout << "text1:"<<  this->text().toStdString() << std::endl);
-    std::string str(text1.toStdString());
-    mHistory.insert(mHistory.begin(),str);
+    mHistory.insert(mHistory.begin(),text1);
     while (mHistory.size() > 100)
         mHistory.erase(mHistory.end()-1);
     mHistoryPtr = -1;
@@ -83,11 +82,11 @@ void CommandLine::keyPressEvent(QKeyEvent * event)
 
 void CommandLine::setLine()
 {
-    outDebug(4,std::cout << "setLine:" << mHistoryPtr << " size:" << mHistory.size() << " " << mHistory[mHistoryPtr].c_str() << std::endl);
+    outDebug(4,std::cout << "setLine:" << mHistoryPtr << " size:" << mHistory.size() << " " << mHistory[mHistoryPtr].toStdString() << std::endl);
     if (mHistoryPtr < -1 || mHistoryPtr >= (signed) mHistory.size())
         return;
     if (mHistoryPtr != -1)
-        this->setText(mHistory[mHistoryPtr].c_str());
+        this->setText(mHistory[mHistoryPtr]);
     else
         this->setText("");
 }
@@ -107,4 +106,19 @@ void CommandLine::setFont()
 bool CommandLine::empty()
 {
 	return (!(mHistory.size() > 0));
+}
+
+void CommandLine::save()
+{
+    Preferences& pref = Preferences::getInstance();
+    while(mHistory.size() > 30)
+        mHistory.pop_back();
+    pref.setHistory(mHistory);
+}
+
+void CommandLine::restore()
+{
+    Preferences& pref = Preferences::getInstance();
+    pref.getHistory(mHistory);
+
 }
