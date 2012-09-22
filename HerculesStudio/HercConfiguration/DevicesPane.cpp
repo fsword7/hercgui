@@ -100,7 +100,7 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 					VisualizedDeviceEntry& deviceEntryPtr = *new VisualizedDeviceEntry(devNo, devType, statusLine.data());
                     std::pair<int,VisualizedDeviceEntry> toinsert(devNo, deviceEntryPtr);
                     mDevices.insert(toinsert);
-                    deviceAdded = true;
+                    if (devNo !=0) deviceAdded = true; // after disconnect and attach, herculess starts sending DEVA instead of DEVC
                     }
 
                 break;
@@ -126,7 +126,7 @@ bool DevicesPane::notify(const QByteArray& statusLine)
                 {
                     hOutDebug(1,"sending restart");
                     mDevices.clear();
-                    emit restartDevices();
+                    //emit restartDevices();
                 }
                 break;
             case('D'):
