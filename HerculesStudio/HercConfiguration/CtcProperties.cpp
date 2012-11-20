@@ -42,6 +42,7 @@ CtcProperties::CtcProperties(ConfigLine& configLine, QWidget *parent)
 	connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
 	connect(ui.typeCombo, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(typeChanged(const QString &)));
 	connect(ui.oatBrowseButton, SIGNAL(clicked()), this, SLOT(oatBrowse()));
+    connect(ui.tun0CheckBox, SIGNAL(stateChanged(int)), this, SLOT(tun0Check(int)));
 }
 
 CtcProperties::~CtcProperties()
@@ -99,49 +100,56 @@ void CtcProperties::ok()
     }
     else  if (ui.typeCombo->currentIndex() == 1)  // ctci
     {
-    	if (!ipValidator(ui.guestIP,false))
-    		return;
-    	if (!ipValidator(ui.hostIP,false))
-    		return;
-        if (!ui.tun->text().isEmpty())
+        if (ui.tun0CheckBox->isChecked())
         {
-            newLineBuff << " -n " << ui.tun->text().toStdString();
+            newLineBuff << "  tun0";
         }
-        if (!(ui.mac->text() == ":::::"))
+        else
         {
-            if (macValidator(ui.mac->text().toStdString()))
-            {
-                newLineBuff << " -m " <<  ui.mac->text().toStdString() ;
-            }
-            else
+            if (!ipValidator(ui.guestIP,false))
                 return;
-        }
-        if (!(ui.mask->text() == "..."))
-        {
-            if (ipValidator(ui.mask, false))
-            {
-                newLineBuff << " -s " <<  ui.mask->text().toStdString() ;
-            }
-            else
+            if (!ipValidator(ui.hostIP,false))
                 return;
-        }
-        if (!(ui.guestIP->text() == "..."))
-        {
-            if (ipValidator(ui.guestIP, false))
+            if (!ui.tun->text().isEmpty())
             {
-                newLineBuff << " " <<  ui.guestIP->text().toStdString() ;
+                newLineBuff << " -n " << ui.tun->text().toStdString();
             }
-            else
-                return;
-        }
-        if (!(ui.hostIP->text() == "..."))
-        {
-            if (ipValidator(ui.hostIP, false))
+            if (!(ui.mac->text() == ":::::"))
             {
-                newLineBuff << " " <<  ui.hostIP->text().toStdString() ;
+                if (macValidator(ui.mac->text().toStdString()))
+                {
+                    newLineBuff << " -m " <<  ui.mac->text().toStdString() ;
+                }
+                else
+                    return;
             }
-            else
-                return;
+            if (!(ui.mask->text() == "..."))
+            {
+                if (ipValidator(ui.mask, false))
+                {
+                    newLineBuff << " -s " <<  ui.mask->text().toStdString() ;
+                }
+                else
+                    return;
+            }
+            if (!(ui.guestIP->text() == "..."))
+            {
+                if (ipValidator(ui.guestIP, false))
+                {
+                    newLineBuff << " " <<  ui.guestIP->text().toStdString() ;
+                }
+                else
+                    return;
+            }
+            if (!(ui.hostIP->text() == "..."))
+            {
+                if (ipValidator(ui.hostIP, false))
+                {
+                    newLineBuff << " " <<  ui.hostIP->text().toStdString() ;
+                }
+                else
+                    return;
+            }
         }
     }
     else // qeth
@@ -259,6 +267,7 @@ void CtcProperties::arrangeLcs(bool set)
 
 void CtcProperties::arrangeCtc(bool set)
 {
+    bool nonTunSet = set;
     outDebug(5, std::cout << "ctc " << (set ? "true" : "false") << std::endl);
     if (set)
     {
@@ -267,6 +276,10 @@ void CtcProperties::arrangeCtc(bool set)
         arrangeQeth(!set);
         ui.hostIP->setInputMask("000.000.000.000;");
     }
+
+    ui.tun0CheckBox->setVisible(set);
+    nonTunSet =  !(ui.tun0CheckBox->isChecked());
+
     ui.guestIPLabel->setVisible(set);
     ui.guestIP->setVisible(set);
     ui.maskLabel->setVisible(set);
@@ -279,6 +292,19 @@ void CtcProperties::arrangeCtc(bool set)
     ui.mac->setVisible(set);
     ui.macLabel2->setVisible(set);
 
+    //disable if tun0 is set
+    ui.guestIPLabel->setEnabled(nonTunSet);
+    ui.guestIP->setEnabled(nonTunSet);
+    ui.maskLabel->setEnabled(nonTunSet);
+    ui.mask->setEnabled(nonTunSet);
+    ui.hostIPLabel->setEnabled(nonTunSet);
+    ui.hostIP->setEnabled(nonTunSet);
+    ui.tunLabel->setEnabled(nonTunSet);
+    ui.tun->setEnabled(nonTunSet);
+    ui.macLabel->setEnabled(nonTunSet);
+    ui.mac->setEnabled(nonTunSet);
+    ui.macLabel2->setEnabled(nonTunSet);
+
     ui.hostIPLabel->setGeometry(20,70,53,16);
     ui.hostIP->setGeometry(110,60,113,26);
     ui.tunLabel->setGeometry(20,110,81,16);
@@ -286,6 +312,7 @@ void CtcProperties::arrangeCtc(bool set)
     ui.macLabel->setGeometry(20,150,53,16);
     ui.mac->setGeometry(110,140,171,26);
     ui.macLabel2->setGeometry(300,140,53,16);
+    ui.tun0CheckBox->setGeometry(250,110,140,24);
 }
 
 void CtcProperties::arrangeCtct(bool set)
@@ -344,6 +371,11 @@ void CtcProperties::oatBrowse()
                     Preferences::getInstance().configDir().c_str(),
                     tr("All files(*)")).toUtf8().data();
     ui.oat->setText(s.c_str());
+}
+
+void CtcProperties::tun0Check(int)
+{
+    arrangeByType();
 }
 
 void CtcProperties::initialize(ConfigLine & configLine)
@@ -408,30 +440,42 @@ void CtcProperties::initialize(ConfigLine & configLine)
     {
         ui.typeCombo->setCurrentIndex(1);
 
-        for (int i=2; i<configLine.size(); i++)
+        QString tun0;
+        if (configLine.size() > 2) tun0 = configLine.getToken(2).c_str();
+        if (tun0 == "tun0")
         {
-            if (configLine.getToken(i) == "-n" ||
-                configLine.getToken(i) == "--dev")
+            ui.tun0CheckBox->setChecked(true);
+        }
+        else
+        {
+            ui.tun0CheckBox->setChecked(false);
+            for (int i=2; i<configLine.size(); i++)
             {
-                ui.tun->setText(configLine.getToken(++i).c_str());
+
+                if (configLine.getToken(i) == "-n" ||
+                        configLine.getToken(i) == "--dev")
+                {
+                    ui.tun->setText(configLine.getToken(++i).c_str());
+                }
+                else if (configLine.getToken(i) == "-m" ||
+                         configLine.getToken(i) == "--mac")
+                {
+                    ui.mac->setText(configLine.getToken(++i).c_str());
+                }
+                else if (configLine.getToken(i) == "-s")
+                {
+                    ui.mask->setText(configLine.getToken(++i).c_str());
+                }
+                else if (i+1 == configLine.size())
+                {
+                    ui.hostIP->setText(configLine.getToken(i).c_str());
+                }
+                else if (i+2 == configLine.size())
+                {
+                    ui.guestIP->setText(configLine.getToken(i).c_str());
+                }
             }
-            else if (configLine.getToken(i) == "-m" ||
-                configLine.getToken(i) == "--mac")
-            {
-                ui.mac->setText(configLine.getToken(++i).c_str());
-            }
-            else if (configLine.getToken(i) == "-s")
-            {
-                ui.mask->setText(configLine.getToken(++i).c_str());
-            }
-            else if (i+1 == configLine.size())
-            {
-                ui.hostIP->setText(configLine.getToken(i).c_str());
-            }
-            else if (i+2 == configLine.size())
-            {
-                ui.guestIP->setText(configLine.getToken(i).c_str());
-            }
+            ui.tun0CheckBox->setChecked(false);
         }
     }
 

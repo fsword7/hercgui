@@ -57,6 +57,7 @@ private slots:
     virtual void cancel();
     virtual void oatBrowse();
     void typeChanged(const QString &);
+    void tun0Check(int);
 };
 
 #endif // CTCPROPERTIES_H

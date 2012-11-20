@@ -184,6 +184,11 @@ void PlainLogWidget::setIpled(bool ipled)
 	mIpled = ipled;
 }
 
+void PlainLogWidget::clear()
+{
+    QTextEdit::clear();
+}
+
 LogWidget::LogWidget(QWidget * parent)
 : PlainLogWidget(NULL), cHercIndex(0), cOsIndex(1)
 {
@@ -223,6 +228,7 @@ void LogWidget::setReadOnly(bool ro)
 void LogWidget::append(const QByteArray & text)
 {
 	QByteArray s = text;
+    hOutDebug(3, s.data());
 	if (text.data()[0] == '<')
 		s = text.mid(24);
 	if (text.startsWith("HHC") || !mIpled)

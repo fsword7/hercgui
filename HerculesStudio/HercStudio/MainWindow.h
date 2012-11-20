@@ -117,6 +117,7 @@ private:
 	void				mipsChanged();
 	void				pswChanged();
 	void				themeChanged();
+    void                setIpled(QString ipled);
 
 
 public slots:

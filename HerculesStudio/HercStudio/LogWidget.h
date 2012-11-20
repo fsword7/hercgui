@@ -48,6 +48,7 @@ public:
 	virtual void writeToFile(WriteType type);
 	virtual void preferencesChanged();
 	virtual void setIpled(bool ipled);
+    virtual void clear();
 
 protected:
 

@@ -475,6 +475,7 @@ void MainWindow::newCommand()
 		mHerculesExecutor->issueFormattedCommand("%s\n",cl->text().toAscii().data());
 	else
 		mHerculesExecutor->issueFormattedCommand(".%s\n",cl->text().toAscii().data());
+    setIpled(cl->text());
 }
 
 
@@ -1154,8 +1155,13 @@ void MainWindow::restartDevices()
 
 bool MainWindow::issueCommand(const std::string& command)
 {
-   if (mHerculesActive)
-		mHerculesExecutor->issueFormattedCommand("%s\n", command.c_str());
+    QString qCommand  = command.c_str();
+    if (mHerculesActive)
+    {
+        mHerculesExecutor->issueFormattedCommand("%s\n", command.c_str());
+        setIpled(qCommand);
+    }
+
 	outDebug(2, std::cout << "issue command:" << command << std::endl);
    return true;
 }
@@ -1172,4 +1178,18 @@ void MainWindow::testGui()
 	}
 }
 
+void MainWindow::setIpled(QString command)
+{
+    if (mHerculesActive)
+    {
+         if (command.toLower().leftJustified(4).startsWith("ipl "))
+         {
+             mLogWindow->setIpled(true);
+         }
+         else if (command.toLower().leftJustified(5).startsWith("quit "))
+         {
+             mLogWindow->setIpled(false);
+         }
 
+    }
+}
