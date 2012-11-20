@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Hercules Studio</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="HercStudio.qrc">
+    <normaloff>:/icons/tray.xpm</normaloff>:/icons/tray.xpm</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
