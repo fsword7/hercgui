@@ -213,7 +213,7 @@ SOURCES += HercConfiguration/CardReaderProperties.cpp \
 		   HercUtilities/UtilityExecutor.cpp \
 		   HercUtilities/UtilityRunner.cpp 
 RESOURCES += HercStudio/HercStudio.qrc
-target.path = /usr/local/bin
+target.path = /usr/bin
 INSTALLS += target
 CONFIG += warn_on
 CONFIG += debug_and_release
