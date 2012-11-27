@@ -46,7 +46,6 @@ HelpAbout::HelpAbout(QWidget *parent)
 	icon2 += "/tray.xpm";
     static QPixmap * pixmap2 = new QPixmap(icon2);
     ui.label2->setPixmap(*pixmap2);
-    update();
     connect(ui.okButton, SIGNAL(clicked()), this, SLOT(okPressed()));
 
 }

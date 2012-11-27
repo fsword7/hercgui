@@ -29,7 +29,7 @@
 #include <QPainter>
 
 MipsGauge::MipsGauge(QWidget * parent)
-: Mips(parent)
+	: Mips(parent), mFirstDraw(true)
 {
 	mMips = new QWidget(parent);
 	mHwm = 0.0;
@@ -70,9 +70,6 @@ void MipsGauge::paintEvent(QPaintEvent *)
 	hOutDebug(5,"Gauge paint" << std::endl);
 	QPainter painter(this);
 
-	QColor red(240,30,30,255);
-	QColor black(0,0,0,255);
-
 	painter.drawArc(0,10,120,120,30*16,120*16);
 	painter.translate(60,70);
 
@@ -83,13 +80,16 @@ void MipsGauge::paintEvent(QPaintEvent *)
 		painter.rotate(10.0);
 	}
 	painter.rotate(-160.0);
+	mPrevAngle = 30.0;
+	mFirstDraw = false;
 
 	double angle = 30.0 ;
 	if (mHwm > 0.0)
 		angle = 30 + (mValue/mHwm*120);
 	hOutDebug(5,"angle="<<angle << " hwm=" << mHwm << std::endl);
+
 	painter.rotate(angle);
-	painter.drawLine(-50,0,0,0);
+	painter.drawLine(-50,0,-20,0);
 }
 
 void MipsGauge::deleteLater()

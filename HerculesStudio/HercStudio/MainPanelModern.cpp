@@ -69,7 +69,7 @@ void MainPanelModern::setupUi(QWidget *)
     setButton(mPowerOffButton, QString("Power\nOff"), QIcon(iconsPath + "/modern/Stop-icon.png"));
     setButton(mStopButton, QString("Stop"), QIcon(iconsPath + "/modern/Pause.png"));
     setButton(mInterruptButton, QString("Interrupt"), QIcon(iconsPath + "/modern/interrupt.png"));
-    setButton(mLoadButton, QString("Load"), QIcon(iconsPath + "/modern/load.png"));
+	setButton(mLoadButton, QString("IPL\n(Boot)"), QIcon(iconsPath + "/modern/load.png"));
 
     mRestartButton = NULL;
     mStoreButton = NULL;
@@ -133,6 +133,18 @@ void MainPanelModern::setDormant()
 void MainPanelModern::standby()
 {
     mMips->setVisible(true);
+
+    const QColor black(50,50,50);
+    const QColor white(255,255,255);
+    QBrush blackBrush(black);
+    QBrush whiteBrush(black);
+    QPalette blackPalette(white, black);
+    QPalette whitePalette(white, white);
+    this->setPalette(whitePalette);
+    this->setAutoFillBackground(true);
+    this->repaint();
+    this->setPalette(blackPalette);
+
 }
 
 bool MainPanelModern::notify(const QByteArray& statusLine)

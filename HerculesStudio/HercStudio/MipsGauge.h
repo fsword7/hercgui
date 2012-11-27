@@ -46,6 +46,8 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *);
+	bool	mFirstDraw;
+	double  mPrevAngle;
 
 private:
     QWidget * mMips;

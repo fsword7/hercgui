@@ -24,8 +24,6 @@
 
 #include "Mips.h"
 
-#include <QLCDNumber>
-
 Mips::Mips(QWidget * parent) : QWidget(parent)
 {
 }
