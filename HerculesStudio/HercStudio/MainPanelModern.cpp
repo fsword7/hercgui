@@ -65,8 +65,8 @@ void MainPanelModern::setupUi(QWidget *)
     QString iconsPath = Environment::getIconsPath().c_str() ;
     hOutDebug(3,"icons path:'" << iconsPath.toStdString() << "'");
 
-    setButton(mPowerOnButton, QString("Power On"), QIcon(iconsPath + "/modern/Play-icon.png"));
-    setButton(mPowerOffButton, QString("Power Off"), QIcon(iconsPath + "/modern/Stop-icon.png"));
+    setButton(mPowerOnButton, QString("Power\nOn"), QIcon(iconsPath + "/modern/Play-icon.png"));
+    setButton(mPowerOffButton, QString("Power\nOff"), QIcon(iconsPath + "/modern/Stop-icon.png"));
     setButton(mStopButton, QString("Stop"), QIcon(iconsPath + "/modern/Pause.png"));
     setButton(mInterruptButton, QString("Interrupt"), QIcon(iconsPath + "/modern/interrupt.png"));
     setButton(mLoadButton, QString("Load"), QIcon(iconsPath + "/modern/load.png"));
