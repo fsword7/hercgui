@@ -54,6 +54,7 @@ public slots:
 	void hercDirPressed();
 	void configDirPressed();
 	void logsDirPressed();
+	void mipsToggled();
 
 signals:
 	void preferencesChanged();

@@ -92,7 +92,7 @@ void MainPanelModern::setupUi(QWidget *)
     	mMips = new MipsGauge(this);
     else
     	mMips = new MipsLed(this);
-    mMips->setVisible(false);
+	mMips->setActive(false);
 }
 
 void MainPanelModern::setButton(QToolButton*& button, QString text, QIcon icon)
@@ -127,12 +127,12 @@ void MainPanelModern::setDormant()
     	stopClickedSlot();
     }
 
-    mMips->setVisible(false);
+	mMips->setActive(false);
 }
 
 void MainPanelModern::standby()
 {
-    mMips->setVisible(true);
+	mMips->setActive(true);
 
     const QColor black(50,50,50);
     const QColor white(255,255,255);
@@ -198,7 +198,7 @@ void MainPanelModern::switchMips()
 	}
 	if (updated)
 	{
-		mMips->setVisible(visible);
+		mMips->setActive(visible);
 		int width = this->size().rwidth();
 		mMips->move(width-680,20);
 	}

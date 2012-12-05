@@ -39,7 +39,7 @@ public:
     virtual ~MipsLed();
 
     virtual void display(double);
-    virtual void setVisible(bool visible);
+	virtual void setActive(bool active);
     virtual void move(int, int);
     virtual void setToolTip(const QString & tip);
     virtual void deleteLater(void);
@@ -47,6 +47,7 @@ public:
 
 private:
     QLCDNumber *mMips;
+	QPalette mMipsPalette;
 };
 
 #endif /* MIPSLCD_H_ */

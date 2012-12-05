@@ -378,7 +378,8 @@ public:
 	SplitLog = 12,
 	AutosaveLog = 13,
 	Theme = 14,
-	LogFileLines = 15
+	LogFileLines = 15,
+	GreenLed = 16
 	};
 
 	enum FontObject
@@ -455,6 +456,10 @@ public:
 	// Mips as gauge
 	void setMipsAsGauge(bool gauge);
 	bool mipsAsGauge() const;
+
+	// Led Color green (mips)
+	void setGreenLed(bool green);
+	bool greenLed() const;
 
 	// Psw Mode
 	void setPswMode(Psw::PswMode mode);

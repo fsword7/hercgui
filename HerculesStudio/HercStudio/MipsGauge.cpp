@@ -34,6 +34,7 @@ MipsGauge::MipsGauge(QWidget * parent)
 	mMips = new QWidget(parent);
 	mHwm = 0.0;
 	resize(120,120);
+	mPenColor = QColor::fromRgb(250,250,250,50);
 }
 
 MipsGauge::~MipsGauge()
@@ -55,9 +56,14 @@ void MipsGauge::display(double value)
 	update(rect);
 }
 
-void MipsGauge::setVisible(bool visible)
+void MipsGauge::setActive(bool active)
 {
-	QWidget::setVisible(visible);
+	hOutDebug(5, "MipsGauge " << (active? "Active" : "NotActive"));
+	if (active)
+		mPenColor = QColor::fromRgb(250,250,250,255);
+	else
+		mPenColor = QColor::fromRgb(250,250,250,50);
+	this->repaint();
 }
 
 void MipsGauge::setToolTip(const QString & tip)
@@ -69,6 +75,7 @@ void MipsGauge::paintEvent(QPaintEvent *)
 {
 	hOutDebug(5,"Gauge paint" << std::endl);
 	QPainter painter(this);
+	painter.setPen(mPenColor);
 
 	painter.drawArc(0,10,120,120,30*16,120*16);
 	painter.translate(60,70);

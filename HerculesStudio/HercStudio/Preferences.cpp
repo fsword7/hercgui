@@ -38,22 +38,23 @@
 Preferences * Preferences::instance = NULL;
 
 const char * Preferences::sKeywords[] = {
-		"HerculesDir",
-		"ConfigurationDir",
-		"LogsDir" ,
-		"LogTimeStamp",
-		"RegsViews",
-		"Version",
-		"LogFont",
-		"RegistersFont",
-		"PswFont",
-		"CommandFont",
-		"MipgAsGauge",
-		"PswMode",
-		"SplitLog",
-		"AutosaveLog",
-		"Theme",
-		"LogFileLines"};
+	"HerculesDir",
+	"ConfigurationDir",
+	"LogsDir" ,
+	"LogTimeStamp",
+	"RegsViews",
+	"Version",
+	"LogFont",
+	"RegistersFont",
+	"PswFont",
+	"CommandFont",
+	"MipgAsGauge",
+	"PswMode",
+	"SplitLog",
+	"AutosaveLog",
+	"Theme",
+	"LogFileLines",
+	"GreenLed"};
 
 const char * Preferences::sRegsViews[] = {
 		"ViewGR32",
@@ -111,20 +112,25 @@ const char * Preferences::sRegsViews[] = {
 Preferences::Preferences()
 {
 	mSettings = new QSettings("org.mvsdasd","HerculesStudio");
-	if (mSettings->value("version") != "1.3")
+	if (mSettings->value("version") != "1.4")
 	{
-		QString oldFile = QDir::homePath() + "/.config/HercStudio.pref";
-		if (SystemUtils::fileExists(oldFile))
+		if (mSettings->value("version") != "1.3")
 		{
-			convert();
+			QString oldFile = QDir::homePath() + "/.config/HercStudio.pref";
+			if (SystemUtils::fileExists(oldFile))
+			{
+				convert();
+			}
+			else
+			{
+				// set default values
+				setLogsDir(QDir::homePath().toStdString()+"/Desktop");
+				setPswMode(Psw::StatusBar);
+			}
+			mSettings->setValue(sKeywords[Version],"1.3");
 		}
-		else
-		{
-			// set default values
-			setLogsDir(QDir::homePath().toStdString()+"/Desktop");
-			setPswMode(Psw::StatusBar);
-		}
-		mSettings->setValue(sKeywords[Version],"1.3");
+		mSettings->setValue(sKeywords[GreenLed], false);
+		mSettings->setValue(sKeywords[Version],"1.4");
 	}
 	if (logFileLines() <= 0) setLogFileLines(5000);
 	if (this->fontName(ConfigurationFontObject).size() == 0) setFontName(ConfigurationFontObject,"Monospace");
@@ -150,6 +156,7 @@ PrefBool(splitLog,SplitLog)
 PrefBool(autosaveLog, AutosaveLog)
 PrefBool(mipsAsGauge, MipsAsGauge)
 PrefInt(logFileLines, LogFileLines, int)
+PrefBool(greenLed, GreenLed)
 
 PrefSet(setHercDir,HerculesDir)
 PrefSet(setConfigDir,ConfigurationDir)
@@ -160,7 +167,7 @@ PrefSetBool(setSplitLog, SplitLog)
 PrefSetBool(setAutosaveLog,AutosaveLog)
 PrefSetBool(setMipsAsGauge,MipsAsGauge)
 PrefSetInt(setLogFileLines,LogFileLines,int)
-
+PrefSetBool(setGreenLed, GreenLed)
 
 std::string Preferences::configDir() const
 {

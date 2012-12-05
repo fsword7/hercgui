@@ -24,19 +24,19 @@
 
 #include "MipsLed.h"
 #include "HerculesStudio.h"
+#include "Preferences.h"
 
 #include <QLCDNumber>
 
 MipsLed::MipsLed(QWidget * parent)
 : Mips()
 {
-    QPalette mipsPalette;
-    mipsPalette.setColor(QPalette::Foreground, QColor(255,0,0));
+	mMipsPalette.setColor(QPalette::Foreground, QColor(255,0,0));
     mMips = new QLCDNumber(6,parent);
-    mMips->setPalette(mipsPalette);
+	mMips->setPalette(mMipsPalette);
     mMips->setSegmentStyle(QLCDNumber::Flat);
     mMips->setFrameShape( QLCDNumber::NoFrame );
-    mMips->setVisible(false);
+	mMips->setVisible(true);
 }
 
 MipsLed::~MipsLed()
@@ -53,9 +53,18 @@ void MipsLed::display(double value)
 	mMips->display(value);
 }
 
-void MipsLed::setVisible(bool visible)
+void MipsLed::setActive(bool active)
 {
-	mMips->setVisible(visible);
+	if (active)
+	{
+		if (Preferences::getInstance().greenLed())
+			mMipsPalette.setColor(QPalette::Foreground, QColor(0,255,0));
+		else
+			mMipsPalette.setColor(QPalette::Foreground, QColor(255,0,0));
+	}
+	else
+		mMipsPalette.setColor(QPalette::Foreground, QColor(120,100,100));
+	mMips->setPalette(mMipsPalette);
 }
 
 void MipsLed::setToolTip(const QString & tip)
@@ -72,5 +81,3 @@ bool MipsLed::isVisible()
 {
 	return mMips->isVisible();
 }
-
-

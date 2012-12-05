@@ -38,6 +38,7 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
 	connect(ui.hercDirButton, SIGNAL(pressed()), this, SLOT(hercDirPressed()));
 	connect(ui.configDirButton, SIGNAL(pressed()), this, SLOT(configDirPressed()));
 	connect(ui.logsDirButton, SIGNAL(pressed()), this, SLOT(logsDirPressed()));
+	connect(ui.mipsGaugeButton, SIGNAL(toggled(bool)), this, SLOT(mipsToggled()));
 
 	ui.hercDirLineEdit->setText(mPreferences->hercDir().c_str());
 	ui.configDirLineEdit->setText(mPreferences->configDir().c_str());
@@ -110,6 +111,13 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
 		ui.memLines->setValue( mPreferences->logFileLines() );
 	else
 		ui.memLines->setValue(5000);
+
+	if (mPreferences->greenLed())
+		ui.GreenCheckBox->setChecked(true);
+	else
+		ui.GreenCheckBox->setChecked(false);
+
+
 }
 
 PreferencesWin::~PreferencesWin()
@@ -162,6 +170,9 @@ void PreferencesWin::okPressed()
 
 	mPreferences->setLogFileLines( ui.memLines->value() );
 
+	mPreferences->setGreenLed(ui.GreenCheckBox->isChecked());
+	ui.GreenCheckBox->setEnabled(!ui.mipsGaugeButton->isChecked());
+
 	mPreferences->write();
 	emit preferencesChanged();
 	close();
@@ -198,4 +209,9 @@ void PreferencesWin::logsDirPressed()
 		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	if (s.length() > 0)
 	  ui.logsDirLineEdit->setText(s);
+}
+
+void PreferencesWin::mipsToggled()
+{
+	ui.GreenCheckBox->setEnabled(!ui.mipsGaugeButton->isChecked());
 }

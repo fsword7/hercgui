@@ -140,7 +140,7 @@ void MainPanelClassic::setupUi(QWidget *)
         mMips = new MipsGauge(this);
     else
         mMips = new MipsLed(this);
-    mMips->setVisible(false);
+	mMips->setActive(false);
 }
 
 void MainPanelClassic::resizeEvent(QResizeEvent * )
@@ -193,14 +193,14 @@ void MainPanelClassic::updateLcd(QLCDNumber * lcd, int inc)
 
 void MainPanelClassic::setDormant()
 {
-    mMips->setVisible(false);
+	mMips->setActive(false);
     QString iconsPath = Environment::getIconsPath().c_str();
     ((PanelButton *)mPowerOnButton)->replaceButton(iconsPath + "/poweronoffu.gif", iconsPath + "/poweronoffd.gif");
 }
 
 void MainPanelClassic::standby()
 {
-    mMips->setVisible(true);
+	mMips->setActive(true);
     QString iconsPath = Environment::getIconsPath().c_str();
     ((PanelButton *)mPowerOnButton)->replaceButton(iconsPath + "/powerononu.gif", iconsPath + "/poweronond.gif");
 
@@ -271,7 +271,6 @@ bool MainPanelClassic::notify(const QByteArray& statusLine)
 void MainPanelClassic::switchMips()
 {
     bool updated = false;
-    bool visible = mMips->isVisible();
     if (Preferences::getInstance().mipsAsGauge())
     {
         MipsLed * oldMips = dynamic_cast<MipsLed *>(mMips);
@@ -298,7 +297,7 @@ void MainPanelClassic::switchMips()
     }
     if (updated)
     {
-        mMips->setVisible(visible);
+		mMips->setActive(true);
         int width = this->size().rwidth();
         mMips->move(width-680,20);
     }

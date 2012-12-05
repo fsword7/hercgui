@@ -38,7 +38,7 @@ public:
 	virtual ~MipsGauge();
 
     virtual void display(double);
-    virtual void setVisible(bool visible);
+	virtual void setActive(bool visible);
     virtual void move(int, int);
     virtual void setToolTip(const QString & tip);
     virtual void deleteLater(void);
@@ -53,6 +53,7 @@ private:
     QWidget * mMips;
     double mValue;
     double mHwm;
+	QColor mPenColor;
 };
 
 #endif /* MIPSGAUGE_H_ */

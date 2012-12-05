@@ -36,7 +36,7 @@ public:
     virtual ~Mips();
 
     virtual void display(double value) = 0;
-    virtual void setVisible(bool) = 0;
+	virtual void setActive(bool) = 0;
     virtual void move(int, int) = 0;
     virtual void setToolTip(const QString &) = 0;
     virtual void deleteLater(void) = 0;
