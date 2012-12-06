@@ -49,6 +49,7 @@ public:
   void switchMips();
   bool isStopped() const;
   virtual void updateLcd(QLCDNumber * lcd, int inc);
+  virtual void animate();
 
 
 protected:
@@ -57,7 +58,7 @@ protected:
     virtual void setupUi(QWidget * parent);
 
 private:
-
+	template<class T> void animateOne(int x, int y, T* button, int step);
 
     QLabel      *mSys;
     QLabel      *mSysText;

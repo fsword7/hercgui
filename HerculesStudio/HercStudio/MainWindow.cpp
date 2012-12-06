@@ -80,13 +80,6 @@ MainWindow::MainWindow(QWidget *parent)
 	ui.setupUi(this);
 	QString iconPath(Environment::getIconsPath().c_str());
 	this->setWindowIcon(QIcon(iconPath+"/tray.xpm"));
-	ui.actionTapecopy->setVisible(true);
-	ui.actionTapemap->setVisible(true);
-	ui.actionTapesplit->setVisible(true);
-	ui.actionHetget->setVisible(true);
-	ui.actionHetinit->setVisible(true);
-	ui.actionHetmap->setVisible(true);
-	ui.actionHetupd->setVisible(true);
 
 	if (Arguments::getInstance().configFileName().length() > 0)
 	{
@@ -304,6 +297,9 @@ MainWindow::MainWindow(QWidget *parent)
 		}
 	}
     mCommandLine->restore();
+	setVisible(true);
+	if (Preferences::getInstance().animate())
+		mMainPanel->animate();
 	if (Arguments::getInstance().configFileName().length() > 0)
 		powerOn();
 }
@@ -390,6 +386,8 @@ void MainWindow::themeChanged()
 	if (mHerculesActive) mMainPanel->standby();
 	mTopDock->setWidget(mMainPanel);
 	connectMainPanel();
+	if (mPreferences->animate())
+		mMainPanel->animate();
 }
 
 void MainWindow::writeToLogFromQueue()

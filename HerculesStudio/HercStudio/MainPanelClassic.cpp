@@ -316,4 +316,81 @@ bool MainPanelClassic::isStopped() const
     return mStopped;
 }
 
+template<class T> void MainPanelClassic::animateOne(int x, int y, T* button, int step)
+{
+	for (int i = 0; i<=x; i+=step)
+	{
+		button->move(i,y);
+		this->repaint();
+	}
+}
 
+void MainPanelClassic::animate()
+{
+	int width = this->size().rwidth();
+
+	mPowerOnButton->move(width,15);
+	mPowerOffButton->move(width,15);
+	mInterruptButton->move(width,45);
+	mLoadButton->move(width,45);
+	mRestartButton->move(width,15);
+	mStoreButton->move(width,15);
+	mStopButton->move(width,45);
+	mStartButton->move(width,45);
+
+	mDial0->move(width,30);
+	mDial1->move(width,30);
+	mDial2->move(width,30);
+	mDial3->move(width,30);
+
+	mStoreButton->move(width,15);
+	mStopButton->move(width,45);
+	mStartButton->move(width,45);
+
+	mLcd0->move(width,5);
+	mLcd1->move(width,5);
+	mLcd2->move(width,5);
+	mLcd3->move(width,5);
+
+	mSys->move(width,60);
+	mSysText->move(width,50);
+	mMan->move(width,60);
+	mManText->move(width,50);
+	mWait->move(width,60);
+	mWaitText->move(width,50);
+	mLoad->move(width,60);
+	mLoadText->move(width,50);
+
+
+	animateOne(width-90,15,mPowerOnButton,5);
+	animateOne(width-50,15,mPowerOffButton,5);
+	animateOne(width-90,45,mInterruptButton,5);
+	animateOne(width-50,45,mLoadButton,5);
+
+	animateOne(width-510,15,mRestartButton,5);
+	mStoreButton->move(width-550,15);
+	mStopButton->move(width-510,45);
+	mStartButton->move(width-550,45);
+
+	animateOne(width-270,30,mDial0,2);
+	animateOne(width-330,30,mDial1,15);
+	animateOne(width-390,30,mDial2,15);
+	animateOne(width-450,30,mDial3,15);
+
+	mSys->move(width-200,60);
+	mSysText->move(width-200,50);
+	mMan->move(width-172,60);
+	mManText->move(width-172,50);
+	mWait->move(width-144,60);
+	mWaitText->move(width-144,50);
+	mLoad->move(width-116,60);
+	mLoadText->move(width-116,50);
+
+	mLcd0->move(width-250,5);
+	mLcd1->move(width-310,5);
+	mLcd2->move(width-370,5);
+	mLcd3->move(width-430,5);
+
+	mMips->move(width-680,20);
+
+}

@@ -117,6 +117,10 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
 	else
 		ui.GreenCheckBox->setChecked(false);
 
+	if (mPreferences->animate())
+		ui.AnimateCheckBox->setChecked(true);
+	else
+		ui.AnimateCheckBox->setChecked(false);
 
 }
 
@@ -173,8 +177,12 @@ void PreferencesWin::okPressed()
 	mPreferences->setGreenLed(ui.GreenCheckBox->isChecked());
 	ui.GreenCheckBox->setEnabled(!ui.mipsGaugeButton->isChecked());
 
+	mPreferences->setAnimate(ui.AnimateCheckBox->isChecked());
+
 	mPreferences->write();
+	setVisible(false); // do not hide animation
 	emit preferencesChanged();
+	setVisible(true);
 	close();
 }
 

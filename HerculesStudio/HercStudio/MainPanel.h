@@ -70,6 +70,7 @@ public:
   virtual void setLoadAddress(const char * devNo);
   virtual bool isStopped()const = 0;
   virtual void updateLcd(QLCDNumber * lcd, int inc)=0;
+  virtual void animate() = 0;
 
 signals:
   void powerOnClicked();

@@ -379,7 +379,8 @@ public:
 	AutosaveLog = 13,
 	Theme = 14,
 	LogFileLines = 15,
-	GreenLed = 16
+	GreenLed = 16,
+	Animate=17
 	};
 
 	enum FontObject
@@ -484,6 +485,10 @@ public:
     //command line history
     void setHistory(QVector<QString>& history);
     void getHistory(QVector<QString>& history);
+
+	//animation
+	void setAnimate(bool animate);
+	bool animate() const;
 
 protected:
 	Preferences();

@@ -38,7 +38,7 @@
        <x>510</x>
        <y>10</y>
        <width>151</width>
-       <height>80</height>
+       <height>111</height>
       </rect>
      </property>
      <property name="title">
@@ -68,6 +68,19 @@
       </property>
       <property name="text">
        <string>Modern</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="AnimateCheckBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Use Animation</string>
       </property>
      </widget>
     </widget>

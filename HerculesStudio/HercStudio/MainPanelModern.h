@@ -50,6 +50,7 @@ public:
   void switchMips();
   bool isStopped() const { return mStopped; };
   virtual void updateLcd(QLCDNumber * , int ){} // null function in this context
+  virtual void animate();
 
 protected:
     virtual void resizeEvent(QResizeEvent * event);
@@ -67,6 +68,8 @@ protected:
     void stopClickedSlot();
 
 private:
+
+	template<class T> void animateOne(int x, int y, T* button, int step);
 
     QToolButton *mPowerOnButton;
     QToolButton *mPowerOffButton;

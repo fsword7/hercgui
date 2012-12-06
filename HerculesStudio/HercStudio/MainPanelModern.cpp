@@ -30,6 +30,7 @@
 #include "MipsLed.h"
 #include "MipsGauge.h"
 #include "ConfigurationEditor.h"
+#include "Preferences.h"
 
 #include <sstream>
 
@@ -55,7 +56,7 @@ MainPanelModern::~MainPanelModern()
 
 void MainPanelModern::setupUi(QWidget *)
 {
-	const QColor black(50,50,50);
+	const QColor black(70,70,70);
     const QColor white(255,255,20);
     QBrush blackBrush(black);
     QPalette blackPalette(white, black);
@@ -108,16 +109,14 @@ void MainPanelModern::setButton(QToolButton*& button, QString text, QIcon icon)
 void MainPanelModern::resizeEvent(QResizeEvent * )
 {
     int width = this->size().rwidth();
-    mPowerOnButton->move(10,20);
-    mPowerOffButton->move(70,20);
-    mStopButton->move(130,20);
-    mInterruptButton->move(190,20);
-    mLoadButton->move(250,20);
-
-    mMips->move(width-680,20);
+	mPowerOnButton->move(10,20);
+	mPowerOffButton->move(70,20);
+	mStopButton->move(130,20);
+	mInterruptButton->move(190,20);
+	mLoadButton->move(250,20);
+	mMips->move(320,20);
 
     mPSW->setGeometry(width-550,110,48*12,12);
-
 }
 
 void MainPanelModern::setDormant()
@@ -144,7 +143,6 @@ void MainPanelModern::standby()
     this->setAutoFillBackground(true);
     this->repaint();
     this->setPalette(blackPalette);
-
 }
 
 bool MainPanelModern::notify(const QByteArray& statusLine)
@@ -232,4 +230,29 @@ void MainPanelModern::stopClickedSlot()
     emit stopClicked();
 }
 
+template<class T> void MainPanelModern::animateOne(int x, int y, T* button, int step)
+{
+	for (int i = this->width(); i>=x; i-=step)
+	{
+		button->move(i,y);
+		this->repaint();
+	}
+}
 
+void MainPanelModern::animate()
+{
+	int width = this->width();
+	mPowerOnButton->move(width,20);
+	mPowerOffButton->move(width,20);
+	mStopButton->move(width,20);
+	mInterruptButton->move(width,20);
+	mLoadButton->move(width,20);
+	mMips->move(width,20);
+
+	animateOne(10,20,mPowerOnButton, 5);
+	animateOne(70,20,mPowerOffButton, 5);
+	animateOne(130,20,mStopButton, 10);
+	animateOne(190,20,mInterruptButton, 10);
+	animateOne(250,20,mLoadButton, 15);
+	animateOne(320,20,mMips,5);
+}
