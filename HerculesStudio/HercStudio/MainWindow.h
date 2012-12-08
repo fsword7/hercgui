@@ -116,8 +116,10 @@ private:
 	void				fontChanged();
 	void				mipsChanged();
 	void				pswChanged();
+	void				styleChanged();
 	void				themeChanged();
     void                setIpled(QString ipled);
+	void				setDarkBackground(bool dark);
 
 
 public slots:

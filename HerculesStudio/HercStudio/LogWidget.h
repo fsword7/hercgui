@@ -59,8 +59,9 @@ protected:
 	bool  mIpled;
 	bool  mSaveLog;
 	QString mLogFileName;
-	QColor mGreen, mYellow, mRed, mBlack;
+	QColor mGreen, mYellow, mRed, mBlack, mWhite;
 	long  mLinesWritten;
+	bool  mDarkBackground;
 };
 
 

@@ -29,9 +29,8 @@
 #include <QPainter>
 
 MipsGauge::MipsGauge(QWidget * parent)
-	: Mips(parent), mFirstDraw(true)
+	: Mips(parent)
 {
-	mMips = new QWidget(parent);
 	mHwm = 0.0;
 	resize(120,120);
 	mPenColor = QColor::fromRgb(250,250,250,50);
@@ -88,7 +87,6 @@ void MipsGauge::paintEvent(QPaintEvent *)
 	}
 	painter.rotate(-160.0);
 	mPrevAngle = 30.0;
-	mFirstDraw = false;
 
 	double angle = 30.0 ;
 	if (mHwm > 0.0)

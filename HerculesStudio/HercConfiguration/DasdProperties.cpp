@@ -99,7 +99,7 @@ void DasdProperties::ok()
     }
     else
     {
-        //@
+		//TODO
     }
 
     newLineBuff << "\n";

@@ -77,17 +77,7 @@ private:
     QToolButton *mStopButton;
     QToolButton *mLoadButton;
 
-    QLabel      *mSys;
-    QLabel      *mSysText;
-    QLabel      *mMan;
-    QLabel      *mManText;
-    QLabel      *mWait;
-    QLabel      *mWaitText;
-    QLabel      *mLoad;
-    QLabel      *mLoadText;
-    QLabel      *mPSW;
-
-  ClickLabel *mDial0, *mDial1, *mDial2, *mDial3;
+	QLabel      *mPSW;
 
   Mips *mMips;
 };

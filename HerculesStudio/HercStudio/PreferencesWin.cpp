@@ -23,6 +23,7 @@
  */
 
 #include "PreferencesWin.h"
+#include "HerculesStudio.h"
 #include "Fonts.h"
 
 #include <QFileDialog>
@@ -122,6 +123,11 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
 	else
 		ui.AnimateCheckBox->setChecked(false);
 
+	if (mPreferences->darkBackground())
+		ui.ThemeComboBox->setCurrentIndex(1);
+	else
+		ui.ThemeComboBox->setCurrentIndex(0);
+	ui.themeBox->setVisible(false);
 }
 
 PreferencesWin::~PreferencesWin()
@@ -179,10 +185,11 @@ void PreferencesWin::okPressed()
 
 	mPreferences->setAnimate(ui.AnimateCheckBox->isChecked());
 
+	mPreferences->setDarkBackground(ui.ThemeComboBox->currentIndex() == 1);
+
 	mPreferences->write();
 	setVisible(false); // do not hide animation
 	emit preferencesChanged();
-	setVisible(true);
 	close();
 }
 

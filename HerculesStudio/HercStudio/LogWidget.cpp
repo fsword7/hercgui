@@ -43,14 +43,14 @@
 #define current_log mLogs[for_loop_i]
 
 PlainLogWidget::PlainLogWidget(QWidget * parent, const char * suffix)
-:QTextEdit(parent),  mGreen(10,120,10), mYellow(215,201,45), mRed(240,20,20), mBlack(0,0,0), mLinesWritten(0)
-
+	:QTextEdit(parent),  mGreen(10,120,10), mYellow(215,201,45), mRed(240,20,20), mBlack(0,0,0), mWhite(250,250,250), mLinesWritten(0)
 {
 	mSaveLog = Preferences::getInstance().autosaveLog();
 	mLogFileLines = Preferences::getInstance().logFileLines();
 	QString parm(suffix);
 	setLogFileName(parm);
 	mIpled = false;
+	mDarkBackground = Preferences::getInstance().darkBackground();
 }
 
 void PlainLogWidget::setLogFileName (QString& suffix)
@@ -80,18 +80,37 @@ void PlainLogWidget::append(const QByteArray & text)
 		s = text.mid(24);
 
 	QColor keepC = textColor();
-	if (strncmp(text.data(),"HHC",3) == 0)
+
+	if (mDarkBackground)
 	{
-		if (text[8] == 'I')
-			setTextColor(mGreen);
-		else if (text.mid(8,1) =="W")
-			setTextColor(mYellow);
-		else if (text.mid(8,1) =="E")
-			setTextColor(mRed);
+		if (strncmp(text.data(),"HHC",3) == 0)
+		{
+			if (text[8] == 'I')
+				setTextColor(mGreen);
+			else if (text.mid(8,1) =="W")
+				setTextColor(mYellow);
+			else if (text.mid(8,1) =="E")
+				setTextColor(mRed);
+		}
+		else
+			setTextColor(mWhite);
+
 	}
 	else
-		setTextColor(mBlack);
-    int len = s.length()-1;
+	{
+		if (strncmp(text.data(),"HHC",3) == 0)
+		{
+			if (text[8] == 'I')
+				setTextColor(mGreen);
+			else if (text.mid(8,1) =="W")
+				setTextColor(mYellow);
+			else if (text.mid(8,1) =="E")
+				setTextColor(mRed);
+		}
+		else
+			setTextColor(mBlack);
+	}
+	int len = s.length()-1;
     if (s[len] == '\n') s[len] = '\0';
 	QTextEdit::append(QByteArray(mTimeStamp) + s);
 	setTextColor(keepC);
@@ -177,6 +196,7 @@ void PlainLogWidget::writeToFile(WriteType type)
 void PlainLogWidget::preferencesChanged()
 {
 	mLogFileLines = Preferences::getInstance().logFileLines(); // might have been updated
+	mDarkBackground = Preferences::getInstance().darkBackground();
 }
 
 void PlainLogWidget::setIpled(bool ipled)
@@ -197,6 +217,7 @@ LogWidget::LogWidget(QWidget * parent)
 	mLogs[cOsIndex] = new PlainLogWidget(this, "os");
 	mTabWidget->addTab(mLogs[cHercIndex], "Hercules");
 	mTabWidget->addTab(mLogs[cOsIndex], "OS");
+
 	for_each_log
 	{
 		current_log->setReadOnly(true);

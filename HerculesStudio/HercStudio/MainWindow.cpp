@@ -78,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent)
 	mHerculesActive(false)
 {
 	ui.setupUi(this);
+	setDarkBackground(Preferences::getInstance().darkBackground());
 	QString iconPath(Environment::getIconsPath().c_str());
 	this->setWindowIcon(QIcon(iconPath+"/tray.xpm"));
 
@@ -330,6 +331,7 @@ void MainWindow::preferencesChanged()
 	fontChanged();
 	mipsChanged();
 	pswChanged();
+	styleChanged();
 	themeChanged();
 	mLogWindow->preferencesChanged();
 }
@@ -372,7 +374,7 @@ void MainWindow::pswChanged()
 	mPswDock->setVisible(mPreferences->pswMode() == Psw::Docked);
 }
 
-void MainWindow::themeChanged()
+void MainWindow::styleChanged()
 {
 	QByteArray loadAddress =
 			QByteArray::number(mMainPanel->getLoadAddress(),16); // preserve
@@ -386,6 +388,11 @@ void MainWindow::themeChanged()
 	if (mHerculesActive) mMainPanel->standby();
 	mTopDock->setWidget(mMainPanel);
 	connectMainPanel();
+}
+
+void MainWindow::themeChanged()
+{
+	setDarkBackground (Preferences::getInstance().darkBackground());
 	if (mPreferences->animate())
 		mMainPanel->animate();
 }
@@ -1190,4 +1197,12 @@ void MainWindow::setIpled(QString command)
          }
 
     }
+}
+
+void MainWindow::setDarkBackground(bool dark)
+{
+	if (dark)
+		setStyleSheet("QWidget{color: white; background: black; selection-color: black; selection-background-color: green} QTabBar::tab:selected { background:red }  QTabBar::tab:!selected { background:black }");
+	else
+		setStyleSheet("");
 }

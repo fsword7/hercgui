@@ -55,7 +55,8 @@ const char * Preferences::sKeywords[] = {
 	"Theme",
 	"LogFileLines",
 	"GreenLed",
-	"Animate"};
+	"Animate",
+	"DarkBackground"};
 
 const char * Preferences::sRegsViews[] = {
 		"ViewGR32",
@@ -132,6 +133,7 @@ Preferences::Preferences()
 		}
 		mSettings->setValue(sKeywords[GreenLed], false);
 		mSettings->setValue(sKeywords[Animate], false);
+		mSettings->setValue(sKeywords[DarkBackground], false);
 		mSettings->setValue(sKeywords[Version],"1.4");
 	}
 	if (logFileLines() <= 0) setLogFileLines(5000);
@@ -160,6 +162,7 @@ PrefBool(mipsAsGauge, MipsAsGauge)
 PrefInt(logFileLines, LogFileLines, int)
 PrefBool(greenLed, GreenLed)
 PrefBool(animate, Animate)
+PrefBool(darkBackground, DarkBackground)
 
 PrefSet(setHercDir,HerculesDir)
 PrefSet(setConfigDir,ConfigurationDir)
@@ -172,6 +175,8 @@ PrefSetBool(setMipsAsGauge,MipsAsGauge)
 PrefSetInt(setLogFileLines,LogFileLines,int)
 PrefSetBool(setGreenLed, GreenLed)
 PrefSetBool(setAnimate, Animate)
+PrefSetBool(setDarkBackground, DarkBackground)
+
 
 std::string Preferences::configDir() const
 {

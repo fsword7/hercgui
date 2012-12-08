@@ -363,24 +363,25 @@ class Preferences
 public:
 	enum keys
 	{
-	HerculesDir = 0,
-	ConfigurationDir = 1,
-	LogsDir = 2,
-	LogTimestamp = 3,
-	RegsViews = 4,
-	Version = 5,
-	LogFont = 6,
-	RegsFont = 7,
-	PswFont = 8,
-	CommandFont = 9,
-	MipsAsGauge = 10,
-	PswMode = 11,
-	SplitLog = 12,
-	AutosaveLog = 13,
-	Theme = 14,
-	LogFileLines = 15,
-	GreenLed = 16,
-	Animate=17
+		HerculesDir = 0,
+		ConfigurationDir = 1,
+		LogsDir = 2,
+		LogTimestamp = 3,
+		RegsViews = 4,
+		Version = 5,
+		LogFont = 6,
+		RegsFont = 7,
+		PswFont = 8,
+		CommandFont = 9,
+		MipsAsGauge = 10,
+		PswMode = 11,
+		SplitLog = 12,
+		AutosaveLog = 13,
+		Theme = 14,
+		LogFileLines = 15,
+		GreenLed = 16,
+		Animate=17,
+		DarkBackground=18
 	};
 
 	enum FontObject
@@ -489,6 +490,10 @@ public:
 	//animation
 	void setAnimate(bool animate);
 	bool animate() const;
+
+	//dark background
+	void setDarkBackground(bool dark);
+	bool darkBackground() const;
 
 protected:
 	Preferences();
