@@ -34,6 +34,11 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
 	: QDialog(parent), mCurrentPath(currentPath), mPreferences(preferences)
 {
 	ui.setupUi(this);
+
+#ifdef Q_WS_MAC
+	ui.AnimateCheckBox->setVisible(false);
+#endif
+
 	connect(ui.okButton, SIGNAL(pressed()), this, SLOT(okPressed()));
 	connect(ui.cancelButton, SIGNAL(pressed()), this, SLOT(cancelPressed()));
 	connect(ui.hercDirButton, SIGNAL(pressed()), this, SLOT(hercDirPressed()));
