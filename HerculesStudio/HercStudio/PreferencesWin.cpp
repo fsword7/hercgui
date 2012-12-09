@@ -127,7 +127,6 @@ PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *pre
 		ui.ThemeComboBox->setCurrentIndex(1);
 	else
 		ui.ThemeComboBox->setCurrentIndex(0);
-	ui.themeBox->setVisible(false);
 }
 
 PreferencesWin::~PreferencesWin()

@@ -1202,7 +1202,13 @@ void MainWindow::setIpled(QString command)
 void MainWindow::setDarkBackground(bool dark)
 {
 	if (dark)
-		setStyleSheet("QWidget{color: white; background: black; selection-color: black; selection-background-color: green} QTabBar::tab:selected { background:red }  QTabBar::tab:!selected { background:black }");
+	{
+		QFile file(":/icons/darkorange.stylesheet");
+		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+				 return;
+		QByteArray ss = file.readAll();
+		setStyleSheet(ss);
+	}
 	else
 		setStyleSheet("");
 }
