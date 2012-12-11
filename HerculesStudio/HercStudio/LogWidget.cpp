@@ -310,4 +310,3 @@ void LogWidget::setIpled(bool ipled)
 {
 	mIpled = ipled;
 }
-
