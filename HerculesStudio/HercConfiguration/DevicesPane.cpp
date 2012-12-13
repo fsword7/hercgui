@@ -132,7 +132,7 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 			}
 			else
 			{
-				hOutDebug(0,"sending restart");
+				hOutDebug(1,"sending restart");
 				clear();
 				emit restartDevices();
 			}

@@ -455,7 +455,8 @@ void MainWindow::dispatchStatus()
 
 void MainWindow::recoverDevices(QByteArray& statusLine)
 {
-	if (statusLine.left(5) == "DEVX=") return;
+	hOutDebug(3,"recorver:" <<statusLine.data());
+	if (statusLine.startsWith("DEVX=")) return;
 	if (statusLine[4] == 'X')
 	{
 		if ( mDevicesRecoveryCommenced )
@@ -469,7 +470,11 @@ void MainWindow::recoverDevices(QByteArray& statusLine)
 		}
 		return;
 	}
-	statusLine = "DEVA=" + statusLine.mid(4);
+	else if (statusLine.startsWith("DEV="))
+		statusLine = "DEVA=" + statusLine.mid(4);
+	else  if (statusLine.startsWith("DEV") && statusLine[4] == '=')
+		statusLine = "DEVA=" + statusLine.mid(5);
+
 }
 
 void MainWindow::newCommand()
