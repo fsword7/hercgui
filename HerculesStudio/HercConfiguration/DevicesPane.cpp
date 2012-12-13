@@ -59,12 +59,19 @@ DevicesPane::~DevicesPane()
 {
 	delete mYellowIcon;
 	delete mYellowHighIcon;
+	delete mListView;
+	mDevices.clear();
 }
 
 bool DevicesPane::notify(const QByteArray& statusLine)
 {
+	hOutDebug(1,"devices notify:" << statusLine.data() << ".");
 	const struct DynDeviceLine * line = reinterpret_cast<const DynDeviceLine *>(statusLine.data());
-    hOutDebug(1,"devices notify:" << line << "." << std::endl);
+	if (line->devNo[0] == '=') // a bug (?) in hercules causes it to send sometimes DEVA==...
+	{
+		const_cast<QByteArray &>(statusLine).remove(4,1);
+		hOutDebug(3,"corrected:" << (char *)line << ".");
+	}
     int devNo;
     VisualizedDeviceEntry deviceEntry;
     bool deviceAdded = false;
@@ -72,104 +79,105 @@ bool DevicesPane::notify(const QByteArray& statusLine)
     {
         DeviceTypes::Type devType = DeviceTypes::Other;
         switch (line->action)
-        {
-            case('A'):
-                if (strncmp(line->devType,"DASD",4)==0)
-                    devType= DeviceTypes::DASD;
-                else if (strncmp(line->devType,"CTC",3)==0)
-                    devType= DeviceTypes::CTC;
-                else if (strncmp(line->devType,"OSA",3)==0)
-                    devType= DeviceTypes::Comm;
-                else if (strncmp(line->devType,"QETH",4)==0)
-                    devType= DeviceTypes::Comm;
-                else if (strncmp(line->devType,"RDR ",4)==0)
-                    devType= DeviceTypes::CardReader;
-                else if (strncmp(line->devType,"PCH ",4)==0)
-                    devType= DeviceTypes::CardReader;
-                else if (strncmp(line->devType,"PRT ",4)==0)
-                    devType= DeviceTypes::Printer;
-                else if (strncmp(line->devType,"DSP ",4)==0)
-                    devType= DeviceTypes::Terminal;
-                else if (strncmp(line->devType,"TAPE",4)==0)
-                    devType= DeviceTypes::Tape;
-                else if (strncmp(line->devType,"CON",3)==0)
-                    devType= DeviceTypes::Console;
+		{
+		case('A'):
+			if (strncmp(line->devType,"DASD",4)==0)
+				devType= DeviceTypes::DASD;
+			else if (strncmp(line->devType,"CTC",3)==0)
+				devType= DeviceTypes::CTC;
+			else if (strncmp(line->devType,"OSA",3)==0)
+				devType= DeviceTypes::Comm;
+			else if (strncmp(line->devType,"QETH",4)==0)
+				devType= DeviceTypes::Comm;
+			else if (strncmp(line->devType,"RDR ",4)==0)
+				devType= DeviceTypes::CardReader;
+			else if (strncmp(line->devType,"PCH ",4)==0)
+				devType= DeviceTypes::CardReader;
+			else if (strncmp(line->devType,"PRT ",4)==0)
+				devType= DeviceTypes::Printer;
+			else if (strncmp(line->devType,"DSP ",4)==0)
+				devType= DeviceTypes::Terminal;
+			else if (strncmp(line->devType,"TAPE",4)==0)
+				devType= DeviceTypes::Tape;
+			else if (strncmp(line->devType,"CON",3)==0)
+				devType= DeviceTypes::Console;
 
-                    devNo =  strtol(line->devNo, NULL, 16);
-                    {
-					VisualizedDeviceEntry& deviceEntryPtr = *new VisualizedDeviceEntry(devNo, devType, statusLine.data());
-                    std::pair<int,VisualizedDeviceEntry> toinsert(devNo, deviceEntryPtr);
-                    mDevices.insert(toinsert);
-                    if (devNo !=0) deviceAdded = true; // after disconnect and attach, herculess starts sending DEVA instead of DEVC
-                    }
+			devNo =  strtol(line->devNo, NULL, 16);
+		{
+			VisualizedDeviceEntry deviceEntryPtr(devNo, devType, statusLine.data());
+			std::pair<int,VisualizedDeviceEntry> toinsert(devNo, deviceEntryPtr);
+			mDevices.insert(toinsert);
+			hOutDebug(5, "to be added:" << statusLine.data() << " " << (devNo !=0 ? "added" : "NOT ADDED")) ;
+			if (devNo !=0) deviceAdded = true; // after disconnect and attach, herculess starts sending DEVA instead of DEVC
+		}
 
-                break;
-            case('C'):
-                devNo = strtol(line->devNo, NULL, 16);
-                if (mDevices.find(devNo) != mDevices.end())
-                {
-                    deviceEntry = mDevices[devNo];
+			break;
+		case('C'):
+			devNo = strtol(line->devNo, NULL, 16);
+			if (mDevices.find(devNo) != mDevices.end())
+			{
+				deviceEntry = mDevices[devNo];
 
-                    if (deviceEntry.getItem() != NULL)
-                    {
-                        if (line->statusBytes[1] == '1')
-                        {
-                            deviceEntry.getItem()->setIcon(*mYellowHighIcon);
-                        }
-                        else
-                        {
-                            deviceEntry.getItem()->setIcon(*mYellowIcon);
-                        }
-                    }
-                }
-                else
-                {
-                    hOutDebug(1,"sending restart");
-                    mDevices.clear();
-                    //emit restartDevices();
-                }
-                break;
-            case('D'):
-            {
-                devNo = strtol(line->devNo, NULL, 16);
-                std::map <int,VisualizedDeviceEntry>::iterator it = mDevices.find(devNo);
-                if (it != mDevices.end())
-                {
-                    mDevices.erase(it);
-                    deviceAdded = true;
-                }
-            }
-                break;
-            default:
-                break;
-        }
-    }
+				if (deviceEntry.getItem() != NULL)
+				{
+					if (line->statusBytes[1] == '1')
+					{
+						deviceEntry.getItem()->setIcon(*mYellowHighIcon);
+					}
+					else
+					{
+						deviceEntry.getItem()->setIcon(*mYellowIcon);
+					}
+				}
+			}
+			else
+			{
+				hOutDebug(0,"sending restart");
+				clear();
+				emit restartDevices();
+			}
+			break;
+		case('D'):
+		{
+			devNo = strtol(line->devNo, NULL, 16);
+			std::map <int,VisualizedDeviceEntry>::iterator it = mDevices.find(devNo);
+			if (it != mDevices.end())
+			{
+				mDevices.erase(it);
+				deviceAdded = true;
+			}
+		}
+			break;
+		default:
+			break;
+		}
+	}
 
     if (deviceAdded)
     {
-        outDebug(3,std::cout << mDevices.size() << " Devices." << std::endl);
+		outDebug(3,std::cout << mDevices.size() << " Devices." << std::endl);
         if (mModel == NULL) mModel = new QStandardItemModel();
         mModel->clear();
         QStandardItem *parentItem = mModel->invisibleRootItem();
         int currLine = 0;
 
-        std::map<int, VisualizedDeviceEntry>::iterator it;
+		std::map<int, VisualizedDeviceEntry>::iterator it;
         for (int curDev=0; curDev<=DeviceTypes::Comm; curDev++ )
         {
-            outDebug(5,std::cout << "curDev:" << curDev<< std::endl);
+			outDebug(5,std::cout << "curDev:" << curDev<< std::endl);
             bool titleDevAdded = false;
             for (it =  mDevices.begin(); it != mDevices.end(); it++)
             {
                 VisualizedDeviceEntry& ent = it->second;
                 if (ent.getType() == curDev)
                 {
-                    outDebug(5,std::cout << "ent:" << ent.getDeviceNumber()<<" "<<DeviceTypes::getName(ent.getType())<<std::endl);
+					outDebug(5,std::cout << "ent:" << ent.getDeviceNumber()<<" "<<DeviceTypes::instance().getName(ent.getType())<<std::endl);
                     if (!titleDevAdded)
                     {
                         std::string iconPath = Environment::getIconsPath() +
-                                DeviceTypes::getName(ent.getType());
-                        const QIcon& ic = DeviceTypes::getIcon(ent.getType());
-                        QStandardItem *item = new QStandardItem(ic, DeviceTypes::getName(ent.getType()));
+								DeviceTypes::instance().getName(ent.getType());
+						const QIcon& ic = DeviceTypes::instance().getIcon(ent.getType());
+						QStandardItem *item = new QStandardItem(ic, DeviceTypes::instance().getName(ent.getType()));
                         item->setEditable(false);
                         parentItem->appendRow(item);
                         currLine++;
@@ -201,6 +209,7 @@ bool DevicesPane::notify(const QByteArray& statusLine)
         if (mListView != NULL)
         {
             mListView->close();
+			delete mListView;
             mListView = NULL;
         }
         mListView = new DeviceListView(this);
@@ -243,18 +252,23 @@ void DevicesPane::clear()
 {
     if (mModel != NULL)
         mModel->clear();
-    mDevices.clear();
     if (mListView == NULL)
         return;
-    mListView->setModel(mModel);
-    mListView->setVisible(true);
+	else
+	{
+		delete mListView;
+		mListView = NULL;
+	}
+	mDevices.clear();
+//    mListView->setModel(mModel);
+//    mListView->setVisible(true);
     adjustSize();
 
 }
 
 bool DevicesPane::isRealDev(int lineNumber)
 {
-    std::map<int, VisualizedDeviceEntry>::iterator it;
+	std::map<int, VisualizedDeviceEntry>::iterator it;
     for (it =  mDevices.begin(); it != mDevices.end(); it++)
     {
         VisualizedDeviceEntry& ent = it->second;
@@ -266,7 +280,7 @@ bool DevicesPane::isRealDev(int lineNumber)
 
 DeviceTypes::Type DevicesPane::getType(int lineNumber)
 {
-    std::map<int, VisualizedDeviceEntry>::iterator it;
+	std::map<int, VisualizedDeviceEntry>::iterator it;
     for (it =  mDevices.begin(); it != mDevices.end(); it++)
     {
         VisualizedDeviceEntry& ent = it->second;

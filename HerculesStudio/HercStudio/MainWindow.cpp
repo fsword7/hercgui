@@ -307,6 +307,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+	if (mConfigFile != NULL)
+		delete mConfigFile;
 }
 
 void MainWindow::connectMainPanel()
@@ -1052,6 +1054,8 @@ void MainWindow::herculesEndedSlot()
 	mLogRunner->terminate();
 	mStatusRunner->terminate();
 	mWatchdog->terminate();
+	if (mWatchdog != NULL) delete mWatchdog;
+	mWatchdog = NULL;
 	mHerculesActive = false;
 	mCommandLine->setReadOnly(true);
 	mHerculesExecutor = NULL;

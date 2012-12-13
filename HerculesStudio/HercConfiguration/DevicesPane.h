@@ -66,6 +66,62 @@ struct DynDeviceLine
     char    statusBytes[4];
 };
 
+template <class Key, class T> class dbgmap
+{
+public:
+	dbgmap()
+	{
+		mMap = new std::map<Key, T>();
+	}
+
+	typedef typename std::map<const Key, T>::iterator iterator ;
+	typedef typename std::map<Key, T>::const_iterator const_iterator ;
+
+	std::pair< iterator, bool > insert(std::pair< const Key, T> t)
+	{
+		return mMap->insert(t);
+	}
+
+	void clear()
+	{
+		mMap->clear();
+	}
+
+	typename std::map<Key, T>::iterator begin() const
+	{
+		return mMap->begin();
+	}
+
+	iterator end() const
+	{
+		return mMap->end();
+	}
+
+	iterator find(const Key& k)
+	{
+		return mMap->find(k);
+	}
+
+	void erase(iterator p)
+	{
+		mMap->erase(p);
+	}
+
+	size_t size()
+	{
+		return mMap->size();
+	}
+
+	T& operator[] (const Key& k)
+	{
+		return (*mMap)[k];
+	}
+
+
+private:
+	std::map<Key,T> *mMap;
+};
+
 class MainWindow;
 class DeviceConfigLine;
 class DevicesRename;

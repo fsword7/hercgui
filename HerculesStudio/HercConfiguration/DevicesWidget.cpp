@@ -183,7 +183,7 @@ void DevicesWidget::initialize()
 		strLine += line->getMultiToken(2,0).c_str();
 		strLine.resize(133,' ');
 		QStandardItem * item = new QStandardItem(strLine.c_str());
-		item->setIcon(DeviceTypes::getIcon(line->getDeviceType()));
+		item->setIcon(DeviceTypes::instance().getIcon(line->getDeviceType()));
 
 		parentItem->appendRow(item);
 		++lineNum;

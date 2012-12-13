@@ -43,6 +43,8 @@ DeviceConfigLine::DeviceConfigLine(const char *line):
 DeviceConfigLine::~DeviceConfigLine()
 {
     outDebug(5,std::cout << "~DeviceConfigLine" << std::endl);
+	mDeviceTypes->clear();
+	mDeviceBaseTypes->clear();
 }
 
 int DeviceConfigLine::getDeviceNumber() const

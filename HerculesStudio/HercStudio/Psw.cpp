@@ -48,7 +48,7 @@ Psw::Psw( QStatusBar * statusBar)
 
 Psw::~Psw()
 {
-
+	delete mFontCourier;
 }
 
 bool Psw::notify(const QByteArray& statusLine)

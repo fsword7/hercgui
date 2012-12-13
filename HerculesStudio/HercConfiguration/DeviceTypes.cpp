@@ -28,7 +28,8 @@
 
 
 #define NUM_DEVICES 12
-std::vector<QIcon *> DeviceTypes::sDeviceIcons;
+std::vector<QIcon> DeviceTypes::sDeviceIcons;
+DeviceTypes DeviceTypes::mInstance;
 
 const char *DeviceTypes::sDeviceNames[NUM_DEVICES] =
 {
@@ -71,6 +72,11 @@ DeviceTypes::~DeviceTypes()
 {
 }
 
+DeviceTypes & DeviceTypes::instance()
+{
+	return mInstance;
+}
+
 QIcon & DeviceTypes::getIcon(DeviceTypes::Type type)
 {
     if  (sDeviceIcons.empty())
@@ -81,10 +87,10 @@ QIcon & DeviceTypes::getIcon(DeviceTypes::Type type)
             QString iPath = iconsPath.c_str();
             iPath += sDeviceIconNames[i];
             hOutDebug(5,i <<" ipath:"<<iPath.toStdString());
-            sDeviceIcons.push_back(new QIcon(iPath));
+			sDeviceIcons.push_back(QIcon(iPath));
         }
     }
-    return *sDeviceIcons.at(type);
+	return sDeviceIcons.at(type);
 }
 
 const char *DeviceTypes::getName(Type type)

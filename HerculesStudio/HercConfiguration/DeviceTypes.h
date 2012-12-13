@@ -34,18 +34,20 @@
 class DeviceTypes
 {
 public:
-    DeviceTypes();
+	static DeviceTypes& instance();
     virtual ~DeviceTypes();
     enum Type { Other = 0,
             Terminal, Sysg, Console, Printer, CardReader, CardPunch,
             LinePrinter, Tape, CTC, DASD , Comm };
     enum BaseType { CTCT=100 , CTCI, LCS, QETH, CKD, FBA};
-    static QIcon & getIcon(DeviceTypes::Type type) ;
-    static const char * getName(Type type);
+	QIcon & getIcon(DeviceTypes::Type type) ;
+	const char * getName(Type type);
 private:
+	DeviceTypes();
+	static DeviceTypes mInstance;
     const static char *sDeviceNames[];
     const static char *sDeviceIconNames[];
-    static std::vector<QIcon *> sDeviceIcons;
+	static std::vector<QIcon> sDeviceIcons;
 };
 
 #endif /* DEVICETYPES_H_ */

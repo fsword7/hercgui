@@ -182,6 +182,13 @@ void DeviceMenuProcessor::menuLoad()
 	newTapeFile->exec();
 }
 
+void DeviceMenuProcessor::menuUnload()
+{
+	QString s("*");
+	if (!isConfig()) doLoadTape(s);
+}
+
+
 void DeviceMenuProcessor::newTapeFileOK(QString& tapeFileName)
 {
 	if (!isConfig()) doLoadTape(tapeFileName);

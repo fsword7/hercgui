@@ -52,6 +52,7 @@ public slots:
     void menuAddDasd();
     void menuAddSYSG();
     void menuLoad();
+	void menuUnload();
     void newTapeFileOK(QString& tapeFile);
 
 protected:

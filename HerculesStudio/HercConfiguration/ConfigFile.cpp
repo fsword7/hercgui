@@ -144,7 +144,7 @@ void ConfigFile::buildConfig(BuildType type)
 
 ConfigFile::~ConfigFile()
 {
-
+	mFileArray.clear();
 }
 
 void ConfigFile::addNonDev(SystemConfigLine * configLine)
