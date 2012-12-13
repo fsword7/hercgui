@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Aug 7, 2009
  *
- *  Copyright (c) 2009 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id$
  *
  *  This object runs the various utilities as a child process

@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Nov 1, 2009
  *
- *  Copyright (c) 2009 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id$
  *
  *	This object handles the re-initialization of devices during hercules run time

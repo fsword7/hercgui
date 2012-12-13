@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Oct 15, 2009
  *
- *  Copyright (c) 2009 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id$
  *
  *  This object is an interface for driving devices through menus

@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Nov 9, 2009
  *
- *  Copyright (c) 2009 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id$
  *
  *	This class manages font preferences for one object

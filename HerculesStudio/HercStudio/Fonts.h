@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Aug 10, 2009
  *
- *  Copyright (c) 2009 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id$
  *
  *	This object is a front-end to the framework fonts services

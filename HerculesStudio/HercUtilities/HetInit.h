@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Sep 3, 2010
  *
- *  Copyright (c) 2009-2010 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id$
  *
  *  Hetinit utility object

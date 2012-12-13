@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Oct 6, 2009
  *
- *  Copyright (c) 2009 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id$
  *
  *  This program is free software: you can redistribute it and/or modify

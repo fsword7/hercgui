@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Oct 28, 2010
  *
- *  Copyright (c) 2009-2010 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id: MainPanel.cpp 67 2010-09-13 14:06:31Z dekeljacob $
  *
  *  This program is free software: you can redistribute it and/or modify

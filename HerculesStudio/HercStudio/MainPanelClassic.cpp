@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Oct 28, 2010
  *
- *  Copyright (c) 2009-2010 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id: MainPanel.cpp 67 2010-09-13 14:06:31Z dekeljacob $
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -194,7 +194,7 @@ void MainPanelClassic::updateLcd(QLCDNumber * lcd, int inc)
 void MainPanelClassic::setDormant()
 {
 	mMips->setActive(false);
-    QString iconsPath = Environment::getIconsPath().c_str();
+	QString iconsPath = Environment::getIconsPath().c_str();
     ((PanelButton *)mPowerOnButton)->replaceButton(iconsPath + "/poweronoffu.gif", iconsPath + "/poweronoffd.gif");
 }
 

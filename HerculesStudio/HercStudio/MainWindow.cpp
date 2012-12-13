@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Aug 7, 2009
  *
- *  Copyright (c) 2009 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id$
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -843,7 +843,7 @@ void MainWindow::powerOff()
 	usleep(100000);  // TODO32
 	#endif
 	mDevicesPane->clear();
-	mMainPanel->setDormant();
+//	mMainPanel->setDormant();
 	mPsw->setDormant();
     mCommandLine->save();
 }

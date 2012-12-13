@@ -4,7 +4,7 @@
  *  Author:     Jacob Dekel
  *  Created on: Aug 26, 2010
  *
- *  Copyright (c) 2009-2010 Jacob Dekel
+ *  Copyright (c) 2009-2013 Jacob Dekel
  *  $Id$
  *
  *  tapemap utility object
