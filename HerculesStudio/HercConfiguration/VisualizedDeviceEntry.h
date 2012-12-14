@@ -37,7 +37,7 @@ class VisualizedDeviceEntry
 {
 public:
     VisualizedDeviceEntry(int number, DeviceTypes::Type type, const std::string& definition);
-    VisualizedDeviceEntry();
+	VisualizedDeviceEntry();
     virtual ~VisualizedDeviceEntry();
 
     inline int getDeviceNumber(){ return mNumber; }

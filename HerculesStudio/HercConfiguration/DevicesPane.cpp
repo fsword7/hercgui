@@ -67,11 +67,6 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 {
 	hOutDebug(1,"devices notify:" << statusLine.data() << ".");
 	const struct DynDeviceLine * line = reinterpret_cast<const DynDeviceLine *>(statusLine.data());
-	if (line->devNo[0] == '=') // a bug (?) in hercules causes it to send sometimes DEVA==...
-	{
-		const_cast<QByteArray &>(statusLine).remove(4,1);
-		hOutDebug(3,"corrected:" << (char *)line << ".");
-	}
     int devNo;
     VisualizedDeviceEntry deviceEntry;
     bool deviceAdded = false;
@@ -105,7 +100,7 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 			devNo =  strtol(line->devNo, NULL, 16);
 		{
 			VisualizedDeviceEntry deviceEntryPtr(devNo, devType, statusLine.data());
-			std::pair<int,VisualizedDeviceEntry> toinsert(devNo, deviceEntryPtr);
+            std::pair<int,VisualizedDeviceEntry> toinsert(devNo, deviceEntryPtr);
 			mDevices.insert(toinsert);
 			hOutDebug(5, "to be added:" << statusLine.data() << " " << (devNo !=0 ? "added" : "NOT ADDED")) ;
 			if (devNo !=0) deviceAdded = true; // after disconnect and attach, herculess starts sending DEVA instead of DEVC
@@ -133,8 +128,8 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 			else
 			{
 				hOutDebug(1,"sending restart");
-				clear();
-				emit restartDevices();
+				mDevices.clear();
+				//emit restartDevices();
 			}
 			break;
 		case('D'):
@@ -250,20 +245,13 @@ QSize DevicesPane::sizeHint() const
 
 void DevicesPane::clear()
 {
-    if (mModel != NULL)
-        mModel->clear();
-    if (mListView == NULL)
-        return;
-	else
-	{
-		delete mListView;
-		mListView = NULL;
-	}
+	hOutDebug(1,"DevicesPane clear");
 	mDevices.clear();
-//    mListView->setModel(mModel);
-//    mListView->setVisible(true);
+	if (mModel != NULL)
+		mModel->clear();
+	if (mListView == NULL)
+        return;
     adjustSize();
-
 }
 
 bool DevicesPane::isRealDev(int lineNumber)
