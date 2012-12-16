@@ -475,4 +475,21 @@ QSpinBox::down-arrow
 }
 
 
+QDoubleSpinBox
+{
+	background-color: #323232;
+	border: 1px solid #ffaa00;
+}
+
+QDoubleSpinBox::up-arrow
+{
+	 image: url(:/icons/do_up_arrow.png);
+}
+
+QDoubleSpinBox::down-arrow
+{
+	 image: url(:/icons/do_down_arrow.png);
+}
+
+
 

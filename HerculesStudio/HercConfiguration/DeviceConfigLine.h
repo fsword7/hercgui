@@ -39,6 +39,7 @@ public:
     typedef std::map<std::string, DeviceTypes::Type> DeviceTypesMap;
     DeviceConfigLine(const char *line);
     virtual ~DeviceConfigLine();
+	static void clear();
 
     int getDeviceNumber() const;
     DeviceTypes::Type getDeviceType() const;

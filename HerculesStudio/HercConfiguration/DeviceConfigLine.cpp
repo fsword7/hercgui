@@ -43,6 +43,10 @@ DeviceConfigLine::DeviceConfigLine(const char *line):
 DeviceConfigLine::~DeviceConfigLine()
 {
     outDebug(5,std::cout << "~DeviceConfigLine" << std::endl);
+}
+
+void DeviceConfigLine::clear()
+{
 	mDeviceTypes->clear();
 	mDeviceBaseTypes->clear();
 }

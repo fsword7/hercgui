@@ -307,6 +307,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+	DeviceConfigLine::clear();  // free acquired static data
 	if (mConfigFile != NULL)
 		delete mConfigFile;
 }
