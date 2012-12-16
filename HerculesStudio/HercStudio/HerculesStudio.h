@@ -38,6 +38,10 @@
 #endif
 #include <iostream>
 
+#ifndef HS_BUILD_ID
+#define HS_BUILD_ID "Unknown"
+#endif
+
 #define outDebug(level,s) if ((level) <= hDEBUG ) \
 					{s;} \
 					else {}

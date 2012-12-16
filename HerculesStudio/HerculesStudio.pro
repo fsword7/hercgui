@@ -17,6 +17,7 @@ QMAKE_CXX  = @echo [c++] $< && $$QMAKE_CXX
 QMAKE_MOC  = @echo [moc] $< && $$QMAKE_MOC
 QMAKE_LINK = @echo [link] $$TARGET && $$QMAKE_LINK
 #QMAKE_UIC  = @echo [uic ] $< && $$QMAKE_UIC
+DEFINES += HS_BUILD_ID="\\\"$$system(svnversion -n .)\\\""
 QMAKE_CXXFLAGS = -pedantic -Wno-long-long
 }
 
