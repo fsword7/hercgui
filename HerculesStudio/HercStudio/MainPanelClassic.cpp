@@ -203,18 +203,6 @@ void MainPanelClassic::standby()
 	mMips->setActive(true);
     QString iconsPath = Environment::getIconsPath().c_str();
     ((PanelButton *)mPowerOnButton)->replaceButton(iconsPath + "/powerononu.gif", iconsPath + "/poweronond.gif");
-
-    const QColor black(50,50,50);
-    const QColor white(255,255,255);
-    QBrush blackBrush(black);
-    QBrush whiteBrush(black);
-    QPalette blackPalette(white, black);
-    QPalette whitePalette(white, white);
-    this->setPalette(whitePalette);
-    this->setAutoFillBackground(true);
-    this->repaint();
-    this->setPalette(blackPalette);
-
 }
 
 bool MainPanelClassic::notify(const QByteArray& statusLine)

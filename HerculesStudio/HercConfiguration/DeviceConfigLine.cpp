@@ -47,8 +47,8 @@ DeviceConfigLine::~DeviceConfigLine()
 
 void DeviceConfigLine::clear()
 {
-	mDeviceTypes->clear();
-	mDeviceBaseTypes->clear();
+	if (mDeviceTypes != NULL) mDeviceTypes->clear();
+	if (mDeviceBaseTypes != NULL) mDeviceBaseTypes->clear();
 }
 
 int DeviceConfigLine::getDeviceNumber() const

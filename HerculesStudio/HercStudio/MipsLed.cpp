@@ -29,7 +29,7 @@
 #include <QLCDNumber>
 
 MipsLed::MipsLed(QWidget * parent)
-: Mips()
+: Mips(parent)
 {
 	mMipsPalette.setColor(QPalette::Foreground, QColor(255,0,0));
     mMips = new QLCDNumber(6,parent);
@@ -63,7 +63,11 @@ void MipsLed::setActive(bool active)
 			mMipsPalette.setColor(QPalette::Foreground, QColor(255,0,0));
 	}
 	else
-		mMipsPalette.setColor(QPalette::Foreground, QColor(120,100,100));
+		if (Preferences::getInstance().greenLed())
+			mMipsPalette.setColor(QPalette::Foreground, QColor(0,80,0));
+		else
+			mMipsPalette.setColor(QPalette::Foreground, QColor(120,0,0));
+
 	mMips->setPalette(mMipsPalette);
 }
 
