@@ -28,7 +28,10 @@
 #define HERCULESSTUDIO_H_
 
 #include <qglobal.h>
-#define HERCSTUDIO_VERSION "Version: 1.4.0-beta"
+#ifndef HS_BUILD_ID
+#define HS_BUILD_ID "Unknown"
+#endif
+#define HERCSTUDIO_VERSION "Version: 1.4.0 " HS_BUILD_ID
 #define hDEBUG 0
 #define UNISTD_INC
 #ifdef  Q_WS_WIN
@@ -37,10 +40,6 @@
 #undef UNISTD_INC
 #endif
 #include <iostream>
-
-#ifndef HS_BUILD_ID
-#define HS_BUILD_ID "Unknown"
-#endif
 
 #define outDebug(level,s) if ((level) <= hDEBUG ) \
 					{s;} \
