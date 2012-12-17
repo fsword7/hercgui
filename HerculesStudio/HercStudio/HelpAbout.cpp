@@ -34,7 +34,7 @@ HelpAbout::HelpAbout(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	ui.versionLabel->setText(HERCSTUDIO_VERSION " (" HS_BUILD_ID ")" );
+	ui.versionLabel->setText(HERCSTUDIO_VERSION);
 	ui.stampLabel->setText("Built on: "__DATE__ " " __TIME__);
 
 	static QString icon1 = Environment::getIconsPath().c_str();
