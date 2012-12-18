@@ -47,7 +47,7 @@
      <widget class="QRadioButton" name="classicRadioButton">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>30</y>
         <width>131</width>
         <height>19</height>
@@ -60,7 +60,7 @@
      <widget class="QRadioButton" name="modernRadioButton">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>60</y>
         <width>141</width>
         <height>19</height>
@@ -73,7 +73,7 @@
      <widget class="QCheckBox" name="AnimateCheckBox">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>90</y>
         <width>151</width>
         <height>24</height>
@@ -103,7 +103,7 @@
        <x>20</x>
        <y>10</y>
        <width>221</width>
-       <height>101</height>
+       <height>121</height>
       </rect>
      </property>
      <property name="title">
@@ -115,7 +115,7 @@
      <widget class="QRadioButton" name="mipsLedButton">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>32</y>
         <width>101</width>
         <height>21</height>
@@ -128,7 +128,7 @@
      <widget class="QRadioButton" name="mipsGaugeButton">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>60</y>
         <width>131</width>
         <height>31</height>
@@ -141,7 +141,7 @@
      <widget class="QCheckBox" name="GreenCheckBox">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>120</x>
         <y>30</y>
         <width>90</width>
         <height>31</height>
@@ -576,7 +576,7 @@
        <x>400</x>
        <y>10</y>
        <width>261</width>
-       <height>111</height>
+       <height>121</height>
       </rect>
      </property>
      <property name="title">
@@ -588,7 +588,7 @@
      <widget class="QComboBox" name="ThemeComboBox">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>30</y>
         <width>141</width>
         <height>29</height>
