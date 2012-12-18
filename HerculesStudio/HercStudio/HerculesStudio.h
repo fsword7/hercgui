@@ -5,7 +5,7 @@
  *  Created on: Aug 7, 2009
  *
  *  Copyright (c) 2009-2013 Jacob Dekel
- *  $Id$
+ *  $Id: HerculesStudio.h 170 2012-12-17 07:45:20Z dekeljacob $
  *
  *  a collection of product-wide definitions
  *
@@ -31,7 +31,7 @@
 #ifndef HS_BUILD_ID
 #define HS_BUILD_ID "Unknown"
 #endif
-#define HERCSTUDIO_VERSION "Version: 1.4.0 " HS_BUILD_ID
+#define HERCSTUDIO_VERSION "Version: 1.4.0 " "$Revision:"
 #define hDEBUG 0
 #define UNISTD_INC
 #ifdef  Q_WS_WIN
