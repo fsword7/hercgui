@@ -39,7 +39,7 @@ HelpAbout::HelpAbout(QWidget *parent)
 	else
 	{
 		QString rev(HERCSTUDIO_REVISION);
-		ui.versionLabel->setText(HERCSTUDIO_VERSION "(" + (rev.mid(11,5) + ")"));
+		ui.versionLabel->setText(HERCSTUDIO_VERSION " (build " + (rev.mid(11,4).replace(" ","") + ")"));
 	}
 	ui.stampLabel->setText("Built on: "__DATE__ " " __TIME__);
 
