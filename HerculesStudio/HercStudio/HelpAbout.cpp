@@ -34,7 +34,13 @@ HelpAbout::HelpAbout(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	ui.versionLabel->setText(HERCSTUDIO_VERSION);
+	if (strlen(HERCSTUDIO_REVISION) < 16)
+		ui.versionLabel->setText(HERCSTUDIO_VERSION);
+	else
+	{
+		QString rev(HERCSTUDIO_REVISION);
+		ui.versionLabel->setText(HERCSTUDIO_VERSION "(" + (rev.mid(11,5) + ")"));
+	}
 	ui.stampLabel->setText("Built on: "__DATE__ " " __TIME__);
 
 	static QString icon1 = Environment::getIconsPath().c_str();
