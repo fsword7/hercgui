@@ -47,7 +47,6 @@ public:
 
 private:
     QLCDNumber *mMips;
-	QPalette mMipsPalette;
 };
 
 #endif /* MIPSLCD_H_ */

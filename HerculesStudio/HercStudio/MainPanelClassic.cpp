@@ -311,6 +311,7 @@ template<class T> void MainPanelClassic::animateOne(int x, int y, T* button, int
 		button->move(i,y);
 		this->repaint();
 	}
+	button->move(x,y);
 }
 
 void MainPanelClassic::animate()

@@ -153,6 +153,7 @@ void Psw::setStatusVisible(bool visible, bool modern)
 
 void Psw::setVisible(bool visible, bool modern)
 {
+    QLabel::setVisible(visible);
 	setStatusVisible(visible, modern);
 }
 

@@ -46,10 +46,11 @@ public:
 
 	virtual bool notify(const QByteArray& );
 	void setFont();
-	inline bool isActive() const { return mActive; } ;
+    inline bool isActive() const { return mActive; }
 	void setMode(PswMode mode);
     void standby();
     void setDormant();
+    using QLabel::setVisible;
     virtual void setVisible(bool visible, bool modern);
     virtual bool visible();
 

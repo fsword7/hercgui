@@ -31,9 +31,7 @@
 MipsLed::MipsLed(QWidget * parent)
 : Mips(parent)
 {
-	mMipsPalette.setColor(QPalette::Foreground, QColor(255,0,0));
     mMips = new QLCDNumber(6,parent);
-	mMips->setPalette(mMipsPalette);
     mMips->setSegmentStyle(QLCDNumber::Flat);
     mMips->setFrameShape( QLCDNumber::NoFrame );
 	mMips->setVisible(true);
@@ -58,17 +56,16 @@ void MipsLed::setActive(bool active)
 	if (active)
 	{
 		if (Preferences::getInstance().greenLed())
-			mMipsPalette.setColor(QPalette::Foreground, QColor(0,255,0));
+			mMips->setStyleSheet("QLCDNumber	{ color: #00ff00;}");
 		else
-			mMipsPalette.setColor(QPalette::Foreground, QColor(255,0,0));
+			mMips->setStyleSheet("QLCDNumber	{ color: #ff0000;}");
 	}
 	else
 		if (Preferences::getInstance().greenLed())
-			mMipsPalette.setColor(QPalette::Foreground, QColor(0,80,0));
+			mMips->setStyleSheet("QLCDNumber	{ color: #005000;}");
 		else
-			mMipsPalette.setColor(QPalette::Foreground, QColor(120,0,0));
+			mMips->setStyleSheet("QLCDNumber	{ color: #700000;}");
 
-	mMips->setPalette(mMipsPalette);
 }
 
 void MipsLed::setToolTip(const QString & tip)

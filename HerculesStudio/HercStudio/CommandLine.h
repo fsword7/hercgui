@@ -43,6 +43,7 @@ public:
   void save();
   void restore();
 
+  using QLineEdit::sizeHint;
   QSize sizeHint();
 
 protected:
