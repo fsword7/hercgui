@@ -35,7 +35,7 @@
 #include "ui_Configuration.h"
 
 #include <QSyntaxHighlighter>
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 struct ConfigTableEntry
 {

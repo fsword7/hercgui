@@ -29,7 +29,7 @@
 
 #include "GenericUtility.h"
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_HetGet.h"
 
 class HetGet : public GenericUtility

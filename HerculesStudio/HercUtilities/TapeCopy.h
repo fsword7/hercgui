@@ -28,7 +28,7 @@
 
 #include "GenericUtility.h"
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_TapeCopy.h"
 
 class TapeCopy : public GenericUtility

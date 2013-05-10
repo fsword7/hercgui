@@ -27,7 +27,7 @@
 #ifndef DASDLOAD_H
 #define DASDLOAD_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_DasdLoad.h"
 
 class UtilityExecutor;

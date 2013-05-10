@@ -30,7 +30,7 @@
 #include "StatusUpdateCollector.h"
 #include "Mips.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include <QLabel>
 #include <QPushButton>
 #include <QToolButton>

@@ -29,7 +29,7 @@
 
 #include "GenericUtility.h"
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include <QAbstractSpinBox>
 #include "ui_HetInit.h"
 

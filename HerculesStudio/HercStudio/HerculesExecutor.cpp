@@ -95,9 +95,9 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
 				<< "hercules could not be started (" <<  rc << ")" << std::endl
 				<< "check that hercules is properly installed and is on the default path " << std::endl
 #ifndef Q_WS_MAC
-				<< "or that the path specified in Edit/Preferences is correct." << std::endl
+                << "and that the path specified in Edit/Preferences is correct." << std::endl
 #else
-				<< "or that the path specified in HerculesStudio/Preferences is correct." << std::endl
+                << "and that the path specified in HerculesStudio/Preferences is correct." << std::endl
 #endif
 				<< "**************************************************************" << std::endl;
 		_exit(1);

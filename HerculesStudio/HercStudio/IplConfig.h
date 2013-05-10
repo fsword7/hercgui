@@ -26,7 +26,7 @@
 #ifndef IPLCONFIG_H
 #define IPLCONFIG_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_IplConfig.h"
 
 class IplConfig : public QDialog

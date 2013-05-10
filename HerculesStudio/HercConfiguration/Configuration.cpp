@@ -419,7 +419,7 @@ void Configuration::blockCountChangedSlot()
 		 block = block.next())
 	{
 		mLastSys++;
-		std::string str = block.text().toAscii().data();
+        std::string str = block.text().toUtf8().data();
 		int skipSpace = str.find_first_not_of(" ");
 		if (skipSpace < 0 || str[skipSpace] == '#') continue;
 		if (str[skipSpace] >= '0' && str[skipSpace] <= '9')
@@ -464,7 +464,7 @@ void ConfigHighlight::highlightBlock(const QString &text)
 	}
 	else
 	{
-		std::string str = text.toAscii().data();
+        std::string str = text.toUtf8().data();
 		int skipSpace = str.find_first_not_of(" ");
 		if (skipSpace >= 0 && str[skipSpace] != '#')
 		{
@@ -483,7 +483,7 @@ void ConfigHighlight::highlightBlock(const QString &text)
 
 	int remarkCol = text.indexOf("#");
 
-	ConfigLine configLine(text.toAscii().data());
+    ConfigLine configLine(text.toUtf8().data());
 	int i=0;
 	std::string tokenToSearch = configLine.getUppercaseToken(0);
 	while (Configuration::mConfigTable[i].keyword.length() != 0 && Configuration::mConfigTable[i].keyword.compare(tokenToSearch) != 0)

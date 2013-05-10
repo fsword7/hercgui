@@ -31,7 +31,7 @@
 #include "StatusUpdateCollector.h"
 #include "Mips.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include "ui_Devices.h"
 #include <QToolButton>
 #include <QMouseEvent>

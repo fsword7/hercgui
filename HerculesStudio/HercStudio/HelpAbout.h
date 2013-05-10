@@ -25,7 +25,7 @@
 #ifndef HELPABOUT_H
 #define HELPABOUT_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include "ui_helpabout.h"
 
 class HelpAbout : public QDialog

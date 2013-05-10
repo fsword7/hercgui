@@ -720,7 +720,7 @@ void ConfigurationEditor::TZOFFSET(Ui::ConfigurationClass * configUi, const Conf
 		if (mSpinMap["TZOFFSET"] != iParm)
 		{
 			QString parm = configUi->tzOffsetHH->text() + configUi->tzOffsetMM->text();
-			outDebug(5,std::cout << "parm:" << parm.toAscii().data() << std::endl;)
+			outDebug(5,std::cout << "parm:" << parm.toUtf8().data() << std::endl;)
 			const_cast<ConfigLine *>(configLine)->replaceParameters(parm.toStdString());
 		}
 	}

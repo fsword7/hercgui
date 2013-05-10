@@ -31,7 +31,7 @@
 #include "ConfigLine.h"
 #include "GenericDeviceProperties.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include "ui_DasdProperties.h"
 
 typedef std::string stringArray[3];

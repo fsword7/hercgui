@@ -27,7 +27,7 @@
 #ifndef PREFERENCESWIN_H
 #define PREFERENCESWIN_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_PreferencesWin.h"
 #include "Preferences.h"
 

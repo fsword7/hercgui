@@ -28,7 +28,7 @@
 #ifndef RECOVERY_H
 #define RECOVERY_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_Recovery.h"
 
 class Recovery : public QDialog

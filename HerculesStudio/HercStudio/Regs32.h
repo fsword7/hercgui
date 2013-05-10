@@ -29,7 +29,7 @@
 
 #include "StatusUpdateCollector.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include <QLabel>
 #include <QCheckBox>
 

@@ -30,8 +30,8 @@
 #include "UtilityExecutor.h"
 #include "GenericUtility.h"
 
-#include <QtGui/QDialog>
-#include <QtGui/QWidget>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QWidget>
 #include <QThread>
 #include <QValidator>
 #include "ui_DasdInit.h"

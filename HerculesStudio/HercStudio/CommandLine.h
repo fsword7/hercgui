@@ -29,7 +29,7 @@
 
 #include "HerculesStudio.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include <QLineEdit>
 
 class CommandLine : public QLineEdit

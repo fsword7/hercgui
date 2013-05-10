@@ -29,7 +29,7 @@ SysgProperties::SysgProperties(ConfigLine& line, QWidget *parent)
 {
     getUi().terminalCombo->clear();
     getUi().terminalCombo->insertItems(0, QStringList()
-     << QApplication::translate("TerminalPropertiesClass", "SYSG", 0, QApplication::UnicodeUTF8)
+     << QApplication::translate("TerminalPropertiesClass", "SYSG", 0)
     );
     getUi().terminalCombo->setEnabled(false);
     getUi().deviceNumber->setText("0000");

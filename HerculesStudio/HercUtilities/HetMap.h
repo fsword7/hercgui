@@ -29,7 +29,7 @@
 
 #include "GenericUtility.h"
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_HetMap.h"
 
 class HetMap : public GenericUtility

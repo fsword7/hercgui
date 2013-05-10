@@ -28,7 +28,7 @@
 
 #include "GenericUtility.h"
 #include "ui_TapeSplt.h"
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include <QTableView>
 #include <QStandardItemModel>
 #include <QAbstractTableModel>

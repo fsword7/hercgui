@@ -382,7 +382,7 @@ char *ConfigFile::getNextLine(char * buff, int len, BuildType type)
 			len = mEditorIterator.length();
 			if (len > 0)
 			{
-				strncpy(buff,mEditorIterator.text().toAscii().data(),len-1);
+                strncpy(buff,mEditorIterator.text().toUtf8().data(),len-1);
 				buff[len-1] = '\0';
 			}
 			else

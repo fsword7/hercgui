@@ -173,7 +173,7 @@ void PlainLogWidget::writeToFile(WriteType type)
 		// write new lines
 		while(block != oldDocument->end())
 		{
-			out << block.text().toAscii().data() << "\n";
+			out << block.text().toUtf8().data() << "\n";
 			mLinesWritten++;
 			block=block.next();
 		}

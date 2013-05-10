@@ -27,7 +27,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include "HerculesStudio.h"
 #include "ui_MainWindow.h"
 #include "MainPanel.h"

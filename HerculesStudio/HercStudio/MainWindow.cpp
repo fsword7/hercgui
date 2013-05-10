@@ -485,9 +485,9 @@ void MainWindow::newCommand()
 	if (cl == NULL) return;
 	outDebug(2, std::cout  << cl->text().toStdString() << std::endl);
 	if (!mLogWindow->isOSLog() || cl->text().left(1).compare(".") == 0)
-		mHerculesExecutor->issueFormattedCommand("%s\n",cl->text().toAscii().data());
+		mHerculesExecutor->issueFormattedCommand("%s\n",cl->text().toUtf8().data());
 	else
-		mHerculesExecutor->issueFormattedCommand(".%s\n",cl->text().toAscii().data());
+		mHerculesExecutor->issueFormattedCommand(".%s\n",cl->text().toUtf8().data());
     setIpled(cl->text());
 }
 

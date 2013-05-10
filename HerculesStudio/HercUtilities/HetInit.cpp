@@ -175,7 +175,7 @@ bool VolserSpinBox::verify()
     if (str.size() == 6)
     {
         char num[6];
-        strncpy(num,text().toAscii().data(),6);
+        strncpy(num,text().toUtf8().data(),6);
         for (int i=0; i<6; i++)
         {
             if (!isdigit(num[i]))

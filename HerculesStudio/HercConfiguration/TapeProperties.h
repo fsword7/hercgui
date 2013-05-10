@@ -30,7 +30,7 @@
 #include "ConfigLine.h"
 #include "GenericDeviceProperties.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include "ui_TapeProperties.h"
 
 class TapeProperties : public GenericDeviceProperties

@@ -30,7 +30,7 @@
 #include "DeviceConfigLine.h"
 #include "DeviceTypes.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include <QMenu>
 
 class DeviceMenuProcessor : public QWidget

@@ -100,7 +100,7 @@ void GenericUtility::finished(int result, QProcess::ExitStatus status)
 	mFinished = true;
 	mRc = result;
 	mFinishedOK = ( (status==QProcess::NormalExit) && (mRc == 0) );
-	QByteArray rcLine = mName.toAscii() + " ended; rc=";
+	QByteArray rcLine = mName.toUtf8() + " ended; rc=";
 	rcLine += QString::number(result);
 	emit output(rcLine);
 	finishedSlot();

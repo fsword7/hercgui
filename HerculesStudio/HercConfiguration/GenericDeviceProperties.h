@@ -30,7 +30,7 @@
 #include "DeviceConfigLine.h"
 #include "DeviceTypes.h"
 #include <QLineEdit>
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 class GenericDeviceProperties : public QDialog
 {

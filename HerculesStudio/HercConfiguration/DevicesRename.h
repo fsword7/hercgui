@@ -29,7 +29,7 @@
 
 #include "Configuration.h"
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_DevicesRename.h"
 
 class DevicesRename : public QDialog
