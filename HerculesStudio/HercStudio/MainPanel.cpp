@@ -40,7 +40,6 @@ MainPanel::MainPanel(QWidget *parent)
     QString iconsPath = Environment::getIconsPath().c_str();
     mYellowLow = new QPixmap(iconsPath + "/yellow.png");
     mYellowHigh = new QPixmap(iconsPath + "/yellowhigh.png");
-
 }
 
 MainPanel::~MainPanel()
@@ -111,6 +110,7 @@ ClickLabel::ClickLabel(MainPanel * parent, QObject * lcd)
 void ClickLabel::mousePressEvent(QMouseEvent * event)
 {
     mPanel->updateLcd((QLCDNumber*)(mLcd), event->x() > 30 ? 1 : -1); 
+    Preferences::getInstance().setIplDevice( std::string(QByteArray::number(mPanel->getLoadAddress(),16).data()) );
 }
 
 int MainPanel::getLoadAddress()

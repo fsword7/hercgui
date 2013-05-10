@@ -37,6 +37,7 @@ MainPanelClassic::MainPanelClassic(QWidget *parent)
 : MainPanel(parent)
 {
     setupUi(parent);
+    setLoadAddress(Preferences::getInstance().iplDevice().c_str());
     doConnect();
 }
 
