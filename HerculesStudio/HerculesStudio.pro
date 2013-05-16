@@ -11,8 +11,8 @@ INCLUDEPATH +=  \
                  HercUtilities
 
 !win32{
-QMAKE_CC   = @echo [c] $< && $$QMAKE_CC
-QMAKE_CXX  = @echo [c++] $< && $$QMAKE_CXX
+#QMAKE_CC   = @echo [c] $< && $$QMAKE_CC
+#QMAKE_CXX  = @echo [c++] $< && $$QMAKE_CXX
 QMAKE_MOC  = @echo [moc] $< && $$QMAKE_MOC
 QMAKE_LINK = @echo [link] $$TARGET && $$QMAKE_LINK
 #QMAKE_UIC  = @echo [uic ] $< && $$QMAKE_UIC
