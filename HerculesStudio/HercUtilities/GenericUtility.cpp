@@ -63,7 +63,7 @@ bool GenericUtility::runOrStopClicked()
     }
 }
 
-int GenericUtility::execute(const std::string & command, const std::string& path, std::vector<std::string>& parameters)
+int GenericUtility::execute(const std::string & command, const std::string& path, std::vector<std::string>& parameters, const QString &workingDirectory)
 {
 	mStarted = true;
 	mFinished = false;
@@ -73,7 +73,7 @@ int GenericUtility::execute(const std::string & command, const std::string& path
     mRunner = new UtilityRunner(mExecutor);
     mErrorRunner = new UtilityRunner(mExecutor);
     emit output(getFlatCommand(command,path,parameters).c_str());
-    int ret = mExecutor->run(command, path, parameters, mRunner, mErrorRunner);
+    int ret = mExecutor->run(command, path, parameters, mRunner, mErrorRunner, workingDirectory);
 
     // do not wait forever
     //QTimer::singleShot(2000, this, SLOT(timeout()));

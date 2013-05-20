@@ -41,9 +41,9 @@ UtilityExecutor::~UtilityExecutor()
 {
 }
 
-
+//TODO convert all std::string parameters to QString
 int UtilityExecutor::run(const std::string & pCommand, const std::string& pPath, std::vector<std::string> pParameters, UtilityRunner * runner,
-        UtilityRunner * errorRunner)
+        UtilityRunner * errorRunner, const QString& workingDirectory)
 {
     QString program = pPath.c_str();
     if (pPath.size() > 0) program += "/";
@@ -71,7 +71,10 @@ int UtilityExecutor::run(const std::string & pCommand, const std::string& pPath,
                 SLOT(readStandardError()));
     }
     for (int i=0 ; i<arguments.size(); i++)
-        hOutDebug(1, " " << arguments.value(i).toStdString());
+        hOutDebug(0, " " << arguments.value(i).toStdString());
+    if (!workingDirectory.isEmpty())
+        mProcess->setWorkingDirectory(workingDirectory);
+    hOutDebug(0, mProcess->workingDirectory().toStdString());
     mProcess->start(program,arguments);
     Q_PID pid = mProcess->pid();
 
@@ -93,7 +96,7 @@ void UtilityExecutor::terminate()
 {
     if (mProcess != NULL)
 	{
-        mProcess->close();
+        //mProcess->close();
 		mProcess = NULL;
 	}
 }
