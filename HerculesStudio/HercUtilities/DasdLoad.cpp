@@ -151,9 +151,9 @@ void DasdLoad::finishedSlot()
         QMessageBox::information(this, "dasdload", "Dasdload operation successfully completed!",
                 QMessageBox::Ok,
                 QMessageBox::NoButton);
-        deleteLater();
     }
     else emit error();
+    deleteLater();
 }
 
 
