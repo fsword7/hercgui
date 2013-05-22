@@ -27,11 +27,13 @@
 #ifndef DASDLOAD_H
 #define DASDLOAD_H
 
+#include "GenericUtility.h"
+
 #include <QtGui/QDialog>
 #include "ui_DasdLoad.h"
 
 class UtilityExecutor;
-class DasdLoad : public QDialog
+class DasdLoad : public GenericUtility
 {
     Q_OBJECT
 
@@ -42,7 +44,9 @@ public:
 private:
     Ui::DasdLoadClass ui;
     bool              mEnded;
-    UtilityExecutor * mExecutor;
+
+private:
+    void finishedSlot();
 
 private slots:
     void exitClicked();

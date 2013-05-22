@@ -23,18 +23,20 @@
  */
 
 #include "DasdLoad.h"
-#include "UtilityExecutor.h"
+#include "HerculesStudio.h"
 #include "UtilityRunner.h"
+#include "Preferences.h"
 #include "StringTokenizer.h"
 
 
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QFileInfo>
 
 #include <csignal>
 
 DasdLoad::DasdLoad(QWidget *parent)
-    : QDialog(parent)
+    : GenericUtility("dasdload", parent)
 {
 	ui.setupUi(this);
 
@@ -56,18 +58,26 @@ void DasdLoad::exitClicked()
 
 void DasdLoad::runClicked()
 {
-    if (mExecutor != NULL)
+    if (!runOrStopClicked())
     {
-    	mExecutor->terminate();
-        QMessageBox::warning(this, "dasdload",
-                                            "dasdload operation was aborted at user's request",
-                                            QMessageBox::Ok,
-                                            QMessageBox::NoButton);
-        ui.runButton->setText("Ok");
+        ui.runButton->setText("Run");
         return;
     }
-    mEnded = false;
+
     std::vector<std::string> parameters;
+
+    if (ui.filename->text().isEmpty())
+    {
+        QMessageBox::warning(this, "dasdload", "Please specify dasd file to create",
+                QMessageBox::Ok, QMessageBox::NoButton);
+        return;
+    }
+    if (ui.path->text().isEmpty())
+    {
+        QMessageBox::warning(this, "dasdload", "Please specify path for dasd file to create",
+                QMessageBox::Ok, QMessageBox::NoButton);
+        return;
+    }
 
     switch (ui.compressionComboBox->currentIndex())
     {
@@ -96,24 +106,16 @@ void DasdLoad::runClicked()
     }
     fullPath += ui.filename->text().toStdString();
     parameters.push_back(fullPath);
-    parameters.push_back("EXTERNALGUI");
     std::string command = "dasdload";
     std::string path = "";
+    QFileInfo fi(ui.control->text());
+    hOutDebug(0, "dir: " << fi.absolutePath().toStdString());
+
+    execute(command, Preferences::getInstance().hercDir(), parameters, fi.absolutePath());
 
     ui.progressBar->setVisible(true);
-    mExecutor = new UtilityExecutor();
-    UtilityRunner * runner = new UtilityRunner(mExecutor);
-    runner->start();
-    UtilityRunner * errorRunner = new UtilityRunner(mExecutor);
-    errorRunner->start();
-    mExecutor->run(command, path, parameters, runner, errorRunner);
-
-    connect(runner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(runner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(runner, SIGNAL(error(QByteArray)), this, SLOT(errorRunner(QByteArray)));
-    connect(errorRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
-    connect(errorRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
-    connect(errorRunner, SIGNAL(error(QByteArray)), this, SLOT(errorRunner(QByteArray)));
+    connect(mErrorRunner, SIGNAL(valueChanged(int)), this, SLOT(runnerValueChanged(int)));
+    connect(mErrorRunner, SIGNAL(maximumChanged(int)), this, SLOT(runnerMaximumChanged(int)));
     ui.runButton->setText("Stop");
 }
 
@@ -140,6 +142,18 @@ void DasdLoad::runnerValueChanged(int value)
         ui.progressBar->setValue(value);
     else
         ui.progressBar->setValue(ui.progressBar->maximum());
+}
+
+void DasdLoad::finishedSlot()
+{
+    if (mStarted && mFinished && mFinishedOK)
+    {
+        QMessageBox::information(this, "dasdload", "Dasdload operation successfully completed!",
+                QMessageBox::Ok,
+                QMessageBox::NoButton);
+        deleteLater();
+    }
+    else emit error();
 }
 
 

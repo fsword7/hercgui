@@ -31,6 +31,7 @@
 #include "UtilityRunner.h"
 
 #include <QObject>
+#include <QString>
 
 #include <string>
 #include <vector>
@@ -50,9 +51,10 @@ public:
             const std::string & pPath,
             std::vector<std::string> pParameters,
             UtilityRunner * runner,
-            UtilityRunner * errorRunner);
+            UtilityRunner * errorRunner,
+            const QString& WorkingDirectory=QString());
     bool running();
-    QProcess * getQProcess() { return mProcess;};
+    QProcess * getQProcess() { return mProcess;}
     void terminate();
 
 private:

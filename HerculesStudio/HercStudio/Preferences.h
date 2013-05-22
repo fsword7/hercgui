@@ -381,7 +381,8 @@ public:
 		LogFileLines = 15,
 		GreenLed = 16,
 		Animate=17,
-		DarkBackground=18
+        DarkBackground=18,
+        IplDevice=19
 	};
 
 	enum FontObject
@@ -494,6 +495,10 @@ public:
 	//dark background
 	void setDarkBackground(bool dark);
 	bool darkBackground() const;
+
+    // IPL device
+    void setIplDevice(const std::string& iplDevice);
+    std::string iplDevice() const;
 
 protected:
 	Preferences();

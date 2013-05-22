@@ -56,7 +56,8 @@ const char * Preferences::sKeywords[] = {
 	"LogFileLines",
 	"GreenLed",
 	"Animate",
-	"DarkBackground"};
+    "DarkBackground",
+    "IplDevice"};
 
 const char * Preferences::sRegsViews[] = {
 		"ViewGR32",
@@ -163,6 +164,7 @@ PrefInt(logFileLines, LogFileLines, int)
 PrefBool(greenLed, GreenLed)
 PrefBool(animate, Animate)
 PrefBool(darkBackground, DarkBackground)
+Pref(iplDevice,IplDevice)
 
 PrefSet(setHercDir,HerculesDir)
 PrefSet(setConfigDir,ConfigurationDir)
@@ -176,6 +178,7 @@ PrefSetInt(setLogFileLines,LogFileLines,int)
 PrefSetBool(setGreenLed, GreenLed)
 PrefSetBool(setAnimate, Animate)
 PrefSetBool(setDarkBackground, DarkBackground)
+PrefSet(setIplDevice, IplDevice)
 
 
 std::string Preferences::configDir() const
@@ -260,7 +263,6 @@ bool Preferences::fontIsItalic(FontObject fontObject) const
 	GenFontKey(key,"/Italic");
 	return mSettings->value(fullKey.c_str()).toBool();
 }
-
 
 const char * Preferences::fontObjectToString(FontObject fontObject) const
 {

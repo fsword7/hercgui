@@ -50,7 +50,7 @@ protected:
 	int mRc;
 
 	bool runOrStopClicked();  // returns false if currently running
-	int execute(const std::string & pCommand, const std::string& pPath, std::vector<std::string>& pParameters);
+    int execute(const std::string & pCommand, const std::string& pPath, std::vector<std::string>& pParameters, const QString &workingDIrectory=QString());
 	std::string getFlatCommand(const std::string & command, const std::string& path, std::vector<std::string>& parameters);
 
 protected:
