@@ -129,5 +129,6 @@ void MainPanel::setLoadAddress(const char *devNo)
 		addr /= 16;
 		nums[i]->display(dig);
 	}
+	Preferences::getInstance().setIplDevice( std::string(QByteArray::number(getLoadAddress(),16).data()) );
 }
 

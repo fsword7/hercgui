@@ -215,7 +215,7 @@ MainWindow::MainWindow(QWidget *parent)
     trayIconMenu->addAction(restoreAction);
     mSystemTrayIcon->setContextMenu(trayIconMenu);
 
-	connect(ui.actionNew, SIGNAL(triggered()), this , SLOT(newConfig()));
+	QObject::connect(ui.actionNew, &QAction::triggered, this , &MainWindow::newConfig);
 	connect(ui.actionOpen_configuration, SIGNAL(triggered()), this , SLOT(openConfig()));
 	connect(ui.actionEditConfig, SIGNAL(triggered()), this , SLOT(config()));
 	connect(ui.actionSave, SIGNAL(triggered()), this , SLOT(saveConfig()));
