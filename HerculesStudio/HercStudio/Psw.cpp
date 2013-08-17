@@ -74,7 +74,7 @@ bool Psw::notify(const QByteArray& statusLine)
 	}
 	else 
 	{
-		mCpu->setText(statusLine.mid(7,43));
+        mCpu->setText(statusLine.mid(7,46));
 		mInstCount->setText(statusLine.mid(62));
 		if (statusLine[54] == 'M')
 			mMan->setText("MAN");

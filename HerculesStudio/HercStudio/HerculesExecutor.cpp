@@ -77,7 +77,7 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
 
 		FILE * fileIn = NamedPipe::getInstance().getHerculesStdin();
 		if (fileIn == NULL) perror("fifo0");
-		fflush(stdout);
+
 		rc = dup2(fileno(fileIn),fileno(stdin));
 		if (rc != 0) perror("stdin");
 

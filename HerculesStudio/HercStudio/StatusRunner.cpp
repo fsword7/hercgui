@@ -52,14 +52,27 @@ void StatusRunner::run()
 	QByteArray buff;
 	buff.resize(512);
 	mRunning = true;
+    bool lineRead = false;
+    int startupCounter = 0;
+
 	while(mRunning)
 	{
 		int size;
 		if ((size = statusFile.readLine(buff.data(),512)) <= 0)
 		{
+            // we wait up to 2 seconds for data to appear in the log
+            if (!lineRead)
+            {
+                if (startupCounter++ < 200)
+                {
+                    QThread::msleep(10);
+                    continue; // retry reading by returning to main loop
+                }
+            }
 			emit newData();
 			break;
 		}
+        lineRead = true;
 		buff[size-1] = '\0';
 		mQueue.push_back(buff);
 		emit newData();
