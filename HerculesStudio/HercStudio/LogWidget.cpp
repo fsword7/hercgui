@@ -196,7 +196,19 @@ void PlainLogWidget::writeToFile(WriteType type)
 void PlainLogWidget::preferencesChanged()
 {
 	mLogFileLines = Preferences::getInstance().logFileLines(); // might have been updated
+    bool prevDarkBackground = mDarkBackground;
 	mDarkBackground = Preferences::getInstance().darkBackground();
+    if (mDarkBackground != prevDarkBackground)
+    {
+        QBrush brush(QColor(180,0,0));
+        for (QTextBlock tb=QTextEdit::document()->begin();
+             tb != QTextEdit::document()->end();
+             tb = tb.next())
+        {
+            tb.blockFormat().setForeground(mGreen);
+
+        }
+    }
 }
 
 void PlainLogWidget::setIpled(bool ipled)

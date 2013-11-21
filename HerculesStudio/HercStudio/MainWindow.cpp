@@ -342,7 +342,7 @@ void MainWindow::preferencesChanged()
 void MainWindow::fontChanged()
 {
 	std::string fontName = Preferences::getInstance().fontName(Preferences::LogFontObject);
-	if (fontName[0] == '(')
+    if (fontName.size() == 0 || fontName[0] == '(')
 	{
 		mLogWindow ->setFont(QFont());
 	}
