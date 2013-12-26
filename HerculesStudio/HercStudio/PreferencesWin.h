@@ -36,7 +36,7 @@ class PreferencesWin : public QDialog
     Q_OBJECT
 
 public:
-    PreferencesWin(const std::string& currentPath, Preferences * preferences, QWidget *parent = 0);
+    PreferencesWin(const std::string& currentPath, QWidget *parent = 0);
     ~PreferencesWin();
 
     std::string getHercDir();

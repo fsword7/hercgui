@@ -30,8 +30,8 @@
 
 #include <iostream>
 
-PreferencesWin::PreferencesWin( const std::string& currentPath, Preferences *preferences, QWidget *parent)
-	: QDialog(parent), mCurrentPath(currentPath), mPreferences(preferences)
+PreferencesWin::PreferencesWin( const std::string& currentPath, QWidget *parent)
+    : QDialog(parent), mCurrentPath(currentPath), mPreferences(&Preferences::getInstance())
 {
 	ui.setupUi(this);
 
