@@ -74,7 +74,6 @@ MainWindow::MainWindow(QWidget *parent)
 	mConfigFile(NULL),
 	mCommandLine(NULL),
 	mHerculesExecutor(NULL),
-	mPreferences(NULL),
 	mHerculesActive(false)
 {
 	ui.setupUi(this);
@@ -300,7 +299,7 @@ MainWindow::MainWindow(QWidget *parent)
     mCommandLine->restore();
 	setVisible(true);
 	if (Preferences::getInstance().animate())
-		mMainPanel->animate();
+        QTimer::singleShot(100, this, SLOT(preferencesChanged()));
 	if (Arguments::getInstance().configFileName().length() > 0)
 		powerOn();
 }
@@ -373,8 +372,8 @@ void MainWindow::mipsChanged()
 
 void MainWindow::pswChanged()
 {
-	mPsw->setMode(mPreferences->pswMode());
-	mPswDock->setVisible(mPreferences->pswMode() == Psw::Docked);
+    mPsw->setMode(Preferences::getInstance().pswMode());
+    mPswDock->setVisible(Preferences::getInstance().pswMode() == Psw::Docked);
 }
 
 void MainWindow::styleChanged()
@@ -396,7 +395,7 @@ void MainWindow::styleChanged()
 void MainWindow::themeChanged()
 {
 	setDarkBackground (Preferences::getInstance().darkBackground());
-	if (mPreferences->animate())
+    if (Preferences::getInstance().animate())
 		mMainPanel->animate();
 }
 
@@ -494,8 +493,6 @@ void MainWindow::newCommand()
 
 void MainWindow::newConfig()
 {
-	if (mPreferences == NULL)
-		mPreferences = &Preferences::getInstance();
 	mConfigFile = new ConfigFile("/usr/share/herculesstudio/template.conf");
 	mConfigFile->setNew(true);
 	mConfiguration = new Configuration(mConfigFile, true, this);
@@ -515,19 +512,16 @@ void MainWindow::config()
 
 void MainWindow::openConfig()
 {
-	if (mPreferences == NULL)
-			mPreferences = &Preferences::getInstance();
-	outDebug(5,std::cout << "config at:" << mPreferences->configDir() << std::endl);
 	std::string s = QFileDialog::getOpenFileName(this,
 			"Open configuration",
-			mPreferences->configDir().c_str(),
+            Preferences::getInstance().configDir().c_str(),
 			tr("Hercules configuration files (*.conf *.cnf);;All files(*)")).toUtf8().data();
 	if (s.length() == 0)
 		return;
 
 	mConfigFile = new ConfigFile(s);
 	QFileInfo f(s.c_str());
-	mPreferences->setVolatileConfigDir(f.dir().absolutePath().toStdString().c_str());
+    Preferences::getInstance().setVolatileConfigDir(f.dir().absolutePath().toStdString().c_str());
 	this->setWindowTitle((mConfigFile->getFileName() + " - Hercules Studio").c_str());
 }
 
@@ -548,8 +542,6 @@ void MainWindow::saveConfig()
 void MainWindow::saveConfigAs()
 {
 	if (mConfigFile == NULL) return;
-	if (mPreferences == NULL)
-			mPreferences = &Preferences::getInstance();
 
 	if (mConfigFile->isNew())
 	{
@@ -572,7 +564,7 @@ void MainWindow::saveConfigAs()
 
 	std::string s = QFileDialog::getSaveFileName(this,
 			"Save configuration",
-			mPreferences->configDir().c_str(),
+            Preferences::getInstance().configDir().c_str(),
 			tr("Hercules configuration files (*.conf *.cnf);;All files(*)")).toUtf8().data();
 	if (s.length() == 0)
 		return;
@@ -708,9 +700,7 @@ void MainWindow::saveMessages()
 
 void MainWindow::preferences()
 {
-	if (mPreferences == NULL)
-		mPreferences = &Preferences::getInstance();
-	PreferencesWin * pw = new PreferencesWin(mCurrentPath.toStdString(), mPreferences, this);
+	PreferencesWin * pw = new PreferencesWin(mCurrentPath.toStdString(), this);
 	connect(pw, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
 	pw->exec();
 }
@@ -730,7 +720,6 @@ void MainWindow::powerOn()
 		if (mConfigFile == NULL) openConfig();
 		if (mConfigFile == NULL) return;
 		configName = mConfigFile->getFileName();
-		mPreferences = &Preferences::getInstance();
 	}
 	else
 	{
@@ -762,7 +751,7 @@ void MainWindow::powerOn()
 	{
 		outDebug(5,std::cout << "not recovery" << std::endl);
 		mHerculesExecutor = new HerculesExecutor(*this);
-		herculesPid = mHerculesExecutor->run(configName, mPreferences->hercDir());
+        herculesPid = mHerculesExecutor->run(configName, Preferences::getInstance().hercDir());
 		mDevicesRecovery = false;
 	}
 	else

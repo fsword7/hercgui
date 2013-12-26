@@ -115,9 +115,9 @@ const char * Preferences::sRegsViews[] = {
 Preferences::Preferences()
 {
 	mSettings = new QSettings("org.mvsdasd","HerculesStudio");
-	if (mSettings->value("version") != "1.4")
+    if (mSettings->value("Version").toString().compare("1.4") != 0)
 	{
-		if (mSettings->value("version") != "1.3")
+        if (mSettings->value("version").toString().compare("1.3") != 0)
 		{
 			QString oldFile = QDir::homePath() + "/.config/HercStudio.pref";
 			if (SystemUtils::fileExists(oldFile))

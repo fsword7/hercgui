@@ -97,7 +97,6 @@ private:
     HerculesExecutor    * mHerculesExecutor;
     LogRunner *         mLogRunner;
     StatusRunner        * mStatusRunner;
-    Preferences         * mPreferences;
     Watchdog            * mWatchdog;
     bool                mHerculesActive;
     bool				mMinimizeOnClose;
