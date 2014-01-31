@@ -109,7 +109,7 @@ void DasdLoad::runClicked()
     std::string command = "dasdload";
     std::string path = "";
     QFileInfo fi(ui.control->text());
-    hOutDebug(0, "dir: " << fi.absolutePath().toStdString());
+    hOutDebug(2, "dir: " << fi.absolutePath().toStdString());
 
     execute(command, Preferences::getInstance().hercDir(), parameters, fi.absolutePath());
 

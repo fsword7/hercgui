@@ -30,6 +30,8 @@
 #include <QFile>
 #include <QTextBlock>
 #include <QTextStream>
+#include <QClipboard>
+#include <QApplication>
 
 #include <fcntl.h>
 #include <time.h>
@@ -51,6 +53,9 @@ PlainLogWidget::PlainLogWidget(QWidget * parent, const char * suffix)
 	setLogFileName(parm);
 	mIpled = false;
 	mDarkBackground = Preferences::getInstance().darkBackground();
+
+    connect(this, SIGNAL(copyAvailable(bool)), this, SLOT(keepSelection(bool)));
+    connect(this, SIGNAL(logCopy()), this, SLOT(copy()));
 }
 
 void PlainLogWidget::setLogFileName (QString& suffix)
@@ -221,6 +226,27 @@ void PlainLogWidget::clear()
     QTextEdit::clear();
 }
 
+void PlainLogWidget::keepSelection(bool selected)
+{
+    hOutDebug(4, "copyAvailable " << (selected?"y":"f"));
+    mSelectedTextExists = selected;
+}
+
+bool PlainLogWidget::textIsSelected()
+{
+    return mSelectedTextExists;
+}
+
+QString PlainLogWidget::copySelectedText()
+{
+    if (mSelectedTextExists)
+    {
+        emit logCopy();
+        hOutDebug(4, "clipboard: '" << QApplication::clipboard()->text().toStdString() << "'");
+    }
+    return QApplication::clipboard()->text();
+}
+
 LogWidget::LogWidget(QWidget * parent)
 : PlainLogWidget(NULL), cHercIndex(0), cOsIndex(1)
 {
@@ -321,4 +347,14 @@ void LogWidget::preferencesChanged()
 void LogWidget::setIpled(bool ipled)
 {
 	mIpled = ipled;
+}
+
+bool LogWidget::textIsSelected()
+{
+    return mLogs[mTabWidget->currentIndex()]->textIsSelected();
+}
+
+QString LogWidget::copySelectedText()
+{
+    return mLogs[mTabWidget->currentIndex()]->copySelectedText();
 }

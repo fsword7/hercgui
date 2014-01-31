@@ -210,57 +210,59 @@ MainWindow::MainWindow(QWidget *parent)
 
     QMenu *trayIconMenu = new QMenu(this);
     QAction *restoreAction = new QAction(tr("&Hide"), this);
-    QObject::connect(restoreAction, &QAction::triggered, this, &MainWindow::hideRestore);
+    connect(restoreAction, SIGNAL(triggered()), this, SLOT(hideRestore()));
     trayIconMenu->addAction(restoreAction);
     mSystemTrayIcon->setContextMenu(trayIconMenu);
 
-    QObject::QObject::connect(ui.actionNew, &QAction::triggered, this , &MainWindow::newConfig);
-    QObject::QObject::connect(ui.actionOpen_configuration, &QAction::triggered, this , &MainWindow::openConfig);
-    QObject::QObject::connect(ui.actionEditConfig, &QAction::triggered, this , &MainWindow::config);
-    QObject::QObject::connect(ui.actionSave, &QAction::triggered, this , &MainWindow::saveConfig);
-    QObject::QObject::connect(ui.actionSave_As, &QAction::triggered, this , &MainWindow::saveConfigAs);
-    QObject::QObject::connect(ui.actionExit, &QAction::triggered, this , &MainWindow::exitNow);
-    QObject::QObject::connect(ui.actionViewControls, &QAction::triggered, this, &MainWindow::editViewControls);
-    QObject::QObject::connect(ui.actionViewDevices, &QAction::triggered, this, &MainWindow::editViewDevices);
-    QObject::QObject::connect(ui.actionViewCommand, &QAction::triggered, this, &MainWindow::editViewCommand);
-    QObject::QObject::connect(ui.actionView_32_bit_General_Registers, &QAction::triggered, this, &MainWindow::editView32BitGr);
-    QObject::QObject::connect(ui.actionView_32_bit_Control_Registers, &QAction::triggered, this, &MainWindow::editView32BitCr);
-    QObject::QObject::connect(ui.actionView_32_bit_Floating_Point_Registers, &QAction::triggered, this, &MainWindow::editView32BitFr);
-    QObject::QObject::connect(ui.actionView_32_bit_Access_Registers, &QAction::triggered, this, &MainWindow::editView32BitAr);
-    QObject::QObject::connect(ui.actionView_64_bit_General_Registers, &QAction::triggered, this, &MainWindow::editView64BitGr);
-    QObject::QObject::connect(ui.actionView_64_bit_Control_Registers, &QAction::triggered, this, &MainWindow::editView64BitCr);
-    QObject::QObject::connect(ui.actionView_64_bit_Floating_Point_Registers, &QAction::triggered, this, &MainWindow::editView64BitFr);
-    QObject::connect(ui.actionView_PSW, &QAction::triggered, this, &MainWindow::editViewPSW);
-    QObject::connect(ui.actionDelete_messages, &QAction::triggered, this, &MainWindow::deleteMessages);
-    QObject::connect(ui.actionSave_messages, &QAction::triggered, this, &MainWindow::saveMessages);
-    QObject::connect(ui.actionPreferences, &QAction::triggered, this, &MainWindow::preferences);
-    QObject::connect(ui.actionPower_on, &QAction::triggered, this, &MainWindow::powerOn);
-    QObject::connect(ui.actionPower_off, &QAction::triggered, this, &MainWindow::powerOff);
-    QObject::connect(ui.actionIPL_Load, &QAction::triggered, this, &MainWindow::loadCommand);
-    QObject::connect(ui.actionStart, &QAction::triggered, this, &MainWindow::start);
-    QObject::connect(ui.actionStop, &QAction::triggered, this, &MainWindow::stop);
-    QObject::connect(ui.actionExtInterrupt, &QAction::triggered, this, &MainWindow::extInterrupt);
-    QObject::connect(ui.actionStore_status, &QAction::triggered, this, &MainWindow::store);
-    QObject::connect(ui.actionPSW_Restart, &QAction::triggered, this, &MainWindow::restart);
-    QObject::connect(ui.actionDevice_Interrupt, &QAction::triggered, this, &MainWindow::devInterrupt);
-    QObject::connect(ui.actionDasdinit, &QAction::triggered, this, &MainWindow::dasdinit);
-    QObject::connect(ui.actionDasdload, &QAction::triggered, this, &MainWindow::dasdload);
-    QObject::connect(ui.actionDasdisup, &QAction::triggered, this, &MainWindow::dasdisup);
-    QObject::connect(ui.actionDasdls, &QAction::triggered, this, &MainWindow::dasdls);
-    QObject::connect(ui.actionDasdcat, &QAction::triggered, this, &MainWindow::dasdcat);
-    QObject::connect(ui.actionDasdconv, &QAction::triggered, this, &MainWindow::dasdconv);
-    QObject::connect(ui.actionDasdcopy, &QAction::triggered, this, &MainWindow::dasdcopy);
-    QObject::connect(ui.actionTapemap, &QAction::triggered, this, &MainWindow::tapemap);
-    QObject::connect(ui.actionTapecopy, &QAction::triggered, this, &MainWindow::tapecopy);
-    QObject::connect(ui.actionTapesplit, &QAction::triggered, this, &MainWindow::tapesplit);
-    QObject::connect(ui.actionHetinit, &QAction::triggered, this, &MainWindow::hetinit);
-    QObject::connect(ui.actionHetget, &QAction::triggered, this, &MainWindow::hetget);
-    QObject::connect(ui.actionHetupd, &QAction::triggered, this, &MainWindow::hetupd);
-    QObject::connect(ui.actionHetmap, &QAction::triggered, this, &MainWindow::hetmap);
-    QObject::connect(ui.actionAbout, &QAction::triggered, this, &MainWindow::helpAbout);
-    QObject::connect(mDevicesPane, &DevicesPane::restartDevices, this , &MainWindow::restartDevices);
-    QObject::connect(mCommandLine, &CommandLine::returnPressed, this , &MainWindow::newCommand);
-    connect(mSystemTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systrayClick(QSystemTrayIcon::ActivationReason)));
+	connect(ui.actionNew, SIGNAL(triggered()), this , SLOT(newConfig()));
+	connect(ui.actionOpen_configuration, SIGNAL(triggered()), this , SLOT(openConfig()));
+	connect(ui.actionEditConfig, SIGNAL(triggered()), this , SLOT(config()));
+	connect(ui.actionSave, SIGNAL(triggered()), this , SLOT(saveConfig()));
+	connect(ui.actionSave_As, SIGNAL(triggered()), this , SLOT(saveConfigAs()));
+	connect(ui.actionExit, SIGNAL(triggered()), this , SLOT(exitNow()));
+	connect(ui.actionViewControls, SIGNAL(triggered()), this, SLOT(editViewControls()));
+	connect(ui.actionViewDevices, SIGNAL(triggered()), this, SLOT(editViewDevices()));
+	connect(ui.actionViewCommand, SIGNAL(triggered()), this, SLOT(editViewCommand()));
+	connect(ui.actionView_32_bit_General_Registers, SIGNAL(triggered()), this, SLOT(editView32BitGr()));
+	connect(ui.actionView_32_bit_Control_Registers, SIGNAL(triggered()), this, SLOT(editView32BitCr()));
+	connect(ui.actionView_32_bit_Floating_Point_Registers, SIGNAL(triggered()), this, SLOT(editView32BitFr()));
+	connect(ui.actionView_32_bit_Access_Registers, SIGNAL(triggered()), this, SLOT(editView32BitAr()));
+	connect(ui.actionView_64_bit_General_Registers, SIGNAL(triggered()), this, SLOT(editView64BitGr()));
+	connect(ui.actionView_64_bit_Control_Registers, SIGNAL(triggered()), this, SLOT(editView64BitCr()));
+	connect(ui.actionView_64_bit_Floating_Point_Registers, SIGNAL(triggered()), this, SLOT(editView64BitFr()));
+    connect(ui.actionView_PSW, SIGNAL(triggered()), this, SLOT(editViewPSW()));
+    connect(ui.actionCopy, SIGNAL(triggered()), this, SLOT(editCopy()));
+	connect(ui.actionDelete_messages, SIGNAL(triggered()), this, SLOT(deleteMessages()));
+	connect(ui.actionSave_messages, SIGNAL(triggered()), this, SLOT(saveMessages()));
+	connect(ui.actionPreferences, SIGNAL(triggered()), this, SLOT(preferences()));
+	connect(ui.actionPower_on, SIGNAL(triggered()), this, SLOT(powerOn()));
+	connect(ui.actionPower_off, SIGNAL(triggered()), this, SLOT(powerOff()));
+	connect(ui.actionIPL_Load, SIGNAL(triggered()), this, SLOT(loadCommand()));
+	connect(ui.actionStart, SIGNAL(triggered()), this, SLOT(start()));
+	connect(ui.actionStop, SIGNAL(triggered()), this, SLOT(stop()));
+	connect(ui.actionExtInterrupt, SIGNAL(triggered()), this, SLOT(extInterrupt()));
+	connect(ui.actionStore_status, SIGNAL(triggered()), this, SLOT(store()));
+	connect(ui.actionPSW_Restart, SIGNAL(triggered()), this, SLOT(restart()));
+	connect(ui.actionDevice_Interrupt, SIGNAL(triggered()), this, SLOT(devInterrupt()));
+	connect(ui.actionDasdinit, SIGNAL(triggered()), this, SLOT(dasdinit()));
+	connect(ui.actionDasdload, SIGNAL(triggered()), this, SLOT(dasdload()));
+	connect(ui.actionDasdisup, SIGNAL(triggered()), this, SLOT(dasdisup()));
+	connect(ui.actionDasdls, SIGNAL(triggered()), this, SLOT(dasdls()));
+	connect(ui.actionDasdcat, SIGNAL(triggered()), this, SLOT(dasdcat()));
+	connect(ui.actionDasdconv, SIGNAL(triggered()), this, SLOT(dasdconv()));
+	connect(ui.actionDasdcopy, SIGNAL(triggered()), this, SLOT(dasdcopy()));
+	connect(ui.actionTapemap, SIGNAL(triggered()), this, SLOT(tapemap()));
+	connect(ui.actionTapecopy, SIGNAL(triggered()), this, SLOT(tapecopy()));
+	connect(ui.actionTapesplit, SIGNAL(triggered()), this, SLOT(tapesplit()));
+	connect(ui.actionHetinit, SIGNAL(triggered()), this, SLOT(hetinit()));
+	connect(ui.actionHetget, SIGNAL(triggered()), this, SLOT(hetget()));
+	connect(ui.actionHetupd, SIGNAL(triggered()), this, SLOT(hetupd()));
+	connect(ui.actionHetmap, SIGNAL(triggered()), this, SLOT(hetmap()));
+	connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(helpAbout()));
+	connect(mDevicesPane, SIGNAL(restartDevices()), this , SLOT(restartDevices()));
+	connect(mCommandLine, SIGNAL(returnPressed()), this , SLOT(newCommand()));
+    connect(mCommandLine, SIGNAL(ctrl_c()), this , SLOT(editCopy()));
+	connect(mSystemTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systrayClick(QSystemTrayIcon::ActivationReason)));
     connectMainPanel();
 
 	if (Preferences::getInstance().splitLog())
@@ -313,14 +315,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectMainPanel()
 {
-    QObject::connect(mMainPanel, SIGNAL(powerOnClicked()), this , SLOT(powerOn()));
-    QObject::connect(mMainPanel, SIGNAL(powerOffClicked()), this , SLOT(powerOff()));
-    QObject::connect(mMainPanel, SIGNAL(interruptClicked()), this , SLOT(extInterrupt()));
-    QObject::connect(mMainPanel, SIGNAL(loadClicked()), this , SLOT(load()));
-    QObject::connect(mMainPanel, SIGNAL(restartClicked()), this , SLOT(restart()));
-    QObject::connect(mMainPanel, SIGNAL(storeClicked()), this , SLOT(store()));
-    QObject::connect(mMainPanel, SIGNAL(startClicked()), this , SLOT(start()));
-    QObject::connect(mMainPanel, SIGNAL(stopClicked()), this , SLOT(stop()));
+	connect(mMainPanel, SIGNAL(powerOnClicked()), this , SLOT(powerOn()));
+	connect(mMainPanel, SIGNAL(powerOffClicked()), this , SLOT(powerOff()));
+	connect(mMainPanel, SIGNAL(interruptClicked()), this , SLOT(extInterrupt()));
+	connect(mMainPanel, SIGNAL(loadClicked()), this , SLOT(load()));
+	connect(mMainPanel, SIGNAL(restartClicked()), this , SLOT(restart()));
+	connect(mMainPanel, SIGNAL(storeClicked()), this , SLOT(store()));
+	connect(mMainPanel, SIGNAL(startClicked()), this , SLOT(start()));
+	connect(mMainPanel, SIGNAL(stopClicked()), this , SLOT(stop()));
 }
 
 void MainWindow::writeToLog(QByteArray line)
@@ -673,7 +675,17 @@ void MainWindow::editViewPSW()
 	{
 		mPswDock->setVisible(newVal);
 	}
- }
+}
+
+void MainWindow::editCopy()
+{
+    hOutDebug(4, "COPY");
+
+    if (mLogWindow->textIsSelected())
+    {
+        mLogWindow->copySelectedText();
+    }
+}
 
 void MainWindow::deleteMessages()
 {
@@ -702,7 +714,7 @@ void MainWindow::saveMessages()
 void MainWindow::preferences()
 {
     PreferencesWin * pw = new PreferencesWin(mCurrentPath.toStdString(), this);
-    QObject::connect(pw, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
+    connect(pw, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
 	pw->exec();
 }
 
@@ -780,11 +792,11 @@ void MainWindow::powerOn()
 #endif
 
 	mLogRunner = new LogRunner(mLogQueue, mHerculesExecutor, Preferences::getInstance().logFileLines());
-    QObject::connect(mLogRunner, SIGNAL(newData()), this , SLOT(writeToLogFromQueue()));
+    connect(mLogRunner, SIGNAL(newData()), this , SLOT(writeToLogFromQueue()));
 	mLogRunner->start();
 
 	mStatusRunner = new StatusRunner(mStatusQueue, mHerculesExecutor);
-    QObject::connect(mStatusRunner, SIGNAL(newData()), this , SLOT(dispatchStatus()));
+    connect(mStatusRunner, SIGNAL(newData()), this , SLOT(dispatchStatus()));
 	mStatusRunner->start();
 
 #ifndef hFramework
@@ -792,7 +804,7 @@ void MainWindow::powerOn()
 #else
 	mWatchdog = new Watchdog(mHerculesExecutor->getQProcess());
 #endif
-    QObject::connect(mWatchdog, SIGNAL(HerculesEnded()), this, SLOT(herculesEndedSlot()));
+    connect(mWatchdog, SIGNAL(HerculesEnded()), this, SLOT(herculesEndedSlot()));
 	mWatchdog->start();
 
 	mHerculesActive = true;
@@ -947,98 +959,98 @@ void MainWindow::stop()
 void MainWindow::dasdinit()
 {
 	DasdInit * dasdinit = new DasdInit(this);
-    QObject::connect(dasdinit, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(dasdinit, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	dasdinit->exec();
 }
 
 void MainWindow::dasdload()
 {
 	DasdLoad * dasdload = new DasdLoad(this);
-    QObject::connect(dasdload, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(dasdload, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	dasdload->exec();
 }
 
 void MainWindow::dasdisup()
 {
 	DasdIsup * dasdisup = new DasdIsup(this);
-    QObject::connect(dasdisup, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(dasdisup, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	dasdisup->exec();
 }
 
 void MainWindow::dasdls()
 {
 	Dasdls * dasdls = new Dasdls(this);
-    QObject::connect(dasdls, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(dasdls, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	dasdls->exec();
 }
 
 void MainWindow::dasdcat()
 {
 	Dasdcat * dasdcat = new Dasdcat(this);
-    QObject::connect(dasdcat, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(dasdcat, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	dasdcat->exec();
 }
 
 void MainWindow::dasdconv()
 {
 	Dasdconv * dasdconv = new Dasdconv(this);
-    QObject::connect(dasdconv, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(dasdconv, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	dasdconv->exec();
 }
 
 void MainWindow::dasdcopy()
 {
 	Dasdcopy * dasdcopy = new Dasdcopy(this);
-    QObject::connect(dasdcopy, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(dasdcopy, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	dasdcopy->exec();
 }
 
 void MainWindow::tapemap()
 {
 	TapeMap * tapemap = new TapeMap(this);
-    QObject::connect(tapemap, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(tapemap, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	tapemap->exec();
 }
 
 void MainWindow::tapecopy()
 {
 	TapeCopy * tapecopy = new TapeCopy(this);
-    QObject::connect(tapecopy, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(tapecopy, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	tapecopy->exec();
 }
 
 void MainWindow::tapesplit()
 {
 	TapeSplt * tapesplit = new TapeSplt(this);
-    QObject::connect(tapesplit, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(tapesplit, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	tapesplit->exec();
 }
 
 void MainWindow::hetinit()
 {
 	HetInit * hetinit = new HetInit(this);
-    QObject::connect(hetinit, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(hetinit, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	hetinit->exec();
 }
 
 void MainWindow::hetget()
 {
 	HetGet * hetget = new HetGet(this);
-    QObject::connect(hetget, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(hetget, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	hetget->exec();
 }
 
 void MainWindow::hetupd()
 {
 	HetUpd * hetupd = new HetUpd(this);
-    QObject::connect(hetupd, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(hetupd, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	hetupd->exec();
 }
 
 void MainWindow::hetmap()
 {
 	HetMap * hetmap = new HetMap(this);
-    QObject::connect(hetmap, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
+	connect(hetmap, SIGNAL(output(QByteArray)), this , SLOT(writeToLog(QByteArray)));
 	hetmap->exec();
 }
 

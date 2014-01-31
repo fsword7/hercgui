@@ -52,6 +52,9 @@ protected:
 private slots:
     void enterPressed(const QString & text);
 
+signals:
+    void ctrl_c();
+
 private:
   QVector<QString> mHistory;
   int mHistoryPtr;

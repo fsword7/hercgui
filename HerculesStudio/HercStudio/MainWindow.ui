@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -56,6 +56,8 @@
     <addaction name="actionView_64_bit_Control_Registers"/>
     <addaction name="actionView_64_bit_Floating_Point_Registers"/>
     <addaction name="actionView_PSW"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopy"/>
     <addaction name="separator"/>
     <addaction name="actionDelete_messages"/>
     <addaction name="actionSave_messages"/>
@@ -568,6 +570,14 @@
    </property>
    <property name="text">
     <string>View PSW</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
  </widget>
