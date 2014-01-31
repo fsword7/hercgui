@@ -55,6 +55,7 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QTimer>
+#include <QShortcut>
 
 #include <iostream>
 #include "cerrno"
@@ -230,7 +231,8 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(ui.actionView_64_bit_General_Registers, SIGNAL(triggered()), this, SLOT(editView64BitGr()));
 	connect(ui.actionView_64_bit_Control_Registers, SIGNAL(triggered()), this, SLOT(editView64BitCr()));
 	connect(ui.actionView_64_bit_Floating_Point_Registers, SIGNAL(triggered()), this, SLOT(editView64BitFr()));
-	connect(ui.actionView_PSW, SIGNAL(triggered()), this, SLOT(editViewPSW()));
+    connect(ui.actionView_PSW, SIGNAL(triggered()), this, SLOT(editViewPSW()));
+    connect(ui.actionCopy, SIGNAL(triggered()), this, SLOT(editCopy()));
 	connect(ui.actionDelete_messages, SIGNAL(triggered()), this, SLOT(deleteMessages()));
 	connect(ui.actionSave_messages, SIGNAL(triggered()), this, SLOT(saveMessages()));
 	connect(ui.actionPreferences, SIGNAL(triggered()), this, SLOT(preferences()));
@@ -260,6 +262,7 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(helpAbout()));
 	connect(mDevicesPane, SIGNAL(restartDevices()), this , SLOT(restartDevices()));
 	connect(mCommandLine, SIGNAL(returnPressed()), this , SLOT(newCommand()));
+    connect(mCommandLine, SIGNAL(ctrl_c()), this , SLOT(editCopy()));
 	connect(mSystemTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systrayClick(QSystemTrayIcon::ActivationReason)));
 	connectMainPanel();
 
@@ -672,7 +675,17 @@ void MainWindow::editViewPSW()
 	{
 		mPswDock->setVisible(newVal);
 	}
- }
+}
+
+void MainWindow::editCopy()
+{
+    hOutDebug(4, "COPY");
+
+    if (mLogWindow->textIsSelected())
+    {
+        mLogWindow->copySelectedText();
+    }
+}
 
 void MainWindow::deleteMessages()
 {

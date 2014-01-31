@@ -173,6 +173,7 @@ public slots:
     void dispatchStatus();
     void newCommand();
     void herculesEndedSlot();
+    void editCopy();
     void deleteMessages();
     void saveMessages();
     void preferences();

@@ -34,6 +34,7 @@
 class QTabWidget;
 class PlainLogWidget : public QTextEdit
 {
+    Q_OBJECT
 public:
 	enum WriteType
 	{
@@ -49,6 +50,9 @@ public:
 	virtual void preferencesChanged();
 	virtual void setIpled(bool ipled);
     virtual void clear();
+    virtual bool textIsSelected();  // text to be copied available
+    virtual QString copySelectedText(); // copies selected text to clipboard
+
 
 protected:
 
@@ -62,6 +66,13 @@ protected:
 	QColor mGreen, mYellow, mRed, mBlack, mWhite;
 	long  mLinesWritten;
 	bool  mDarkBackground;
+    bool  mSelectedTextExists;
+
+private slots:
+    void  keepSelection(bool selected);
+
+signals:
+    void logCopy();
 };
 
 
@@ -81,6 +92,8 @@ public:
 	QTabWidget * tabWidget();
 	virtual bool empty();
 	virtual void clear();
+    virtual bool textIsSelected();
+    virtual QString copySelectedText();
 
 	virtual void append(const QByteArray & text);
 	virtual QString toPlainText();

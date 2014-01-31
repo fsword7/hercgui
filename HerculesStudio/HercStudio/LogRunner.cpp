@@ -54,12 +54,23 @@ void LogRunner::run()
 	QByteArray buff;
 	buff.resize(512);
 	mRunning = true;
+    bool lineRead = false;
+    int startupCounter = 0;
 
 	while(mRunning)
 	{
 		int size;
 		if ((size = logFile.readLine(buff.data(),512)) <= 0)
 		{
+            // we wait up to 2 seconds for data to appear in the log
+            if (!lineRead)
+            {
+                if (startupCounter++ < 200)
+                {
+                    QThread::msleep(10);
+                    continue; // retry reading by returning to main loop
+                }
+            }
 			mQueue.push_back("logger ended");
 			emit newData();
 			QThread::sleep(100);

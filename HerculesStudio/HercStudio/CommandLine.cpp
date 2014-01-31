@@ -75,6 +75,11 @@ void CommandLine::keyPressEvent(QKeyEvent * event)
         if (mHistoryPtr >= (signed) mHistory.size()) mHistoryPtr = mHistory.size()-1;
         setLine();
         break;
+    case Qt::Key_C:
+        if (event->modifiers() && Qt::CTRL)
+        emit ctrl_c();
+        break;
+
     default:
         break;
     }

@@ -30,6 +30,8 @@
 #include <QFile>
 #include <QTextBlock>
 #include <QTextStream>
+#include <QClipboard>
+#include <QApplication>
 
 #include <fcntl.h>
 #include <time.h>
@@ -51,6 +53,9 @@ PlainLogWidget::PlainLogWidget(QWidget * parent, const char * suffix)
 	setLogFileName(parm);
 	mIpled = false;
 	mDarkBackground = Preferences::getInstance().darkBackground();
+
+    connect(this, SIGNAL(copyAvailable(bool)), this, SLOT(keepSelection(bool)));
+    connect(this, SIGNAL(logCopy()), this, SLOT(copy()));
 }
 
 void PlainLogWidget::setLogFileName (QString& suffix)
@@ -196,7 +201,19 @@ void PlainLogWidget::writeToFile(WriteType type)
 void PlainLogWidget::preferencesChanged()
 {
 	mLogFileLines = Preferences::getInstance().logFileLines(); // might have been updated
+    bool prevDarkBackground = mDarkBackground;
 	mDarkBackground = Preferences::getInstance().darkBackground();
+    if (mDarkBackground != prevDarkBackground)
+    {
+        QBrush brush(QColor(180,0,0));
+        for (QTextBlock tb=QTextEdit::document()->begin();
+             tb != QTextEdit::document()->end();
+             tb = tb.next())
+        {
+            tb.blockFormat().setForeground(mGreen);
+
+        }
+    }
 }
 
 void PlainLogWidget::setIpled(bool ipled)
@@ -207,6 +224,27 @@ void PlainLogWidget::setIpled(bool ipled)
 void PlainLogWidget::clear()
 {
     QTextEdit::clear();
+}
+
+void PlainLogWidget::keepSelection(bool selected)
+{
+    hOutDebug(4, "copyAvailable " << (selected?"y":"f"));
+    mSelectedTextExists = selected;
+}
+
+bool PlainLogWidget::textIsSelected()
+{
+    return mSelectedTextExists;
+}
+
+QString PlainLogWidget::copySelectedText()
+{
+    if (mSelectedTextExists)
+    {
+        emit logCopy();
+        hOutDebug(4, "clipboard: '" << QApplication::clipboard()->text().toStdString() << "'");
+    }
+    return QApplication::clipboard()->text();
 }
 
 LogWidget::LogWidget(QWidget * parent)
@@ -309,4 +347,14 @@ void LogWidget::preferencesChanged()
 void LogWidget::setIpled(bool ipled)
 {
 	mIpled = ipled;
+}
+
+bool LogWidget::textIsSelected()
+{
+    return mLogs[mTabWidget->currentIndex()]->textIsSelected();
+}
+
+QString LogWidget::copySelectedText()
+{
+    return mLogs[mTabWidget->currentIndex()]->copySelectedText();
 }
