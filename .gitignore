@@ -1,0 +1,5 @@
+#QtCreator setting files
+HerculesStudio/HerculesStudio.pro.user
+
+#build directories
+build*
