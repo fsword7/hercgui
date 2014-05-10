@@ -8,3 +8,4 @@ Fedora:
 	prerequisites:
 		qt-x11
 	yum install qt-x11
+
