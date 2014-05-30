@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2009-2014 Jacob Dekel <jacob@jacobdekel.com> -->
+<application>
+ <id type="application">hercstudio.desktop</id>
+ <metadata_license>CC-BY-3.0</metadata_license>
+ <project_license>GPL-3.0+</project_license>
+ <name>Hercules Studio</name>
+ <summary>GUI front-end to the Hercules mainframe Emulator</summary>
+ <description>
+  <p>
+   Hercules Studio is a GUI front-end to the Hercules mainframe Emulator. 
+   With Hercules Studio, you can easily control and monitor the hercules virtual machine. 
+  </p>
+  <p>To use Hercules Studio the hercules emulator must have previously been instaled. Hercules must be built with GUI support.
+  </p>
+ </description>
+ <screenshots>
+  <screenshot type="default" width="800" height="600">http://www.jacobdekel.com/hercstudio/Screenshot-Hercules%20Studio-running.png</screenshot>
+ </screenshots>
+ <url type="homepage">http://www.jacobdekel.com/hercstudio</url>
+ <updatecontact>jacob@jacobdekel.com</updatecontact>
+</application>
+
