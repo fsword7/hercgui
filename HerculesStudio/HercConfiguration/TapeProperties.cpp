@@ -187,7 +187,7 @@ void TapeProperties::initialize(ConfigLine & line)
     for (int i=3; i<line.size(); i++)
     {
         QString token = line.getToken(i).c_str();
-    	outDebug(3,std::cout << "token=" << token.toStdString() << std::endl);
+        hOutDebug(3,"token=" << token.toStdString());
         if (token.toLower() == "--no-erg")
         {
             ui.noergCheckbox->setChecked(true);

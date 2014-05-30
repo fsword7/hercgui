@@ -41,8 +41,9 @@ public:
 	bool            empty ( ) const;
 	QByteArray&     front ( ) ;
 	void            pop_front ( );
-	void            push_back(const QByteArray& charBuff);
-	int				size( );
+    void            push_back(const QByteArray& charBuff);
+    void            push_back(QByteArray&& charBuff);
+    int				size( );
 	void            clear( );
 
 private:

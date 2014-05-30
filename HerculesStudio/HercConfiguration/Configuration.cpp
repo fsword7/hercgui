@@ -198,7 +198,7 @@ void Configuration::populate(ConfigurationEditor::Direction dir)
 	}
 	for (int i=0; mConfigTable[i].keyword.compare("") != 0 ; i++)
 	{
-		outDebug(5,std::cout << "populate:" << mConfigTable[i].keyword << std::endl;)
+        hOutDebug(5,"populate:" << mConfigTable[i].keyword)
 				const ConfigLine * configLine = mConfigFile->locateLine(mConfigTable[i].keyword, true, true);
 		mConfigTable[i].populator(&ui, configLine, dir);
 	}
@@ -381,7 +381,7 @@ QString Configuration::DoubleDigitSpinBox::textFromValue(int value) const
 	if (pValue < 10) ret = "0" + ret;
 	if (sig == -1) ret = "-" + ret;
 	if (mAppendPlus && sig != -1) ret = "+" + ret;
-	outDebug(5,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
+    hOutDebug(5, "textFromValue:" << value << "='" << ret.toStdString())
 	return ret;
 }
 
@@ -407,7 +407,7 @@ QString Configuration::HexSpinBox::textFromValue(int value) const
 	else
 		strcpy(formatted,"0000");
 	QString ret(formatted);
-	outDebug(5,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
+    hOutDebug(5,  "textFromValue:" << value << "='" << ret.toStdString())
 	return ret;
 }
 

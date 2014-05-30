@@ -76,7 +76,7 @@ int NamedPipe::recover()
     if (rc<0 && errno != EEXIST)
     {
         perror(hercstudioDir.c_str());
-        outDebug(1,std::cout << "rc=" << errno << std::endl);
+        hOutDebug(1,"rc=" << errno);
         return -1;
     }
 
@@ -88,7 +88,7 @@ int NamedPipe::recover()
 
         if (!SystemUtils::fileExists(setPath))
         {
-            outDebug(2,std::cout << "setPath=" << setPath << ",run=" << pipeSet << std::endl);
+            hOutDebug(2,"setPath=" << setPath << ",run=" << pipeSet);
             set = pipeSet;
             break;  // set does not exist - we can use this number
         }
@@ -115,7 +115,7 @@ int NamedPipe::recover()
             else
             {
                 // recovery - takeover
-                outDebug(1,std::cout<< "Hercules process " << hercPid << " is running" << std::endl);
+                hOutDebug(1,"Hercules process " << hercPid << " is running");
                 mRecovery = true;
                 mSetPath = setPath;
                 mHerculesPid = hercPid;
@@ -124,12 +124,12 @@ int NamedPipe::recover()
         }
     }
 
-    outDebug(1, std::cout << "going to work with set " << set << std::endl);
+    hOutDebug(1, "going to work with set " << set);
     mSetPath = setPath;
     if (!mRecovery && mkdir(mSetPath.c_str(), 0777)<0)
     {
         perror(hercstudioDir.c_str());
-        outDebug(2,std::cout << "rc=" << errno << std::endl);
+        hOutDebug(2,"rc=" << errno);
         return -1;
     }
 
@@ -137,7 +137,7 @@ int NamedPipe::recover()
     umask(0);
 
     mFifo0 = mSetPath + "/fifo0";
-    outDebug(5,std::cout << "fifo0=" << mFifo0 << std::endl);
+    hOutDebug(5,"fifo0=" << mFifo0);
     if (!mRecovery && mknod(mFifo0.c_str(), S_IFIFO|0666, 0) != 0)
     {
         perror("fifo0");
@@ -172,7 +172,7 @@ int NamedPipe::delDir(std::string& dir)
 void NamedPipe::generatePid(int studioPid, int herculesPid)
 {
     std::string pidPath = mSetPath + "/pid";
-    outDebug(1,std::cout << "generatePid " << studioPid << "," << herculesPid << std::endl);
+    hOutDebug(1,"generatePid " << studioPid << "," << herculesPid);
     FILE * fPid = fopen(pidPath.c_str(),"w");
     if (fPid == NULL)
     {

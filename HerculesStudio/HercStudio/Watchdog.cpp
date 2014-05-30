@@ -58,7 +58,7 @@ void Watchdog::run()
 #ifndef hFramework
         int stat_loc;
         int rc = waitpid(mHerculesPid, &stat_loc, 0);
-        outDebug(1, std::cout << "watchdog ended for pid:" << rc << std::endl);
+        hOutDebug(1, "watchdog ended for pid:" << rc);
 #endif
     }
     else

@@ -131,7 +131,7 @@ void DasdInit::setSizeValue()
 
 void DasdInit::filenameFocus()
 {
-    outDebug(2, std::cout << "dasdinit focus" << std::endl);
+    hOutDebug(2,"dasdinit focus");
     if (ui.filename->text().length() == 0)
     {
         QString s = "dasd.";

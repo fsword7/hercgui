@@ -29,10 +29,12 @@
 
 #include "DeviceConfigLine.h"
 #include "DeviceTypes.h"
+#include "IpValidator.h"
+
 #include <QLineEdit>
 #include <QtWidgets/QDialog>
 
-class GenericDeviceProperties : public QDialog
+class GenericDeviceProperties : public IpValidator
 {
 	Q_OBJECT
 public:
@@ -46,7 +48,6 @@ protected:
 	QWidget * mParent;
 
 	bool  deviceNumberValidator(QLineEdit * deviceLine);
-	bool ipValidator(QLineEdit * ipLineEdit, bool allowNull);
 	int   mOriginalDeviceNumber;
 
 private slots:

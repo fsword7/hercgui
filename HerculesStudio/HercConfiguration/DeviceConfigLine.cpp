@@ -42,7 +42,7 @@ DeviceConfigLine::DeviceConfigLine(const char *line):
 
 DeviceConfigLine::~DeviceConfigLine()
 {
-    outDebug(5,std::cout << "~DeviceConfigLine" << std::endl);
+    hOutDebug(5,"~DeviceConfigLine");
 }
 
 void DeviceConfigLine::clear()
@@ -62,7 +62,7 @@ DeviceTypes::Type DeviceConfigLine::getDeviceType() const
     DeviceTypesMap::iterator it = (*mDeviceTypes).find(token.toUpper().toStdString());
     if (it == (*mDeviceTypes).end())
         return (*mDeviceTypes)["0000"];
-    outDebug(5, std::cout << "getDeviceType " << token.toStdString() << std::endl);
+    hOutDebug(5,"getDeviceType " << token.toStdString());
     return it->second;
 }
 
@@ -92,7 +92,7 @@ void DeviceConfigLine::handleMultiLine()
     if (first > -1)
     {
         mMultiCount = last-first+1;
-        outDebug(5, std::cout << devno << " multiCount:" << mMultiCount << std::endl);
+        hOutDebug(5, devno << " multiCount:" << mMultiCount);
         std::stringstream line;
         line << std::hex << first ;
         line << " " + getMultiToken(1,0) + "\n";
@@ -106,7 +106,7 @@ void DeviceConfigLine::handleMultiLine()
 
 int DeviceConfigLine::getMultiCount()
 {
-    outDebug(5, std::cout << "get multiCount:" << mMultiCount << std::endl);
+    hOutDebug(5, "get multiCount:" << mMultiCount);
     return mMultiCount;
 }
 

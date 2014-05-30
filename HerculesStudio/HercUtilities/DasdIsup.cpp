@@ -108,7 +108,7 @@ void DasdIsup::browseSfClicked()
 void DasdIsup::runnerMaximumChanged(int maximum)
 {
     ui.progressBar->setMaximum(maximum);
-    outDebug(2, std::cout << "dasdisup maximum is " << maximum << std::endl);
+    hOutDebug(2,"dasdisup maximum is " << maximum);
 }
 
 void DasdIsup::runnerValueChanged(int value)

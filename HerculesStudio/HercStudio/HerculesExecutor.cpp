@@ -67,7 +67,7 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
 		if (herculesPath.length() != 0 )
 			hercules += "/";
 		hercules += "hercules";
-		outDebug(2, std::cout << "hercules:" << hercules << std::endl);
+        hOutDebug(2,"hercules:" << hercules );
 
 		FILE * fileOut = NamedPipe::getInstance().getHerculesStdout();
 		rc = dup2(fileno(fileOut),fileno(stdout));
@@ -87,19 +87,19 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
 			int stat = putenv(const_cast<char *>(resourceFile.c_str()));
 			if (stat)
 			{
-			 std::cout<<"failed to define environment variable "<< stat << std::endl;
+             hOutDebug(0,"failed to define environment variable "<< stat);
 			}
 		}
 		rc = execlp(hercules.c_str(),hercules.c_str(),"-d","-f",configName.c_str(),"EXTERNALGUI",NULL);
-		std::cout << "***************************************************************" << std::endl
-				<< "hercules could not be started (" <<  rc << ")" << std::endl
-				<< "check that hercules is properly installed and is on the default path " << std::endl
+        std::cout << "***************************************************************" << "\n"
+                << "hercules could not be started (" <<  rc << ")" << "\n"
+                << "check that hercules is properly installed and is on the default path " << "\n"
 #ifndef Q_WS_MAC
-                << "and that the path specified in Edit/Preferences is correct." << std::endl
+                << "and that the path specified in Edit/Preferences is correct." << "\n"
 #else
-                << "and that the path specified in HerculesStudio/Preferences is correct." << std::endl
+                << "and that the path specified in HerculesStudio/Preferences is correct." << "\n"
 #endif
-				<< "**************************************************************" << std::endl;
+                << "**************************************************************" << "\n";
 		_exit(1);
 	}
 
@@ -113,7 +113,7 @@ void HerculesExecutor::issueCommand(const char * command)
 	if (mPid == 0)
 		return;
 
-	outDebug(2, std::cout << "issue command:" << command << std::endl);
+    hOutDebug(2,"issue command:" << command);
 	FILE * input = NamedPipe::getInstance().getHerculesCommandsFile();
 	if (input)
 	{
@@ -123,7 +123,7 @@ void HerculesExecutor::issueCommand(const char * command)
 	}
 	else
 	{
-		outDebug(3, std::cout << "input=" << input << std::endl);
+        hOutDebug(3, "input=" << input);
 		return;
 	}
 }

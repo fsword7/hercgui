@@ -43,6 +43,10 @@
 #include "HetGet.h"
 #include "HetUpd.h"
 #include "HetMap.h"
+#include "PrinterDialog.h"
+#include "StationeryDialog.h"
+#include "StationeryDialog.h"
+#include "DecolationDialog.h"
 #include "NamedPipe.h"
 #include "Environment.h"
 #include "Arguments.h"
@@ -74,7 +78,8 @@ MainWindow::MainWindow(QWidget *parent)
 	mConfigFile(NULL),
 	mCommandLine(NULL),
 	mHerculesExecutor(NULL),
-	mHerculesActive(false)
+    mPrinterDialog(NULL),
+    mHerculesActive(false)
 {
 	ui.setupUi(this);
 	setDarkBackground(Preferences::getInstance().darkBackground());
@@ -204,7 +209,6 @@ MainWindow::MainWindow(QWidget *parent)
 	editViewPSW();
 
 	QString path = Environment::getIconsPath().c_str();
-	outDebug(3,std::cout << "icons=" << path.toStdString() << std::endl);
 	QIcon trayIcon(path + "/tray.xpm");
 	mSystemTrayIcon = new QSystemTrayIcon(trayIcon);
 
@@ -258,7 +262,10 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(ui.actionHetget, SIGNAL(triggered()), this, SLOT(hetget()));
 	connect(ui.actionHetupd, SIGNAL(triggered()), this, SLOT(hetupd()));
 	connect(ui.actionHetmap, SIGNAL(triggered()), this, SLOT(hetmap()));
-	connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(helpAbout()));
+    connect(ui.actionStartPrinter, SIGNAL(triggered()), this, SLOT(printer()));
+    connect(ui.actionStationery, SIGNAL(triggered()), this, SLOT(stationery()));
+    connect(ui.actionDecolation, SIGNAL(triggered()), this, SLOT(decolation()));
+    connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(helpAbout()));
 	connect(mDevicesPane, SIGNAL(restartDevices()), this , SLOT(restartDevices()));
 	connect(mCommandLine, SIGNAL(returnPressed()), this , SLOT(newCommand()));
     connect(mCommandLine, SIGNAL(ctrl_c()), this , SLOT(editCopy()));
@@ -484,7 +491,7 @@ void MainWindow::newCommand()
 	if (mHerculesExecutor == NULL) return;
 	CommandLine *cl = static_cast<CommandLine *>(QObject::sender());
 	if (cl == NULL) return;
-	outDebug(2, std::cout  << cl->text().toStdString() << std::endl);
+    hOutDebug(2, cl->text().toStdString());
 	if (!mLogWindow->isOSLog() || cl->text().left(1).compare(".") == 0)
 		mHerculesExecutor->issueFormattedCommand("%s\n",cl->text().toUtf8().data());
 	else
@@ -514,9 +521,9 @@ void MainWindow::config()
 
 void MainWindow::openConfig()
 {
-    outDebug(5,std::cout << "config at:" << Preferences::getInstance().configDir() << std::endl);
+    hOutDebug(5,"config at:" << Preferences::getInstance().configDir() << ".");
 	std::string s = QFileDialog::getOpenFileName(this,
-			"Open configuration",
+            tr("Open configuration"),
             Preferences::getInstance().configDir().c_str(),
 			tr("Hercules configuration files (*.conf *.cnf);;All files(*)")).toUtf8().data();
 	if (s.length() == 0)
@@ -762,14 +769,14 @@ void MainWindow::powerOn()
 	int herculesPid = 0;
 	if (!mRecovery)
 	{
-		outDebug(5,std::cout << "not recovery" << std::endl);
+        hOutDebug(5,"not recovery");
 		mHerculesExecutor = new HerculesExecutor(*this);
         herculesPid = mHerculesExecutor->run(configName, Preferences::getInstance().hercDir());
 		mDevicesRecovery = false;
 	}
 	else
 	{
-		outDebug(2,std::cout << "recovery" << std::endl);
+        hOutDebug(2,"recovery");
 		herculesPid = NamedPipe::getInstance().getHerculesPid();
 		mHerculesExecutor = new HerculesExecutor(*this, herculesPid);
 		mDevicesRecovery = true;
@@ -867,7 +874,7 @@ void MainWindow::load()
 		return;
 	}
 	int addr = mMainPanel->getLoadAddress();
-	outDebug(1, std::cout << "going to load " << addr << std::endl);
+    hOutDebug(1, "going to load " << addr);
 	mHerculesExecutor->issueFormattedCommand("IPL %X\n",addr);
 	mIplDevno.setNum(addr,16);
 	mLogWindow->setIpled(true);
@@ -914,7 +921,7 @@ void MainWindow::loadCommand()
 void MainWindow::extInterrupt()
 {
 	if (!mHerculesActive) return;
-	outDebug(1, std::cout << "going to externally interrupt " << std::endl);
+    hOutDebug(1, "going to externally interrupt ");
 	mHerculesExecutor->issueCommand("ext\n");
 	return;
 }
@@ -923,7 +930,7 @@ void MainWindow::devInterrupt()
 {
 	if (!mHerculesActive) return;
 	int addr = mMainPanel->getLoadAddress();
-	outDebug(1, std::cout << "going to interrupt " << addr << std::endl);
+    hOutDebug(1, "going to interrupt " << addr);
 	mHerculesExecutor->issueFormattedCommand("I %X\n", addr);
 }
 
@@ -1054,6 +1061,31 @@ void MainWindow::hetmap()
 	hetmap->exec();
 }
 
+void MainWindow::printer()
+{
+    if (mPrinterDialog == NULL)
+        mPrinterDialog = new PrinterDialog(0);
+    mPrinterDialog->show();
+    connect(mPrinterDialog, SIGNAL(destroyed()), this, SLOT(printerFinished()));
+}
+
+void MainWindow::printerFinished()
+{
+    mPrinterDialog = NULL;
+}
+
+void MainWindow::stationery()
+{
+    StationeryDialog* stationeryDialog = new StationeryDialog(this);
+    stationeryDialog->exec();
+}
+
+void MainWindow::decolation()
+{
+    DecolationDialog* dialog = new DecolationDialog(this);
+    dialog->exec();
+}
+
 void MainWindow::herculesEndedSlot()
 {
 	std::cerr << "############ ended ##############" << std::endl;
@@ -1107,6 +1139,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	 else
 	 {
 		 hOutDebug(5,"Close");
+
 		 if (mHerculesActive)
 		 {
 			 if( QMessageBox::warning(this,"Hercules Is Still Running",
@@ -1120,6 +1153,31 @@ void MainWindow::closeEvent(QCloseEvent *event)
 			 }
 			 else hOutDebug(5,"abort");
 		 }
+
+         if (mPrinterDialog != NULL)
+         {
+             if (mPrinterDialog->isConnected())
+             {
+                 if( QMessageBox::warning(this,"Printer Is Still Connected",
+                                          "Press Close - To Close The Printer\n"
+                                          "Or\n"
+                                          "Press Cancel - To Return",
+                                          QMessageBox::Cancel, QMessageBox::Close) == QMessageBox::Cancel)
+                 {
+                     event->ignore();
+                 }
+                 else
+                 {
+                     mPrinterDialog->close();
+                     delete mPrinterDialog;
+                 }
+             }
+             else
+             {
+                 mPrinterDialog->close();
+                 delete mPrinterDialog;
+             }
+         }
 	 }
  }
 
@@ -1153,7 +1211,7 @@ void MainWindow::hideRestore()
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
 {
-	outDebug(4, std::cout << "key:" << event->key() << " " << (event->key() == Qt::Key_Up) << std::endl);
+    hOutDebug(4,"key:" << event->key() << " " << (event->key() == Qt::Key_Up));
 	QMainWindow::keyPressEvent(event);
 	if (!mCommandLine->hasFocus())
 		mCommandLine->setFocus();
@@ -1179,7 +1237,7 @@ bool MainWindow::issueCommand(const std::string& command)
         setIpled(qCommand);
     }
 
-	outDebug(2, std::cout << "issue command:" << command << std::endl);
+    hOutDebug(2,"issue command:" << command);
    return true;
 }
 
@@ -1215,7 +1273,7 @@ void MainWindow::setDarkBackground(bool dark)
 {
 	if (dark)
 	{
-		QFile file(":/icons/darkorange.stylesheet");
+        QFile file(":/icons/darkorange.css");
 		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 				 return;
 		QByteArray ss = file.readAll();

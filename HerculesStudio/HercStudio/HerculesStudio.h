@@ -28,10 +28,11 @@
 #define HERCULESSTUDIO_H_
 
 #include <qglobal.h>
+#include <QSharedPointer>
 #ifndef HS_BUILD_ID
 #define HS_BUILD_ID "Unknown"
 #endif
-#define HERCSTUDIO_VERSION "Version: 1.4.0"
+#define HERCSTUDIO_VERSION "Version: 1.5.0"
 #define HERCSTUDIO_REVISION "$Revision$"
 #define hDEBUG 0
 #define UNISTD_INC
@@ -42,15 +43,16 @@
 #endif
 #include <iostream>
 
-#define outDebug(level,s) if ((level) <= hDEBUG ) \
-					{s;} \
-					else {}
-#define hOutDebug(level,s)  if ((level) <= hDEBUG ) \
-					{std::cout << s << std::endl;} \
-					else {}
+#define hOutDebugNl(level,s)  {if ((level) <= hDEBUG ) \
+                    {std::cout << s;} \
+                    else {}}
+#define hOutDebug(level,s)  hOutDebugNl(level, s << std::endl)
 
 #define checkedConnect(button,slot) \
    if ((button) != NULL ) { connect(button, SIGNAL(clicked()), this , SLOT(slot)) ;} else{};
+
+#define mk_shared_ptr(p) class p ; typedef QSharedPointer<p> p##Ptr;
+#define mk_shared_constptr(p) class p ; typedef QSharedPointer<const p> p##ConstPtr;
 
 class hsException : public  std::exception
 {

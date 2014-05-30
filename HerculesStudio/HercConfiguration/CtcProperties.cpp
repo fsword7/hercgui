@@ -81,7 +81,7 @@ void CtcProperties::ok()
         }
         if ( !ui.guestIP->text().isEmpty() && (ui.guestIP->text() != "..." ) )
         {
-            if (ipValidator(ui.guestIP, false))
+            if (validateIp(ui.guestIP, false, false))
             {
                 newLineBuff << " " << ui.guestIP->text().toStdString() ;
             }
@@ -91,7 +91,7 @@ void CtcProperties::ok()
     }
     else  if (ui.typeCombo->currentIndex() == 2)  // ctct
     {
-    	if (!ipValidator(ui.hostIP,false))
+        if (!validateIp(ui.hostIP,false, false))
     	   return;
         newLineBuff << " " << ui.lportSpinbox->text().toStdString() ;
         newLineBuff << " " << ui.hostIP->text().toStdString();
@@ -106,9 +106,9 @@ void CtcProperties::ok()
         }
         else
         {
-            if (!ipValidator(ui.guestIP,false))
+            if (!validateIp(ui.guestIP,false, false))
                 return;
-            if (!ipValidator(ui.hostIP,false))
+            if (!validateIp(ui.hostIP,false, false))
                 return;
             if (!ui.tun->text().isEmpty())
             {
@@ -125,7 +125,7 @@ void CtcProperties::ok()
             }
             if (!(ui.mask->text() == "..."))
             {
-                if (ipValidator(ui.mask, false))
+                if (validateIp(ui.mask, false, false))
                 {
                     newLineBuff << " -s " <<  ui.mask->text().toStdString() ;
                 }
@@ -134,7 +134,7 @@ void CtcProperties::ok()
             }
             if (!(ui.guestIP->text() == "..."))
             {
-                if (ipValidator(ui.guestIP, false))
+                if (validateIp(ui.guestIP, false, false))
                 {
                     newLineBuff << " " <<  ui.guestIP->text().toStdString() ;
                 }
@@ -143,7 +143,7 @@ void CtcProperties::ok()
             }
             if (!(ui.hostIP->text() == "..."))
             {
-                if (ipValidator(ui.hostIP, false))
+                if (validateIp(ui.hostIP, false, false))
                 {
                     newLineBuff << " " <<  ui.hostIP->text().toStdString() ;
                 }
@@ -156,7 +156,7 @@ void CtcProperties::ok()
     {
     	if (!(ui.hostIP->text() == "..."))
     	{
-    		if (ipValidator(ui.hostIP, false))
+            if (validateIp(ui.hostIP, false, false))
     		{
     			newLineBuff << " " <<  ui.hostIP->text().toStdString() ;
     		}
@@ -215,7 +215,7 @@ void CtcProperties::typeChanged(const QString &newValue)
 
 void CtcProperties::arrangeQeth(bool set)
 {
-    outDebug(5, std::cout << "qeth " << (set ? "true" : "false") << std::endl);
+    hOutDebug(5, "qeth " << (set ? "true" : "false"));
     if (set)
     {
         arrangeCtc(!set);
@@ -232,7 +232,7 @@ void CtcProperties::arrangeQeth(bool set)
 
 void CtcProperties::arrangeLcs(bool set)
 {
-    outDebug(5, std::cout << "lcs " << (set ? "true" : "false") << std::endl);
+    hOutDebug(5, "lcs " << (set ? "true" : "false") );
     if (set)
     {
         arrangeCtc(!set);
@@ -268,7 +268,7 @@ void CtcProperties::arrangeLcs(bool set)
 void CtcProperties::arrangeCtc(bool set)
 {
     bool nonTunSet = set;
-    outDebug(5, std::cout << "ctc " << (set ? "true" : "false") << std::endl);
+    hOutDebug(5,  "ctc " << (set ? "true" : "false"));
     if (set)
     {
         arrangeLcs(!set);
@@ -317,7 +317,7 @@ void CtcProperties::arrangeCtc(bool set)
 
 void CtcProperties::arrangeCtct(bool set)
 {
-    outDebug(3, std::cout << "ctct " << (set ? "true" : "false") << std::endl);
+    hOutDebug(3,"ctct " << (set ? "true" : "false"));
     if (set)
     {
         arrangeCtc(!set);

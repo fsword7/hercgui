@@ -26,6 +26,9 @@
 #include "HerculesStudio.h"
 #include "SystemUtils.h"
 #include "ConfigurationEditor.h"
+#include "Stationery.h"
+#include "PrinterItem.h"
+#include "DecolationRules.h"
 
 #include <QDir>
 #include <QSettings>
@@ -57,7 +60,10 @@ const char * Preferences::sKeywords[] = {
 	"GreenLed",
 	"Animate",
     "DarkBackground",
-    "IplDevice"};
+    "IplDevice",
+    "LastPrinterName",
+    "BallonDecolation",
+    "BaloonStationery"};
 
 const char * Preferences::sRegsViews[] = {
 		"ViewGR32",
@@ -165,6 +171,9 @@ PrefBool(greenLed, GreenLed)
 PrefBool(animate, Animate)
 PrefBool(darkBackground, DarkBackground)
 Pref(iplDevice,IplDevice)
+Pref(lastPrinterName, LastPrinterName)
+PrefBool(balloonDecolation, BalloonDecolation)
+PrefBool(balloonStationery, BalloonStationery)
 
 PrefSet(setHercDir,HerculesDir)
 PrefSet(setConfigDir,ConfigurationDir)
@@ -179,7 +188,9 @@ PrefSetBool(setGreenLed, GreenLed)
 PrefSetBool(setAnimate, Animate)
 PrefSetBool(setDarkBackground, DarkBackground)
 PrefSet(setIplDevice, IplDevice)
-
+PrefSet(setLastPrinterName, LastPrinterName)
+PrefSetBool(setBalloonDecolation, BalloonDecolation)
+PrefSetBool(setBalloonStationery, BalloonStationery)
 
 std::string Preferences::configDir() const
 {
@@ -300,9 +311,349 @@ void Preferences::setTheme(Themes theme)
 	mSettings->setValue(sKeywords[Theme],theme);
 }
 
+bool Preferences::setStationery(const QString& name, const QString& stationeryString, bool replace)
+{
+    QString key = "Stationery/" + name;
+    if (stationeryString.length() != 0 || replace)
+    {
+        mSettings->setValue(key, stationeryString);
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Preferences::setStationery(const QString& name, const Stationery& stationery, bool)
+{
+    mSettings->beginGroup("Stationery");
+    mSettings->beginGroup(name);
+    mSettings->setValue("Name", stationery.mName);
+    mSettings->setValue("PaperSize", stationery.mPaperSize);
+    mSettings->setValue("Size1", stationery.mSize1);
+    mSettings->setValue("Size2", stationery.mSize2);
+    mSettings->setValue("TopMargin", stationery.mTopMargin);
+    mSettings->setValue("Milimeters", stationery.mMillimeters);
+    mSettings->setValue("Portrait", stationery.mPortrait);
+    mSettings->setValue("BarsColor", stationery.mBarsColor);
+    mSettings->setValue("BarsRGB", stationery.mBarsRGB);
+    mSettings->setValue("Decorated", stationery.mDecorated);
+    mSettings->setValue("TractorFeedHols", stationery.mTractorFeedHoles);
+    mSettings->endGroup();
+    mSettings->endGroup();
+    return true;
+}
+
+StationeryPtr Preferences::stationery(QString name)
+{
+
+    mSettings->beginGroup("Stationery");
+    mSettings->beginGroup(name);
+
+    StationeryPtr ret(new Stationery(
+                          mSettings->value("Name").toString(),
+                          mSettings->value("PaperSize").toString(),
+                          mSettings->value("Size1").toString(),
+                          mSettings->value("Size2").toString(),
+                          mSettings->value("TopMargin").toInt(),
+                          mSettings->value("Milimeters").toBool(),
+                          mSettings->value("Portrait").toBool(),
+                          mSettings->value("BarsColor").toString(),
+                          mSettings->value("BarsRGB").toString(),
+                          mSettings->value("Decorated").toBool(),
+                          mSettings->value("TractorFeedHols").toBool()));
+
+
+    mSettings->endGroup();
+    mSettings->endGroup();
+    return ret;
+}
+
+QStringList Preferences::stationeryList()
+{
+    defaultStationery();
+    mSettings->beginGroup("Stationery");
+    QStringList keys = mSettings->childGroups();
+    for (int i = 0; i < keys.size(); ++i)
+    {
+        hOutDebug(3, "key=" << keys[i].toStdString());
+    }
+    mSettings->endGroup();
+    return keys;
+}
+
+void Preferences::deleteStationery(const QString& item)
+{
+    mSettings->beginGroup("Stationery");
+    mSettings->remove(item);
+    mSettings->endGroup();
+}
+
+bool Preferences::setPrinter(const QString& name, const PrinterItem& printerItem, bool)
+{
+    mSettings->beginGroup("Printers");
+    mSettings->beginGroup(name);
+    mSettings->setValue("Name", printerItem.mName);
+    mSettings->setValue("Ip", printerItem.mIp);
+    mSettings->setValue("Port", printerItem.mPort);
+    mSettings->setValue("Stationery", printerItem.mStationery);
+    mSettings->setValue("Lines-Per-Inch", printerItem.mLinesPerInch);
+    mSettings->setValue("Font-Size", printerItem.mFontSize);
+    mSettings->setValue("Spool-Directory", printerItem.mSpoolDir);
+    mSettings->setValue("Decolation-Name", printerItem.mDecolationName);
+    mSettings->endGroup();
+    mSettings->endGroup();
+    return true;
+}
+
+PrinterItemPtr Preferences::printer(QString name)
+{
+    PrinterItemPtr ret(new PrinterItem()); //TODO : proper constructor
+    mSettings->beginGroup("Printers");
+    mSettings->beginGroup(name);
+    if (name.length() > 0 && (mSettings->value("Name").toString().compare(name) == 0))
+    {
+        ret->mName           = mSettings->value("Name").toString();
+        ret->mIp             = mSettings->value("Ip").toString();
+        ret->mPort           = mSettings->value("Port").toInt();
+        ret->mStationery     = mSettings->value("Stationery").toString();
+        ret->mLinesPerInch   = mSettings->value("Lines-Per-Inch").toInt();
+        ret->mFontSize       = mSettings->value("Font-Size").toInt();
+        ret->mSpoolDir       = mSettings->value("Spool-Directory").toString();
+        ret->mDecolationName = mSettings->value("Decolation-Name").toString();
+    }
+    mSettings->endGroup();
+    mSettings->endGroup();
+    return ret;
+}
+
+QStringList Preferences::printerList()
+{
+    mSettings->beginGroup("Printers");
+    QStringList keys = mSettings->childGroups();
+    for (int i = 0; i < keys.size(); ++i)
+    {
+        hOutDebug(2, "printer key=" << keys[i].toStdString());
+    }
+    mSettings->endGroup();
+    return keys;
+}
+
+void Preferences::deletePrinter(const QString& item)
+{
+    mSettings->beginGroup("Printers");
+    mSettings->remove(item);
+    mSettings->endGroup();
+}
+
+QStringList Preferences::decolationList()
+{
+    defaultDecolations();
+    mSettings->beginGroup("Decolations");
+    QStringList groups = mSettings->childGroups();
+    for (int i = 0; i < groups.size(); ++i)
+    {
+        hOutDebug(3, "key=" << groups[i].toStdString());
+    }
+    mSettings->endGroup();
+    return groups;
+}
+
+void Preferences::defaultStationery()
+{
+    mSettings->beginGroup("Stationery");
+    mSettings->remove("Legacy Green");
+    mSettings->setValue("Legacy Green/BarsColor","Green");
+    mSettings->setValue("Legacy Green/BarsRGB","#ddffdd");
+    mSettings->setValue("Legacy Green/Decorated","true");
+    mSettings->setValue("Legacy Green/Milimeters","false");
+    mSettings->setValue("Legacy Green/Name","Legacy Green");
+    mSettings->setValue("Legacy Green/PaperSize","Std FanFold");
+    mSettings->setValue("Legacy Green/Portrait","false");
+    mSettings->setValue("Legacy Green/Size1","11");
+    mSettings->setValue("Legacy Green/Size2","14.875");
+    mSettings->setValue("Legacy Green/TopMargin",8);
+    mSettings->setValue("Legacy Green/TractorFeedHols","true");
+    mSettings->endGroup();
+
+}
+
+void Preferences::defaultDecolations()
+{
+    mSettings->beginGroup("Decolations");
+    mSettings->remove("mvs38");
+    mSettings->setValue("mvs38/Accounting/Date/Column","68");
+    mSettings->setValue("mvs38/Accounting/Date/Length","21");
+    mSettings->setValue("mvs38/Accounting/Date/Line","30");
+    mSettings->setValue("mvs38/Accounting/Jobid/Column","19");
+    mSettings->setValue("mvs38/Accounting/Jobid/Length","4");
+    mSettings->setValue("mvs38/Accounting/Jobid/Line","30");
+    mSettings->setValue("mvs38/Accounting/Jobname/Column","25");
+    mSettings->setValue("mvs38/Accounting/Jobname/Length","8");
+    mSettings->setValue("mvs38/Accounting/Jobname/Line","30");
+    mSettings->setValue("mvs38/FileNameTemplate","$Jobname$.pdf");
+    mSettings->setValue("mvs38/Seperator/Pages","1");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-0/Column","1");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-0/Line","30");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-0/Text","****");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-0/Type","String");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-1/Column","9");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-1/Line","30");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-1/Text","END");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-1/Type","String");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-2/Column","1");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-2/Line","31");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-2/Text","****");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-2/Type","String");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-3/Column","9");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-3/Line","31");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-3/Text","END");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-3/Type","String");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-4/Column","1");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-4/Line","32");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-4/Text","****");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-4/Type","String");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-5/Column","9");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-5/Line","32");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-5/Text","END");
+    mSettings->setValue("mvs38/Seperator/Triggers/Trigger-5/Type","String");
+    mSettings->remove("mvs-legacy");
+    mSettings->setValue("mvs-legacy/Accounting/date/Column","18");
+    mSettings->setValue("mvs-legacy/Accounting/date/Length","11");
+    mSettings->setValue("mvs-legacy/Accounting/date/Line","51");
+    mSettings->setValue("mvs-legacy/Accounting/jobid/Column","18");
+    mSettings->setValue("mvs-legacy/Accounting/jobid/Length","8");
+    mSettings->setValue("mvs-legacy/Accounting/jobid/Line","33");
+    mSettings->setValue("mvs-legacy/Accounting/jobname/Column","18");
+    mSettings->setValue("mvs-legacy/Accounting/jobname/Length","8");
+    mSettings->setValue("mvs-legacy/Accounting/jobname/Line","34");
+    mSettings->setValue("mvs-legacy/Accounting/userid/Column","18");
+    mSettings->setValue("mvs-legacy/Accounting/userid/Length","8");
+    mSettings->setValue("mvs-legacy/Accounting/userid/Line","35");
+    mSettings->setValue("mvs-legacy/FileNameTemplate","$date$/$jobname$-$jobid$.pdf");
+    mSettings->setValue("mvs-legacy/Seperator/Pages","2");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-0/Column","1");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-0/Line","35");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-0/Text","* USER ID:");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-0/Type","String");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-1/Column","1");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-1/Line","34");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-1/Text","* JOB NAME:");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-1/Type","String");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-2/Column","1");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-2/Line","33");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-2/Text","* JOBID:");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-2/Type","String");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-3/Column","1");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-3/Line","31");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-3/Text","**END*******END");
+    mSettings->setValue("mvs-legacy/Seperator/Triggers/Trigger-3/Type","String");
+    mSettings->endGroup();
+}
+
+void Preferences::deleteDecolation(const QString& item)
+{
+    mSettings->beginGroup("Decolations");
+    mSettings->remove(item);
+    QStringList groups = mSettings->childGroups();
+    hOutDebug(0,"left:" << groups.count());
+    mSettings->endGroup();
+}
+
+DecolationRules * Preferences::decolation(QString name)
+{
+    DecolationRules * decolation = new DecolationRules();
+    decolation->setName(name);
+    mSettings->beginGroup("Decolations");
+    mSettings->beginGroup(name);
+
+    decolation->setFileNameTemplate(mSettings->value("FileNameTemplate").toString());
+
+    mSettings->beginGroup("Seperator");
+    decolation->mSeperator.mPages = mSettings->value("Pages").toInt();
+    mSettings->beginGroup("Triggers");
+
+    hOutDebug(5, "Triggers count when getting decolation: " << mSettings->allKeys().count());
+
+    for (int i=0; i<mSettings->childGroups().count(); i++)
+    {
+        mSettings->beginGroup(QString("Trigger-") + QString::number(i));
+        hOutDebug(5,"keys:" << mSettings->allKeys().count());
+        Trigger t;
+        t.setLine(mSettings->value("Line").toInt());
+        t.setColumn(mSettings->value("Column").toInt());
+        t.setTriggerType(Trigger::encodeTriggerType(mSettings->value("Type").toString())); //TODO
+        t.setText(mSettings->value("Text").toString());
+        decolation->mSeperator.mTriggers.insert(i,t);
+        mSettings->endGroup(); // one trigger
+    }
+    mSettings->endGroup(); //triggers
+    mSettings->endGroup(); //seperator
+
+    mSettings->beginGroup("Accounting");
+
+    for (int i=0; i<mSettings->childGroups().count(); i++)
+    {
+        QString group = mSettings->childGroups().at(i);
+        mSettings->beginGroup(group);
+        hOutDebug(5,"group:" << group.toStdString() << " keys:" << mSettings->allKeys().count());
+        AccountingField field;
+        field.mName = group;
+        field.mLine = mSettings->value("Line").toInt();
+        field.mColumn = mSettings->value("Column").toInt();
+        field.mLength = mSettings->value("Length").toInt();
+        decolation->mAccounting.mFields.push_back(field);
+        mSettings->endGroup();
+    }
+    mSettings->endGroup();  //Accounting
+    mSettings->endGroup();  //decolation name
+    mSettings->endGroup();  //Decolations
+
+    return decolation;
+}
+
+void Preferences::setDecolation(DecolationRules &decolation)
+{
+    mSettings->beginGroup("Decolations");
+    mSettings->beginGroup(decolation.name());
+    mSettings->remove("");
+
+    mSettings->setValue("FileNameTemplate", decolation.filenameTemplate());
+
+    mSettings->beginGroup("Seperator");
+    mSettings->setValue("Pages", decolation.mSeperator.mPages);
+    mSettings->beginGroup("Triggers");
+    for (int i=0; i<decolation.mSeperator.mTriggers.count(); i++)
+    {
+        mSettings->beginGroup(QString("Trigger-") + QString::number(i));
+        mSettings->setValue("Line", decolation.mSeperator.mTriggers[i].line());
+        mSettings->setValue("Column", decolation.mSeperator.mTriggers[i].column());
+        mSettings->setValue("Type", Trigger::decodeTriggerType(decolation.mSeperator.mTriggers[i].triggerType()));
+        mSettings->setValue("Text", decolation.mSeperator.mTriggers[i].text());
+        mSettings->endGroup(); // one trigger
+    }
+    mSettings->endGroup(); //triggers
+    mSettings->endGroup(); //seperator
+
+    mSettings->beginGroup("Accounting");
+    for (int i=0; i<decolation.mAccounting.mFields.count(); i++)
+    {
+        mSettings->beginGroup(decolation.mAccounting.mFields[i].mName);
+        mSettings->setValue("Line", decolation.mAccounting.mFields[i].mLine);
+        mSettings->setValue("Column", decolation.mAccounting.mFields[i].mColumn);
+        mSettings->setValue("Length", decolation.mAccounting.mFields[i].mLength);
+        mSettings->endGroup();
+    }
+    mSettings->endGroup();  //Accounting
+    mSettings->endGroup();  //decolation name
+    mSettings->endGroup();  //Decolations
+}
+
 void Preferences::convert()
 {
-	hOutDebug(0,"converting old preferences");
+    hOutDebug(2,"converting old preferences");
 	Preferences_1_2_0& oldPreferences = Preferences_1_2_0::getInstance();
 	setHercDir(oldPreferences.hercDir());
 	setConfigDir(oldPreferences.configDir());
@@ -495,7 +846,7 @@ std::string Preferences_1_2_0::getValue(char * line, const char * keyword)
 	std::string ret(p);
 	if (ret.at(ret.length()-1) == '\n')
 		ret = ret.substr(0,ret.length()-1);
-	outDebug(4,std::cout << "keyword:" << keyword << " value=" << ret << std::endl);
+    hOutDebug(4,"keyword:" << keyword << " value=" << ret);
 	return ret;
 }
 
@@ -520,7 +871,7 @@ QString Preferences_1_2_0::getFileName()
 	QString ret = mPath;
 	ret += "/";
 	ret += sFileName;
-	outDebug(4,std::cout << "file name=" << ret.toStdString() << std::endl);
+    hOutDebug(4,"file name=" << ret.toStdString());
 	return ret;
 }
 
@@ -792,7 +1143,7 @@ std::string Preferences_1_0::getValue(char * line, const char * keyword)
 	std::string ret(p);
 	if (ret.at(ret.length()-1) == '\n')
 		ret = ret.substr(0,ret.length()-1);
-	outDebug(4,std::cout << "keyword:" << keyword << " value=" << ret << std::endl);
+    hOutDebug(4,"keyword:" << keyword << " value=" << ret);
 	return ret;
 }
 
@@ -819,7 +1170,7 @@ QString Preferences_1_0::getFileName()
 	QString ret = mPath.c_str();
 	ret += "/";
 	ret += sFileName;
-	outDebug(4,std::cout << "file name=" << ret.toStdString() << std::endl);
+    hOutDebug(4,"file name=" << ret.toStdString());
 	return ret;
 }
 

@@ -177,7 +177,7 @@ void Dasdcopy::runnerMaximumChanged(int maximum)
 
 void Dasdcopy::runnerValueChanged(int value)
 {
-    outDebug(3, std::cout << "dasdcopy got value changed " << value << std::endl);
+    hOutDebug(3, "dasdcopy got value changed " << value);
 	if (value >= 0)
         ui.progressBar->setValue(value);
     else

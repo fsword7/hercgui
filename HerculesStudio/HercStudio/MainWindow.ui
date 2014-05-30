@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -106,10 +106,20 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuPrinters">
+    <property name="title">
+     <string>Printers</string>
+    </property>
+    <addaction name="actionStartPrinter"/>
+    <addaction name="separator"/>
+    <addaction name="actionStationery"/>
+    <addaction name="actionDecolation"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
    <addaction name="menuCommand"/>
    <addaction name="menuUtilities"/>
+   <addaction name="menuPrinters"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -578,6 +588,52 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPrintersManager">
+   <property name="text">
+    <string>Printers Manager...</string>
+   </property>
+  </action>
+  <action name="actionStationery">
+   <property name="text">
+    <string>Stationery ...</string>
+   </property>
+   <property name="iconText">
+    <string>Stationery</string>
+   </property>
+   <property name="toolTip">
+    <string>Stationery</string>
+   </property>
+  </action>
+  <action name="actionDecolation">
+   <property name="text">
+    <string>Decolations ...</string>
+   </property>
+  </action>
+  <action name="actionStationeryManager">
+   <property name="text">
+    <string>Stationery Manager</string>
+   </property>
+  </action>
+  <action name="actionPrinters_Manager">
+   <property name="text">
+    <string>Printers Manager...</string>
+   </property>
+  </action>
+  <action name="action111">
+   <property name="text">
+    <string>111</string>
+   </property>
+  </action>
+  <action name="actionQwe">
+   <property name="text">
+    <string>qwe</string>
+   </property>
+  </action>
+  <action name="actionStartPrinter">
+   <property name="text">
+    <string>Start Printer</string>
    </property>
   </action>
  </widget>

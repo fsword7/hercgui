@@ -37,7 +37,7 @@ Fonts::Fonts()
     mFonts.insert(0,"(system default)");
     for (int i=0; i<mFonts.size(); ++i)
     {
-		outDebug(5,std::cout << i << ": " << mFonts.at(i).toLocal8Bit().constData()  << std::endl);
+        hOutDebug(5, i << ": " << mFonts.at(i).toLocal8Bit().constData() );
     }
 }
 

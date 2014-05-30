@@ -28,6 +28,7 @@
 #define PREFERENCES_H_
 
 #include "Psw.h"
+#include "HerculesStudio.h"
 
 #include <string>
 #include <vector>
@@ -77,12 +78,12 @@ public:
 	void write();
 
 	void setHercDir(const std::string& hercDir);
-	std::string&  hercDir(){return mPrefs[HerculesDir]; } ;
+    std::string&  hercDir(){return mPrefs[HerculesDir]; }
 	void setConfigDir(const std::string& logsDir) ;
 	void setVolatileConfigDir(const std::string& logsDir) ;
 	const std::string&  configDir();
 	void setLogsDir(const std::string& logsDir) ;
-	std::string& logsDir(){return mPrefs[LogsDir]; } ;
+    std::string& logsDir(){return mPrefs[LogsDir]; }
 	void setFontName( const std::string& fontName) ;
 	std::string& fontName () ;
 	void setFontSize( int variation );
@@ -168,7 +169,7 @@ public:
 
 	// hercules directory
 	void setHercDir(const std::string& hercDir);
-	std::string&  hercDir(){return mPrefs[HerculesDir]; } ;
+    std::string&  hercDir(){return mPrefs[HerculesDir]; }
 
 	// configuration default directory
 	void setConfigDir(const std::string& logsDir) ;
@@ -177,7 +178,7 @@ public:
 
 	// log directory
 	void setLogsDir(const std::string& logsDir) ;
-	std::string& logsDir(){return mPrefs[LogsDir]; } ;
+    std::string& logsDir(){return mPrefs[LogsDir]; }
 
 	// font name
 	void setFontName( FontObject fontObject, const std::string& fontName) ;
@@ -281,7 +282,7 @@ public:
 
 	// hercules directory
 	void setHercDir(const std::string& hercDir);
-	std::string&  hercDir(){return mPrefs[HerculesDir]; } ;
+    std::string&  hercDir(){return mPrefs[HerculesDir]; }
 
 	// configuration default directory
 	void setConfigDir(const std::string& logsDir) ;
@@ -290,7 +291,7 @@ public:
 
 	// log directory
 	void setLogsDir(const std::string& logsDir) ;
-	std::string& logsDir(){return mPrefs[LogsDir]; } ;
+    std::string& logsDir(){return mPrefs[LogsDir]; }
 
 	// font name
 	void setFontName( FontObject fontObject, const std::string& fontName) ;
@@ -357,11 +358,14 @@ private:
 };
 
 class QSettings;
+mk_shared_ptr(PrinterItem)
+mk_shared_ptr(Stationery)
+class DecolationRules;
 
 class Preferences
 {
 public:
-	enum keys
+    enum keys
 	{
 		HerculesDir = 0,
 		ConfigurationDir = 1,
@@ -382,7 +386,10 @@ public:
 		GreenLed = 16,
 		Animate=17,
         DarkBackground=18,
-        IplDevice=19
+        IplDevice=19,
+        LastPrinterName=20,
+        BalloonDecolation=21,
+        BalloonStationery=22
 	};
 
 	enum FontObject
@@ -500,6 +507,34 @@ public:
     void setIplDevice(const std::string& iplDevice);
     std::string iplDevice() const;
 
+    // Stationery
+    bool setStationery(const QString& name, const QString& stationeryString, bool replace=true);
+    bool setStationery(const QString& name, const Stationery& stationery, bool replace=true);
+    StationeryPtr stationery(QString name);
+    QStringList stationeryList();
+    void deleteStationery(const QString& item);
+
+    // Printers
+    bool setPrinter(const QString& name, const PrinterItem& printerItem, bool replace=true);
+    PrinterItemPtr printer(QString name);
+    QStringList printerList();
+    void deletePrinter(const QString& item);
+    void setLastPrinterName(const std::string& lastPrinterName);
+    std::string lastPrinterName() const;
+
+    // Decolations
+    DecolationRules *decolation(QString name);
+    QStringList decolationList();
+    void deleteDecolation(const QString& item);
+    void setDecolation(DecolationRules& decolation);
+
+    void setBalloonDecolation(bool popped);
+    bool balloonDecolation() const;
+
+    void setBalloonStationery(bool popped);
+    bool balloonStationery() const;
+
+
 protected:
 	Preferences();
 
@@ -511,7 +546,9 @@ private:
 	static const char *sRegsViews[];
 	std::string mVolatileConfigDir;
 
-	const char * fontObjectToString(FontObject fontObject) const;
+    const char * fontObjectToString(FontObject fontObject) const;
+    void defaultDecolations();
+    void defaultStationery();
 	void convert();
 };
 

@@ -61,7 +61,7 @@ void ConfigurationEditor::PARM(Ui::ConfigurationClass * configUi, const ConfigLi
 void ConfigurationEditor::handleText(QLineEdit * lineEdit, const ConfigLine * configLine, Direction dir)
 {                                                       
 	std::string parm = configLine->getToken(1);
-	outDebug(4,std::cout << configLine->getToken(0) << std::endl);        
+    hOutDebug(4,configLine->getToken(0) << std::endl);
 	if (dir == toScreen)                                
 	{													
 		if (configLine->getToken(2).length() != 0)      
@@ -82,7 +82,7 @@ void ConfigurationEditor::handleSpin(QSpinBox * spinBox, const ConfigLine * conf
 { 
 	std::string keyword = configLine->getUppercaseToken(0);
 	std::string parm = configLine->getToken(1);
-	outDebug(4,std::cout << parm << std::endl);      
+    hOutDebug(4,parm);
 	if (dir == toScreen)                              
 	{ 
 		std::string parm = configLine->getToken(1);   
@@ -116,7 +116,7 @@ void ConfigurationEditor::handleSpin(QSpinBox * spinBox, const ConfigLine * conf
 void ConfigurationEditor::handleSpin(QDoubleSpinBox * doubleSpinBox, const ConfigLine * configLine, Direction dir, int dflt) 
 { 
 	std::string parm = configLine->getToken(1);
-	outDebug(4,std::cout << parm << std::endl);      
+    hOutDebug(4, parm);
 	if (dir == toScreen)                              
 	{ 
 		std::string parm = configLine->getToken(1);   
@@ -180,7 +180,7 @@ void ConfigurationEditor::handleCheckbox(QCheckBox * checkbox, const ConfigLine 
 {
 	QString name=configLine->getToken(0).c_str();
 	QString parm=configLine->getToken(1).c_str();
-	outDebug(2,std::cout << parm.toStdString() << std::endl);
+    hOutDebug(2,parm.toStdString());
 	if (dir == toScreen)                                                         
 	{                                                                               
 		if (parm=="") parm=unchecked;
@@ -207,7 +207,7 @@ std::map<std::string,int>ConfigurationEditor::mSpinMap;
 
 ConfigurationEditor::ConfigurationEditor()
 {
-	outDebug(5,std::cout << "ConfigurationEditor::ConfigurationEditor" << std::endl);
+    hOutDebug(5,"ConfigurationEditor::ConfigurationEditor");
 }
 
 ConfigurationEditor::~ConfigurationEditor()
@@ -218,7 +218,7 @@ void ConfigurationEditor::ARCHMODE(Ui::ConfigurationClass * configUi, const Conf
 {
 	if (dir == toScreen)
 	{
-		outDebug(4,std::cout << "ARCHMODE" << std::endl);
+        hOutDebug(4,"ARCHMODE");
 		std::string token = configLine->getLowercaseToken(1);
 		if (token == "s/370")
 			configUi->s370Button->setChecked(true);
@@ -268,7 +268,7 @@ void ConfigurationEditor::ALRF(Ui::ConfigurationClass * configUi, const ConfigLi
 void ConfigurationEditor::AUTO_MOUNT(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
 {
 	// TODO: accept "-", but do not generate one
-	outDebug(4,std::cout << "AUTO_MOUNT" << std::endl);
+    hOutDebug(4,"AUTO_MOUNT");
 	if (dir == toScreen)
 	{
 		std::string parm=configLine->getToken(1);
@@ -285,7 +285,7 @@ void ConfigurationEditor::AUTO_MOUNT(Ui::ConfigurationClass * configUi, const Co
 
 void ConfigurationEditor::AUTO_SCSI_MOUNT(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
 {
-	outDebug(4,std::cout << "AUTO_SCSI_MOUNT" << std::endl);
+    hOutDebug(4,"AUTO_SCSI_MOUNT");
 	if (dir == toScreen)
 	{
 		std::string parm = configLine->getLowercaseToken(1);
@@ -329,7 +329,7 @@ void ConfigurationEditor::AUTO_SCSI_MOUNT(Ui::ConfigurationClass * configUi, con
 			s << val;
 			parm = s.str();
 		}
-		outDebug(3,std::cout << "parm=" << parm << std::endl);
+        hOutDebug(3,"parm=" << parm);
 		const_cast<ConfigLine *>(configLine)->replaceParameters(parm);
 	}
 }
@@ -360,7 +360,7 @@ SpinItem(DEVTMAX,devTMaxSpin, 0)
 
 void ConfigurationEditor::DIAG8CMD(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
 {
-	outDebug(4,std::cout << "DIAG8CMD" << std::endl);
+    hOutDebug(4,"DIAG8CMD");
 	if (dir == toScreen)
 	{
 		std::string enableDisable = configLine->getLowercaseToken(1);
@@ -406,7 +406,7 @@ TextItem(ENGINES,engines)
 
 void ConfigurationEditor::ECPSVM(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
 {
-	outDebug(4,std::cout << "ECPSVM" << std::endl);
+    hOutDebug(4,"ECPSVM");
 	if (dir == toScreen)
 	{
 		if (configLine->getLowercaseToken(1) == "yes" || configLine->getLowercaseToken(1) == "level")
@@ -448,7 +448,7 @@ SliderItem(HERCPRIO,hercPrioSlider)
 
 void ConfigurationEditor::HTTPPORT(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir) \
 {
-	outDebug(4,std::cout << "HTTPPORT" << std::endl);
+    hOutDebug(4,"HTTPPORT");
 	if (dir == toScreen)
 	{
 		std::string parm = configLine->getToken(1);
@@ -479,7 +479,7 @@ void ConfigurationEditor::HTTPPORT(Ui::ConfigurationClass * configUi, const Conf
 
 void ConfigurationEditor::HTTPROOT(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
 {
-	outDebug(4,std::cout << "HTTPROOT" << std::endl);
+    hOutDebug(4,"HTTPROOT");
 	if (dir == toScreen)
 	{
 		std::string parm=configLine->getToken(1);
@@ -500,7 +500,7 @@ TextItem(LDMOD,ldmod)
 
 void ConfigurationEditor::LEGACYSENSEID(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
 {
-	outDebug(4,std::cout << "LEGACYSENSEID" << std::endl);
+    hOutDebug(4,"LEGACYSENSEID");
 	if (dir == toScreen)
 	{
 		std::string parm=configLine->getUppercaseToken(1);
@@ -535,7 +535,7 @@ CheckBoxItem(MOUNTED_TAPE_REINIT,mountedTapeReinitCheckbox,ALLOW,DISALLOW)
 
 void ConfigurationEditor::MODPATH(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
 {
-	outDebug(4,std::cout << "MODPATH" << std::endl);
+    hOutDebug(4,"MODPATH");
 	if (dir == toScreen)
 	{
 		std::string parm=configLine->getToken(1);
@@ -554,7 +554,7 @@ SpinItem(NUMVEC,numVecSpin, 0)
 
 void ConfigurationEditor::OSTAILOR(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
 {
-	outDebug(4,std::cout << "OSTAILOR" << std::endl);
+    hOutDebug(4,"OSTAILOR");
 	if (dir == toScreen)
 	{
 		std::string parm = configLine->getUppercaseToken(1);
@@ -634,7 +634,7 @@ void ConfigurationEditor::OSTAILOR(Ui::ConfigurationClass * configUi, const Conf
 
 void ConfigurationEditor::PANRATE(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
 {
-	outDebug(4,std::cout << "PANRATE" << std::endl);
+    hOutDebug(4,"PANRATE");
 	if (dir == toScreen)
 	{
 		std::string panRateSpin = configLine->getLowercaseToken(1);
@@ -685,7 +685,7 @@ void ConfigurationEditor::TZOFFSET(Ui::ConfigurationClass * configUi, const Conf
 			configLine->setInError(configLine->getAbsoluteTokenColumn(1));
 			return;
 		}
-		outDebug(5,std::cout << "parm=" << parm << std::endl;)
+        hOutDebug(5,"parm=" << parm);
 		int hh = 0, mm = 0;
 		int sig = 1;
 		if (parm[0] == '+') parm = parm.substr(1);
@@ -710,7 +710,7 @@ void ConfigurationEditor::TZOFFSET(Ui::ConfigurationClass * configUi, const Conf
 		}
 		configUi->tzOffsetHH->setValue(hh);
 		configUi->tzOffsetMM->setValue(mm);
-		outDebug(5,std::cout << "HH:" << hh << "MM:" << mm<< std::endl;)
+        hOutDebug(5,"HH:" << hh << "MM:" << mm);
 		mSpinMap["TZOFFSET"] = parseNum(parm);
 		validateMaxTokens(configLine,1);
 	}
@@ -720,7 +720,7 @@ void ConfigurationEditor::TZOFFSET(Ui::ConfigurationClass * configUi, const Conf
 		if (mSpinMap["TZOFFSET"] != iParm)
 		{
 			QString parm = configUi->tzOffsetHH->text() + configUi->tzOffsetMM->text();
-			outDebug(5,std::cout << "parm:" << parm.toUtf8().data() << std::endl;)
+            hOutDebug(5, "parm:" << parm.toUtf8().data());
 			const_cast<ConfigLine *>(configLine)->replaceParameters(parm.toStdString());
 		}
 	}

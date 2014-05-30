@@ -150,7 +150,7 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 
     if (deviceAdded)
     {
-		outDebug(3,std::cout << mDevices.size() << " Devices." << std::endl);
+        hOutDebug(3,mDevices.size() << " Devices.");
         if (mModel == NULL) mModel = new QStandardItemModel();
         mModel->clear();
         QStandardItem *parentItem = mModel->invisibleRootItem();
@@ -159,14 +159,14 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 		std::map<int, VisualizedDeviceEntry>::iterator it;
         for (int curDev=0; curDev<=DeviceTypes::Comm; curDev++ )
         {
-			outDebug(5,std::cout << "curDev:" << curDev<< std::endl);
+            hOutDebug(5,"curDev:" << curDev);
             bool titleDevAdded = false;
             for (it =  mDevices.begin(); it != mDevices.end(); it++)
             {
                 VisualizedDeviceEntry& ent = it->second;
                 if (ent.getType() == curDev)
                 {
-					outDebug(5,std::cout << "ent:" << ent.getDeviceNumber()<<" "<<DeviceTypes::instance().getName(ent.getType())<<std::endl);
+                    hOutDebug(5,"ent:" << ent.getDeviceNumber()<<" "<<DeviceTypes::instance().getName(ent.getType()));
                     if (!titleDevAdded)
                     {
                         std::string iconPath = Environment::getIconsPath() +
@@ -223,7 +223,7 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 
 void DevicesPane::mousePressed(const QModelIndex index)
 {
-    outDebug(1, std::cout << "pressed " << index.row() << std::endl);
+    hOutDebug(1,"pressed " << index.row());
     mClickRow = index.row();
 }
 
@@ -441,7 +441,7 @@ void DevicesPane::menuProperties()
     }
     catch (...)
     {
-        outDebug(2, std::cout << "exception caught in class factory (add)" << std::endl);
+        hOutDebug(2, "exception caught in class factory (add)");
     }
 
     connect(mProp, SIGNAL(updateLine(bool)), this, SLOT(updateDevice(bool)));
@@ -506,6 +506,6 @@ QString DevicesPane::textFromValue(int value) const
 	else
 		strcpy(formatted,"0000");
 	QString ret(formatted);
-	outDebug(5,std::cout << "textFromValue:" << value << "='" << ret.toStdString() << std::endl;)
+    hOutDebug(5,"textFromValue:" << value << "='" << ret.toStdString());
 	return ret;
 }

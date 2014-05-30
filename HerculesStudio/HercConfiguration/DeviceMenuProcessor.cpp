@@ -152,7 +152,7 @@ void DeviceMenuProcessor::menuAddSYSG()
 
 void DeviceMenuProcessor::menuAddItem(int iType)
 {
-    outDebug(5, std::cout << "add Item" << mClickRow << std::endl);
+    hOutDebug(5, "add Item" << mClickRow);
     if (iType < 0 || iType > DeviceTypes::Comm) return;
     DeviceTypes::Type type = static_cast<DeviceTypes::Type> (iType);
     mCandidateLine = new DeviceConfigLine("\n");
@@ -166,7 +166,7 @@ void DeviceMenuProcessor::menuAddItem(int iType)
     }
     catch (...)
     {
-        outDebug(2, std::cout << "exception caught in class factory (add)" << std::endl);
+        hOutDebug(2,"exception caught in class factory (add)");
     }
 
     connect(mProp, SIGNAL(updateLine(bool)), this, SLOT(doAddDevice(bool)));

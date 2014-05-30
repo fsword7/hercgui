@@ -45,7 +45,13 @@ QByteArray& SynchronizedQueue::front()
     return mQueue.front();
 }
 
-void SynchronizedQueue::push_back(const QByteArray& str)
+void SynchronizedQueue::push_back(const QByteArray &str)
+{
+    QMutexLocker lock(&mMutex);
+    mQueue.push_back(str);
+}
+
+void SynchronizedQueue::push_back(QByteArray &&str)
 {
     QMutexLocker lock(&mMutex);
     mQueue.push_back(str);

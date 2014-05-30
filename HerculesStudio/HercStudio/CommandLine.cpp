@@ -48,7 +48,7 @@ QSize CommandLine::sizeHint()
 
 void CommandLine::enterPressed(const QString & text1)
 {
-    outDebug(4,std::cout << "text1:"<<  this->text().toStdString() << std::endl);
+    hOutDebug(4,"text1:"<<  this->text().toStdString());
     mHistory.insert(mHistory.begin(),text1);
     while (mHistory.size() > 100)
         mHistory.erase(mHistory.end()-1);
@@ -58,7 +58,7 @@ void CommandLine::enterPressed(const QString & text1)
 
 void CommandLine::keyPressEvent(QKeyEvent * event)
 {
-    outDebug(4, std::cout << "key:" << event->key() << " " << (event->key() == Qt::Key_Up) << std::endl);
+    hOutDebug(4, "key:" << event->key() << " " << (event->key() == Qt::Key_Up));
     QLineEdit::keyPressEvent(event);
     switch (event->key())
     {
@@ -87,7 +87,7 @@ void CommandLine::keyPressEvent(QKeyEvent * event)
 
 void CommandLine::setLine()
 {
-    outDebug(4,std::cout << "setLine:" << mHistoryPtr << " size:" << mHistory.size() << " " << mHistory[mHistoryPtr].toStdString() << std::endl);
+    hOutDebug(4,"setLine:" << mHistoryPtr << " size:" << mHistory.size() << " " << mHistory[mHistoryPtr].toStdString());
     if (mHistoryPtr < -1 || mHistoryPtr >= (signed) mHistory.size())
         return;
     if (mHistoryPtr != -1)

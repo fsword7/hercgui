@@ -4,11 +4,13 @@
 
 TEMPLATE = app
 QT       += widgets
+QT       += network
 TARGET = HerculesStudio
 INCLUDEPATH +=  \
                  HercStudio \
                  HercConfiguration \
-                 HercUtilities
+                 HercUtilities \
+                 HercPrinter
 
 !win32{
 QMAKE_CC   = @echo [c] $< && $$QMAKE_CC
@@ -16,7 +18,7 @@ QMAKE_CXX  = @echo [c++] $< && $$QMAKE_CXX
 QMAKE_MOC  = @echo [moc] $< && $$QMAKE_MOC
 QMAKE_LINK = @echo [link] $$TARGET && $$QMAKE_LINK
 #QMAKE_UIC  = @echo [uic ] $< && $$QMAKE_UIC
-QMAKE_CXXFLAGS = -pedantic -Wno-long-long
+QMAKE_CXXFLAGS = -pedantic -Wno-long-long -std=c++11
 }
 UI_DIR = ui
 MOC_DIR = moc
@@ -56,6 +58,7 @@ HEADERS += HercConfiguration/CardReaderProperties.h \
            HercStudio/Arguments.h \
            HercStudio/CommandLine.h \
            HercStudio/Environment.h \
+           HercStudio/FieldTip.h \
            HercStudio/FontPreferences.h \
            HercStudio/Fonts.h \
            HercStudio/HelpAbout.h \
@@ -103,7 +106,20 @@ HEADERS += HercConfiguration/CardReaderProperties.h \
            HercUtilities/TapeMap.h \
            HercUtilities/TapeSplt.h \
            HercUtilities/UtilityExecutor.h \
-           HercUtilities/UtilityRunner.h
+           HercUtilities/UtilityRunner.h \
+           HercPrinter/PrinterDialog.h \
+           HercPrinter/StationeryDialog.h \
+           HercPrinter/Stationery.h \
+           HercPrinter/DecolationRules.h \
+           HercPrinter/Trigger.h \
+           HercPrinter/PagePrinter.h \
+           HercPrinter/PrintRunner.h \
+           HercPrinter/PrinterItem.h \
+           HercStudio/StringedObject.h \
+           HercPrinter/PrinterController.h \
+           HercPrinter/DecolationDialog.h \
+           HercStudio/IpValidator.h \
+           HercPrinter/PrinterInterface.h
 FORMS += HercConfiguration/CardReaderProperties.ui \
          HercConfiguration/Configuration.ui \
          HercConfiguration/ConsoleProperties.ui \
@@ -135,7 +151,10 @@ FORMS += HercConfiguration/CardReaderProperties.ui \
          HercUtilities/TapeCopy.ui \
          HercUtilities/TapeMap.ui \
          HercUtilities/TapeSplt.ui \
-         HercUtilities/TapeSpltSubDlg.ui
+         HercUtilities/TapeSpltSubDlg.ui \
+         HercPrinter/PrinterDialog.ui \
+         HercPrinter/StationeryDialog.ui \
+         HercPrinter/DecolationDialog.ui
 SOURCES += HercConfiguration/CardReaderProperties.cpp \
            HercConfiguration/ConfigFile.cpp \
            HercConfiguration/ConfigLine.cpp \
@@ -168,6 +187,7 @@ SOURCES += HercConfiguration/CardReaderProperties.cpp \
            HercStudio/Arguments.cpp \
            HercStudio/CommandLine.cpp \
            HercStudio/Environment.cpp \
+           HercStudio/FieldTip.cpp \
            HercStudio/FontPreferences.cpp \
            HercStudio/Fonts.cpp \
            HercStudio/HelpAbout.cpp \
@@ -214,7 +234,20 @@ SOURCES += HercConfiguration/CardReaderProperties.cpp \
            HercUtilities/TapeMap.cpp \
            HercUtilities/TapeSplt.cpp \
            HercUtilities/UtilityExecutor.cpp \
-           HercUtilities/UtilityRunner.cpp
+           HercUtilities/UtilityRunner.cpp \
+           HercPrinter/PrinterDialog.cpp \
+           HercPrinter/DecolationRules.cpp \
+           HercPrinter/StationeryDialog.cpp \
+           HercPrinter/Stationery.cpp \
+           HercPrinter/Trigger.cpp \
+           HercPrinter/PagePrinter.cpp \
+           HercPrinter/PrintRunner.cpp \
+           HercPrinter/PrinterItem.cpp \
+           HercStudio/StringedObject.cpp \
+           HercPrinter/PrinterController.cpp \
+           HercPrinter/DecolationDialog.cpp \
+           HercStudio/IpValidator.cpp \
+           HercPrinter/PrinterInterface.cpp
 RESOURCES += HercStudio/HercStudio.qrc
 
 target.path = /usr/bin

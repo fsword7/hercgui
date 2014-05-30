@@ -42,7 +42,7 @@
 #include <iomanip>
 
 GenericDeviceProperties::GenericDeviceProperties(ConfigLine& line, QWidget *parent)
- : QDialog(parent) ,  mLine(line), mParent(parent),
+ : IpValidator(parent) ,  mLine(line), mParent(parent),
    mOriginalDeviceNumber(ConfigurationEditor::parseNum(mLine.getToken(0),16))
 {
 
@@ -58,7 +58,7 @@ GenericDeviceProperties * GenericDeviceProperties::classFactory(DeviceConfigLine
 {
     if (type == 0)
         type = line.getDeviceType();
-    outDebug(1, std::cout << "GenericDeviceProperties::classFactory " << type << std::endl);
+    hOutDebug(1, "GenericDeviceProperties::classFactory " << type);
     switch(type)
     {
     case DeviceTypes::Terminal:
@@ -119,49 +119,5 @@ bool GenericDeviceProperties::deviceNumberValidator(QLineEdit * deviceLine)
     }
     return true;
 
-}
-
-bool GenericDeviceProperties::ipValidator(QLineEdit * ipLineEdit, bool allowNull)
-{
-	const std::string ip = ipLineEdit->text().toStdString();
-    bool ret = true;
-    if (allowNull && ip.compare("...") == 0)
-    	return ret;
-    QString qip = ip.c_str();
-    int pos=0;
-    for (int i=0; i<4 && ret; i++)
-    {
-        outDebug(5, std::cout << "IP:" << ip << " pos:" << pos << " i=" << i << std::endl);
-        if (i>0)
-        {
-            if (qip.toLatin1().data()[pos] != '.')
-            {
-                ret = false;
-                break;
-            }
-            pos++;
-        }
-        int num = 0;
-        int ppos=pos;
-        while(ip[pos] >= '0' && ip[pos] <= '9')
-        {
-            num = num*10 + ip[pos] - '0';
-            pos++;
-        }
-        if (pos == ppos || num > 255)
-        {
-            ret = false;
-            break;
-        }
-    }
-    if (!ret)
-    {
-        QString msg = ip.c_str();
-        msg += " is illagel IP address";
-        QMessageBox::warning(this, "Illegal IP address", msg , QMessageBox::Ok);
-        ipLineEdit->setFocus();
-        return false;
-    }
-    return true;
 }
 

@@ -34,7 +34,7 @@ ConsoleProperties::ConsoleProperties(ConfigLine & line, QWidget *parent)
 	ui.setupUi(this);
 	if (!mLine.isNew())
     {
-        outDebug(5, std::cout << "not new" << mLine.getLine() <<  std::endl);
+        hOutDebug(5, "not new" << mLine.getLine());
         ui.deviceNumber->setText(mLine.getToken(0).c_str());
 
         if (mLine.getToken(1) == "1052")
@@ -92,9 +92,9 @@ void ConsoleProperties::ok()
 {
     if (!deviceNumberValidator(ui.deviceNumber))
         return;
-    if ( (ui.deviceCombo->currentIndex() < 2) && !ipValidator(ui.ipAddress,false))
+    if ( (ui.deviceCombo->currentIndex() < 2) && !validateIp(ui.ipAddress,false, false))
     	return;
-    if (!ipValidator(ui.subnetMask,true))
+    if (!validateIp(ui.subnetMask,true, false))
     	return;
     std::stringstream newLineBuff;
     if (ui.deviceCombo->currentIndex() >= 2)
@@ -128,7 +128,7 @@ void ConsoleProperties::ok()
         newLineBuff << "\n";
 
     }
-    outDebug(5, std::cout << newLineBuff.str() << std::endl);
+    hOutDebug(5, newLineBuff.str());
     mLine.replaceLine(newLineBuff.str());
     emit updateLine(true);
     this->deleteLater();

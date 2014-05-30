@@ -188,7 +188,7 @@ void MainPanelClassic::updateLcd(QLCDNumber * lcd, int inc)
         lcd->display(0);
     if (lcd->intValue() < 0)
         lcd->display(15);
-    outDebug(5, std::cout << "update " << lcd->intValue() << std::endl);
+    hOutDebug(5,"update " << lcd->intValue());
 }
 
 
