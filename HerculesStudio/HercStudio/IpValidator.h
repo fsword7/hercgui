@@ -11,7 +11,7 @@ class IpValidator : public QDialog
 public:
     IpValidator(QWidget * parent);
 protected:
-    bool validateIp(QLineEdit * ipLineEdit, bool allowNull);
+    bool validateIp(QLineEdit * ipLineEdit, bool allowNull, bool quite);
 };
 
 #endif // IPVLIDATOR_H

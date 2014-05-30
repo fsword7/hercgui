@@ -13,6 +13,8 @@
 #include <QCloseEvent>
 #include <QMenu>
 #include <QMovie>
+#include <QDir>
+#include <QFileInfo>
 
 
 PrinterDialog::PrinterDialog(QWidget *parent, const QString &item) :
@@ -113,34 +115,43 @@ void PrinterDialog::dirClicked()
     if (dir.length() > 0) ui->spoolDirectory->setText(dir);
 }
 
-bool PrinterDialog::save()
+bool PrinterDialog::save(bool quiet)
 {
-    if (validateIp(ui->IP, false) == false) return false;
+    if (validateIp(ui->IP, false, false) == false) return false;
 
     if ((ui->PortNumber->text().toUInt() > 0xffff) ||
         (ui->PortNumber->text().toUInt() == 0))
     {
-        QString msg(ui->PortNumber->text());
-        msg += " is an ilegal port number";
-        QMessageBox::warning(this, "Illegal port number", msg , QMessageBox::Ok);
+        if (!quiet)
+        {
+            QString msg(ui->PortNumber->text());
+            msg += " is an ilegal port number";
+            QMessageBox::warning(this, "Illegal port number", msg , QMessageBox::Ok);
+        }
         return false;
     }
 
     if (ui->printerNameComboBox->currentText().length() == 0)
     {
-        QMessageBox::warning(this, "printer", "Please enter printer name",
-            QMessageBox::Ok, QMessageBox::NoButton);
-        FieldTip *balloon = new FieldTip(this, true);
-        balloon->setOwner(ui->printerNameComboBox);
-        balloon->showMessage("Give a name to this printer",2000);
-        ui->printerNameComboBox->setFocus();
+        if (!quiet)
+        {
+            QMessageBox::warning(this, "printer", "Please enter printer name",
+                                 QMessageBox::Ok, QMessageBox::NoButton);
+            FieldTip *balloon = new FieldTip(this, true);
+            balloon->setOwner(ui->printerNameComboBox);
+            balloon->showMessage("Give a name to this printer",2000);
+            ui->printerNameComboBox->setFocus();
+        }
         return false;
     }
     if (ui->printerNameComboBox->currentText().indexOf("\"") >= 0)
     {
-        QMessageBox::warning(this, "printer", "Printer name cannot contain quotes",
-            QMessageBox::Ok, QMessageBox::NoButton);
-        ui->printerNameComboBox->setFocus();
+        if (!quiet)
+        {
+            QMessageBox::warning(this, "printer", "Printer name cannot contain quotes",
+                                 QMessageBox::Ok, QMessageBox::NoButton);
+            ui->printerNameComboBox->setFocus();
+        }
         return false;
     }
     mPrinterItem = PrinterItemPtr(new PrinterItem());
@@ -167,8 +178,10 @@ void PrinterDialog::deleteClicked()
 void PrinterDialog::cancelClicked()
 {
     stop();
-    if (!save()) return;
-    Preferences::getInstance().setLastPrinterName(ui->printerNameComboBox->currentText().toStdString());
+    if (save(true))
+    {
+        Preferences::getInstance().setLastPrinterName(ui->printerNameComboBox->currentText().toStdString());
+    }
     deleteLater();
 }
 
@@ -203,6 +216,8 @@ void PrinterDialog::connectClicked()
     }
     else
     {
+        if (!testDirectory(ui->spoolDirectory->text())) return;
+        if (!save(false)) return ;
         if (mPrinterItem == NULL)
             mPrinterItem = PrinterItemPtr(new PrinterItem());
         mPrinterItem->mName = ui->printerNameComboBox->currentText();
@@ -278,7 +293,7 @@ void PrinterDialog::closeEvent(QCloseEvent *event)
         event->ignore();
         return;
     }
-    if (!save())
+    if (!save(false))
     {
         event->ignore();
         return;
@@ -328,4 +343,37 @@ void PrinterDialog::setProtected(bool protect)
     ui->spoolDirectory->setEnabled(!protect);
     ui->decolationComboBox->setEnabled(!protect);
     ui->deleteButton->setEnabled(!protect);
+}
+
+bool PrinterDialog::testDirectory(QString dirName)
+{
+    QDir dir(dirName);
+    if (!dir.exists())
+    {
+        QString msg("Directory \"" + dirName);
+        msg += "\" does not exist";
+        QMessageBox::warning(this, "non-existing directory", msg , QMessageBox::Ok);
+        ui->spoolDirectory->setFocus();
+        return false;
+    }
+    QFileInfo fileInfo(dirName);
+    if (!fileInfo.isDir())
+    {
+        QString msg("\"" + dirName);
+        msg += "\" is not a directory";
+        QMessageBox::warning(this, "invalid directory", msg , QMessageBox::Ok);
+        ui->spoolDirectory->setFocus();
+        return false;
+
+    }
+    if (!fileInfo.isWritable())
+    {
+        QString msg("You do not have permission to write into directory \"" + dirName);
+        msg += "\"";
+        QMessageBox::warning(this, "invalid directory", msg , QMessageBox::Ok);
+        ui->spoolDirectory->setFocus();
+        return false;
+
+    }
+    return true;
 }

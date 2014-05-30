@@ -69,7 +69,7 @@ void TerminalProperties::ok()
         ip = "";
     else
     {
-        if (!validateIp(ui.IPAddress,false))
+        if (!validateIp(ui.IPAddress,false, false))
     	    	return;
         ip = ui.IPAddress->text().toStdString();
     }

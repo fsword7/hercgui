@@ -92,9 +92,9 @@ void ConsoleProperties::ok()
 {
     if (!deviceNumberValidator(ui.deviceNumber))
         return;
-    if ( (ui.deviceCombo->currentIndex() < 2) && !validateIp(ui.ipAddress,false))
+    if ( (ui.deviceCombo->currentIndex() < 2) && !validateIp(ui.ipAddress,false, false))
     	return;
-    if (!validateIp(ui.subnetMask,true))
+    if (!validateIp(ui.subnetMask,true, false))
     	return;
     std::stringstream newLineBuff;
     if (ui.deviceCombo->currentIndex() >= 2)

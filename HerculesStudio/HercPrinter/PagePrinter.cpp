@@ -143,7 +143,17 @@ bool PdfPrinter::print(QByteArray line)
         QString newFileName = mDir + "/" + decodedFileName;
         QFileInfo fileInfo(newFileName);
         QDir dir = fileInfo.absoluteDir();
-        if (!dir.exists()) dir.mkpath(dir.absolutePath());
+        if (!dir.exists())
+        {
+            if (!dir.mkpath(dir.absolutePath()))
+            {
+                mDir = "/tmp/";
+                newFileName = mDir + decodedFileName;
+                fileInfo.setFile(newFileName);
+                dir = fileInfo.absoluteDir();
+                dir.mkpath(dir.absolutePath());
+            }
+        }
         mPen = NULL;
         mPdf = new QPdfWriter(newFileName); //TODO handle invalid filename (pdf is still created, but is not working)
         mVariables.clear();

@@ -9,7 +9,7 @@ QDialog(parent)
 {
 }
 
-bool IpValidator::validateIp(QLineEdit * ipLineEdit, bool allowNull)
+bool IpValidator::validateIp(QLineEdit * ipLineEdit, bool allowNull, bool quite)
 {
     const std::string ip = ipLineEdit->text().toStdString();
     bool ret = true;
@@ -44,10 +44,13 @@ bool IpValidator::validateIp(QLineEdit * ipLineEdit, bool allowNull)
     }
     if (!ret)
     {
-        QString msg = ip.c_str();
-        msg += " is an illegel IP address";
-        QMessageBox::warning(this, "Illegal IP address", msg , QMessageBox::Ok);
-        ipLineEdit->setFocus();
+        if (!quite)
+        {
+            QString msg = ip.c_str();
+            msg += " is an illegel IP address";
+            QMessageBox::warning(this, "Illegal IP address", msg , QMessageBox::Ok);
+            ipLineEdit->setFocus();
+        }
         return false;
     }
     return true;

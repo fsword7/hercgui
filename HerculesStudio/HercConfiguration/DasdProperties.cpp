@@ -78,7 +78,7 @@ void DasdProperties::ok()
     }
     else
     {
-        if (!validateIp(ui.remotehost, false))
+        if (!validateIp(ui.remotehost, false, false))
     		return;
         newLineBuff << " " << ui.remotehost->text().toStdString() << ":" << ui.portSpinBox->value() << ":" << ui.devnoSpinBox->value();
     }

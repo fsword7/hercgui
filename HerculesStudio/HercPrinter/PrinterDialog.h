@@ -57,10 +57,11 @@ public:
 
 private:
     void populate(QString printerName);
-    bool save();
+    bool save(bool quiet);
     void closeEvent(QCloseEvent * event);
     void systrayHint();
     void setProtected(bool protect);
+    bool testDirectory(QString dirName);
 
     Ui::PrinterDialog      *ui;
     QSystemTrayIcon        * mSystemTrayIcon;

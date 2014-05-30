@@ -81,7 +81,7 @@ void CtcProperties::ok()
         }
         if ( !ui.guestIP->text().isEmpty() && (ui.guestIP->text() != "..." ) )
         {
-            if (validateIp(ui.guestIP, false))
+            if (validateIp(ui.guestIP, false, false))
             {
                 newLineBuff << " " << ui.guestIP->text().toStdString() ;
             }
@@ -91,7 +91,7 @@ void CtcProperties::ok()
     }
     else  if (ui.typeCombo->currentIndex() == 2)  // ctct
     {
-        if (!validateIp(ui.hostIP,false))
+        if (!validateIp(ui.hostIP,false, false))
     	   return;
         newLineBuff << " " << ui.lportSpinbox->text().toStdString() ;
         newLineBuff << " " << ui.hostIP->text().toStdString();
@@ -106,9 +106,9 @@ void CtcProperties::ok()
         }
         else
         {
-            if (!validateIp(ui.guestIP,false))
+            if (!validateIp(ui.guestIP,false, false))
                 return;
-            if (!validateIp(ui.hostIP,false))
+            if (!validateIp(ui.hostIP,false, false))
                 return;
             if (!ui.tun->text().isEmpty())
             {
@@ -125,7 +125,7 @@ void CtcProperties::ok()
             }
             if (!(ui.mask->text() == "..."))
             {
-                if (validateIp(ui.mask, false))
+                if (validateIp(ui.mask, false, false))
                 {
                     newLineBuff << " -s " <<  ui.mask->text().toStdString() ;
                 }
@@ -134,7 +134,7 @@ void CtcProperties::ok()
             }
             if (!(ui.guestIP->text() == "..."))
             {
-                if (validateIp(ui.guestIP, false))
+                if (validateIp(ui.guestIP, false, false))
                 {
                     newLineBuff << " " <<  ui.guestIP->text().toStdString() ;
                 }
@@ -143,7 +143,7 @@ void CtcProperties::ok()
             }
             if (!(ui.hostIP->text() == "..."))
             {
-                if (validateIp(ui.hostIP, false))
+                if (validateIp(ui.hostIP, false, false))
                 {
                     newLineBuff << " " <<  ui.hostIP->text().toStdString() ;
                 }
@@ -156,7 +156,7 @@ void CtcProperties::ok()
     {
     	if (!(ui.hostIP->text() == "..."))
     	{
-            if (validateIp(ui.hostIP, false))
+            if (validateIp(ui.hostIP, false, false))
     		{
     			newLineBuff << " " <<  ui.hostIP->text().toStdString() ;
     		}
