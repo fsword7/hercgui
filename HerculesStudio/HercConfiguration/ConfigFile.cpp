@@ -56,7 +56,7 @@ void ConfigFile::initialize()
 	mFile = fopen(mFileName.c_str(), "r");
 	if (mFile==NULL)
 	{
-		outDebug(4, std::cout << "file not found:" << mFileName << std::endl);
+        hOutDebug(4, "file not found:" << mFileName << std::endl);
 		openTemplate();
 	}
 	buildConfig(ConfigFile::File);
@@ -104,7 +104,7 @@ void ConfigFile::buildConfig(BuildType type)
 		if ((s.length() == 0) || (nb != std::string::npos &&
 								  (s.substr(nb,1).find_first_not_of("0123456789") != std::string::npos)) ) // not device
 		{
-			outDebug(4, std::cout << mFileArray.size() << " " << buff << std::endl);
+            hOutDebug(4, mFileArray.size() << " " << buff << std::endl);
 			SystemConfigLine l(s.c_str());
 			mFileArray.push_back(l);
 
@@ -137,8 +137,8 @@ void ConfigFile::buildConfig(BuildType type)
 			}
 		}
 	}
-	outDebug(3, std::cout << "### last sys=" << mLastSys << " size=" << mFileArray.size() << std::endl);
-	outDebug(3, std::cout << mFileArray[mLastSys].getLine() << std::endl)
+    hOutDebug(3, "### last sys=" << mLastSys << " size=" << mFileArray.size() << std::endl);
+    hOutDebug(3, mFileArray[mLastSys].getLine() << std::endl)
 
 }
 
@@ -157,7 +157,7 @@ void ConfigFile::addNonDev(SystemConfigLine * configLine)
 
 void ConfigFile::addDev(DeviceConfigLine * configLine)
 {
-	outDebug(2, std::cout << "add dev after " << mFileArray.size() << " line:'" << configLine->getLine() << std::endl);
+    hOutDebug(2, "add dev after " << mFileArray.size() << " line:'" << configLine->getLine() << std::endl);
 	configLine->parseLine();
 	mFileArray.push_back(*configLine);
 	mChanged = true;
@@ -172,12 +172,12 @@ DeviceConfigLine * ConfigFile::getDevice(int index) const
 {
 	if (index <= mLastSys)
 	{
-		std::cout << "ConfigFile[" << index << "] requested where lastsys=" << mLastSys << std::endl;
+        hOutDebug(0, "ConfigFile[" << index << "] requested where lastsys=" << mLastSys);
 		abort();
 	}
 	if (static_cast<unsigned int>(index) >= mFileArray.size())
 	{
-		std::cout << "ConfigFile[" << index << "] requested where size=" << mFileArray.size() << std::endl;
+        hOutDebug(0,"ConfigFile[" << index << "] requested where size=" << mFileArray.size());
 		abort();
 	}
 	return static_cast<DeviceConfigLine *> (const_cast<ConfigLine *>(&mFileArray.at(index)));
@@ -221,7 +221,7 @@ SystemConfigLine * ConfigFile::operator[] (int index) const
 {
 	if (index > mLastSys)
 	{
-		outDebug(5, std::cout << "ConfigFile[" << index << "] requested where lastsys=" << mLastSys << std::endl);
+        hOutDebug(5, "ConfigFile[" << index << "] requested where lastsys=" << mLastSys << std::endl);
 		abort();
 	}
 	return static_cast<SystemConfigLine *> (const_cast<ConfigLine *>(&mFileArray.at(index)));
@@ -278,13 +278,13 @@ bool ConfigFile::changed()
 
 const ConfigLine * ConfigFile::locateLine(const std::string& keyword, bool create, bool synonyms)
 {
-	outDebug(3, std::cout << "localLine seraching for '" << keyword << "'" << std::endl);
+    hOutDebug(3,"localLine seraching for '" << keyword << "'" << std::endl);
 	for (int i=0; i<=getLastSys(); i++)
 	{
-		outDebug(5, std::cout << "examining  " << (*this)[i]->getLine() << "=='" << (*this)[i]->getToken(0) << "'" <<std::endl);
+        hOutDebug(5, "examining  " << (*this)[i]->getLine() << "=='" << (*this)[i]->getToken(0) << "'" <<std::endl);
 		if ( !(*this)[i]->isRemark()  && ((*this)[i]->getUppercaseToken(0) == keyword))
 		{
-			outDebug(5, std::cout << "token(0):'" << (*this)[i]->getLine() << "'" <<  std::endl);
+            hOutDebug(5,"token(0):'" << (*this)[i]->getLine() << "'" <<  std::endl);
 			return (*this)[i];
 		}
 	}
@@ -293,17 +293,17 @@ const ConfigLine * ConfigFile::locateLine(const std::string& keyword, bool creat
 	for (unsigned int i=0; i<mNewLines.size(); i++)
 	{
 		ConfigLine * cl = &mNewLines[i];
-		outDebug(4, std::cout << "new line test:" << cl->getLine() << std::endl);
+        hOutDebug(4,"new line test:" << cl->getLine() << std::endl);
 		if (cl->getToken(0) == keyword)
 		{
-			outDebug(4, std::cout << "found" << std::endl);
+            hOutDebug(4,"found" << std::endl);
 			return cl;
 		}
 	}
 
 	if (synonyms)
 	{
-		outDebug(4, std::cout << "locating in synonyms " <<  keyword << " in synonyms " << std::endl);
+        hOutDebug(4, "locating in synonyms " <<  keyword << " in synonyms " << std::endl);
 		for (int i=0; mSynonyms[i].keyword1.length() > 0; i++)
 		{
 			if (mSynonyms[i].keyword1.compare(keyword) == 0)
@@ -311,7 +311,7 @@ const ConfigLine * ConfigFile::locateLine(const std::string& keyword, bool creat
 				const ConfigLine * tmp = locateLine(mSynonyms[i].keyword2, false, false);
 				if (tmp != NULL)
 				{
-					outDebug(4, std::cout << "found in synonyms" << std::endl);
+                    hOutDebug(4, "found in synonyms" << std::endl);
 					return tmp;
 				}
 			}
@@ -324,7 +324,7 @@ const ConfigLine * ConfigFile::locateLine(const std::string& keyword, bool creat
 		std::string line(keyword + "\n");
 		ret = new SystemConfigLine(line.c_str());
 		ret->setNew(true);
-		outDebug(3, std::cout << "new line 1:" << ret->getToken(0) << " 2:" << ret->getToken(1) << std::endl);
+        hOutDebug(3, "new line 1:" << ret->getToken(0) << " 2:" << ret->getToken(1) << std::endl);
 		mNewLines.push_back(*ret);
 	}
 	return ret;
@@ -333,18 +333,18 @@ const ConfigLine * ConfigFile::locateLine(const std::string& keyword, bool creat
 
 void ConfigFile::appendNewLines()
 {
-	outDebug(4, std::cout << "append new lines:" << mNewLines.size() << std::endl);
+    hOutDebug(4, "append new lines:" << mNewLines.size() << std::endl);
 	// append new system lines
 	for (unsigned int i=0; i<mNewLines.size(); i++)
 	{
-		outDebug(3, std::cout << mNewLines[i].getLine() << std::endl);
+        hOutDebug(3, mNewLines[i].getLine() << std::endl);
 		SystemConfigLine * cl = &mNewLines[i];
 		addNonDev(cl);
 	}
 	// append new device lines
 	for (unsigned int i=0; i<mNewDeviceLines.size(); i++)
 	{
-		outDebug(3, std::cout << mNewDeviceLines[i].getLine() << std::endl);
+        hOutDebug(3, mNewDeviceLines[i].getLine() << std::endl);
 		DeviceConfigLine * cl = &mNewDeviceLines[i];
 		addDev(cl);
 	}

@@ -56,7 +56,7 @@ void UtilityRunner::updateStatus(const std::string& line)
 {
     Tokenizer::handle pos, lastPos;
     std::string word = StringTokenizer::getFirstWord(line, pos, lastPos, " \t\n");
-    outDebug(1, std::cout << "util runner line:" << line << std::endl);
+    hOutDebug(1,"util runner line:" << line);
     if (line.length() == 0)
         return;
 
@@ -133,7 +133,7 @@ void UtilityRunner::updateStatus(const std::string& line)
     {
         int currMem = ConfigurationEditor::parseNum(line.substr(5),10);
         emit valueChanged(currMem);
-        outDebug(2, std::cout << "Value changed " << currMem << std::endl);
+        hOutDebug(2,"Value changed " << currMem);
         return;
     }
 	if (line.compare(0,7,"OUTCYL=") == 0)
@@ -150,7 +150,7 @@ void UtilityRunner::updateStatus(const std::string& line)
 	if (line.length() > 5 && line.compare(2,4,"CYL=") == 0)
     {
         int currCyl = ConfigurationEditor::parseNum(line.substr(4),10);
-        outDebug(5, std::cout << "emitting value changed to " << currCyl << std::endl);
+        hOutDebug(5, "emitting value changed to " << currCyl);
         emit valueChanged(currCyl);
         return;
     }

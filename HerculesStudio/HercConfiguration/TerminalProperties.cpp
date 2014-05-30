@@ -69,7 +69,7 @@ void TerminalProperties::ok()
         ip = "";
     else
     {
-    	if (!ipValidator(ui.IPAddress,false))
+        if (!validateIp(ui.IPAddress,false))
     	    	return;
         ip = ui.IPAddress->text().toStdString();
     }
@@ -89,8 +89,8 @@ void TerminalProperties::ok()
     	newLineBuff << " "  << ui.groupName->text().toStdString();
     }
     newLineBuff << " " << ip + "\n";
-    outDebug(3, std::cout << "terminal: new line:" << newLineBuff.str()
-            << " " << &mLine << std::endl);
+    hOutDebug(3,"terminal: new line:" << newLineBuff.str()
+            << " " << &mLine);
     mLine.replaceLine(newLineBuff.str());
     emit updateLine(true);
     this->deleteLater();

@@ -90,8 +90,8 @@ int ConfigLine::getAbsoluteTokenEnd(int i) const
 
 void ConfigLine::replaceLine(const std::string& newLine)
 {
-	outDebug(5, std::cout  << "configLine: new Line '" << newLine << "'" << std::endl);
-	outDebug(5, std::cout  << "configLine: old Line  '" << mLine <<     "'" << std::endl);
+    hOutDebug(5,"configLine: new Line '" << newLine << "'" << std::endl);
+    hOutDebug(5,"configLine: old Line  '" << mLine <<     "'" << std::endl);
 	mLine = newLine;
 	mUpdated = true;
 	parseLine();
@@ -100,8 +100,8 @@ void ConfigLine::replaceLine(const std::string& newLine)
 void ConfigLine::replaceParameters(const std::string& newParm)
 {
 	std::string newString = "  " + getToken(0) + "    " + newParm + "                   #edited By Hercules Studio\n";
-	outDebug(5, std::cout  << "configLine: line is now '" << newString << "'" << std::endl);
-	outDebug(5, std::cout  << "configLine: old string  '" << mLine <<     "'" << std::endl);
+    hOutDebug(5,"configLine: line is now '" << newString << "'" << std::endl);
+    hOutDebug(5,"configLine: old string  '" << mLine <<     "'" << std::endl);
 	mLine = newString;
 	mUpdated = true;
 	mNew = false;

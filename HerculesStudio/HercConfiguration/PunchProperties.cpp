@@ -88,7 +88,7 @@ void PunchProperties::ok()
             << (fileGiven && ui.crlfCheckBox->isChecked() ? " crlf" : " ")
             << (fileGiven && ui.noclearCheckBox->isChecked() ? " noclear" : " ")
             << "\n";
-    outDebug(5, std::cout << "new line:" << newLineBuff.str() << std::endl);
+    hOutDebug(5, "new line:" << newLineBuff.str());
     mLine.replaceLine(newLineBuff.str());
     emit updateLine(true);
     this->deleteLater();

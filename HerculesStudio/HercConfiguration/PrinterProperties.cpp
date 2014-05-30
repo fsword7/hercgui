@@ -86,7 +86,7 @@ void PrinterProperties::ok()
             << ui.filename->text().toStdString() << " "
             << (crlf ? "crlf" : " ")
             << "\n";
-    outDebug(5, std::cout << "new line:" << newLineBuff.str() << std::endl);
+    hOutDebug(5,"new line:" << newLineBuff.str());
     mLine.replaceLine(newLineBuff.str());
     emit updateLine(true);
     this->deleteLater();

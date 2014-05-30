@@ -100,7 +100,7 @@ void Dasdls::browseSfClicked()
 void Dasdls::runnerMaximumChanged(int maximum)
 {
 	mMaximum = maximum;
-    outDebug(2, std::cout << "dasdls maximum is " << maximum << std::endl);
+    hOutDebug(2,"dasdls maximum is " << maximum);
 }
 
 void Dasdls::runnerValueChanged(int value)

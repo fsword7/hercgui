@@ -73,10 +73,17 @@
         <file>icons/modern/Play-icon.png</file>
         <file>icons/modern/Stop-icon.png</file>
         <file>icons/modern/Synchronize-icon.png</file>
-        <file>icons/darkorange.stylesheet</file>
+        <file>icons/darkorange.css</file>
         <file>icons/do_checkbox.png</file>
         <file>icons/do_handle.png</file>
         <file>icons/do_down_arrow.png</file>
         <file>icons/do_up_arrow.png</file>
+        <file>icons/landscape.png</file>
+        <file>icons/portrait.png</file>
+        <file>icons/Hole.png</file>
+        <file>icons/printer.png</file>
+        <file>icons/connecting.gif</file>
+        <file>icons/connected.png</file>
+        <file>icons/printerw.png</file>
     </qresource>
 </RCC>

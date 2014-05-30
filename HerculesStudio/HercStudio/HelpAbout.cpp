@@ -41,7 +41,7 @@ HelpAbout::HelpAbout(QWidget *parent)
 		QString rev(HERCSTUDIO_REVISION);
 		ui.versionLabel->setText(HERCSTUDIO_VERSION " (build " + (rev.mid(11,4).replace(" ","") + ")"));
 	}
-	ui.stampLabel->setText("Built on: "__DATE__ " " __TIME__);
+    ui.stampLabel->setText("Built on: " __DATE__ " " __TIME__);
 
 	static QString icon1 = Environment::getIconsPath().c_str();
 	icon1 += "/opensource.png";

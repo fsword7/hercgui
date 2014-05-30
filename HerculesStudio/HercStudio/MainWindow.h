@@ -51,6 +51,7 @@
 class LogRunner;
 class HerculesExecutor;
 class PlainLogWidget;
+class PrinterDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -98,6 +99,7 @@ private:
     LogRunner *         mLogRunner;
     StatusRunner        * mStatusRunner;
     Watchdog            * mWatchdog;
+    PrinterDialog       * mPrinterDialog;
     bool                mHerculesActive;
     bool				mMinimizeOnClose;
     bool                mRecovery;
@@ -166,6 +168,11 @@ public slots:
 	void hetget();
 	void hetupd();
 	void hetmap();
+    void printer();
+    void printerFinished();
+    void stationery();
+    void decolation();
+    void helpAbout();
 
     void writeToLogFromQueue();
 	void writeToLog(QByteArray line);
@@ -177,7 +184,6 @@ public slots:
     void deleteMessages();
     void saveMessages();
     void preferences();
-    void helpAbout();
     void closeEvent(QCloseEvent * event);
     void tryAbort();
     void systrayClick(QSystemTrayIcon::ActivationReason);

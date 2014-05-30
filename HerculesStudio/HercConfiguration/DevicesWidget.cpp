@@ -102,7 +102,7 @@ DeviceTypes::Type DevicesWidget::getType(int lineNumber)
 
 void DevicesWidget::menuDelete()
 {
-	outDebug(5, std::cout << "delete " << mLastClick << std::endl);
+    hOutDebug(5, "delete " << mLastClick);
 	mConfigFile->deleteLine(mDialogToFile[mLastClick]);
 	initialize();
 }
@@ -125,7 +125,7 @@ void DevicesWidget::menuProperties()
 	}
 	catch (...)
 	{
-		outDebug(2, std::cout << "exception caught in class factory (properties) " << std::endl);
+        hOutDebug(2, "exception caught in class factory (properties) ");
 	}
 
 	if (mProp != NULL)
@@ -137,7 +137,7 @@ void DevicesWidget::menuProperties()
 
 void DevicesWidget::doAddDevice(bool keep)
 {
-	outDebug(5, std::cout << "Update Line " << std::endl);
+    hOutDebug(5,"Update Line ");
 
 	std::stringstream newLine;
 	newLine << ConfigurationEditor::normalizeNum(mCandidateLine->getToken(0),4,16);
@@ -168,12 +168,12 @@ void DevicesWidget::initialize()
 	QStandardItem *parentItem = model->invisibleRootItem();
 	mDialogToFile.clear();
 
-	outDebug(5, std::cout << "DeviceDlg::initilize from " <<lastSys+1 << " to " << mConfigFile->size() << std::endl);
+    hOutDebug(5, "DeviceDlg::initilize from " <<lastSys+1 << " to " << mConfigFile->size());
 	int lineNum=-1;
 	for (int i=lastSys+1; i<mConfigFile->size(); i++)
 	{
 		const DeviceConfigLine * line = mConfigFile->getDevice(i);
-		outDebug(5,std::cout <<"line=" << line->getLine() << line->isRemark() << std::endl);
+        hOutDebug(5,"line=" << line->getLine() << line->isRemark());
 		if (line->isRemark()) continue;
 
 		std::string strLine = line->getToken(0);

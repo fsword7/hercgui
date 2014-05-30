@@ -125,11 +125,11 @@ void CardReaderProperties::itemPressed(const QModelIndex & index)
 {
     mDragCandidate = index.row();
     mDragCount = mModel->rowCount();
-    outDebug(5, std::cout << "index pressed:" << mDragCandidate << std::endl);
+    hOutDebug(5, "index pressed:" << mDragCandidate << std::endl);
 }
 void CardReaderProperties::shouldBeDeleted()
 {
-    outDebug(5, std::cout << "should be deleted:" << mDragCandidate << std::endl);
+    hOutDebug(5, "should be deleted:" << mDragCandidate << std::endl);
     if (mModel->rowCount() > mDragCount)
         mModel->removeRow(mDragCandidate);
     mDragCandidate=-1;
@@ -143,12 +143,12 @@ void CardReaderProperties::addPressed()
     mNewReaderFile->move(this->geometry().x(),this->geometry().y());
     connect(mNewReaderFile, SIGNAL(okPressed(QString &)), this, SLOT(addFile(QString&)));
     connect(mNewReaderFile, SIGNAL(destroyed(QObject *)), this, SLOT(newFileFinished(QObject *)));
-    outDebug(5, std::cout << "add pressed:" << mDragCandidate << std::endl);
+    hOutDebug(5, "add pressed:" << mDragCandidate << std::endl);
 }
 
 void CardReaderProperties::deletePressed()
 {
-    outDebug(5, std::cout << "delete pressed:" <<  std::endl);
+    hOutDebug(5, "delete pressed:" <<  std::endl);
     if (ui.fileNamesListView->currentIndex().row() >= 0)
     {
         mModel->removeRow(ui.fileNamesListView->currentIndex().row());
@@ -158,7 +158,7 @@ void CardReaderProperties::deletePressed()
 
 void CardReaderProperties::addFile(QString & file)
 {
-    outDebug(5, std::cout << "pickupFile:" << file.toStdString() << std::endl);
+    hOutDebug(5,"pickupFile:" << file.toStdString() << std::endl);
     QStandardItem *parentItem = mModel->invisibleRootItem();
     parentItem->appendRow(new QStandardItem(file));
     ui.sockdevCheckBox->setEnabled (mModel->rowCount() == 0);

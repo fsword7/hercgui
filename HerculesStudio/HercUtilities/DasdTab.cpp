@@ -50,21 +50,21 @@ DasdTab& DasdTab::getInstance()
 
 int DasdTab::getCkdSize(const std::string& dev)
 {
-    outDebug(3, std::cout << "DasdTab dev=" << dev << " size=" << ckdTab.size() << std::endl);
+    hOutDebug(3,"DasdTab dev=" << dev << " size=" << ckdTab.size());
     SizeMap::iterator it = ckdTab.find(dev);
     if (it == ckdTab.end())
         return 0;
-    outDebug(3, std::cout << it->second << " " << it->first << std::endl);
+    hOutDebug(3, it->second << " " << it->first);
     return it->second;
 }
 
 int DasdTab::getFbaSize(const std::string& dev)
 {
-    outDebug(3, std::cout << "DasdTab dev=" << dev << " size=" << fbaTab.size() << std::endl);
+    hOutDebug(3, "DasdTab dev=" << dev << " size=" << fbaTab.size());
     SizeMap::iterator it = fbaTab.find(dev);
     if (it == fbaTab.end())
         return 0;
-    outDebug(3, std::cout << it->second << " " << it->first << std::endl);
+    hOutDebug(3, it->second << " " << it->first);
     return it->second;
 }
 

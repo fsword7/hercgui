@@ -159,7 +159,7 @@ void Dasdconv::runnerMaximumChanged(int maximum)
 
 void Dasdconv::runnerValueChanged(int value)
 {
-    outDebug(5, std::cout << "dasdconv got value changed " << value << std::endl);
+    hOutDebug(5, "dasdconv got value changed " << value);
     if (value > 0)
         ui.progressBar->setValue(value);
     else
