@@ -78,7 +78,7 @@
       <string>Paper Size</string>
      </property>
     </widget>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="orientationGroupBox">
      <property name="geometry">
       <rect>
        <x>50</x>

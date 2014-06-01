@@ -181,6 +181,7 @@ void StationeryDialog::paperSizeChanged(QString value)
         ui->customSizeW->setText("");
         ui->customSizeH->setEnabled(true);
         ui->customSizeW->setEnabled(true);
+        ui->orientationGroupBox->setEnabled(false);
 
         FieldTip *balloon = new FieldTip(ui->paperTab);
         balloon->setOwner(ui->customSizeH);
@@ -201,6 +202,7 @@ void StationeryDialog::paperSizeChanged(QString value)
         }
         ui->customSizeH->setEnabled(false);
         ui->customSizeW->setEnabled(false);
+        ui->orientationGroupBox->setEnabled(true);
     }
 
 }
@@ -368,6 +370,11 @@ void StationeryDialog::populate()
     paperSizeChanged(ui->stationeryNameComboBox->currentText());
     bool disabled = builtinStationery(ui->stationeryNameComboBox->currentText());
     setProtected(disabled);
+    hOutDebug(0,ui->paperSizeComboBox->currentText().toUtf8().data());
+    if (ui->paperSizeComboBox->currentText().compare("Custom") == 0)
+    {
+        ui->orientationGroupBox->setEnabled(false);
+    }
 }
 
 void StationeryDialog::setProtected(bool disabled)
@@ -376,7 +383,7 @@ void StationeryDialog::setProtected(bool disabled)
     ui->customSizeW->setEnabled(!disabled);
     ui->customSizeH->setEnabled(!disabled);
     mTopMarginSpinBox->setEnabled(!disabled);
-    ui->groupBox->setEnabled(!disabled);
+    ui->orientationGroupBox->setEnabled(!disabled);
     ui->groupBox_2->setEnabled(!disabled);
     ui->feedHolesCheckBox->setEnabled(!disabled);
     ui->decorationCheckBox->setEnabled(!disabled);
