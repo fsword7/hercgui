@@ -177,8 +177,6 @@ void StationeryDialog::paperSizeChanged(QString value)
 {
     if (value.compare("Custom") == 0)
     {
-        ui->customSizeH->setText("");
-        ui->customSizeW->setText("");
         ui->customSizeH->setEnabled(true);
         ui->customSizeW->setEnabled(true);
         ui->orientationGroupBox->setEnabled(false);
@@ -356,6 +354,7 @@ void StationeryDialog::populate()
     mTopMarginSpinBox->setValue(st->mTopMargin);
     ui->mmRadioButton->setChecked(st->mMillimeters);
     ui->portraitRadioButton->setChecked(st->mPortrait);
+    ui->landscapeRadioButton->setChecked(!st->mPortrait);
     ui->barsColorComboBox->setCurrentText(st->mBarsColor);
     ui->customColor->setText(st->mBarsRGB);
     ui->decorationCheckBox->setChecked(st->mDecorated);
@@ -367,7 +366,7 @@ void StationeryDialog::populate()
         ui->customSizeW->setEnabled(true);
     }
     barsColorChanged(ui->barsColorComboBox->currentText());
-    paperSizeChanged(ui->stationeryNameComboBox->currentText());
+    paperSizeChanged(st->mPaperSize);
     bool disabled = builtinStationery(ui->stationeryNameComboBox->currentText());
     setProtected(disabled);
     hOutDebug(0,ui->paperSizeComboBox->currentText().toUtf8().data());

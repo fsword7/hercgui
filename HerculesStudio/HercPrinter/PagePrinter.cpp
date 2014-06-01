@@ -73,6 +73,12 @@ void PdfPrinter::setValues(bool eject)
     mBottomMargin = 0.375L * mPdf->logicalDpiY();
     mPaperHeight = mStationery->mSize1.toFloat();
     mPaperWidth = mStationery->mSize2.toFloat();
+    if (mStationery->mPaperSize.compare("Custom")==0 && !mStationery->mPortrait)
+    {
+        mPaperHeight = mStationery->mSize2.toFloat();
+        mPaperWidth = mStationery->mSize1.toFloat();
+    }
+
     mLinesPerPage = mPaperHeight * mLinesPerInch;
 
     if (eject) mPdf->newPage();
@@ -88,7 +94,6 @@ void PdfPrinter::setValues(bool eject)
 
 bool PdfPrinter::print(QByteArray line)
 {
-
     // if reached maximum number of lines or eject found - advance to next page
     if ((mCurLine >= mLinesPerPage) || (line[0] == '\f') || mCurPage == 0)
     {
