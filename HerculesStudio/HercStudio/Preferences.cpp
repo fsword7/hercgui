@@ -170,6 +170,8 @@ PrefBool(animate, Animate)
 PrefBool(darkBackground, DarkBackground)
 Pref(iplDevice,IplDevice)
 Pref(lastPrinterName, LastPrinterName)
+PrefBool(balloonDecolation, BalloonDecolation)
+PrefBool(balloonStationery, BalloonStationery)
 
 PrefSet(setHercDir,HerculesDir)
 PrefSet(setConfigDir,ConfigurationDir)
@@ -185,6 +187,8 @@ PrefSetBool(setAnimate, Animate)
 PrefSetBool(setDarkBackground, DarkBackground)
 PrefSet(setIplDevice, IplDevice)
 PrefSet(setLastPrinterName, LastPrinterName)
+PrefSetBool(setBalloonDecolation, BalloonDecolation)
+PrefSetBool(setBalloonStationery, BalloonStationery)
 
 std::string Preferences::configDir() const
 {

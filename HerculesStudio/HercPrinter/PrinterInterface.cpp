@@ -15,6 +15,10 @@ GenericPagePrinter::GenericPagePrinter(StationeryPtr &stationery, float scaling)
     mStationery(stationery),  mPen(NULL), mLogo(QPixmap(2200,1200)), mLogoWidth(0), mScaling(scaling)
 {
     mDecolation.clear();
+    mHeightInPixels = 4000;
+    mWidthInPixels = 1200;
+    mLeftMargin = 0;
+    mLogicalDpiX = mLogicalDpiY = 1200;
 }
 
 void GenericPagePrinter::preparePage(bool eject)
@@ -76,11 +80,21 @@ void GenericPagePrinter::preparePage(bool eject)
         QPixmap pixmap(pixmapStr);
         int dpiWidth= pixmap.width() * mLogicalDpiX / pixmap.logicalDpiX();
         hOutDebug(5, "hole width " << pixmap.width() << " " << pixmap.logicalDpiX() << " "  << pixmap.physicalDpiX() << " " << dpiWidth);
+        float gap = mLogicalDpiY/2;
+        float holeStart = mLogicalDpiY/4 - builtinMargin;
+        if (mScaling < 1)
+        {
+            gap = 40;
+            holeStart = 20;
+        }
 
-        for (int holePos=mLogicalDpiY/4 - builtinMargin; holePos <= mHeightInPixels; holePos += mLogicalDpiY/2) // image is 200 pixels
+        for (int holePos=holeStart; holePos <= mHeightInPixels; holePos += gap) // image is 200 pixels
         {
             //TODO: automatic scaling?
-            if (mScaling < 1.0) mPen->drawPixmap(50*mScaling, holePos, 15, 15, pixmap, 0,0,200,200);
+            if (mScaling < 1.0)
+            {
+                mPen->drawPixmap(50*mScaling, holePos, 15, 15, pixmap, 0,0,200,200);
+            }
             else
             {
                 mPen->drawPixmap(160, holePos, pixmap);

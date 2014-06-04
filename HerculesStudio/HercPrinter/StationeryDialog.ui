@@ -358,7 +358,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Stationary</string>
+    <string>Name</string>
    </property>
   </widget>
   <widget class="QPushButton" name="deleteButton">

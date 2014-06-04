@@ -39,11 +39,12 @@ DecolationDialog::DecolationDialog(QWidget *parent, const QString & item) :
         ui->decolationNameComboBox->setCurrentIndex(0);
     }
     populate();
-    if (builtinDecolation(ui->decolationNameComboBox->currentText()))
+    if (!Preferences::getInstance().balloonDecolation()  && builtinDecolation(ui->decolationNameComboBox->currentText()))
     {
+        Preferences::getInstance().setBalloonDecolation(true);
         FieldTip *baloon = new FieldTip(this, true);
         baloon->setOwner(ui->decolationNameComboBox);
-        baloon->showMessage("Change this name to define you own decolation", 10000);
+        baloon->showMessage("Change this name to define you own decolation", 7000);
     }
 }
 

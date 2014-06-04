@@ -136,7 +136,7 @@ StationeryDialog::StationeryDialog(QWidget *parent, const QString &item) :
 
     mPaperPreview = new PaperPreview(this, ui->styleTab);
     mPaperPreview->setGeometry(20,190,450,230);
-    mPaperPreview->repaint();
+    repaint();
 
     if (item.length() > 0)
     {
@@ -160,8 +160,9 @@ StationeryDialog::StationeryDialog(QWidget *parent, const QString &item) :
     connect(ui->feedHolesCheckBox, SIGNAL(stateChanged(int)), this, SLOT(feedHolesToggeled()));
     connect(ui->customColor, SIGNAL(textChanged(QString)), this, SLOT(customColorChanged()));
 
-    if (builtinStationery(ui->stationeryNameComboBox->currentText()))
+    if (Preferences::getInstance().balloonStationery() && builtinStationery(ui->stationeryNameComboBox->currentText()))
     {
+        Preferences::getInstance().setBalloonStationery(true);
         FieldTip *baloon = new FieldTip(this, true);
         baloon->setOwner(ui->stationeryNameComboBox);
         baloon->showMessage("Change this name to define you own stationery", 10000);
@@ -202,7 +203,7 @@ void StationeryDialog::paperSizeChanged(QString value)
         ui->customSizeW->setEnabled(false);
         ui->orientationGroupBox->setEnabled(true);
     }
-
+    repaint();
 }
 
 void StationeryDialog::barsColorChanged(QString value)
@@ -231,6 +232,7 @@ void StationeryDialog::barsColorChanged(QString value)
         if (mPaperPreview != NULL) mPaperPreview->repaint();
     }
     ui->decorationCheckBox->setDisabled( (value.compare("None") == 0) );
+    repaint();
 }
 
 void StationeryDialog::inchesMm(bool)
@@ -284,6 +286,7 @@ void StationeryDialog::stationeryNameChanged(QString)
     save(mCurrentName);
     mCurrentName = ui->stationeryNameComboBox->currentText();
     populate();
+    repaint();
 }
 
 void StationeryDialog::stationeryNameEdited(QString name)
@@ -392,12 +395,12 @@ void StationeryDialog::setProtected(bool disabled)
 
 void StationeryDialog::feedHolesToggeled()
 {
-    mPaperPreview->repaint();
+    repaint();
 }
 
 void StationeryDialog::decorationToggeled()
 {
-    mPaperPreview->repaint();
+    repaint();
 }
 
 void StationeryDialog::customColorChanged()
@@ -405,7 +408,7 @@ void StationeryDialog::customColorChanged()
     if (ui->customColor->text().length() != 7)
         return;
     mPaperPreview->setBarsRgb(ConfigurationEditor::parseNum(ui->customColor->text().right(6).toStdString(), 16));
-    mPaperPreview->repaint();
+    repaint();
 }
 
 //

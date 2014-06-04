@@ -387,7 +387,9 @@ public:
 		Animate=17,
         DarkBackground=18,
         IplDevice=19,
-        LastPrinterName=20
+        LastPrinterName=20,
+        BalloonDecolation=21,
+        BalloonStationery=22
 	};
 
 	enum FontObject
@@ -525,6 +527,13 @@ public:
     QStringList decolationList();
     void deleteDecolation(const QString& item);
     void setDecolation(DecolationRules& decolation);
+
+    void setBalloonDecolation(bool popped);
+    bool balloonDecolation() const;
+
+    void setBalloonStationery(bool popped);
+    bool balloonStationery() const;
+
 
 protected:
 	Preferences();
