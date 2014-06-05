@@ -185,7 +185,11 @@ bool PdfPrinter::doPrint(QByteArray &line)
         preparePage(mCurPage > 1);
 
         mPen->setPen(QPen(QColor(0x80, 0x80, 0x80), 1));
+#ifdef Q_OS_DARWIN
+        mPen->setFont(QFont("Courier",mFontSize));
+#else
         mPen->setFont(QFont("Mono",mFontSize));
+#endif
     }
     if (mPdf != NULL)
         mPen->drawText(mPdf->logicalDpiX()/2,mMargin+mCurLine*mPixelsPerLine, line);

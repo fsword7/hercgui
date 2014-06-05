@@ -3,6 +3,7 @@
 
 #include <QHostAddress>
 #include <QElapsedTimer>
+#include <QtGlobal>
 #include <algorithm>
 
 PrinterSocket::PrinterSocket() :
@@ -89,7 +90,11 @@ void PrintRunner::readFromSocket()
             {
                 hOutDebug(5,":" << line.data());
                 if (ff) mQueue.push_back("\f"); // generate eject
+#ifdef Q_OS_DARWIN
+                else mQueue.push_back((line));
+#else
                 else mQueue.push_back(std::move(line));
+#endif
                 emit newData();
                 while (mQueue.size() > mMaxQueueSize) // do not flood the queue
                     QThread::msleep(100);

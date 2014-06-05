@@ -61,7 +61,9 @@ const char * Preferences::sKeywords[] = {
 	"Animate",
     "DarkBackground",
     "IplDevice",
-    "LastPrinterName"};
+    "LastPrinterName",
+    "BallonDecolation",
+    "BaloonStationery"};
 
 const char * Preferences::sRegsViews[] = {
 		"ViewGR32",
