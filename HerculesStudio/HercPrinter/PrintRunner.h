@@ -38,7 +38,7 @@ class PrinterSocket : public QTcpSocket
 public:
     PrinterSocket();
     QByteArray readLine();
-    qint64 bytesAvailable();
+    qint64 bytesAvailable() const;
 private:
     QByteArray returnLine(const char *end);
     char *nextPos();

@@ -85,14 +85,6 @@ const char *paperWidthMm[] =
         "0",
 };
 
-const int stripeColors[][3] =
-{
-    {0xe7, 0xff, 0xdd}, // Green
-    {0xd2, 0xd2, 0xd2}, // Gray
-    {0xc0, 0xf0, 0xf0}, // Light Blue
-    {0x00, 0x00, 0x00}  // None
-};
-
 StationeryDialog::StationeryDialog(QWidget *parent, const QString &item) :
     QDialog(parent),
     ui(new Ui::PaperDialog)

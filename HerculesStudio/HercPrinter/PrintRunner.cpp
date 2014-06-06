@@ -57,7 +57,7 @@ QByteArray PrinterSocket::readLine()
     }
 }
 
-qint64 PrinterSocket::bytesAvailable()
+qint64 PrinterSocket::bytesAvailable() const
 {
     return QTcpSocket::bytesAvailable() + (mBuffPos - mBuff);
 }
