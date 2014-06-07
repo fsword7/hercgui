@@ -294,7 +294,7 @@ void StationeryDialog::cancelClicked() //TODO allow exit when there is no name
             QMessageBox::Ok, QMessageBox::NoButton);
         FieldTip *balloon = new FieldTip(this, true);
         balloon->setOwner(ui->stationeryNameComboBox);
-        balloon->showMessage("Give a name to this stationary",2000);
+        balloon->showMessage("Give a name to this stationery",2000);
         ui->stationeryNameComboBox->setFocus();
         return;
     }
