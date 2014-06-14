@@ -1300,7 +1300,7 @@ p, li { white-space: pre-wrap; }
       <property name="smallDecimalPoint">
        <bool>true</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>3</number>
       </property>
       <property name="value" stdset="0">
@@ -1743,7 +1743,7 @@ p, li { white-space: pre-wrap; }
       <property name="smallDecimalPoint">
        <bool>true</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>3</number>
       </property>
       <property name="value" stdset="0">
@@ -2191,7 +2191,7 @@ p, li { white-space: pre-wrap; }
       <property name="smallDecimalPoint">
        <bool>true</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>3</number>
       </property>
       <property name="value" stdset="0">
@@ -2634,7 +2634,7 @@ p, li { white-space: pre-wrap; }
       <property name="smallDecimalPoint">
        <bool>true</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>3</number>
       </property>
       <property name="value" stdset="0">
