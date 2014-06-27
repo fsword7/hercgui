@@ -81,6 +81,24 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
 		rc = dup2(fileno(fileIn),fileno(stdin));
 		if (rc != 0) perror("stdin");
 
+		if (herculesPath.length() != 0)
+		{
+			rc = chdir(herculesPath.c_str());
+			if (rc != 0)
+			{
+				std::cout << "***************************************************************" << "\n"
+						<< "hercules could not be started (" <<  rc << ")" << "\n"
+		#ifndef Q_WS_MAC
+						<< "check that the path specified in Edit/Preferences is correct." << "\n"
+		#else
+						<< "check that the path specified in HerculesStudio/Preferences is correct." << "\n"
+		#endif
+						<< "**************************************************************" << "\n";
+				fflush(stdout);
+				_exit(1);
+			}
+		}
+
 		if (Arguments::getInstance().resourceFileName().length() > 0)
 		{
 			std::string resourceFile = "HERCULES_RC=" + Arguments::getInstance().resourceFileName();
@@ -100,6 +118,7 @@ int HerculesExecutor::run(std::string configName, std::string herculesPath)
                 << "and that the path specified in HerculesStudio/Preferences is correct." << "\n"
 #endif
                 << "**************************************************************" << "\n";
+        fflush(stdout);
 		_exit(1);
 	}
 

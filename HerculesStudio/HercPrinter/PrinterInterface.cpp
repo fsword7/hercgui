@@ -78,8 +78,7 @@ void GenericPagePrinter::preparePage(bool eject)
         QString pixmapStr(Environment::getIconsPath().c_str());
         pixmapStr +="/Hole.png";
         QPixmap pixmap(pixmapStr);
-        int dpiWidth= pixmap.width() * mLogicalDpiX / pixmap.logicalDpiX();
-        hOutDebug(5, "hole width " << pixmap.width() << " " << pixmap.logicalDpiX() << " "  << pixmap.physicalDpiX() << " " << dpiWidth);
+        hOutDebug(5, "hole width " << pixmap.width() << " " << pixmap.logicalDpiX() << " "  << pixmap.physicalDpiX());
         float gap = mLogicalDpiY/2;
         float holeStart = mLogicalDpiY/4 - builtinMargin;
         if (mScaling < 1)
