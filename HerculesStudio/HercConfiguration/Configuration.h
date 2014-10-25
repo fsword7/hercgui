@@ -77,6 +77,7 @@ protected:
 
 private:
 	Ui::ConfigurationClass	ui;
+	HexSpinBox				* mLparNum;
 	DevicesWidget			* mDevWgt;
 	QPlainTextEdit			* mFreeEdit;
 	QSyntaxHighlighter      * mSyntaxHighlighter;
@@ -113,6 +114,8 @@ signals:
 	 void modPathBrowsePressed();
 	 void tabChanged(int);
 	 void blockCountChangedSlot();
+	 void validateMaxCpu();
+	 void validateModels();
 };
 
 class ConfigHighlight : public QSyntaxHighlighter

@@ -23,6 +23,7 @@
  */
 
 #include "ConfigurationEditor.h"
+#include "Configuration.h"
 #include "HerculesStudio.h"
 
 #include <QRegExp>
@@ -145,6 +146,42 @@ void ConfigurationEditor::handleSpin(QDoubleSpinBox * doubleSpinBox, const Confi
 		if (mSpinMap[parm] != doubleSpinBox->value())
 			const_cast<ConfigLine *>(configLine)->replaceParameters(doubleSpinBox->text().toStdString()); 
 	} 
+}
+
+void ConfigurationEditor::handleHexSpin(QSpinBox * spinBox, const ConfigLine * configLine, Direction dir, int dflt)
+{
+	Configuration::HexSpinBox * hSpinBox = static_cast<Configuration::HexSpinBox *>(spinBox);
+	std::string keyword = configLine->getUppercaseToken(0);
+	std::string parm = configLine->getToken(1);
+
+	if (dir == toScreen)
+	{
+		std::string parm = configLine->getToken(1);
+		if (parm.length() > 0)
+		{
+			if (parm[0] == '+') parm = parm.substr(1);
+			int num = parseNum(parm, 16);
+			if (parm.length() > 0 && num == 0 && parm[0] != '0')
+			{
+				num = dflt;
+				configLine->setInError(configLine->getAbsoluteTokenColumn(1));
+			}
+			hSpinBox->setValue(num);
+		}
+		else
+		{
+			hSpinBox->setValue(0);
+		}
+		mSpinMap[keyword] = hSpinBox->value();
+		if (configLine->getToken(2).length() != 0)
+			configLine->setInError(configLine->getAbsoluteTokenColumn(2));
+	}
+	else
+	{
+		/*TODO: verification routine*/
+		if (mSpinMap[keyword] != hSpinBox->value())
+			const_cast<ConfigLine *>(configLine)->replaceParameters(hSpinBox->text().toStdString());
+	}
 }
 
 void ConfigurationEditor::handleSlider(QSlider * slider, const ConfigLine * configLine, Direction dir)
@@ -528,9 +565,48 @@ void ConfigurationEditor::LEGACYSENSEID(Ui::ConfigurationClass * configUi, const
 TextItem(LOADPARM,loadParm)
 CheckBoxItem(LOGOPT,logopt, TIMESTAMP, NOTIMESTAMP)
 TextItem(LPARNAME,lparName)
+void ConfigurationEditor::LPARNUM(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
+{
+  handleHexSpin(configUi->lparNum, configLine, dir, 0); \
+}
+
+
+
 SpinItem(MAINSIZE,mainSizeSpin, 64)
 TextItem(MANUFACTURER,manufacturer)
-TextItem(MODEL,model)
+SpinItem(MAXCPU, maxCPUSpin, 1)
+void ConfigurationEditor::MODEL(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)
+{
+	if (dir == toScreen)
+	{
+		if (configLine->getToken(2).length() != 0)
+			configLine->setInError(configLine->getAbsoluteTokenColumn(2));
+		configUi->model->setText(configLine->getToken(1).c_str());
+		if (configLine->getToken(2).length() != 0)
+		{
+			configUi->capacityModel->setText(configLine->getToken(2).c_str());
+			if (configLine->getToken(3).length() != 0)
+			{
+				configUi->permCapacityModel->setText(configLine->getToken(3).c_str());
+				if (configLine->getToken(4).length() != 0)
+				{
+					configUi->tempCapacityModel->setText(configLine->getToken(4).c_str());
+				}
+			}
+		}
+	}
+	else
+	{
+		if (configUi->model->isModified() || configUi->capacityModel->isModified() || configUi->permCapacityModel->isModified() || configUi->tempCapacityModel->isModified())
+		{
+			QString newParm = configUi->model->text() + " " + configUi->capacityModel->text() + " " + configUi->permCapacityModel->text() + " " + configUi->tempCapacityModel->text();
+			const_cast<ConfigLine *>(configLine)->replaceParameters(newParm.toStdString());
+		}
+	}
+}
+
+
+
 CheckBoxItem(MOUNTED_TAPE_REINIT,mountedTapeReinitCheckbox,ALLOW,DISALLOW)
 
 void ConfigurationEditor::MODPATH(Ui::ConfigurationClass * configUi, const ConfigLine * configLine, Direction dir)

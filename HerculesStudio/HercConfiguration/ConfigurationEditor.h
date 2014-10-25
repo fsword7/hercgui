@@ -50,6 +50,7 @@ public:
 	static void handleCheckbox(QCheckBox * checkbox, const ConfigLine * configLine, Direction dir, QString checked, QString unchecked);
 	static void handleSpin(QSpinBox * spinbox, const ConfigLine * configLine, Direction dir, int dflt);
 	static void handleSpin(QDoubleSpinBox * spinbox, const ConfigLine * configLine, Direction dir, int dflt);
+	static void handleHexSpin(QSpinBox * hexSpinbox, const ConfigLine * configLine, Direction dir, int dflt);
 
   static void ARCHMODE(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
   static void ASN_AND_LX_REUSE(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
@@ -77,8 +78,10 @@ public:
 	static void LOADPARM(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
 	static void LOGOPT(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
 	static void LPARNAME(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
+	static void LPARNUM(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
 	static void MAINSIZE(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
 	static void MANUFACTURER(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
+	static void MAXCPU(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
 	static void MODEL(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
 	static void MODPATH(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);
 	static void MOUNTED_TAPE_REINIT(Ui::ConfigurationClass *, const ConfigLine * configLine, Direction dir);

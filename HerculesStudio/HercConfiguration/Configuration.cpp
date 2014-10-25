@@ -30,6 +30,7 @@
 
 #include <QFileDialog>
 #include <QTimer>
+#include <QMessageBox>
 
 #include <iostream>
 #include <sstream>
@@ -67,8 +68,10 @@ struct ConfigTableEntry Configuration::mConfigTable[] = {
 		genEntry(LOADPARM)
 		genEntry(LOGOPT)
 		genEntry(LPARNAME)
+		genEntry(LPARNUM)
 		genEntry(MAINSIZE)
 		genEntry(MANUFACTURER)
+		genEntry(MAXCPU)
 		genEntry(MODEL)
 		genEntry(MODPATH)
 		genEntry(MOUNTED_TAPE_REINIT)
@@ -97,6 +100,14 @@ Configuration::Configuration(ConfigFile* configFile, bool newConfig, QWidget *pa
 	: QDialog(parent), mParent(parent), mConfigFile(configFile), mNewConfig(newConfig)
 {
 	ui.setupUi(this);
+
+	int lpnRow = ui.lparNum->pos().y();
+	int lpnCol = ui.lparNum->pos().x();
+	delete ui.lparNum;
+	ui.lparNum = new HexSpinBox(ui.groupBox_4);
+	ui.lparNum->move(lpnCol, lpnRow);
+	ui.lparNum->show();
+
 	mDevWgt = new DevicesWidget(configFile, ui.Configuration->widget(5));
 	mDevWgt->move(0,50);
 	mDevWgt->show();
@@ -136,6 +147,20 @@ void Configuration::initilize()
 	mCurrTab = ui.Configuration->currentIndex();
 	ui.logopt->setVisible(false); // irrelevant for gui, but needed for syntax checking
 
+	if (mConfigFile->locateLine("MAXCPU") == NULL)
+	{
+		const ConfigLine * numCpuLine = mConfigFile->locateLine("NUMCPU");
+		if (numCpuLine != NULL)
+		{
+			QString s = " MAXCPU ";
+			s += "0";
+			SystemConfigLine maxCpuLine(s.toUtf8().data());
+			maxCpuLine.replaceParameters(numCpuLine->getToken(1).c_str());
+			mConfigFile->addNonDev(&maxCpuLine);
+			ui.maxCPUSpin->setValue(ui.numCpuSpin->value());
+		}
+	}
+
 	connect(ui.pushButton_OK, SIGNAL(clicked()), this , SLOT(okPressed()));
 	connect(ui.pushButton_Cancel, SIGNAL(clicked()), this , SLOT(cancelPressed()));
 	connect(ui.autoMountBrowseButton, SIGNAL(clicked()), this, SLOT(autoMountBrowsePressed()));
@@ -149,6 +174,12 @@ void Configuration::initilize()
 	connect(ui.httpRootBrowseButton, SIGNAL(clicked()), this, SLOT(httpRootBrowsePressed()));
 	connect(ui.modPathButton, SIGNAL(clicked()), this, SLOT(modPathBrowsePressed()));
 	connect(ui.Configuration, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+	connect(ui.maxCPUSpin, SIGNAL(valueChanged(int)), this, SLOT(validateMaxCpu()));
+	connect(ui.numCpuSpin, SIGNAL(valueChanged(int)), this, SLOT(validateMaxCpu()));
+	connect(ui.model, SIGNAL(textChanged(QString)), this, SLOT(validateModels()));
+	connect(ui.capacityModel, SIGNAL(textChanged(QString)), this, SLOT(validateModels()));
+	connect(ui.tempCapacityModel, SIGNAL(textChanged(QString)), this, SLOT(validateModels()));
+	connect(ui.permCapacityModel, SIGNAL(textChanged(QString)), this, SLOT(validateModels()));
 	connect(mFreeEdit, SIGNAL(blockCountChanged(int)), this, SLOT(blockCountChangedSlot()));
 }
 
@@ -199,7 +230,7 @@ void Configuration::populate(ConfigurationEditor::Direction dir)
 	for (int i=0; mConfigTable[i].keyword.compare("") != 0 ; i++)
 	{
         hOutDebug(5,"populate:" << mConfigTable[i].keyword)
-				const ConfigLine * configLine = mConfigFile->locateLine(mConfigTable[i].keyword, true, true);
+		const ConfigLine * configLine = mConfigFile->locateLine(mConfigTable[i].keyword, true, true);
 		mConfigTable[i].populator(&ui, configLine, dir);
 	}
 }
@@ -305,6 +336,59 @@ void Configuration::modPathBrowsePressed()
 	ui.modPath->setText(s.c_str());
 
 }
+
+void Configuration::validateMaxCpu()
+{
+	if (ui.maxCPUSpin->value() < ui.numCpuSpin->value())
+	{
+		QMessageBox::warning(this, "CPU number mismatch", "Number of CPUs (" +
+							 QString::number(ui.numCpuSpin->value()) +
+							 QString(") must not be greater than maximum number of CPUs (") +
+							 QString::number(ui.maxCPUSpin->value()) +
+							 ")",
+							 QMessageBox::Ok);
+		hOutDebug(0,"num " << ui.numCpuSpin->value() << " max " << ui.maxCPUSpin->value());
+		ui.numCpuSpin->setValue(ui.maxCPUSpin->value());
+	}
+}
+
+void Configuration::validateModels()
+{
+	if (ui.model->text().isEmpty())
+	{
+		ui.capacityModel->clear();
+		ui.capacityModel->setEnabled(false);
+		ui.tempCapacityModel->clear();
+		ui.tempCapacityModel->setEnabled(false);
+		ui.permCapacityModel->clear();
+		ui.permCapacityModel->setEnabled(false);
+	}
+	else
+	{
+		ui.capacityModel->setEnabled(true);
+		if (ui.capacityModel->text().isEmpty())
+		{
+			ui.permCapacityModel->clear();
+			ui.permCapacityModel->setEnabled(false);
+			ui.tempCapacityModel->clear();
+			ui.tempCapacityModel->setEnabled(false);
+		}
+		else
+		{
+			ui.permCapacityModel->setEnabled(true);
+			if (ui.permCapacityModel->text().isEmpty())
+			{
+				ui.tempCapacityModel->clear();
+				ui.tempCapacityModel->setEnabled(false);
+			}
+			else
+			{
+				ui.tempCapacityModel->setEnabled(true);
+			}
+		}
+	}
+}
+
 
 void Configuration::tabChanged(int newTab)
 {

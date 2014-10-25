@@ -238,6 +238,6 @@ QString PdfPrinter::decodeFilename()
         QString str = "$" + it.key().toLower() + "$";
         ret.replace(str, it.value().trimmed());
     }
-    hOutDebug(0,"filename:" << ret.toStdString() << " " << mVariables.count());
+	hOutDebug(1,"filename:" << ret.toStdString() << " " << mVariables.count());
     return ret;
 }

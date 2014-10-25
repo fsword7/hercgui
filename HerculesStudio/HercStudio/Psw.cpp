@@ -64,18 +64,20 @@ bool Psw::notify(const QByteArray& statusLine)
 		return true;
     }
 	//STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M.W..... instcount=0
-	if (!statusLine.startsWith("STATUS=") || statusLine.length() < 63)
+	//STATUS=CP00 PSW=00000000 00000000 0000000000000000 M....... instcount=0
+	//0123456789012345678901234567890123456789012345678901234567890
+	if (!statusLine.startsWith("STATUS=") || statusLine.length() < 61)
 		return false;
 	if (mMode == Psw::Docked)
 	{
 		mLine.replace(0,46, statusLine.mid(7,46));
-		mLine.replace(48,statusLine.length()-56, statusLine.mid(63,statusLine.length()-56));
+		mLine.replace(48,statusLine.length()-56, statusLine.mid(60,statusLine.length()-56));
 		setText(mLine);
 	}
 	else 
 	{
-        mCpu->setText(statusLine.mid(7,46));
-		mInstCount->setText(statusLine.mid(62));
+		mCpu->setText(statusLine.mid(7,51));
+		mInstCount->setText(statusLine.mid(60));
 		if (statusLine[54] == 'M')
 			mMan->setText("MAN");
 		else
