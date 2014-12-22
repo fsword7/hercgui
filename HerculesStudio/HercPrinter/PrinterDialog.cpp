@@ -117,7 +117,7 @@ void PrinterDialog::dirClicked()
 
 bool PrinterDialog::save(bool quiet)
 {
-    if (validateIp(ui->IP, false, false) == false) return false;
+    if (validateIp(ui->IP, false, quiet) == false) return false;
 
     if ((ui->PortNumber->text().toUInt() > 0xffff) ||
         (ui->PortNumber->text().toUInt() == 0))
@@ -293,7 +293,7 @@ void PrinterDialog::closeEvent(QCloseEvent *event)
         event->ignore();
         return;
     }
-    if (!save(false))
+    if (!save(true))
     {
         event->ignore();
         return;

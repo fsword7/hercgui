@@ -558,7 +558,7 @@ void Preferences::deleteDecolation(const QString& item)
     mSettings->beginGroup("Decolations");
     mSettings->remove(item);
     QStringList groups = mSettings->childGroups();
-	hOutDebug(2,"left:" << groups.count());
+    hOutDebug(0,"left:" << groups.count());
     mSettings->endGroup();
 }
 

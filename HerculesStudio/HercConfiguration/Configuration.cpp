@@ -229,7 +229,7 @@ void Configuration::populate(ConfigurationEditor::Direction dir)
 	}
 	for (int i=0; mConfigTable[i].keyword.compare("") != 0 ; i++)
 	{
-        hOutDebug(5,"populate:" << mConfigTable[i].keyword)
+        hOutDebug(0,"populate:" << mConfigTable[i].keyword)
 		const ConfigLine * configLine = mConfigFile->locateLine(mConfigTable[i].keyword, true, true);
 		mConfigTable[i].populator(&ui, configLine, dir);
 	}

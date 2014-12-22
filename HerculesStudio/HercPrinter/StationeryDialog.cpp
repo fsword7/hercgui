@@ -364,7 +364,7 @@ void StationeryDialog::populate()
     paperSizeChanged(st->mPaperSize);
     bool disabled = builtinStationery(ui->stationeryNameComboBox->currentText());
     setProtected(disabled);
-	hOutDebug(4,ui->paperSizeComboBox->currentText().toUtf8().data());
+    hOutDebug(0,ui->paperSizeComboBox->currentText().toUtf8().data());
     if (ui->paperSizeComboBox->currentText().compare("Custom") == 0)
     {
         ui->orientationGroupBox->setEnabled(false);
