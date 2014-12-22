@@ -53,7 +53,7 @@ void FieldTip::calculatePosition() {
 
     QPoint fieldPos = attachedField->mapToParent(QPoint(0,0));
     QSize size = findBestSize(this->fontMetrics(), windowTitle());
-    hOutDebug(1,"size: " << size.width() << "," << size.height());
+    hOutDebug(0,"size: " << size.width() << "," << size.height());
     size.setWidth(size.width() + (textPadding*2));
     size.setHeight(size.height() + (textPadding*2) + tipHeight);
 

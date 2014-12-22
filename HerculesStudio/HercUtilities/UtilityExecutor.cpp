@@ -71,10 +71,10 @@ int UtilityExecutor::run(const std::string & pCommand, const std::string& pPath,
                 SLOT(readStandardError()));
     }
     for (int i=0 ; i<arguments.size(); i++)
-        hOutDebug(1, " " << arguments.value(i).toStdString());
+        hOutDebug(0, " " << arguments.value(i).toStdString());
     if (!workingDirectory.isEmpty())
         mProcess->setWorkingDirectory(workingDirectory);
-    hOutDebug(1, mProcess->workingDirectory().toStdString());
+    hOutDebug(0, mProcess->workingDirectory().toStdString());
     mProcess->start(program,arguments);
     Q_PID pid = mProcess->pid();
 

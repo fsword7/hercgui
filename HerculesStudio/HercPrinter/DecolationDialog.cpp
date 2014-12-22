@@ -202,7 +202,7 @@ DecolationModelBase::DecolationModelBase(QObject * o) :
 
 int DecolationModelBase::rowCount(const QModelIndex &parent) const
 {
-    hOutDebug(1,"row count:" << zmTable.size());
+    hOutDebug(0,"row count:" << zmTable.size());
     if (parent.isValid()) return 0;
     else return zmTable.size();
 }
@@ -280,7 +280,7 @@ SepTableModel::SepTableModel(QObject *o) : DecolationModelBase(o)
 bool SepTableModel::insertRow(int row, const QModelIndex & index,
                               int line, int column, const QString& value, Trigger::TriggerType type)
 {
-    hOutDebug(1,"insert " << line << " , "<< column << " " << value.toStdString() <<Trigger::decodeTriggerType(type).toStdString());
+    hOutDebug(0,"insert " << line << " , "<< column << " " << value.toStdString() <<Trigger::decodeTriggerType(type).toStdString());
 
     if (row > zmTable.size()) return false;
     QStringList list;
@@ -290,7 +290,7 @@ bool SepTableModel::insertRow(int row, const QModelIndex & index,
     beginInsertRows(index, key+1, key+1);
     zmTable.append(list);
     endInsertRows();
-    hOutDebug(1, "new row count " << zmTable.count());
+    hOutDebug(0, "new row count " << zmTable.count());
 
     return true;
 }

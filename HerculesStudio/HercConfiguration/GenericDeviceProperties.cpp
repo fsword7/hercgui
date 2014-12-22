@@ -58,7 +58,7 @@ GenericDeviceProperties * GenericDeviceProperties::classFactory(DeviceConfigLine
 {
     if (type == 0)
         type = line.getDeviceType();
-    hOutDebug(1, "GenericDeviceProperties::classFactory " << type);
+    hOutDebug(0, "GenericDeviceProperties::classFactory " << type);
     switch(type)
     {
     case DeviceTypes::Terminal:

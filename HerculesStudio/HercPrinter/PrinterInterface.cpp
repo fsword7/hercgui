@@ -41,7 +41,7 @@ void GenericPagePrinter::preparePage(bool eject)
         }
     }
 
-    hOutDebug(1, "in pixels: " <<mWidthInPixels << " " << mHeightInPixels);
+    hOutDebug(0, "in pixels: " <<mWidthInPixels << " " << mHeightInPixels);
     hOutDebug(1, "left margin " << mLeftMargin);
 
     int stripe = (mHeightInPixels-(mMargin+mBottomMargin))/alternatingStripes*mScaling;

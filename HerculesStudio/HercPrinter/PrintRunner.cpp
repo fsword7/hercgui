@@ -107,14 +107,14 @@ void PrintRunner::waitForConnected()
 {
     while(mSocket->state() != QAbstractSocket::ConnectedState && mRunning)
     {
-        hOutDebug(1,"not connected:" << mSocket->state());
+        hOutDebug(0,"not connected:" << mSocket->state());
         if (mSocket->state() == QAbstractSocket::UnconnectedState)
         {
             mSocket->connectToHost(QHostAddress(mPrinterItem->mIp), mPrinterItem->mPort);
             mSocket->waitForConnected(1000);
             if(mRunning && mSocket->state() != QAbstractSocket::ConnectedState)
                 QThread::msleep(200);
-            hOutDebug(1, "error:" << mSocket->errorString().toStdString());
+            hOutDebug(0, "error:" << mSocket->errorString().toStdString());
         }
         else
         {
@@ -142,10 +142,10 @@ void PrintRunner::run()
         if (!mRunning) break;
 
         emit connected();
-        hOutDebug(1,"appl connected");
+        hOutDebug(0,"appl connected");
 
         readFromSocket();
-        hOutDebug(1, "state:" << mSocket->state() << " running: " << (mRunning? "y" : "n") );
+        hOutDebug(0, "state:" << mSocket->state() << " running: " << (mRunning? "y" : "n") );
         emit disconnected();
         if (timer.elapsed() < 1000)
         {
@@ -164,17 +164,17 @@ void PrintRunner::socketStateChanged(QAbstractSocket::SocketState state)
     {
         if (state == QAbstractSocket::ConnectedState && prevState != QAbstractSocket::ConnectedState)
         {
-            hOutDebug(1,"Connected");
+            hOutDebug(0,"Connected");
             emit connected();
         }
         if (state != QAbstractSocket::ConnectedState && prevState == QAbstractSocket::ConnectedState)
         {
-            hOutDebug(1,"Disconnected");
+            hOutDebug(0,"Disconnected");
             emit disconnected();
         }
         prevState = state;
     }
-    hOutDebug(1, "Socket state: " << state);
+    hOutDebug(0, "Socket state: " << state);
 }
 
 void PrintRunner::stop()

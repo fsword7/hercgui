@@ -56,7 +56,7 @@ void UtilityRunner::updateStatus(const std::string& line)
 {
     Tokenizer::handle pos, lastPos;
     std::string word = StringTokenizer::getFirstWord(line, pos, lastPos, " \t\n");
-    hOutDebug(1,"util runner line:" << line);
+    hOutDebug(0,"util runner line:" << line);
     if (line.length() == 0)
         return;
 

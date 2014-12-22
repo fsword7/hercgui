@@ -219,10 +219,10 @@ bool HerculesExecutor::getLine(char * buff, int max)
 		ready = mProcess->waitForReadyRead(3000);
 		if (ready)
 		{
-			hOutDebug(1,"waiting for log");
+            hOutDebug(0,"waiting for log");
 			QByteArray output = mProcess->readLine(max);
 			int len = output.length();
-			hOutDebug(1,"log len=" << len << ":" << output.data());
+            hOutDebug(0,"log len=" << len << ":" << output.data());
 			if (len > 0)
 			{
 				strncpy(buff, output.data(), (len>max? max : len));
@@ -245,10 +245,10 @@ bool HerculesExecutor::getStatusLine(char * buff, int max)
 		ready = mProcess->waitForReadyRead(3000);
 		if (ready)
 		{
-			hOutDebug(1,"waiting for status");
+            hOutDebug(0,"waiting for status");
 			QByteArray output = mProcess->readAllStandardError();
 			int len = output.length();
-			hOutDebug(1,"status len=" << len);
+            hOutDebug(0,"status len=" << len);
 			if (len > 0)
 			{
 				strncpy(buff, output.data(), (len>max? max : len));

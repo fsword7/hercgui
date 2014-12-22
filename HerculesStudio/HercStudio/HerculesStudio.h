@@ -43,7 +43,7 @@
 #endif
 #include <iostream>
 
-#define hOutDebugNl(level,s)  {if ((level) <= hDEBUG ) \
+#define hOutDebugNl(level,s)  {if ((level) < hDEBUG ) \
                     {std::cout << s;} \
                     else {}}
 #define hOutDebug(level,s)  hOutDebugNl(level, s << std::endl)

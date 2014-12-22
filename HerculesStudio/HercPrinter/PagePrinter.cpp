@@ -194,7 +194,7 @@ bool PdfPrinter::doPrint(QByteArray &line)
     if (mPdf != NULL)
         mPen->drawText(mPdf->logicalDpiX()/2,mMargin+mCurLine*mPixelsPerLine, line);
 
-    hOutDebug(1, "line " << mCurLine << " page " << mCurPage << " " << line.data());
+    hOutDebug(0, "line " << mCurLine << " page " << mCurPage << " " << line.data());
 
     if (mLastPagesCountdown == 0)
     {

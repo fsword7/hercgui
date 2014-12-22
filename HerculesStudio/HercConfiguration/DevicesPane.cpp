@@ -65,7 +65,7 @@ DevicesPane::~DevicesPane()
 
 bool DevicesPane::notify(const QByteArray& statusLine)
 {
-	hOutDebug(1,"devices notify:" << statusLine.data() << ".");
+    hOutDebug(0,"devices notify:" << statusLine.data() << ".");
 	const struct DynDeviceLine * line = reinterpret_cast<const DynDeviceLine *>(statusLine.data());
     int devNo;
     VisualizedDeviceEntry deviceEntry;
@@ -127,7 +127,7 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 			}
 			else
 			{
-				hOutDebug(1,"sending restart");
+                hOutDebug(0,"sending restart");
 				mDevices.clear();
 				//emit restartDevices();
 			}
@@ -223,7 +223,7 @@ bool DevicesPane::notify(const QByteArray& statusLine)
 
 void DevicesPane::mousePressed(const QModelIndex index)
 {
-    hOutDebug(1,"pressed " << index.row());
+    hOutDebug(0,"pressed " << index.row());
     mClickRow = index.row();
 }
 
@@ -245,7 +245,7 @@ QSize DevicesPane::sizeHint() const
 
 void DevicesPane::clear()
 {
-	hOutDebug(1,"DevicesPane clear");
+    hOutDebug(0,"DevicesPane clear");
 	mDevices.clear();
 	if (mModel != NULL)
 		mModel->clear();
