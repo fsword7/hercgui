@@ -58,9 +58,13 @@ bool Psw::notify(const QByteArray& statusLine)
 	if (statusLine.startsWith("SYS="))
     {
         if (statusLine[4] == '1')
+        {
         	mSys->setText("SYS");
+        }
         else
+        {
         	mSys->setText("   ");
+        }
 		return true;
     }
 	//STATUS=CPU0000 PSW=00000000 00000000 0000000000000000 M.W..... instcount=0

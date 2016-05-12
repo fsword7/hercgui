@@ -90,9 +90,13 @@ void MainPanelModern::setupUi(QWidget *)
     mPSW->setFont(pswFont);
 
     if (Preferences::getInstance().mipsAsGauge())
+    {
     	mMips = new MipsGauge(this);
+    }
     else
+    {
     	mMips = new MipsLed(this);
+    }
 	mMips->setActive(false);
 }
 

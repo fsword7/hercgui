@@ -138,9 +138,13 @@ void MainPanelClassic::setupUi(QWidget *)
     mDial3->setToolTip("Click to select IPL address");
 
     if (Preferences::getInstance().mipsAsGauge())
+    {
         mMips = new MipsGauge(this);
+    }
     else
+    {
         mMips = new MipsLed(this);
+    }
 	mMips->setActive(false);
 }
 
