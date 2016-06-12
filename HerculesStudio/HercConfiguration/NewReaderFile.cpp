@@ -44,6 +44,7 @@ mCancelButton(this)
     connect(&mCancelButton, SIGNAL(pressed()), this, SLOT(doCancel()));
     connect(&mOKButton, SIGNAL(pressed()), this, SLOT(doOK()));
     connect(&mBrowseButton, SIGNAL(pressed()), this, SLOT(doBrowse()));
+    this->setVisible(true);
 }
 
 NewReaderFile::~NewReaderFile()

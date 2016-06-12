@@ -3,3 +3,13 @@ HerculesStudio/HerculesStudio.pro.user*
 
 #build directories
 build*
+HerculesStudio/moc/
+HerculesStudio/obj/
+HerculesStudio/release/
+HerculesStudio/ui/
+
+#build artifact 
+HerculesStudio/HerculesStudio
+
+#Makefile(s)
+HerculesStudio/Makefile*
