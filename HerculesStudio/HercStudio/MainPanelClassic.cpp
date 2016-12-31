@@ -233,7 +233,7 @@ bool MainPanelClassic::notify(const QByteArray& statusLine)
     }
     else if (statusLine.startsWith("MIPS="))
     {
-        double d = statusLine.mid(5).toDouble();
+        double d = atof(statusLine.data()+5);
         if (d > mMipsHWM)
         {
             mMipsHWM = d;
