@@ -160,7 +160,7 @@ void PlainLogWidget::writeToFile(WriteType type)
 
 		if (!file.open(QIODevice::Append | QIODevice::Text))
 		{
-			hOutDebug(0,"Failed to open file " << mLogFileName.toStdString());
+			hOutDebug(3,"Failed to open file " << mLogFileName.toStdString());
 			return ;
 		}
 		QTextStream out(&file);

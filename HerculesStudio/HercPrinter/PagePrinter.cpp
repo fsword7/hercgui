@@ -194,7 +194,7 @@ bool PdfPrinter::doPrint(QByteArray &line)
     if (mPdf != NULL)
         mPen->drawText(mPdf->logicalDpiX()/2,mMargin+mCurLine*mPixelsPerLine, line);
 
-    hOutDebug(0, "line " << mCurLine << " page " << mCurPage << " " << line.data());
+    hOutDebug(3, "line " << mCurLine << " page " << mCurPage << " " << line.data());
 
     if (mLastPagesCountdown == 0)
     {
@@ -238,6 +238,6 @@ QString PdfPrinter::decodeFilename()
         QString str = "$" + it.key().toLower() + "$";
         ret.replace(str, it.value().trimmed());
     }
-    hOutDebug(0,"filename:" << ret.toStdString() << " " << mVariables.count());
+    hOutDebug(3,"filename:" << ret.toStdString() << " " << mVariables.count());
     return ret;
 }

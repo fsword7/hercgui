@@ -229,7 +229,7 @@ void Configuration::populate(ConfigurationEditor::Direction dir)
 	}
 	for (int i=0; mConfigTable[i].keyword.compare("") != 0 ; i++)
 	{
-        hOutDebug(0,"populate:" << mConfigTable[i].keyword)
+        hOutDebug(3,"populate:" << mConfigTable[i].keyword)
 		const ConfigLine * configLine = mConfigFile->locateLine(mConfigTable[i].keyword, true, true);
 		mConfigTable[i].populator(&ui, configLine, dir);
 	}
@@ -347,7 +347,7 @@ void Configuration::validateMaxCpu()
 							 QString::number(ui.maxCPUSpin->value()) +
 							 ")",
 							 QMessageBox::Ok);
-		hOutDebug(0,"num " << ui.numCpuSpin->value() << " max " << ui.maxCPUSpin->value());
+        hOutDebug(3,"num " << ui.numCpuSpin->value() << " max " << ui.maxCPUSpin->value());
 		ui.numCpuSpin->setValue(ui.maxCPUSpin->value());
 	}
 }

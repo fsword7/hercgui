@@ -34,7 +34,7 @@ void PrinterController::exec()
         connect(mRunner.data(), SIGNAL(stoppedWaiting()), this, SIGNAL(stoppedWaiting()));
     }
     mRunner->start();
-    hOutDebug(0,"Print runner started");
+    hOutDebug(3,"Print runner started");
 }
 
 void PrinterController::stop()

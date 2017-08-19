@@ -172,12 +172,12 @@ DeviceConfigLine * ConfigFile::getDevice(int index) const
 {
 	if (index <= mLastSys)
 	{
-        hOutDebug(0, "ConfigFile[" << index << "] requested where lastsys=" << mLastSys);
+        hOutDebug(3, "ConfigFile[" << index << "] requested where lastsys=" << mLastSys);
 		abort();
 	}
 	if (static_cast<unsigned int>(index) >= mFileArray.size())
 	{
-        hOutDebug(0,"ConfigFile[" << index << "] requested where size=" << mFileArray.size());
+        hOutDebug(3,"ConfigFile[" << index << "] requested where size=" << mFileArray.size());
 		abort();
 	}
 	return static_cast<DeviceConfigLine *> (const_cast<ConfigLine *>(&mFileArray.at(index)));

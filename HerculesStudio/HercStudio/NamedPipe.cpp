@@ -76,7 +76,7 @@ int NamedPipe::recover()
     if (rc<0 && errno != EEXIST)
     {
         perror(hercstudioDir.c_str());
-        hOutDebug(0,"rc=" << errno);
+        hOutDebug(3,"rc=" << errno);
         return -1;
     }
 
@@ -115,7 +115,7 @@ int NamedPipe::recover()
             else
             {
                 // recovery - takeover
-                hOutDebug(0,"Hercules process " << hercPid << " is running");
+                hOutDebug(3,"Hercules process " << hercPid << " is running");
                 mRecovery = true;
                 mSetPath = setPath;
                 mHerculesPid = hercPid;
@@ -124,7 +124,7 @@ int NamedPipe::recover()
         }
     }
 
-    hOutDebug(0, "going to work with set " << set);
+    hOutDebug(3, "going to work with set " << set);
     mSetPath = setPath;
     if (!mRecovery && mkdir(mSetPath.c_str(), 0777)<0)
     {
@@ -172,7 +172,7 @@ int NamedPipe::delDir(std::string& dir)
 void NamedPipe::generatePid(int studioPid, int herculesPid)
 {
     std::string pidPath = mSetPath + "/pid";
-    hOutDebug(0,"generatePid " << studioPid << "," << herculesPid);
+    hOutDebug(3,"generatePid " << studioPid << "," << herculesPid);
     FILE * fPid = fopen(pidPath.c_str(),"w");
     if (fPid == NULL)
     {

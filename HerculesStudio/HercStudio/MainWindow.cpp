@@ -426,7 +426,7 @@ void MainWindow::dispatchStatus()
 	while (!mStatusQueue.empty())
 	{
 		QByteArray& statusLine = mStatusQueue.front();
-        hOutDebug(0, "writeToDevice:" << statusLine.data() << std::endl);
+        hOutDebug(3, "writeToDevice:" << statusLine.data() << std::endl);
 		if (!statusLine.isEmpty())
 		{
 			if (statusLine[0] == 'D')
@@ -874,7 +874,7 @@ void MainWindow::load()
 		return;
 	}
 	int addr = mMainPanel->getLoadAddress();
-    hOutDebug(0, "going to load " << addr);
+    hOutDebug(3, "going to load " << addr);
 	mHerculesExecutor->issueFormattedCommand("IPL %X\n",addr);
 	mIplDevno.setNum(addr,16);
 	mLogWindow->setIpled(true);
@@ -921,7 +921,7 @@ void MainWindow::loadCommand()
 void MainWindow::extInterrupt()
 {
 	if (!mHerculesActive) return;
-    hOutDebug(0, "going to externally interrupt ");
+    hOutDebug(3, "going to externally interrupt ");
 	mHerculesExecutor->issueCommand("ext\n");
 	return;
 }
@@ -930,7 +930,7 @@ void MainWindow::devInterrupt()
 {
 	if (!mHerculesActive) return;
 	int addr = mMainPanel->getLoadAddress();
-    hOutDebug(0, "going to interrupt " << addr);
+    hOutDebug(3, "going to interrupt " << addr);
 	mHerculesExecutor->issueFormattedCommand("I %X\n", addr);
 }
 

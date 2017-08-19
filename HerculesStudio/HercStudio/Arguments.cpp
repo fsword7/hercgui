@@ -88,13 +88,13 @@ int Arguments::parse(int argc, char * argv[])
 	    }
 
     }
-    hOutDebug(0,"resource file:'" << mResourceFile << "'");
+    hOutDebug(3,"resource file:'" << mResourceFile << "'");
 	return 0;
 }
 
 void Arguments::printUsage()
 {
-    hOutDebug(0, "Usage:" << "\n\n"
+    hOutDebug(3, "Usage:" << "\n\n"
             << "\tHerculesStudio [ -f <hercules-config-file> ] [ -r <hercules-run-commands-file> ] [ -h ]");
 }
 
