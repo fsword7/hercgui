@@ -76,7 +76,7 @@ void CommandLine::keyPressEvent(QKeyEvent * event)
         setLine();
         break;
     case Qt::Key_C:
-        if (event->modifiers() && Qt::CTRL)
+        if (event->modifiers() & Qt::CTRL)
         emit ctrl_c();
         break;
 
