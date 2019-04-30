@@ -210,7 +210,7 @@
        <number>4</number>
       </property>
       <property name="maximum">
-       <number>20</number>
+       <number>200</number>
       </property>
       <property name="value">
        <number>10</number>
@@ -337,7 +337,7 @@
        <number>4</number>
       </property>
       <property name="maximum">
-       <number>20</number>
+       <number>200</number>
       </property>
       <property name="value">
        <number>10</number>
@@ -356,7 +356,7 @@
        <number>4</number>
       </property>
       <property name="maximum">
-       <number>20</number>
+       <number>200</number>
       </property>
       <property name="value">
        <number>10</number>
@@ -375,7 +375,7 @@
        <number>4</number>
       </property>
       <property name="maximum">
-       <number>20</number>
+       <number>200</number>
       </property>
       <property name="value">
        <number>10</number>
@@ -537,7 +537,7 @@
        <number>4</number>
       </property>
       <property name="maximum">
-       <number>20</number>
+       <number>200</number>
       </property>
       <property name="value">
        <number>10</number>
